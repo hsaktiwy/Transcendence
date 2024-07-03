@@ -1,0 +1,74 @@
+user
+  id_user uuid pk
+  login varchar(30)
+  FirstName varchar(30)
+  LastName varchar(30)
+  email varchar(255)
+  password_hash varchar(255)
+  created_at timestamp=now()
+  two_factor_enabled state(on,off)
+  two_factor_secret varchar(255)
+message
+  id_message uuid pk
+  id_user_fk fk user.id_user
+  content text
+  timestamp timestamp=now()
+channel
+  id_channel  uuid pk
+  id_user1_fk fk user.id_user
+  id_user2_fk fk user.id_user
+  created_at timestamp=now()
+notification
+  id_notification uuid pk
+  id_user_fk fk user.id_user
+channel_message
+  id_channel_fk fk channel.id_channel
+  id_message_fk fk message.id_message
+ProfileStatus
+  id_status uuid pk
+  id_user_fk fk user.id_user
+  total_games int
+  wins int
+  lostes int
+  rank int
+game
+  id_game uuid pk
+  id_player1_fk fk user.id_user
+  id_player2_fk fk user.id_user
+  game_status state(waiting, in_progress, ended)
+  winner_id fk user.id_user
+  start_time timestamp=now()
+  end_time timestamp
+gameStatus
+  id_game_fk fk game.id_game
+game_invitation
+  id_invitation uuid pk
+  id_game_fk fk game.id_game
+  id_user_from_fk fk user.id_user
+  id_user_to_fk fk user.id_user
+  status state(pending, accepted, declined)
+  created_at timestamp=now()
+
+
+# Description
+
+# user
+  # The user table contains the user information
+
+# message
+  # The message table contains the message information
+
+# channel
+  # The channel (or we can call them conversation pages) table contains the channel information
+
+# notification
+  # The notification table contains the notification information
+
+# channel message
+  # The channel_message table contains the message that is sent in the channel
+
+# gameStatus
+  # The gameStatus table contains the status of all games played by the user
+  # this is created to provide the info need to display it in the user profile
+  # they are collected from the game table
+  # this where we can see our user progress, level ... etc 
