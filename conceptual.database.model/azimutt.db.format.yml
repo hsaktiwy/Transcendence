@@ -11,6 +11,7 @@ user
 message
   id_message uuid pk
   id_user_fk fk user.id_user
+  id_channel_fk fk channel.id_channel
   content text
   timestamp timestamp=now()
 channel
@@ -23,9 +24,6 @@ notification
   id_user_fk fk user.id_user
   content varchar(80)
   type state(system, friendship, gameInvitation,tournament)
-channel_message
-  id_channel_fk uuid pk fk channel.id_channel
-  id_message_fk uuid pk fk message.id_message
 ProfileStatus
   id_status uuid pk
   id_user_fk fk user.id_user
