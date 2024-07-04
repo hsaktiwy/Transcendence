@@ -65,7 +65,7 @@ CREATE TABLE game_invitation (
   id_game_fk INT REFERENCES game(id_game),
   id_user_from_fk INT REFERENCES user(id_user),
   id_user_to_fk INT REFERENCES user(id_user),
-  status VARCHAR(20), -- pending, accepted, declined, blocked
+  status VARCHAR(20), -- pending, accepted, declined
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -73,7 +73,7 @@ CREATE TABLE friendship (
   id_friendship SERIAL PRIMARY KEY,
   id_user1_fk INT REFERENCES user(id_user),
   id_user2_fk INT REFERENCES user(id_user),
-  status VARCHAR(20), -- pending, accepted, declined
+  status VARCHAR(20), -- pending, accepted, declined, blocked
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
