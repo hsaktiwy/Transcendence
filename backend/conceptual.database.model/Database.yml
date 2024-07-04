@@ -58,14 +58,14 @@ game_invitation:
   id_game_fk fk game.id_game
   id_user_from_fk fk user.id_user
   id_user_to_fk fk user.id_user
-  status state(pending, accepted, declined, blocked)
+  status state(pending, accepted, declined)
   created_at timestamp=now()
 
 friendship:
   id_friendship int pk
   id_user1_fk fk user.id_user
   id_user2_fk fk user.id_user
-  status state(pending, accepted, declined)
+  status state(pending, accepted, declined, blocked)
   created_at timestamp=now()
 
 tournament:
