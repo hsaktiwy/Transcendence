@@ -13,6 +13,7 @@ CREATE TABLE user (
 CREATE TABLE message (
   id_message SERIAL PRIMARY KEY,
   id_user_fk INT REFERENCES user(id_user),
+  id_channel_fk INT REFERENCES channel(id_channel),
   content TEXT,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -29,12 +30,6 @@ CREATE TABLE notification (
   id_user_fk INT REFERENCES user(id_user),
   content VARCHAR(80),
   type VARCHAR(20) -- system, friendship, gameInvitation, tournament
-);
-
-CREATE TABLE channel_message (
-  id_channel_fk INT REFERENCES channel(id_channel),
-  id_message_fk INT REFERENCES message(id_message),
-  PRIMARY KEY (id_channel_fk, id_message_fk)
 );
 
 CREATE TABLE ProfileStatus (

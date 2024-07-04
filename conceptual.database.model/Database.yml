@@ -14,6 +14,7 @@ user:
 message:
   id_message int pk
   id_user_fk fk user.id_user
+  id_channel_fk int pk fk channel.id_channel
   content text
   timestamp timestamp=now()
 
@@ -28,10 +29,6 @@ notification:
   id_user_fk fk user.id_user
   content varchar(80)
   type state(system, friendship, gameInvitation, tournament)
-
-channel_message:
-  id_channel_fk int pk fk channel.id_channel
-  id_message_fk int pk fk message.id_message
 
 ProfileStatus:
   id_status int pk
