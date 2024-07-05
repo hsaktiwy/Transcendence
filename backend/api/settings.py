@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'users.apps.UsersConfig',
-    'messages.apps.MessagesConfig',
+    'channels.apps.ChannelsConfig',
+    #'messages.apps.MessagesConfig',
 ]
 
 REST_FRAMEWORK = {

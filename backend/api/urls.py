@@ -17,8 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from users.views import UserRetrieveUpdateDestroyAPIView, UserAPICreate
+from channels.views import MessageRetrieveUpdateDestroyAPIView, MessageAPICreate, ChannelRetrieveUpdateDestroyAPIView, ChannelAPICreate
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/<int:pk>/', UserRetrieveUpdateDestroyAPIView.as_view(), name="Access_User"),
     path('users/create/', UserAPICreate.as_view(), name="Add_Users"),
+    path('messages/<int:pk>/', MessageRetrieveUpdateDestroyAPIView.as_view(), name="Access_Message"),
+    path('messages/create/', MessageAPICreate.as_view(), name="Add_Message"),
+    path('channels/<int:pk>/', ChannelRetrieveUpdateDestroyAPIView.as_view(), name="Access_Channel"),
+    path('channels/create/', ChannelAPICreate.as_view(), name="Add_Channel"),
 ]
