@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from users.views import UserRetrieveUpdateDestroyAPIView, UserAPICreate
 from channels.views import MessageRetrieveUpdateDestroyAPIView, MessageAPICreate, ChannelRetrieveUpdateDestroyAPIView, ChannelAPICreate
+from status.views import NotificationRetrieveUpdateDestroyAPIView, NotificationAPICreate, ProfileStatusRetrieveUpdateDestroyAPIView, ProfileStatusAPICreate
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/<int:pk>/', UserRetrieveUpdateDestroyAPIView.as_view(), name="Access_User"),
@@ -26,4 +27,8 @@ urlpatterns = [
     path('messages/create/', MessageAPICreate.as_view(), name="Add_Message"),
     path('channels/<int:pk>/', ChannelRetrieveUpdateDestroyAPIView.as_view(), name="Access_Channel"),
     path('channels/create/', ChannelAPICreate.as_view(), name="Add_Channel"),
+    path('notification/<int:pk>/', NotificationRetrieveUpdateDestroyAPIView.as_view(), name="Access_Notification"),
+    path('notification/create/', NotificationAPICreate.as_view(), name="Add_Notification"),
+    path('ProfileStatus/<int:pk>/', ProfileStatusRetrieveUpdateDestroyAPIView.as_view(), name="Access_ProfileStatus"),
+    path('ProfileStatus/create/', ProfileStatusAPICreate.as_view(), name="Add_ProfileStatus"),
 ]

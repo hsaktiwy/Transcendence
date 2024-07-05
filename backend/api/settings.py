@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users.apps.UsersConfig',
     'channels.apps.ChannelsConfig',
+    'status.apps.StatusConfig',
     #'messages.apps.MessagesConfig',
 ]
 
