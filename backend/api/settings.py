@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'channels.apps.ChannelsConfig',
     'status.apps.StatusConfig',
     'friendship.apps.FriendshipConfig',
+    'game.apps.GameConfig',
 ]
 
 REST_FRAMEWORK = {

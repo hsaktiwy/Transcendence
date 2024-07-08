@@ -17,6 +17,7 @@ class Notification(models.Model):
             choices=[(tag.name, tag.value) for tag in NotificationType],
             default=NotificationType.system.value,
         )
+    created = models.DateTimeField(auto_now_add=True)
 
 class ProfileStatus(models.Model):
     id_user_fk =  models.ForeignKey('users.User', on_delete=models.CASCADE)
