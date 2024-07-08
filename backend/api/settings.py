@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'channels.apps.ChannelsConfig',
     'status.apps.StatusConfig',
+    #'friendship.apps.FriendshipConfig',
     #'messages.apps.MessagesConfig',
 ]
 
