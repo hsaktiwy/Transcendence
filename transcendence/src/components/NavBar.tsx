@@ -1,27 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { IoNotificationsOutline } from "react-icons/io5";
 import { AiOutlineMessage } from "react-icons/ai";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { CiMenuBurger } from "react-icons/ci";
-
+import { IoMenuSharp } from "react-icons/io5";
+import { IoCloseSharp } from "react-icons/io5";
+import Sidebar from "./Sidebar";
+import { RiHome5Line } from "react-icons/ri";
+import { FaRegUser } from "react-icons/fa";
+import { PiPingPong } from "react-icons/pi";
+import { PiPingPongLight } from "react-icons/pi";
+import { IoLogOutOutline } from "react-icons/io5";
 
 function NavBar(){
+    const [open, setOpen] = useState<boolean>(false)
     return(
-        <div className=" bg-[#2B2F32] rounded-lg shadow-xl  col-span-12 lg:col-span-11 row-span-1 grid grid-cols-3 items-center ">
-            <span className="text-white col-span-1 lg:hidden  px-8 text-3xl"> <CiMenuBurger/> </span>
-            <input type="text" placeholder="Search" className="w-[60%] hidden lg:block justify-self-end col-span-1 rounded-full border-1 border-white focus:outline-none h-[50%] bg-[#404549] pr-4 pl-8 pt-2 pb-2 focus:bg-slate-200  focus:border-black duration-300"/>
-            <div className="col-span-2 lg:col-span-1 flex items-center justify-evenly justify-self-center lg:justify-self-end">
-                <ul className="flex text-[#FFFFFF] bg-[#404549] text-[2.2rem] rounded-2xl gap-12 lg:gap-4 ">
-                    <li className="cursor-pointer lg:pr-3 lg:pl-3"><IoNotificationsOutline /></li>
-                    <li className="cursor-pointer lg:pr-3 lg:pl-3"><AiOutlineMessage /></li>
-                    <li className="flex gap-1 text-xl items-center cursor-pointer lg:pr-3 lg:pl-3">
-                        <img src="./src/assets/8.jpg" alt="user" className=" h-10 w-10 rounded-full" />
-                        <IoIosArrowDropdown className="text-xl"/>
-                    </li>
-                </ul>
+       <>
+        <div className=" bg-[#2B2F32] rounded-lg shadow-xl w-[100%] h-[70px] flex justify-center items-center gap-8 overflow-hidden">
+            <span className="text-white text-4xl basis-[5%] lg:hidden px-4" onClick={() => {setOpen(!open)}}> {!open ? <IoMenuSharp/> : <IoCloseSharp/>} </span>
+            <div className=" basis-[55%] lg:basis-[75%] flex justify-center">
+                <input type="text" placeholder="Search" className=" w-[50%] rounded-full border-1 border-white focus:outline-none  bg-[#404549] pr-4 pl-8 pt-2 pb-2 focus:bg-slate-200  focus:border-black duration-300"/>
+            </div>
+            {/* <div className="flex items-center justify-evenly justify-self-center lg:justify-self-end "> */}
+            <div id="nav-menu" className=" basis-[35%] lg:basis-[20%] rounded-full bg-[#404549] text-white flex items-center text-4xl justify-around gap-4">
+                <span>
+                    <IoNotificationsOutline/>
+                </span>
+                <span className="hidden sm:inline">
+                    <AiOutlineMessage/>
+                </span>
+                <div className="basis-16">
+                    <img src="./src/assets/8.jpg" alt="user-pic" className=" w-8 h-8 lg:w-9 lg:h-9 object-center rounded-full"/>
+                </div>
+            </div>
+            {/* </div> */}
+        </div>
+        <div className={`bg-[#2B2F32] text-white font-poppins rounded-lg shadow-xl  w-64  h-[85%] top-[6rem] transition ease-in duration-200 ${open ? " translate-x-[0%]" : "translate-x-[-110%] "} lg:translate-x-[0%] absolute  flex flex-col `}>
+            <div className="basis-[15%] ">
+                LOGO
+            </div>
+            <ul className="basis-[70%]  flex flex-col justify-around items-center text-3xl">
+                <li className=" w-full  flex justify-center items-center gap-8 p-4">
+                    <span><RiHome5Line/></span>
+                    <span> Home</span>
+                </li >
+                <li className="w-full  flex justify-center items-center gap-8 p-4">
+                    <span><FaRegUser/></span>
+                    <span> Profile</span>
+                </li>
+                <li className="w-full  flex justify-center items-center gap-8 p-4">
+                    <span><PiPingPong /></span>
+                    <span> Game</span>
+                </li>
+            </ul>
+            <div className="basis-[15%] text-3xl flex justify-center items-end gap-8 p-4">
+                <span className="text-4xl">
+                    <IoLogOutOutline/>
+                </span>
+                <span>Log out</span>
             </div>
         </div>
+       </>
+       
     )
 
 }

@@ -14,7 +14,7 @@ function Sidebar(){
 
     const [active, setActive] = useState<string>('home')
     return(
-        <aside className="bg-[#2B2F32] text-white font-poppins rounded-lg shadow-xl  col-span-1 row-span-12 hidden lg:block">
+        <aside className="bg-[#2B2F32] text-white font-poppins rounded-lg shadow-xl  hidden lg:block w-64 mt-[0.5rem] h-[calc(100%-4.375rem)]">
             {/* <div id="logo" className="invisible sm:visible  text-center h-[10%]">
                 <h1 className="text-[25px] text-white">LOGO</h1>
                 <div className="w-[100%] bg-white h-[2px]"></div>
