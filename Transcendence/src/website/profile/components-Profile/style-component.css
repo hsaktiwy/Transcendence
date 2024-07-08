@@ -1,0 +1,94 @@
+
+/*--------- side -bar -----------*/
+.side-bar-div
+{
+    /* border: solid; */
+    height: 933px;
+    width: 139px;
+    border-radius:  20px;
+    background-color: #1D1E22;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    /* grid-template-rows: 1fr 1fr 1fr; */
+}
+
+.side-bar-div-grid
+{
+    /* border: solid; */
+}
+.logo-center
+{
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    padding-left: 15px;
+}
+.center-sid-bar
+{
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    flex-direction: column;
+}
+.size-image
+{
+    width: 29.2px;
+}
+.log-out
+{
+    padding-left: 6px;
+    padding-bottom: 40px;
+}
+/* ------------------------------- */
+/*-------------Search-info-profile-------------*/
+
+.search-info-profile
+{
+    /* border: solid; */
+    width: 100%;
+    display: flex;
+
+}
+
+.top {
+
+}
+
+.flex {
+    display: flex;
+}
+/* ------------------------------- */
+/*------------- Search-navbar -------------*/
+
+.SearchNavBar
+{
+    /* border: solid; */
+    height: 150px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-bar-div
+{
+    /* border: solid; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: aliceblue; */
+}
+.search-bar
+{
+    border: solid;
+    width: 620px;
+    height: 92px;
+    margin-left:  60px;
+    
+}
+.nav-bar
+{
+    border: solid;
+}
