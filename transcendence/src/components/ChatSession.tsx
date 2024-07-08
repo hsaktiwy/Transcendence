@@ -9,7 +9,7 @@ import { RiSendPlaneFill } from "react-icons/ri";
 function ChatSession(){
     return(
 
-        <div className="bg-[#2B2F32] rounded-lg shadow-xl col-span-9  lg:col-span-8 row-span-12 pt-4 pb-4 pr-12 pl-12 font-poppins flex flex-col justify-between">
+        <div className="bg-[#2B2F32] rounded-lg shadow-xl col-span-12  lg:col-span-8 row-span-12 pt-4 pb-4 pr-12 pl-12 font-poppins flex flex-col justify-between">
             <div id="conversation-header-container">
                 <div id="conversation-header" className="text-white grid grid-cols-4 after:">
                     <div id="friend-info" className="col-span-2 flex gap-8">
