@@ -21,6 +21,8 @@ from channels.views import MessageRetrieveUpdateDestroyAPIView, MessageAPICreate
 from status.views import NotificationRetrieveUpdateDestroyAPIView, NotificationAPICreate, ProfileStatusRetrieveUpdateDestroyAPIView, ProfileStatusAPICreate
 from friendship.views import SendFriendRequest, AcceptFriendRequest, BlockFriendRequest, DeclineFriendRequest, DeleteFriendship, ListFriendRequests, ListFriends
 from game.views import ListGames, ListGamesWaiting, CreateGame, DestroyGame, ListGamesInProgress, ListGamesEnded, ChangeGameStatus
+from invitation.views import SendGameInvitation
+
 urlpatterns = [
     # this was here by defalt gave us grafical admin interface only for users assogne in django default users exemple (hsaktiwy, 1234)<- super user in production level #DestroyThis
     path('admin/', admin.site.urls),
@@ -57,4 +59,6 @@ urlpatterns = [
     path('games/inProgress/', ListGamesInProgress.as_view(), name="InProgress_Games"),
     path('games/ended/', ListGamesEnded.as_view(), name="Ended_Games"),
     path('games/change/status/<int:game_id>/<str:status_index>', ChangeGameStatus.as_view(), name="changeStatus_Games"),
+    #Game Invitation
+    path('invitation/send/<int:sender_id>/<int:receiver_id>', SendGameInvitation.as_view(), name="send_GameInvitation"),
 ]
