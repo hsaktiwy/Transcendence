@@ -4,4 +4,4 @@ from .models import GameInvitation
 class GameInvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = GameInvitation
-        feilds = '__all__'
+        fields = '__all__'
