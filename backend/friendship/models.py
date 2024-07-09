@@ -11,7 +11,7 @@ class Friendship(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendship')
 	friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
 	status = models.CharField(max_length=100,
-                           choices=[(tag.name, tag.value) for tag in RelationShipStatus],
+                           choices=[(tag.value, tag.name) for tag in RelationShipStatus],
                            default=RelationShipStatus.PENDING.value)
 	created_at = models.DateTimeField(auto_now_add=True)
 

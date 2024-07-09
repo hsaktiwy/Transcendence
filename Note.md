@@ -1,6 +1,6 @@
 becarefull:
-    keep the secret key used in production secret! (backend/api{or app}/setting.py/SECRET_KEY)
-
+    - keep the secret key used in production secret! (backend/api{or app}/setting.py/SECRET_KEY)
+    - There is some comment marked as 'destroyThis' to destroy it before push {Hamza Saktiwy} 
 
 Production levels:
     + added cors to our project mainsetting
@@ -24,3 +24,7 @@ Production levels:
             }
             CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"] 
         }
+
+Do List:
+    [ ] create a way where you can add welcome notification and ProfileStatus at the time where the user is created
+
