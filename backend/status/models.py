@@ -14,7 +14,7 @@ class Notification(models.Model):
     content = models.TextField()
     type = models.CharField(
             max_length=20,
-            choices=[(tag.name, tag.value) for tag in NotificationType],
+            choices=[(tag.value, tag.name) for tag in NotificationType],
             default=NotificationType.system.value,
         )
     created = models.DateTimeField(auto_now_add=True)

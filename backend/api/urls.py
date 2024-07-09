@@ -20,7 +20,7 @@ from users.views import UserRetrieveUpdateDestroyAPIView, UserAPICreate
 from channels.views import MessageRetrieveUpdateDestroyAPIView, MessageAPICreate, ChannelRetrieveUpdateDestroyAPIView, ChannelAPICreate
 from status.views import NotificationRetrieveUpdateDestroyAPIView, NotificationAPICreate, ProfileStatusRetrieveUpdateDestroyAPIView, ProfileStatusAPICreate
 from friendship.views import SendFriendRequest, AcceptFriendRequest, BlockFriendRequest, DeclineFriendRequest, DeleteFriendship, ListFriendRequests, ListFriends
-from game.views import ListGames, ListGamesWaiting, CreateGame
+from game.views import ListGames, ListGamesWaiting, CreateGame, DestroyGame, ListGamesInProgress, ListGamesEnded, ChangeGameStatus
 urlpatterns = [
     # this was here by defalt gave us grafical admin interface only for users assogne in django default users exemple (hsaktiwy, 1234)<- super user in production level #DestroyThis
     path('admin/', admin.site.urls),
@@ -52,5 +52,9 @@ urlpatterns = [
     #Game
     path('games/create/', CreateGame.as_view(), name="Add_Game"),
     path('games/list/', ListGames.as_view(), name="Access_Game"),
+    path('games/Delete/<int:pk>', DestroyGame.as_view(), name="Destroy_Game"),
     path('games/waiting/', ListGamesWaiting.as_view(), name="Waiting_Games"),
+    path('games/inProgress/', ListGamesInProgress.as_view(), name="InProgress_Games"),
+    path('games/ended/', ListGamesEnded.as_view(), name="Ended_Games"),
+    path('games/change/status/<int:game_id>/<str:status_index>', ChangeGameStatus.as_view(), name="changeStatus_Games"),
 ]

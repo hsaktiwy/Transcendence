@@ -13,7 +13,7 @@ class Game(models.Model):
     winner = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='game_winner', null=True, blank=True)
     status =  models.CharField(
             max_length=20,
-            choices=[(tag.name, tag.value) for tag in GameEnumStatus],
+            choices=[(tag.value, tag.name) for tag in GameEnumStatus],
             default=GameEnumStatus.WAITING.value
             )
     start = models.DateTimeField(auto_now_add=True)
