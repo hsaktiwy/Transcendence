@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'status.apps.StatusConfig',
     'friendship.apps.FriendshipConfig',
     'game.apps.GameConfig',
+    'invitation.apps.InvitationConfig'
 ]
 
 REST_FRAMEWORK = {
