@@ -17,7 +17,7 @@ function NavBar(){
     const [open, setOpen] = useState<boolean>(false)
     return(
        <>
-        <div className=" bg-[#2B2F32] rounded-lg shadow-xl w-[100%] h-[70px] flex justify-center items-center gap-8 overflow-hidden">
+        <div className=" rounded-lg shadow-xl w-[100%] h-[80px] flex justify-center items-center gap-8 overflow-hidden ">
             <span className="text-white text-4xl basis-[5%] lg:hidden px-4" onClick={() => {setOpen(!open)}}> {!open ? <IoMenuSharp/> : <IoCloseSharp/>} </span>
             <div className=" basis-[55%] lg:basis-[75%] flex justify-center">
                 <input type="text" placeholder="Search" className=" w-[50%] rounded-full border-1 border-white focus:outline-none  bg-[#404549] pr-4 pl-8 pt-2 pb-2 focus:bg-slate-200  focus:border-black duration-300"/>
@@ -36,8 +36,11 @@ function NavBar(){
             </div>
             {/* </div> */}
         </div>
-        <div className={`bg-[#2B2F32] text-white font-poppins rounded-lg shadow-xl  w-64  h-[85%] top-[6rem] transition ease-in duration-200 ${open ? " translate-x-[0%]" : "translate-x-[-110%] "} lg:translate-x-[0%] absolute  flex flex-col `}>
-            <div className="basis-[15%] ">
+        <div className={` bg-[rgba(0,0,0,0.7)] lg:bg-[#404549] text-white font-poppins h-[calc(100vh-80px)] w-screen lg:w-[120px]   top-[80px] transition ease-in duration-200 ${open ? " translate-x-[0%]" : "translate-x-[-110%] "} lg:translate-x-[0%] absolute  flex flex-col `}>
+            <div>
+                logo
+            </div>
+            {/* <div className="basis-[15%] ">
                 LOGO
             </div>
             <ul className="basis-[70%]  flex flex-col justify-around items-center text-3xl">
@@ -59,7 +62,7 @@ function NavBar(){
                     <IoLogOutOutline/>
                 </span>
                 <span>Log out</span>
-            </div>
+            </div> */}
         </div>
        </>
        

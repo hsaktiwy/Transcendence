@@ -7,9 +7,9 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="bg-black w-screen h-screen  p-4 relative">
+    <div className="bg-black w-screen h-screen  relative">
       <NavBar/>
-
+      {children}
     </div>
   );
 };
