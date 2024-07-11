@@ -3,16 +3,20 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from .validators import Validator_birthDay
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, login, email, birthDay,password,**extra_fields):
+    def create_user(self, login, email, firstName, lastName, birthDay,password,**extra_fields):
         if not login:
             ValueError("User must set the login")
         email = self.normalize_email(email)
         Validator_birthDay(email)
-        user = self(login=login, email=email, birthDay=birthDay, **extra_fields)
+        user = self(login=login, email=email, firstName=firstName, lastName=lastName, birthDay=birthDay, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
+    def create_superuser(self, login, email, firstName, lastName, birthDay, password=None, **extra_fields):
+        extra_fields.setdefault('is_admin', True)
+        extra_fields.setdefault('is_superuser', True)
 
+        return self.create_user(login, email, firstName, lastName, birthDay, password, **extra_fields)
 # Create your models here.
 class MyUser(AbstractBaseUser):
     #password field already exist in the AbstractBaseUser model no need to overide it
@@ -26,6 +30,8 @@ class MyUser(AbstractBaseUser):
     two_factor_auth_code = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = "login"
     REQUIRED_FIELDS = ["email", "firstName", "lastName", "birthDay"]
