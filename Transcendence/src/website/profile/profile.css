@@ -8,17 +8,17 @@
     overflow: hidden;
     z-index: 1;
     pointer-events: none;
-    background-image: radial-gradient(#a8a8a81b 1px, transparent 1px);
+    /* background-image: radial-gradient(#a8a8a81b 1px, transparent 1px); */
     background-size: 10px 10px;
 }
 .main
 {
     color: inherit;
     position: relative;
-    padding-top: 73px;
+
+    /* padding-top: 73px; */
     padding-bottom: 0px;
     /* border: solid; */
-    /* align-items:  center; */
 }
 .banner
 {
@@ -28,17 +28,17 @@
 
 .screen
 {
-    width: 1548px;
-    height: 933px;
+    width: 100%;
+    height: 680px;
     /* position: relative; */
     margin: auto;
     /* border: solid; */
-    border-radius: 8px;
-    border-width: 0.5px;
-    border-color: rgb(97, 97, 97);
+    /* border-radius: 8px;
+    border-width: 0.5px; 
+    border-color: rgb(97, 97, 97); */
     display: flex;
 }
 .grid-side-bar
 {
-    border: solid;
+    /* border: solid; */
 }
