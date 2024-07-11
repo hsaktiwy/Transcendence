@@ -40,11 +40,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'users.apps.UsersConfig',
-    'channels.apps.ChannelsConfig',
-    'status.apps.StatusConfig',
-    'friendship.apps.FriendshipConfig',
-    'game.apps.GameConfig',
-    'invitation.apps.InvitationConfig'
+    # 'channels.apps.ChannelsConfig',
+    # 'status.apps.StatusConfig',
+    # 'friendship.apps.FriendshipConfig',
+    # 'game.apps.GameConfig',
+    # 'invitation.apps.InvitationConfig'
 ]
 
 REST_FRAMEWORK = {
