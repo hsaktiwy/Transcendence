@@ -31,36 +31,36 @@ urlpatterns = [
     path('users/create/', UserAPICreate.as_view(), name="Add_Users"),
     #channel app
         # messages
-    path('messages/<int:pk>/', MessageRetrieveUpdateDestroyAPIView.as_view(), name="Access_Message"),
-    path('messages/create/', MessageAPICreate.as_view(), name="Add_Message"),
-        #channels
-    path('channels/<int:pk>/', ChannelRetrieveUpdateDestroyAPIView.as_view(), name="Access_Channel"),
-    path('channels/create/', ChannelAPICreate.as_view(), name="Add_Channel"),
-    #status app
-        #Notifications
-    path('notification/<int:pk>/', NotificationRetrieveUpdateDestroyAPIView.as_view(), name="Access_Notification"),
-    path('notification/create/', NotificationAPICreate.as_view(), name="Add_Notification"),
-        #ProfileStatus
-    path('ProfileStatus/<int:pk>/', ProfileStatusRetrieveUpdateDestroyAPIView.as_view(), name="Access_ProfileStatus"),
-    path('ProfileStatus/create/', ProfileStatusAPICreate.as_view(), name="Add_ProfileStatus"),
-    #friendship app
-    path('friendRequests/send/<int:user_id>/<int:friend_id>', SendFriendRequest.as_view(), name='send_friend_request'),
-    path('friendRequests/list/<int:user_id>/', ListFriendRequests.as_view(), name='list_friend_requests'),
-    path('friendRequests/listFriends/<int:user_id>/', ListFriends.as_view(), name='list_friends'),
-    path('friendRequests/accept/<int:pk>', AcceptFriendRequest.as_view(), name='accept_friend_request'),
-    path('friendRequests/block/<int:pk>', BlockFriendRequest.as_view(), name='block_friend_request'),
-    path('friendRequests/decline/<int:pk>', DeclineFriendRequest.as_view(), name='decline_friend_request'),
-    path('friendships/delete/<int:pk>', DeleteFriendship.as_view(), name='delete_friendship'),
-    #Game
-    path('games/create/', CreateGame.as_view(), name="Add_Game"),
-    path('games/list/', ListGames.as_view(), name="Access_Game"),
-    path('games/Delete/<int:pk>', DestroyGame.as_view(), name="Destroy_Game"),
-    path('games/waiting/', ListGamesWaiting.as_view(), name="Waiting_Games"),
-    path('games/inProgress/', ListGamesInProgress.as_view(), name="InProgress_Games"),
-    path('games/ended/', ListGamesEnded.as_view(), name="Ended_Games"),
-    path('games/change/status/<int:game_id>/<str:status_index>', ChangeGameStatus.as_view(), name="ChangeStatus_Games"),
-    #Game Invitation
-    path('invitation/list/', ListGameInvitation.as_view(), name="Access_GameInvitation"),
-    path('invitation/send/<int:sender_id>/<int:receiver_id>', SendGameInvitation.as_view(), name="Send_GameInvitation"),
-    path('invitation/change/status/<int:pk>/<str:Status>', ChangeGameInvitationStatus.as_view(), name="ChangeStatus_GameInvitation"),
+    # path('messages/<int:pk>/', MessageRetrieveUpdateDestroyAPIView.as_view(), name="Access_Message"),
+    # path('messages/create/', MessageAPICreate.as_view(), name="Add_Message"),
+    #     #channels
+    # path('channels/<int:pk>/', ChannelRetrieveUpdateDestroyAPIView.as_view(), name="Access_Channel"),
+    # path('channels/create/', ChannelAPICreate.as_view(), name="Add_Channel"),
+    # #status app
+    #     #Notifications
+    # path('notification/<int:pk>/', NotificationRetrieveUpdateDestroyAPIView.as_view(), name="Access_Notification"),
+    # path('notification/create/', NotificationAPICreate.as_view(), name="Add_Notification"),
+    #     #ProfileStatus
+    # path('ProfileStatus/<int:pk>/', ProfileStatusRetrieveUpdateDestroyAPIView.as_view(), name="Access_ProfileStatus"),
+    # path('ProfileStatus/create/', ProfileStatusAPICreate.as_view(), name="Add_ProfileStatus"),
+    # #friendship app
+    # path('friendRequests/send/<int:user_id>/<int:friend_id>', SendFriendRequest.as_view(), name='send_friend_request'),
+    # path('friendRequests/list/<int:user_id>/', ListFriendRequests.as_view(), name='list_friend_requests'),
+    # path('friendRequests/listFriends/<int:user_id>/', ListFriends.as_view(), name='list_friends'),
+    # path('friendRequests/accept/<int:pk>', AcceptFriendRequest.as_view(), name='accept_friend_request'),
+    # path('friendRequests/block/<int:pk>', BlockFriendRequest.as_view(), name='block_friend_request'),
+    # path('friendRequests/decline/<int:pk>', DeclineFriendRequest.as_view(), name='decline_friend_request'),
+    # path('friendships/delete/<int:pk>', DeleteFriendship.as_view(), name='delete_friendship'),
+    # #Game
+    # path('games/create/', CreateGame.as_view(), name="Add_Game"),
+    # path('games/list/', ListGames.as_view(), name="Access_Game"),
+    # path('games/Delete/<int:pk>', DestroyGame.as_view(), name="Destroy_Game"),
+    # path('games/waiting/', ListGamesWaiting.as_view(), name="Waiting_Games"),
+    # path('games/inProgress/', ListGamesInProgress.as_view(), name="InProgress_Games"),
+    # path('games/ended/', ListGamesEnded.as_view(), name="Ended_Games"),
+    # path('games/change/status/<int:game_id>/<str:status_index>', ChangeGameStatus.as_view(), name="ChangeStatus_Games"),
+    # #Game Invitation
+    # path('invitation/list/', ListGameInvitation.as_view(), name="Access_GameInvitation"),
+    # path('invitation/send/<int:sender_id>/<int:receiver_id>', SendGameInvitation.as_view(), name="Send_GameInvitation"),
+    # path('invitation/change/status/<int:pk>/<str:Status>', ChangeGameInvitationStatus.as_view(), name="ChangeStatus_GameInvitation"),
 ]
