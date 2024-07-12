@@ -1,10 +1,10 @@
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from datetime import timedelta
-
+from datetime import datetime
 
 def Validator_birthDay(value):
-    current = timezone.now().date()
-    age = current - timedelta(days=6*365)
-    if (value > age):
-        ValueError("User must must be at least 6 years old.")
+    if isinstance(value, str):
+        value = datetime.strptime(value, '%Y-%m-%d').date()
+    age = datetime.now().date() - value
+    if age.days / 365 < 18:
+        raise ValueError("User must be at least 18 years old.")
