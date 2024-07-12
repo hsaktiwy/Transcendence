@@ -9,7 +9,7 @@ function ProfileSection()
         <>
             <div className='ProfileSection lineUp'>
                 <ProfileOverView/>
-                <StatsComponent/>         
+                <StatsComponent/>
             </div>
         </>
         
