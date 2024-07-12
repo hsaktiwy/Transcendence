@@ -12,7 +12,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('login', 'email', 'password')}),
         ('Personal info', {'fields': ('firstName', 'lastName', 'birthDay')}),
-        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'is_active')}),
+        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'is_active', 'is_staff')}),
         ('Important dates', {'fields': ('created_at',)}),
     )
     add_fieldsets = (
@@ -22,5 +22,4 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
     ordering = ('login',)
-
 admin.site.register(MyUser, UserAdmin)

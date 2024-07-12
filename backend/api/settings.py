@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     # 'game.apps.GameConfig',
     # 'invitation.apps.InvitationConfig'
 ]
-
+AUTH_USER_MODEL = "users.MyUser"
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         'rest_framework.permissions.AllowAny',

@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from users.views import UserRetrieveUpdateDestroyAPIView, UserAPICreate
+from users.views import UserRetrieveUpdateDestroyAPIView, UserAPICreate, UserListAPIView
 # from channels.views import MessageRetrieveUpdateDestroyAPIView, MessageAPICreate, ChannelRetrieveUpdateDestroyAPIView, ChannelAPICreate
 # from status.views import NotificationRetrieveUpdateDestroyAPIView, NotificationAPICreate, ProfileStatusRetrieveUpdateDestroyAPIView, ProfileStatusAPICreate
 # from friendship.views import SendFriendRequest, AcceptFriendRequest, BlockFriendRequest, DeclineFriendRequest, DeleteFriendship, ListFriendRequests, ListFriends
@@ -27,8 +27,9 @@ urlpatterns = [
     # this was here by defalt gave us grafical admin interface only for users assogne in django default users exemple (hsaktiwy, 1234)<- super user in production level #DestroyThis
     path('admin/', admin.site.urls),
     #users app
-    path('users/<int:pk>/', UserRetrieveUpdateDestroyAPIView.as_view(), name="Access_User"),
-    path('users/create/', UserAPICreate.as_view(), name="Add_Users"),
+    path('users/', UserListAPIView.as_view(), name="Access_Users"),
+    path('user/<int:pk>/', UserRetrieveUpdateDestroyAPIView.as_view(), name="Access_User"),
+    path('user/create/', UserAPICreate.as_view(), name="Add_Users"),
     #channel app
         # messages
     # path('messages/<int:pk>/', MessageRetrieveUpdateDestroyAPIView.as_view(), name="Access_Message"),
