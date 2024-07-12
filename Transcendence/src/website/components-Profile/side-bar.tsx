@@ -14,12 +14,12 @@ function sideBar()
                     <h1 style={{fontWeight: '400'}} >Home</h1>
                 </div>
                 <div className="div-side-bar-icon">
-                    <img className="size-image-bar" src="/images/Vector.svg" />
+                    <img className="size-image-bar" src="/images/profileVector.svg" />
                     <h1 style={{fontWeight: '400'}} >Profile</h1>
                 </div>
                 <div className="div-side-bar-icon">
                     <img className="size-image-bar" src="/images/Message.svg" />
-                    <h1 style={{fontWeight: '400'}} >Chat  '</h1>
+                    <h1 style={{fontWeight: '400'}} >Chatt</h1>
                 </div>
                 <div className="div-side-bar-icon">
                     <img className="size-image-bar" src="/images/pong_.svg" />
