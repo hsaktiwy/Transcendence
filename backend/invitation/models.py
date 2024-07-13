@@ -1,5 +1,4 @@
 from django.db import models
-from game.models import Game, User
 from enum import Enum
 
 # Create your models here.
@@ -9,8 +8,8 @@ class GameInvitationStatus(Enum):
     DECLINED = 'declined'
 
 class GameInvitation(models.Model):
-    user_sender  = models.ForeignKey('users.user', on_delete=models.CASCADE, related_name="sender")
-    user_receiver  = models.ForeignKey('users.user', on_delete=models.CASCADE, related_name="receiver")
+    user_sender  = models.ForeignKey('users.Myuser', on_delete=models.CASCADE, related_name="sender")
+    user_receiver  = models.ForeignKey('users.Myuser', on_delete=models.CASCADE, related_name="receiver")
     status = models.CharField(
                 max_length=20,
                 choices=[(tag.value, tag.name) for tag in GameInvitationStatus],

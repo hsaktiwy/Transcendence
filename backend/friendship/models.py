@@ -1,6 +1,6 @@
 from django.db import models
 from enum import Enum
-from users.models import User
+from users.models import MyUser
 # Create your models here.
 class RelationShipStatus(Enum):
 	PENDING = 'pending'
@@ -8,8 +8,8 @@ class RelationShipStatus(Enum):
 	DECLINED = 'declined'
 	BLOCKED = 'blocked'
 class Friendship(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendship')
-	friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
+	user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='friendship')
+	friend = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='friends')
 	status = models.CharField(max_length=100,
                            choices=[(tag.value, tag.name) for tag in RelationShipStatus],
                            default=RelationShipStatus.PENDING.value)

@@ -4,7 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Friendship, RelationShipStatus
 from .serializers import FriendshipSerializer
-from users.models import User
+from users.models import MyUser
+from rest_framework.permissions import IsAuthenticated
+
 # Create your views here.
 
 # this will need authentication
@@ -30,6 +32,7 @@ from users.models import User
 # this need the user log in to define the proper behavios as in this case any of the 2 users they can redefine there friend ship with the other in both side
 # plus any user that new a friendship id can change other users friendship status
 class ListFriendRequests(generics.ListAPIView):
+	permission_classes = [IsAuthenticated]
 	serializer_class = FriendshipSerializer
 	def get_sentedRequest(self):
 		user_id = self.kwargs['user_id']
@@ -56,6 +59,7 @@ class ListFriendRequests(generics.ListAPIView):
         })
 
 class ListFriends(generics.ListAPIView):
+	permission_classes = [IsAuthenticated]
 	serializer_class = FriendshipSerializer
 	def get_sentedRequest(self):
 		user_id = self.kwargs['user_id']
@@ -82,16 +86,22 @@ class ListFriends(generics.ListAPIView):
 		})
 	
 class SendFriendRequest(APIView):
+	permission_classes = [IsAuthenticated]
 	def post(self,request, user_id, friend_id,**kwargs):
-		user = User.objects.get(id=user_id)
-		friend = User.objects.get(id=friend_id)
-		friendship, created = Friendship.objects.get_or_create(user=user, friend=friend)
-		if created:
-			return Response({'message': 'Friend request sent'}, status=status.HTTP_201_CREATED)
-		else:
-			return Response({'message': 'Friend request was already sent'}, status=status.HTTP_200_OK)
+		try:
+			user = MyUser.objects.get(id=user_id)
+			friend = MyUser.objects.get(id=friend_id)
+			friendship, created = Friendship.objects.get_or_create(user=user, friend=friend)
+			if created:
+				return Response({'message': 'Friend request sent'}, status=status.HTTP_201_CREATED)
+			else:
+				return Response({'message': 'Friend request was already sent'}, status=status.HTTP_200_OK)
+		except MyUser.DoesNotExist as e:
+			return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
 
 class AcceptFriendRequest(APIView):
+	permission_classes = [IsAuthenticated]
 	def put(self,reuest, pk, **kwargs):
 		friendship = Friendship.objects.get(id=pk)
 		friendship2, created = Friendship.objects.get_or_create(user=friendship.friend, friend=friendship.user)
@@ -102,6 +112,7 @@ class AcceptFriendRequest(APIView):
 		return Response({'message': 'Accept request sent'}, status=status.HTTP_200_OK)
 
 class BlockFriendRequest(APIView):
+	permission_classes = [IsAuthenticated]
 	def put(self, request,pk,**kwargs):
 		friendship = Friendship.objects.get(id=pk)
 		friendship2, created= Friendship.objects.get_or_create(user=friendship.friend, friend=friendship.user)
@@ -112,6 +123,7 @@ class BlockFriendRequest(APIView):
 		return Response({'message': 'Block request sent'}, status=status.HTTP_200_OK)
 
 class DeclineFriendRequest(APIView):
+	permission_classes = [IsAuthenticated]
 	def put(self, request, pk,**kwargs):
 		friendship = Friendship.objects.get(id=pk)
 		friendship2 = Friendship.objects.get_or_create(user=friendship.friend, friend=friendship.user)
@@ -122,6 +134,7 @@ class DeclineFriendRequest(APIView):
 		return Response({'message': 'Declinerequest sent'}, status=status.HTTP_200_OK)
 
 class DeleteFriendship(APIView):
+	permission_classes = [IsAuthenticated]
 	def delete(self, request, pk, **kwargs):
 		friendship = Friendship.objects.get(id=pk)
 		st = friendship.status

@@ -40,17 +40,23 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'users.apps.UsersConfig',
-    # 'channels.apps.ChannelsConfig',
-    # 'status.apps.StatusConfig',
-    # 'friendship.apps.FriendshipConfig',
-    # 'game.apps.GameConfig',
-    # 'invitation.apps.InvitationConfig'
+    'channels.apps.ChannelsConfig',
+    'status.apps.StatusConfig',
+    'friendship.apps.FriendshipConfig',
+    'game.apps.GameConfig',
+    'invitation.apps.InvitationConfig'
 ]
 AUTH_USER_MODEL = "users.MyUser"
+
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         'rest_framework.permissions.AllowAny',
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES":
+    [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
 }
 
 MIDDLEWARE = [
