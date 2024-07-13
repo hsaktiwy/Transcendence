@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User
+from users.models import MyUser
 from enum import Enum
 
 # Create your models here.
@@ -10,7 +10,7 @@ class NotificationType(Enum):
     tournament = 'tournament'
 
 class Notification(models.Model):
-    id_user_fk = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     content = models.TextField()
     type = models.CharField(
             max_length=20,
@@ -20,7 +20,7 @@ class Notification(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 class ProfileStatus(models.Model):
-    id_user_fk =  models.ForeignKey('users.User', on_delete=models.CASCADE)
+    id_user_fk =  models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     total_games = models.IntegerField()
     wins = models.IntegerField()
     lostes = models.IntegerField()

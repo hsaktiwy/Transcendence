@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Message, channel
+from .models import Message, Channel
 
 class MessageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -7,5 +7,5 @@ class MessageSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 class ChannelSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = channel
+		model = Channel
 		fields = '__all__'

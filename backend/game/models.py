@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User
+from users.models import MyUser
 from enum import Enum
 
 # Create your models here.
@@ -9,8 +9,8 @@ class GameEnumStatus(Enum):
     ENDED = 'ended'
 
 class Game(models.Model):
-    players = models.ManyToManyField(User)
-    winner = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='game_winner', null=True, blank=True)
+    players = models.ManyToManyField(MyUser)
+    winner = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='game_winner', null=True, blank=True)
     status =  models.CharField(
             max_length=20,
             choices=[(tag.value, tag.name) for tag in GameEnumStatus],
