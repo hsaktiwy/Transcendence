@@ -27,4 +27,5 @@ Production levels:
 
 Do List:
     [ ] create a way where you can add welcome notification and ProfileStatus at the time where the user is created
-
+    [ ] when trying to get the user channel try to identife the last channel a user did sent a message in it bye adding to the channels a property named lastUpdate
+ 
