@@ -2,3 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scrollbar container */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Scrollbar track */
+  ::-webkit-scrollbar-track {
+    background: #000;
+    border-radius: 5px;
+  }
+  
+  /* Scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+    background: #5E97A9;
+    border-radius: 5px;
+  }
+  
+  /* Scrollbar thumb on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background:  #4e4f50;
+  }

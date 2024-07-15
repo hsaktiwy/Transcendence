@@ -3,7 +3,7 @@ import ChatSession from "./ChatSession";
 import Conversations from "./Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "../utils/ChatContext"
 import {convs} from "../utils/ConversationsList"
-
+import ChatFriendInfo from "./ChatFriendInfo";
 
 import { createContext } from "react";
 
@@ -54,13 +54,15 @@ function ChatSection(){
 //     ]
 
     const [active, setActive] = useState<Conversation>(convs[0])
-    const [activeSectionOnSm, setActiveSection] = useState<React.ReactNode>(<ChatSession/>)
+    const [activeSectionOnSm, setActiveSection] = useState<string>('conversations')
+    const [showProfile, setShowProfile] = useState<boolean>(false)
     return(
 
-        <ChatSectionContext.Provider value={{convs, setActive, active, activeSectionOnSm, setActiveSection}}>
-            <div className=" animate-fade-down ml-1 lg:ml-[140px]   mr-1 lg:mr-6 my-6 grid grid-cols-12 grid-rows-12 gap-2 lg:gap-4 h-[calc(100vh-128px)] overflow-hidden">
+        <ChatSectionContext.Provider value={{convs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile}}>
+            <div className=" animate-fade-down ml-2 lg:ml-[140px]   mr-2 lg:mr-6 mt-6  mb-6 h-[calc(100vh-118px)] overflow-hidden relative">
                 <Conversations/>
                 <ChatSession/>
+                <ChatFriendInfo/>
                 {/* <div className="bg-[#898989] rounded-lg shadow-xl hidden lg:block lg:col-span-3 row-span-12">User</div> */}
                 
             </div>
