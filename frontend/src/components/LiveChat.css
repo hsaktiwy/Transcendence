@@ -1,0 +1,100 @@
+.bi-three-dots
+{
+    width: 2.2vw;
+    height: 2.2vw;
+}
+
+.LiveChat
+{
+    margin-top: 3vh;
+    margin-right: 1vw;
+    display: flex;
+    flex-direction: column;
+    color:beige;
+    background-color: var(--eerie-black);
+    border-radius: 10px;
+    max-height: 50%;
+}
+
+.headerChat
+{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.Left
+{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content:center ;
+    align-items: flex-start;
+    padding-left: 2vw;
+}
+
+.Right
+{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-items:center ;
+    align-items: flex-end;
+    padding: 1vw 2vw;
+}
+
+.LiveChat_Line
+{
+    display: flex;
+    align-self: center;
+    width: 80%;
+}
+
+.messageInput
+{
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    padding: 0 1vw;
+    height: 3vh;
+    gap: 0.5vw;
+}
+
+.messageInput:hover
+{
+    outline: 1px solid var(  --davys-gray
+);
+    border-radius: 10px;
+}
+
+.messageInput .bi
+{
+    color: var(  --davys-gray
+);
+    width: 2vw;
+    height: 2vw;
+    transform: color 0.3s ease;
+}
+
+.messageInput .bi:hover
+{
+    color: #a69f9f;
+    cursor: pointer;
+}
+
+.textingBar
+{
+    color: #eadede;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    width: 78%;
+    font-size: small;
+}
+
+.textingBar::placeholder
+{
+    color: #a69f9f;
+    font-size: small;
+}

@@ -1,0 +1,29 @@
+.Messages
+{
+    display: flex;
+    flex-direction: column;
+    gap:1.5vh;
+    overflow-y: auto;
+}
+
+/* Scrollbar container */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Scrollbar track */
+  ::-webkit-scrollbar-track {
+    background: #898787;
+    border-radius: 10px;
+  }
+  
+  /* Scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(75, 69, 69);
+    border-radius: 10px;
+  }
+  
+  /* Scrollbar thumb on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background:  rgb(57, 52, 52);
+  }
