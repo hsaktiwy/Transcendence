@@ -7,7 +7,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="bg-black w-screen h-screen  relative">
+    <div className="bg-slate-800 w-screen h-screen  relative ">
       <NavBar/>
       {children}
     </div>
