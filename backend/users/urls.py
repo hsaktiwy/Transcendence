@@ -5,5 +5,5 @@ urlpatterns = [
     path('users/', UserListAPIView.as_view(), name="Access_Users"),
     path('user/<int:pk>/', UserRetrieveUpdateDestroyAPIView.as_view(), name="Access_User"),
     path('user/create/', UserAPICreate.as_view(), name="Add_Users"),
-    path('user/session/',CheckAuthentication.as_view(), name="User_Access"),
+    path('session/',CheckAuthentication.as_view(), name="User_Access"),
 ]
