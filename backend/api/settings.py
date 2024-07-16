@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+
     'rest_framework',
     'users.apps.UsersConfig',
     'channels.apps.ChannelsConfig',
@@ -70,13 +71,28 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True  
+CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
-    "http://localhost:8000",
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173"
 )
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173"] 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173"
+]
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173"] 
+CORS_ALLOW_CREDENTIALS = True
+# CSRF_COOKIE_SAMESITE = 'Strict'
+# SESSION_COOKIE_SAMESITE = 'Strict'
+# CSRF_COOKIE_HTTPONLY = False  # False since we will grab it via universal-cookies
+# SESSION_COOKIE_HTTPONLY = True
 ROOT_URLCONF = 'api.urls'
 
 TEMPLATES = [

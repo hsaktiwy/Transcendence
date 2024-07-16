@@ -1,4 +1,5 @@
-
+import Cookies from "universal-cookie";
+export const cookies = new Cookies();
 export const getCookie = (name: string) : string =>{
     const cookie = document.cookie.split(';').find((line) => line.startsWith(name+"="));
     console.log("cookie : ", document.cookie)

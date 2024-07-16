@@ -1,4 +1,4 @@
 
 export interface childrenInterface{
-    children: React.ReactNode
+    site: React.ReactNode
 }
