@@ -4,7 +4,7 @@ function SearchNavBar()
 {
     return(
         <>
-            <div className='SearchNavBar lineDown'>
+            <div className='SearchNavBar lineDown '>
                 <div className='search-bar-div'>
                     <input className='search-bar' type='text' placeholder='Search'/>
                     {/* <div className='search-bar'>Search</div> */}
