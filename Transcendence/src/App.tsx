@@ -5,13 +5,14 @@ import './App.css'
 import Profile from './website/profile/profile.tsx'
 import Dashboard from './website/dashboard/dashboard.tsx'
 import Testcmpo from './website/components-Profile/testcmpo.tsx'
-
+import TopBar from './website/mobileVersion/topBar.tsx'
 
 function App() {
 
   return (
     <>
-      <Testcmpo/>
+      <TopBar/>
+      {/* <Testcmpo/> */}
         {/* <Dashboard/> */}
         {/* <Profile/> */}
         
