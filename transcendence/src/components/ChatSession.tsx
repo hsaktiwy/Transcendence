@@ -34,18 +34,22 @@ function ChatSession(){
     const [backToMessages, setBackToMessages] = useState<boolean>(false)
     return(
 
-        <div className={`bg-[#404549] animate-fade-down rounded shadow-xl    font-poppins flex flex-col justify-between overflow-hidden absolute right-0 ${chatContext.activeSectionOnSm === 'chat' ? 'w-[100%]' : 'w-0'} lg:w-[70%] xl:w-[78%] h-full transition-all duration-800 
+        <div className={`bg-[url('https://e1.pxfuel.com/desktop-wallpaper/141/941/desktop-wallpaper-wide-q-gothic-gothic-background.jpg')] bg-cover bg-no-repeat animate-fade-down rounded shadow-xl    font-poppins flex flex-col justify-between overflow-hidden absolute right-0 ${chatContext.activeSectionOnSm === 'chat' ? 'w-[100%]' : 'w-0'} lg:w-[70%] xl:w-[78%] h-full transition-all duration-800 
         `}>
             <div id="conversation-header-container" className="">
                 <div id="conversation-header" className="text-white grid grid-cols-4 px-4">
-                        <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center">
+                        <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center cursor-pointer">
                             <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
                                 chatContext.setActiveSection('conversations')
                             }}>
                             <IoArrowBackOutline />
                             </span>
-                            <img src={`${chatContext.active.user2.profilePic}`} alt="user-pic" className="w-[46px] h-[46px] rounded-full" />
-                            <div >
+                            <img src={`${chatContext.active.user2.profilePic}`} alt="user-pic" className="w-[46px] h-[46px] rounded-full cursor-pointer" onClick={()=>{
+                                chatContext.setShowProfile(true)
+                            }}/>
+                            <div className="cursor-pointer" onClick={()=>{
+                                chatContext.setShowProfile(true)
+                            }}>
                                 <p className=" text-[14px] font-semibold">{chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
                                 <p className=" text-[12px] text-gray-400">{`@${chatContext.active.user2.username}`}</p>
                             </div>
@@ -77,12 +81,14 @@ function ChatSession(){
                     })
                 }
             </div> */}
-                        <div className="text-white basis-[85%]  text-[14px] rounded-lg bg-[#404549]  p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
+                        <div className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
                 {
                     messageArray.map((msg, index): React.ReactNode => {
                         return(
                         <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender.id === 1 && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                            <img src={`${msg.sender.profilePic}`} alt="" className=" w-[40px] h-[40px] rounded-full" />
+                            <img src={`${msg.sender.profilePic}`} alt="" className=" w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                chatContext.setShowProfile(true)
+                            }}/>
                             <div id='message' className={`${msg.sender.id !== 1 ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  `}>
                                 <p >{msg.content}</p>
                             </div>

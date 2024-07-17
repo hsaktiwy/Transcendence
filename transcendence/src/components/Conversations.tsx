@@ -96,13 +96,13 @@ function Conversations(){
     throw new Error('error')
   
 return(
-    <div className={`bg-[#323232] rounded shadow-xl  absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full  pt-4 font-poppins flex flex-col overflow-hidden duration-800  transition-all`}>
+    <div className={`bg-[#222222] rounded border-r-[1px] border-white  border-opacity-50 absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full  pt-4 font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all`}>
             <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2">
                 <h1 className="self-start ml-4">All Chats</h1>
                 <div className="bg-zinc-300 w-[100%] h-[1px] lg:mt-5 rounded-full opacity-50"></div>
             </div>
 
-            <div className="online-friends-container">
+            {/* <div className="online-friends-container">
                 <h1 className="text-white font-semibold mt-4 ml-4">Online Friends</h1>
                 <div className="online-friends my-8 flex gap-2 overflow-y-auto">
                     {
@@ -116,7 +116,7 @@ return(
                         })
                     }
                 </div>
-            </div>
+            </div> */}
             <div id="messages-conatiner" className="text-white my-2 flex flex-col gap-2 ">
                 {/* <div className=" mb-4 flex justify-center xl:justify-start gap-6"> */}
                     {
@@ -133,7 +133,7 @@ return(
                             }
                             return(
                                 
-                                <div key={index} className={` ${conv.channelId === chatContext.active.channelId ? "bg-black border-l-2 border-[#5E97A9]  " : ""} mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black duration-150 rounded p-2 `} onClick={() =>{
+                                <div key={index} className={` ${conv.channelId === chatContext.active.channelId ? "bg-black border-l-2 border-[#5E97A9]  " : ""} mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black duration-150 rounded p-4 `} onClick={() =>{
                                     chatContext.setActive(conv)
                                     chatContext.setActiveSection('chat')
                                 }}>
