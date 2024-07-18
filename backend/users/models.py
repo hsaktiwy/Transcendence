@@ -3,20 +3,20 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from .validators import Validator_birthDay
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, login, email, firstName, lastName, birthDay,password,**extra_fields):
+    def create_user(self, login, email, firstName, lastName, birthDay, profile_pic, password, **extra_fields):
         if not login:
             ValueError("User must set the login")
         email = self.normalize_email(email)
-        user = self.model(login=login, email=email, firstName=firstName, lastName=lastName, birthDay=birthDay, **extra_fields)
+        user = self.model(login=login, email=email, firstName=firstName, lastName=lastName, birthDay=birthDay, profile_pic=profile_pic, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
-    def create_superuser(self, login, email, firstName, lastName, birthDay, password=None, **extra_fields):
+    def create_superuser(self, login, email, firstName, lastName, birthDay, profile_pic=None, password=None, **extra_fields):
         extra_fields.setdefault('is_admin', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
 
-        return self.create_user(login, email, firstName, lastName, birthDay, password, **extra_fields)
+        return self.create_user(login, email, firstName, lastName, birthDay, profile_pic, password, **extra_fields)
 
 # Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
@@ -26,6 +26,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     lastName = models.CharField(max_length=50)
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address")
     birthDay = models.DateField()
+    profile_pic = models.CharField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     two_factor_auth = models.BooleanField(default=False)
     two_factor_auth_code = models.CharField(max_length=255, blank=True, null=True)
@@ -37,7 +38,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = "login"
-    REQUIRED_FIELDS = ["email", "firstName", "lastName", "birthDay"]
+    REQUIRED_FIELDS = ["email", "firstName", "lastName", "birthDay", "profile_pic"]
 
     objects = MyUserManager()
 
