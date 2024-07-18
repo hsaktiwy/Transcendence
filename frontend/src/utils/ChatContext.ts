@@ -22,8 +22,10 @@ export interface ContextType {
     convs: Conversation[];
     setActive: React.Dispatch<React.SetStateAction<Conversation>>;
     active: Conversation
-    activeSectionOnSm: React.ReactNode 
-    setActiveSection: React.Dispatch<React.SetStateAction<React.ReactNode >>;
+    activeSectionOnSm: string;
+    setActiveSection: React.Dispatch<React.SetStateAction<string >>;
+    showProfile: boolean;
+    setShowProfile: React.Dispatch<React.SetStateAction<boolean >>;
 }
 
 export const ChatSectionContext = createContext<ContextType | undefined>(undefined)
