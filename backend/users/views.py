@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
+from rest_framework.decorators import api_view
 from django.contrib.auth import login as auth_login
 from django.views.decorators.http import require_http_methods
 # Create your views here.
@@ -33,15 +34,18 @@ class UserListAPIView(generics.ListAPIView):
 @sensitive_post_parameters()
 @require_http_methods(["POST"])
 @csrf_protect
+@api_view(['POST'])
 def MyLogin(request):
     if request.method == 'POST':
         form  = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return JsonResponse({'message': 'Login successful', 'user_id': user.id})
+            return Response({'message': 'Login successful', 'user_id': user.id}, status=status.HTTP_200_OK)
+        else :
+            return Response({'Error': 'Invalide user credentials!'}, status=status.HTTP_401_UNAUTHORIZED) 
     else:
-        return  Response({'Error': 'This path only accept POST request'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return  Response({'Error': 'This path only accept POST request!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 class CheckAuthentication(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
