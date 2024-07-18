@@ -8,6 +8,7 @@ user:
   email varchar(255)
   password_hash varchar(255)
   created_at timestamp=now()
+  profile_pic varchar(500)
   two_factor_enabled state(on,off)
   two_factor_secret varchar(255)
 
