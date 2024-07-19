@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState,useEffect } from "react";
 import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
 import { IoIosMore } from "react-icons/io";
 import { HiPlus } from "react-icons/hi2";
@@ -32,9 +32,16 @@ function ChatSession(){
     // ]
     const messageArray: Message[] = chatContext.active.messages 
     const [backToMessages, setBackToMessages] = useState<boolean>(false)
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        // Scroll to the bottom whenever the messages array changes
+        if (containerRef.current) {
+          containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        }
+      }, [messageArray]);
     return(
 
-        <div className={`bg-[url('https://e1.pxfuel.com/desktop-wallpaper/141/941/desktop-wallpaper-wide-q-gothic-gothic-background.jpg')] bg-cover bg-no-repeat animate-fade-down rounded shadow-xl    font-poppins flex flex-col justify-between overflow-hidden absolute right-0 ${chatContext.activeSectionOnSm === 'chat' ? 'w-[100%]' : 'w-0'} lg:w-[70%] xl:w-[78%] h-full transition-all duration-800 
+        <div  className={`  animate-fade-down rounded shadow-xl    font-poppins flex flex-col justify-between overflow-hidden absolute right-0 ${chatContext.activeSectionOnSm === 'chat' ? 'w-[100%]' : 'w-0'} lg:w-[70%] xl:w-[78%] h-full transition-all duration-800 
         `}>
             <div id="conversation-header-container" className="">
                 <div id="conversation-header" className="text-white grid grid-cols-4 px-4">
@@ -81,7 +88,7 @@ function ChatSession(){
                     })
                 }
             </div> */}
-                        <div className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
+                        <div ref={containerRef} className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
                 {
                     messageArray.map((msg, index): React.ReactNode => {
                         return(

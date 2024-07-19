@@ -6,17 +6,17 @@ import Auth from './auth/Authication'
 //import { childrenInterface } from './utils/interfaces'
 import Layout from './Layout'
 import ChatSection from './components/ChatSection'
+import LandingPage from './components/LandingPage'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
   //         <ChatSection/>
   //       </Layout>}
   return (
-      <Auth>
-        <Layout>
-          <ChatSection/>
-        </Layout>
-      </Auth>
+    
+
+        <LandingPage/>
+ 
   )
 }
 
