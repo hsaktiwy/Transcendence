@@ -6,6 +6,7 @@ import Auth from './auth/Authication'
 //import { childrenInterface } from './utils/interfaces'
 import Layout from './Layout'
 import ChatSection from './components/ChatSection'
+import { WebSocketProvider } from './utils/WSContext'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -13,9 +14,11 @@ const App = () =>
   //       </Layout>}
   return (
       <Auth>
-        <Layout>
-          <ChatSection/>
-        </Layout>
+        <WebSocketProvider>
+          <Layout>
+            <ChatSection/>
+          </Layout>
+        </WebSocketProvider>
       </Auth>
   )
 }

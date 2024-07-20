@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {Navigate} from 'react-router-dom';
 import { useEffect } from 'react';
-import { BACKEND, SESSION_CHECKPATH } from '../utils/Contants';
+import { BACKEND, SESSION_CHECKPATH } from '../utils/Constants';
 import { childrenInterface } from '../utils/interfaces';
 import React from 'react'
 
