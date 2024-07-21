@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +43,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'users.apps.UsersConfig',
-    'channels.apps.ChannelsConfig',
+    'conversations.apps.ConversationsConfig',
     'status.apps.StatusConfig',
     'friendship.apps.FriendshipConfig',
     'game.apps.GameConfig',
@@ -77,22 +79,40 @@ CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:3000",
-    "http://127.0.0.1:5173"
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:6379",
+
 )
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:3000",
-    "http://127.0.0.1:5173"
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:6379",
+
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173"] 
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:6379"] 
 CORS_ALLOW_CREDENTIALS = True
 # CSRF_COOKIE_SAMESITE = 'Strict'
 # SESSION_COOKIE_SAMESITE = 'Strict'
 # CSRF_COOKIE_HTTPONLY = False  # False since we will grab it via universal-cookies
 # SESSION_COOKIE_HTTPONLY = True
+
+# ASGI app
+ASGI_APPLICATION = 'api.asgi.application'
+
+CHANNEL_LAYERS ={
+    'default':
+    {
+        'BACKEND' : 'channels_redis.core.RedisChannelLayer',
+        'CONFIG':{
+            "hosts" : [('127.0.0.1', 6379)]
+        }
+    }
+}
+
 ROOT_URLCONF = 'api.urls'
 
 TEMPLATES = [

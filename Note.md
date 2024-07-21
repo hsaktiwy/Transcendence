@@ -57,3 +57,6 @@ hints:
             Not Found: /favicon.ico
             [18/Jul/2024 10:07:08] "GET /favicon.ico HTTP/1.1" 404 3124
         )
+
+        [=] if you found that the backend is screaming 'redis.exceptions.ConnectionError: Error 61 connecting to 127.0.0.1:6379. 61.', this is the result of not founding the redis server working at the port 127.0.0.1:6379 to eneable that go and run the redis_build.sh
+        this can require the privelige and the docker existing in the system

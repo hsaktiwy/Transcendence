@@ -26,7 +26,7 @@ urlpatterns = [
     #users app
     path('api/', include('users.urls')),
     #channel app
-    path('chat/', include('channels.urls')),
+    path('chat/', include('conversations.urls')),
     # #status app
     #     #Notifications
     path('profile/', include('status.urls')),
