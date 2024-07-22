@@ -38,13 +38,13 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
   
       socket.current.onmessage = (message) => {
         const { type, ...data } = JSON.parse(message.data)
-        // const channelName: string = `${type}_${data.channel}`
-        console.log('type :' + type + '\n- ---> data :' + data.message )
-        // if (channels.current[channelName]) {
-        //   channels.current[channelName](data)
-        // }
-        // else
-        //     channels.current[type]?.(data)
+        const channelName: string = `${type}_${data.channel}`
+        //console.log('type :' + type + '\n- ---> data :' + data.message )
+        if (channels.current[channelName]) {
+          channels.current[channelName](data)
+        }
+        else
+            channels.current[type]?.(data)
       }
   
       return () => {
