@@ -6,7 +6,7 @@
 //         id: number;
 //         sender: string;
 //         content: string;
-//         profilePicture: string;
+//         profile_picture: string;
 //     }
 //     interface Conversations {
 //         channelId: number;
@@ -18,26 +18,26 @@
 //         {
 //             channelId: 1, 
 //             messages: [
-//                 {id: 2, sender: "Hamza", content: "hey", profilePicture: "./src/assets/8.jpg"},
-//                 {id: 1, sender: "Amine", content: "hello", profilePicture: "./src/assets/8.jpg"},
-//                 {id: 2, sender: "Hamza", content: "how are you", profilePicture: "./src/assets/8.jpg"},
-//                 {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profilePicture: "./src/assets/8.jpg"},
-//                 {id: 2, sender: "Hamza", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profilePicture: "./src/assets/8.jpg"},
-//                 {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profilePicture: "./src/assets/8.jpg"},
+//                 {id: 2, sender: "Hamza", content: "hey", profile_picture: "./src/assets/8.jpg"},
+//                 {id: 1, sender: "Amine", content: "hello", profile_picture: "./src/assets/8.jpg"},
+//                 {id: 2, sender: "Hamza", content: "how are you", profile_picture: "./src/assets/8.jpg"},
+//                 {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profile_picture: "./src/assets/8.jpg"},
+//                 {id: 2, sender: "Hamza", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profile_picture: "./src/assets/8.jpg"},
+//                 {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profile_picture: "./src/assets/8.jpg"},
 //             ]
 //         },
 //         {
 //             channelId: 2, 
 //             messages: [
-//                 {id: 2, sender: "Hamza", content: "hey", profilePicture: "./src/assets/8.jpg"},
-//                 {id: 1, sender: "Amine", content: "hello", profilePicture: "./src/assets/8.jpg"},
+//                 {id: 2, sender: "Hamza", content: "hey", profile_picture: "./src/assets/8.jpg"},
+//                 {id: 1, sender: "Amine", content: "hello", profile_picture: "./src/assets/8.jpg"},
 //             ]
 //         },
 //         {
 //             channelId: 3, 
 //             messages: [
-//                 {id: 1, sender: "Amine", content: "hello", profilePicture: "./src/assets/8.jpg"},
-//                 {id: 2, sender: "Hamza", content: "hey", profilePicture: "./src/assets/8.jpg"},
+//                 {id: 1, sender: "Amine", content: "hello", profile_picture: "./src/assets/8.jpg"},
+//                 {id: 2, sender: "Hamza", content: "hey", profile_picture: "./src/assets/8.jpg"},
 //             ]
 //         }
 //     ]
@@ -110,7 +110,7 @@ return(
                             return(
                                 <div key={index} className="relative">
                                     <div className="absolute bg-green-500 h-2 w-2 rounded-full bottom-0 right-0"></div>
-                                    <img src={conv.user2.profilePic} alt="friend-pic" className="w-[40x] h-[40px] rounded-full " />
+                                    <img src={conv.user2.profile_pic} alt="friend-pic" className="w-[40x] h-[40px] rounded-full " />
                                 </div>
                             )
                         })
@@ -128,7 +128,7 @@ return(
                             }
                             const currentConvData: convData = {
                                 lastMessage: conv.messages[conv.messages.length - 1].content,
-                                picture: conv.user2.profilePic,
+                                picture: conv.user2.profile_pic,
                                 friendName: conv.user2.firstName +  " " +conv.user2.lastName
                             }
                             return(

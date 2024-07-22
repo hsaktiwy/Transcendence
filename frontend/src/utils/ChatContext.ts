@@ -4,8 +4,8 @@ export interface User{
     id: number;
     firstName: string;
     lastName: string;
-    username: string;
-    profilePic: string;
+    login: string;
+    profile_pic: string;
 }
 export interface Message{
     id: number;
@@ -20,8 +20,8 @@ export interface Conversation {
 }
 export interface ContextType {
     convs: Conversation[];
-    setActive: React.Dispatch<React.SetStateAction<Conversation>>;
-    active: Conversation
+    setActive: React.Dispatch<React.SetStateAction<Conversation | undefined>>;
+    active: Conversation | undefined
     activeSectionOnSm: string;
     setActiveSection: React.Dispatch<React.SetStateAction<string >>;
     showProfile: boolean;

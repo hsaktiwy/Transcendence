@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
 import {  cookies } from './Cookie';
 import { useNavigate } from 'react-router-dom';
+import { user_id } from '../utils/Constants';
 
 const Login = () => {
     const Navigate = useNavigate();

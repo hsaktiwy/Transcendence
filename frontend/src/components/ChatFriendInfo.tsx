@@ -19,11 +19,11 @@ function ChatFriendInfo(){
                 </div>
                 <div id="friend-info-container" className="  py-4  mx-2    h-full flex flex-col justify-center items-center  gap-8">
                     <div className="w-[210px] h-[210px] p-4 ">
-                        <img src={chatContext.active.user2.profilePic} alt=""  className="rounded-full w-full h-full object-scale-down"/>
+                        <img src={chatContext.active.user2.profile_pic} alt=""  className="rounded-full w-full h-full object-scale-down"/>
                     </div>
                     <div className="text-center text-white">
                         <h1 className="text-3xl font-semibold">{chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</h1>
-                        <p className="text-gray-500">{'@'+chatContext.active.user2.username}</p>
+                        <p className="text-gray-500">{'@'+chatContext.active.user2.login}</p>
                     </div>
                     <div className="bg-black w-[80%] rounded-xl py-8  flex flex-col  justify-center items-center gap-8">
                         <div className="">

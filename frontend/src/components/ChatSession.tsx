@@ -18,20 +18,29 @@ function ChatSession(){
     //     id: number;
     //     sender: string;
     //     content: string;
-    //     profilePicture: string;
+    //     profile_picture: string;
     // }
 
     // const messageArray: Message[] = [
-    //     {id: 2, sender: "Hamza", content: "hey", profilePicture: "./src/assets/8.jpg"},
-    //     {id: 1, sender: "Amine", content: "hello", profilePicture: "./src/assets/8.jpg"},
-    //     {id: 2, sender: "Hamza", content: "how are you", profilePicture: "./src/assets/8.jpg"},
-    //     {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profilePicture: "./src/assets/8.jpg"},
-    //     {id: 2, sender: "Hamza", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profilePicture: "./src/assets/8.jpg"},
-    //     {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profilePicture: "./src/assets/8.jpg"},
+    //     {id: 2, sender: "Hamza", content: "hey", profile_picture: "./src/assets/8.jpg"},
+    //     {id: 1, sender: "Amine", content: "hello", profile_picture: "./src/assets/8.jpg"},
+    //     {id: 2, sender: "Hamza", content: "how are you", profile_picture: "./src/assets/8.jpg"},
+    //     {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profile_picture: "./src/assets/8.jpg"},
+    //     {id: 2, sender: "Hamza", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profile_picture: "./src/assets/8.jpg"},
+    //     {id: 1, sender: "Amine", content: "Loreorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatibus vel eos non suscipit debitis quaerat laudantium facere eveniet porro? Consectetur consequatur porro repellendus nisi eum laudantium amet numquam accusamus!", profile_picture: "./src/assets/8.jpg"},
 
     // ]
     const messageArray: Message[] = chatContext.active.messages 
     const [backToMessages, setBackToMessages] = useState<boolean>(false)
+    // const TableMessage = useRef<unknown>({})
+    // const AddMessageTotABLE(data:unknown)
+    // {
+    //     TableMessage.PUSH(DATA)
+    // }
+    // USEeFFECT(()
+    // {
+        
+    // })
     return(
 
         <div className={`bg-[url('https://e1.pxfuel.com/desktop-wallpaper/141/941/desktop-wallpaper-wide-q-gothic-gothic-background.jpg')] bg-cover bg-no-repeat animate-fade-down rounded shadow-xl    font-poppins flex flex-col justify-between overflow-hidden absolute right-0 ${chatContext.activeSectionOnSm === 'chat' ? 'w-[100%]' : 'w-0'} lg:w-[70%] xl:w-[78%] h-full transition-all duration-800 
@@ -44,14 +53,14 @@ function ChatSession(){
                             }}>
                             <IoArrowBackOutline />
                             </span>
-                            <img src={`${chatContext.active.user2.profilePic}`} alt="user-pic" className="w-[46px] h-[46px] rounded-full cursor-pointer" onClick={()=>{
+                            <img src={`${chatContext.active.user2.profile_pic}`} alt="user-pic" className="w-[46px] h-[46px] rounded-full cursor-pointer" onClick={()=>{
                                 chatContext.setShowProfile(true)
                             }}/>
                             <div className="cursor-pointer" onClick={()=>{
                                 chatContext.setShowProfile(true)
                             }}>
                                 <p className=" text-[14px] font-semibold">{chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
-                                <p className=" text-[12px] text-gray-400">{`@${chatContext.active.user2.username}`}</p>
+                                <p className=" text-[12px] text-gray-400">{`@${chatContext.active.user2.login}`}</p>
                             </div>
                         </div>
                         <div id='conv-header-menu' className="col-span-1 flex justify-self-end items-center text-[24px]">
@@ -72,7 +81,7 @@ function ChatSession(){
                     messageArray.map((msg, index): React.ReactNode => {
                         return(
                         <div key={index} id='message-container' className={` w-[80%]  flex ${msg.sender.id === 1 && "justify-end flex-row-reverse self-end"} items-end gap-4 `}>
-                            <img src={`${msg.sender.profilePic}`} alt="" className="hidden sm:block w-[40px] h-[40px] rounded-full" />
+                            <img src={`${msg.sender.profile_pic}`} alt="" className="hidden sm:block w-[40px] h-[40px] rounded-full" />
                             <div id='message' className={`${msg.sender.id !== 1 ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  `}>
                                 <p >{msg.content}</p>
                             </div>
@@ -84,17 +93,17 @@ function ChatSession(){
                         <div className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
                 {
                     messageArray.map((msg, index): React.ReactNode => {
+                        console.log ('msg.sender ' + msg.sender.login + ' image : ' + msg.sender.profile_pic + ' message : ' + msg.content)
                         return(
-                        <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender.id === 1 && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                            <img src={`${msg.sender.profilePic}`} alt="" className=" w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
-                                chatContext.setShowProfile(true)
-                            }}/>
-                            <div id='message' className={`${msg.sender.id !== 1 ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  `}>
-                                <p >{msg.content}</p>
+                            <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
+                                <img src={`${msg.sender.profile_pic}`} alt="" className=" w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                    chatContext.setShowProfile(true)
+                                }}/>
+                                <div id='message' className={`${msg.sender.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  `}>
+                                    <p >{msg.content}</p>
+                                </div>
                             </div>
-                        </div>
                         )
-
                     })
                 }
             </div>
