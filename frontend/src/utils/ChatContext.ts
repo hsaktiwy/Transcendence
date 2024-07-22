@@ -19,7 +19,7 @@ export interface Conversation {
     messages: Message[];
 }
 export interface ContextType {
-    convs: Conversation[];
+    convs: Conversation[] | undefined;
     setActive: React.Dispatch<React.SetStateAction<Conversation | undefined>>;
     active: Conversation | undefined
     activeSectionOnSm: string;

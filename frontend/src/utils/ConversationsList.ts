@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import Conversations from "../components/Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "./ChatContext"
 import {BACKEND, CONVERSATION} from './Constants'
-
 // const users: User[] = [
 //     {
 //         id: 1,
@@ -211,11 +210,19 @@ export let convs : Conversation[]
 export let initialized:boolean = false
 export let received:boolean = false
 
-export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean>>,setActive:React.Dispatch<React.SetStateAction<Conversation | undefined>>) =>
+export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean>>,setActive:React.Dispatch<React.SetStateAction<Conversation | undefined>>, setConv:React.Dispatch<React.SetStateAction<Conversation[] | undefined>>) =>
 {
   console.log("bool" + initialized)
   if (initialized)
+  {
+    if (received)
+    {
+      setLoading(false)
+      setConv(convs)
+      setActive(convs[0])
+    }
       return 
+  }
   console.log("ola ola")
   initialized = true;
   const data = async () =>
@@ -233,18 +240,11 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
         received = true
         const  holder:Conversation[] = await responce.json() as Conversation[]
         console.log("bro ")
-        // console.log(holder.conversations);
-        // console.log("conv ? ");
         setLoading(false)
         convs = holder.conversations
+        setConv(convs)
         console.log(convs[0]);
-        console.log(convs);
-
         setActive(convs[0])
-        // console.log(convs[0]);
-
-        // const test:Conversation[] = _conversations as Conversation[]
-        // console.log("in interface format : " + test[0].channelId)
       }
     }
     catch (error)
@@ -255,3 +255,8 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
   }
   data();
 }
+
+// export const UpdateConversation = (request) =>
+// {
+
+// }

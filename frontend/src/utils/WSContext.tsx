@@ -1,4 +1,4 @@
-import React, {useEffect, createContext, useRef} from 'react'
+import React, {useEffect, createContext, useRef, useState} from 'react'
 import { ws_url } from './Constants'
 import {channelType, WebSocketContextType, childrenInterface} from './interfaces'
 import {CallbackType} from './types'
@@ -9,7 +9,7 @@ export const WebSocketContext = createContext<WebSocketContextType | unknown>(un
 export const WebSocketProvider = ({ children }:childrenInterface) => {
     const channels = useRef<channelType>({})
     const socket = useRef<WebSocket>()
-  
+    const retry = useState<number>(0)
     const AddMessage = (channelName: string, callback: CallbackType) => {
       channels.current[channelName] = callback
     }
@@ -30,29 +30,29 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
   
       socket.current.onclose = () => {
         console.log('Connection closed')
+        retry != retry
       }
-  
-      socket.current.onerror = (error) => {
-        console.error('Error in WebSocket connection', error)
-      }
-  
+
       socket.current.onmessage = (message) => {
         const { type, ...data } = JSON.parse(message.data)
         const channelName: string = `${type}_${data.channel}`
-        //console.log('type :' + type + '\n- ---> data :' + data.message )
-        if (channels.current[channelName]) {
-          channels.current[channelName](data)
-        }
-        else
-            channels.current[type]?.(data)
+        console.log('type :' + type + '\n- ---> data :' + data.message )
+        // if (channels.current[channelName]) {
+        //   channels.current[channelName](data)
+        // }
+        // else
+        //     channels.current[type]?.(data)
       }
   
       return () => {
-        socket.current?.close()
+        // Close the WebSocket connection when the component is unmounted
+        if (socket.current) {
+          socket.current.close()
+        }
       }
-    }, [])
+    }, [retry])
 
-    return (<WebSocketContext.Provider value={[AddMessage, RemoveChannel]}>
+    return (<WebSocketContext.Provider value={{AddMessage, RemoveChannel, socket}}>
             {children}
         </WebSocketContext.Provider>)
 }

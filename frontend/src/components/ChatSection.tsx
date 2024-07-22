@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ChatSession from "./ChatSession";
 import Conversations from "./Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "../utils/ChatContext"
-import {convs, init_conv, initialized, received} from "../utils/ConversationsList"
+import {init_conv, initialized, received} from "../utils/ConversationsList"
 import ChatFriendInfo from "./ChatFriendInfo";
 import LoadingIndecator from "./Loading";
 import { createContext } from "react";
@@ -11,13 +11,14 @@ import { createContext } from "react";
 
 function ChatSection(){
     const [loading, setLoading] = useState<boolean>(true)
+    const [convs, setConvs] = useState<Conversation[] | undefined>(undefined)
     const [active, setActive] = useState<Conversation>()
     const [activeSectionOnSm, setActiveSection] = useState<string>('conversations')
     const [showProfile, setShowProfile] = useState<boolean>(false)
 
     useEffect(()=>
     {
-        init_conv(setLoading,setActive);
+        init_conv(setLoading,setActive, setConvs);
     }, [loading, active])
     return(
 
