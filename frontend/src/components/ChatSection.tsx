@@ -60,7 +60,7 @@ function ChatSection(){
 
         <ChatSectionContext.Provider value={{convs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile}}>
             {/* animate-fade-down ml-2 lg:ml-[140px]   mr-2 lg:mr-6 mt-6  mb-6 h-[calc(100vh-118px)] overflow-hidden relative */} 
-            <div className="shadow-lg shadow-white/25 bg-black/30 backdrop-filter backdrop-blur-3xl animate-fade-down absolute top-[7%]  left-[145px] h-[90%] w-[calc(100%-145px)]">
+            <div className="rounded-lg bg-[#2B2F32] backdrop-filter backdrop-blur-3xl animate-fade-down absolute top-[30px]  left-[30px] h-[calc(90%)] w-[calc(100%-100px)] m-[10px]">
                 <div className="  h-[100%] overflow-hidden relative ">
                     <Conversations/>
                     <ChatSession/>

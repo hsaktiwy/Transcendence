@@ -10,14 +10,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className=" w-full h-full relative bg-[url('bg.png')]  bg-cover bg-center ">
+    <div className=" w-full h-full relative bg-[#131313] ">
         {/* <div className='absolute top-0 left-0 h-full w-full  bg-black backdrop-filter backdrop-blur-sm opacity-30'></div> */}
         {/* <NavBar/> */}
-        <div className='w-[95%] h-[100%] mx-auto relative '>
-          <SideBarV2/>
-          <NavBarV2/>
+       
+            {/* <SideBarV2/>
+            <NavBarV2/> */}
           {children}
-        </div>
     </div>
   );
 };

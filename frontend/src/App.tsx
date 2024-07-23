@@ -14,8 +14,10 @@ const App = () =>
   //       </Layout>}
   return (
     
-
-        <LandingPage/>
+      <Layout>
+        <ChatSection/>
+      </Layout>
+        // <LandingPage/>
  
   )
 }
