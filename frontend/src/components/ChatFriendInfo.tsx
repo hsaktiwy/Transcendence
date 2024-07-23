@@ -7,41 +7,30 @@ function ChatFriendInfo(){
     if (!chatContext)
      throw new Error('error')
     return(
-        <div className={`font-poppins absolute rounded w-[100%] h-full  ${chatContext.showProfile ? 'translate-x-0' : 'translate-x-full'} transition-all duration-[300ms]  text-white `}>
-            <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div>
-            <div className=" bg-[#2B2F32] h-full w-full sm:w-[400px] absolute right-0 top-0 rounded text-black flex flex-col overflow-auto ">
-                <div id="friend-info-header" className="text-[24px] absolute top-1 left-1">
-                    <span className="text-white cursor-pointer" onClick={() =>{
+        <div className={` bg-[#2B2F32] border-l-[1px] border-white/50 font-poppins  rounded  absolute top-0 right-0  h-full  ${chatContext.showProfile ? 'w-full  lg:w-[379px]' : 'w-0'} transition-all duration-[300ms]  text-white `}>
+            {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
+            <div className=" bg-[#1D1E22]   w-full  overflow-auto relative   ">
+                <div id="friend-info-header" className=" m-4 text-[24px] text-white flex justify-between items-center">
+
+                    <h1 className="text-xl font-semibold">Contact Info</h1>
+                    <span className="block text-white cursor-pointer" onClick={() =>{
                         chatContext.setShowProfile(!chatContext.showProfile)
                     }}>
                         <IoCloseSharp/>
                     </span>
                 </div>
-                <div id="friend-info-container" className="  py-4  mx-2    h-full flex flex-col justify-center items-center  gap-8">
-                    <div className="w-[210px] h-[210px] p-4 ">
-                        <img src={chatContext.active.user2.profilePic} alt=""  className="rounded-full w-full h-full object-scale-down"/>
-                    </div>
-                    <div className="text-center text-white">
-                        <h1 className="text-3xl font-semibold">{chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</h1>
-                        <p className="text-gray-500">{'@'+chatContext.active.user2.username}</p>
-                    </div>
-                    <div className="bg-black w-[80%] rounded-xl py-8  flex flex-col  justify-center items-center gap-8">
-                        <div className="">
-                            <button className="bg-[#5E97A9] text-white font-medium w-[180px] hover:text-[#5E97A9] hover:bg-white duration-300 rounded-lg px-6 py-2 text-xl">View Profile</button>
-                        </div>
-                        <div className="">
-                            <button className="bg-[#2B2F32]  text-white font-medium w-[180px] hover:text-[#2B2F32] hover:bg-white duration-300 rounded-lg px-6 py-2 text-xl">Play Game</button>
-                        </div>
-                        <div className="">
-                            <button className="bg-[#2B2F32]  text-yellow-300 font-medium w-[180px] hover:text-[#2B2F32] hover:bg-yellow-300 duration-300 rounded-lg px-6 py-2 text-xl">Unfriend</button>
-                        </div>
-                        <div className="">
-                            <button className="bg-[#2B2F32]  text-red-500 font-medium w-[180px] hover:text-[#2B2F32] hover:bg-red-500 duration-300  rounded-lg px-6 py-2 text-xl">Block</button>
-                        </div>
+                    <div className="bg-white w-[100%] h-[1px] lg:mt-[28px] rounded-full"></div>
+            </div>
+            <div id="friend-info" className="m-4 bg-[#1D1E22] rounded-lg">
+                <div className=" p-4 profile-info-header flex flex-col justify-center items-center">
+                    <img src={chatContext.active.user2.profilePic} alt="" className="rounded-full w-28 h-28"  />
+                    <h1 className=" mt-4 font-semibold">{chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</h1>
+                    <p className="text-gray-400">{"@" + chatContext.active.user2.username}</p>
+                    <h2 className="m-2">Level: <span>{chatContext.active.user2.level}</span></h2>
+                    <div className={` relative m-3 w-full h-3 bg-[#444444] rounded-full after:content-[''] after:absolute after:top-0 after:left-0 after:bg-[#5E97A9] after:${'w-[' + ((chatContext.active.user2.level - (Math.floor(chatContext.active.user2.level))) * 100) + '%]' } after:h-full after:rounded-full `}>
+
                     </div>
                 </div>
-
-
             </div>
         </div>
     )

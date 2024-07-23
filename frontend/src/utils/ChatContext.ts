@@ -6,6 +6,7 @@ export interface User{
     lastName: string;
     username: string;
     profilePic: string;
+    level: number;
 }
 export interface Message{
     id: number;

@@ -96,10 +96,10 @@ function Conversations(){
     throw new Error('error')
   
 return(
-    <div className={`rounded border-r-[1px] border-white  border-opacity-50 absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full  pt-4 font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all`}>
-            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2">
+    <div className={` border-r-[1px] border-white/50   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all`}>
+            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-[#1D1E22] pt-4">
                 <h1 className="self-start ml-4">All Chats</h1>
-                <div className="bg-zinc-300 w-[100%] h-[1px] lg:mt-5 rounded-full opacity-50"></div>
+                <div className="bg-white w-[100%] h-[1px] lg:mt-5 rounded-full"></div>
             </div>
 
             {/* <div className="online-friends-container">

@@ -41,9 +41,9 @@ function ChatSession(){
       }, [messageArray]);
     return(
 
-        <div  className={`  animate-fade-down rounded shadow-xl    font-poppins flex flex-col justify-between overflow-hidden absolute right-0 ${chatContext.activeSectionOnSm === 'chat' ? 'w-[100%]' : 'w-0'} lg:w-[70%] xl:w-[78%] h-full transition-all duration-800 
+        <div  className={`  animate-fade-down     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-380px)] xl:w-[calc(78%-380px)]` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%]`}  h-full transition-all duration-800
         `}>
-            <div id="conversation-header-container" className="">
+            <div id="conversation-header-container" className="bg-[#1D1E22]">
                 <div id="conversation-header" className="text-white grid grid-cols-4 px-4">
                         <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center cursor-pointer">
                             <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
@@ -72,7 +72,7 @@ function ChatSession(){
                             </span>
                         </div>
                 </div>
-                <div className="bg-zinc-300 w-[100%] h-[1px] lg:mt-4 rounded-full opacity-50"></div>
+                <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div>
             </div>
             {/* <div className="text-white basis-[85%]  h-64 text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-auto justify-end">
                 {
@@ -109,7 +109,7 @@ function ChatSession(){
                 <span className="bg-[#5E97A9] text-white rounded-full hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                     <HiPlus/>
                 </span>
-                <input type="text" placeholder="Message" className=" rounded-full border-1 border-white focus:outline-none  bg-[#2B2F32]  text-sm sm:text-md pl-2 py-2 focus:bg-slate-200  focus:border-black duration-300 basis-[95%]"/>
+                <input type="text" placeholder="Message" className=" rounded-full border-1 border-white focus:outline-none text-white bg-[#1D1E22]  text-sm sm:text-md pl-2 py-2 focus:text-black focus:bg-slate-200  focus:border-black duration-300 basis-[95%]"/>
                 <span className="bg-[#5E97A9] text-white rounded-lg hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                     <RiSendPlaneFill />
                 </span>
