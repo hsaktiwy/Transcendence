@@ -7,6 +7,10 @@ import { HiPlus } from "react-icons/hi2";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { FiUser } from "react-icons/fi";
+
+import { MdOutlineBlock } from "react-icons/md";
+import { IoTrashOutline } from "react-icons/io5";
 
 import Conversations from "./Conversations";
 
@@ -33,6 +37,9 @@ function ChatSession(){
     const messageArray: Message[] = chatContext.active.messages 
     const [backToMessages, setBackToMessages] = useState<boolean>(false)
     const containerRef = useRef<HTMLDivElement | null>(null);
+
+    const [openDrop, setOpenDrop] = useState<boolean>(false)
+
     useEffect(() => {
         // Scroll to the bottom whenever the messages array changes
         if (containerRef.current) {
@@ -41,17 +48,18 @@ function ChatSession(){
       }, [messageArray]);
     return(
 
-        <div  className={`  animate-fade-down     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-380px)] xl:w-[calc(78%-380px)]` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%]`}  h-full transition-all duration-800
+        <div  className={`  animate-fade-down     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-280px)]` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%]`}  h-full transition-all duration-800
         `}>
             <div id="conversation-header-container" className="bg-[#1D1E22]">
                 <div id="conversation-header" className="text-white grid grid-cols-4 px-4">
                         <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center cursor-pointer">
                             <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
+                                setOpenDrop(false)
                                 chatContext.setActiveSection('conversations')
                             }}>
                             <IoArrowBackOutline />
                             </span>
-                            <img src={`${chatContext.active.user2.profilePic}`} alt="user-pic" className="w-[46px] h-[46px] rounded-full cursor-pointer" onClick={()=>{
+                            <img src={`${chatContext.active.user2.profilePic}`} alt="user-pic" className="w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
                                 chatContext.setShowProfile(true)
                             }}/>
                             <div className="cursor-pointer" onClick={()=>{
@@ -61,18 +69,44 @@ function ChatSession(){
                                 <p className=" text-[12px] text-gray-400">{`@${chatContext.active.user2.username}`}</p>
                             </div>
                         </div>
-                        <div id='conv-header-menu' className="col-span-1 flex justify-self-end items-center text-[24px]">
+                        <div id='conv-header-menu' className="relative col-span-1 flex justify-self-end items-center text-[24px]">
                             <span className=" m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={()=>{
+                                setOpenDrop(false)
                                 chatContext.setShowProfile(true)
                             }}>
                             <IoMdInformationCircleOutline />
                             </span>
-                            <span className="  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300">
+                            <span className="  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
+                                setOpenDrop(!openDrop)
+                            }}>
                             <IoIosMore />
                             </span>
+                            <div id='drop-menu' className= {` ${!openDrop ? 'hidden': 'block' } rounded-b-lg absolute text-base right-[-10px]  top-[100%] bg-[#1D1E22]  transition-all duration-75 animate-fade-down `}>
+                                <ul className="w-80 py-4">
+                                    <li className="m-4 flex gap-8">
+                                            <span className="inline-block text-xl"><FiUser/></span>
+                                        <p>
+                                            View Profile
+                                        </p>
+                                    </li>
+                                    <li className="m-4 flex gap-8">
+                                            <span className="inline-block text-xl"><MdOutlineBlock/></span>
+                                        <p>
+                                            Block
+                                        </p>
+                                    </li>
+                                    <li className="m-4 flex gap-8">
+                                            <span className="inline-block text-xl"><IoTrashOutline/></span>
+                                        <p>
+                                            Delete Conversation
+                                        </p>
+                                    </li>
+
+                                </ul>
+                            </div>
                         </div>
                 </div>
-                <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div>
+                {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
             </div>
             {/* <div className="text-white basis-[85%]  h-64 text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-auto justify-end">
                 {
@@ -94,6 +128,7 @@ function ChatSession(){
                         return(
                         <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender.id === 1 && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
                             <img src={`${msg.sender.profilePic}`} alt="" className=" w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                setOpenDrop(false)
                                 chatContext.setShowProfile(true)
                             }}/>
                             <div id='message' className={`${msg.sender.id !== 1 ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  `}>
