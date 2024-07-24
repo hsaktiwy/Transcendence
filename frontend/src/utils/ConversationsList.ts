@@ -16,7 +16,7 @@ const users: User[] = [
         lastName: "Hamza",
         username: "piwai",
         profilePic: "./src/assets/profiles/2.png",
-        level: 5.5
+        level: 5.56
     },
     {
         id: 3,
@@ -24,7 +24,7 @@ const users: User[] = [
         lastName: "Brown",
         username: "charlie_b",
         profilePic: "./src/assets/profiles/3.jpg",
-        level: 5.05
+        level: 5.5
       },
       {
         id: 4,
@@ -32,7 +32,7 @@ const users: User[] = [
         lastName: "Wilson",
         username: "dave_wilson",
         profilePic: "./src/assets/profiles/4.jpg",
-        level: 5.05
+        level: 5.5
       },
       {
         id: 5,
@@ -40,7 +40,7 @@ const users: User[] = [
         lastName: "Davis",
         username: "eva_d",
         profilePic: "./src/assets/profiles/5.jpg",
-        level: 5.05
+        level: 5.5
       },
       {
         id: 6,
@@ -48,7 +48,7 @@ const users: User[] = [
         lastName: "Miller",
         username: "frank_m",
         profilePic: "./src/assets/profiles/6.jpg",
-        level: 5.05
+        level: 5.5
       },
       {
         id: 7,
@@ -56,7 +56,7 @@ const users: User[] = [
         lastName: "Lee",
         username: "grace_lee",
         profilePic: "./src/assets/profiles/7.jpg",
-        level: 5.05
+        level: 5.5
       },
     
 ]
