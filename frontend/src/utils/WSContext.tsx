@@ -1,56 +1,95 @@
-import React, {useEffect, createContext, useRef, useState} from 'react'
+import React, {useEffect, createContext, useRef, useState, useContext} from 'react'
 import { ws_url } from './Constants'
 import {channelType, WebSocketContextType, childrenInterface} from './interfaces'
 import {CallbackType} from './types'
+import { ChatSectionContext, Message } from './ChatContext'
 
+let inc: number = 222222 // desable the id that amine use later else we will use this 
 // type CallbackType = (message: any) => void
 export const WebSocketContext = createContext<WebSocketContextType | unknown>(undefined)
 
 export const WebSocketProvider = ({ children }:childrenInterface) => {
     const channels = useRef<channelType>({})
     const socket = useRef<WebSocket>()
-    const retry = useState<number>(0)
+    const connected = useRef<boolean>(false)
+    const retry = useRef<boolean>(false)
+    const [inc, setInc] = useState(200000);
+
+    /// ??
+    const chatContext = useContext(ChatSectionContext);
+    if (!chatContext) throw new Error('ChatSectionContext not found');
+    /// ??
+
     const AddMessage = (channelName: string, callback: CallbackType) => {
       channels.current[channelName] = callback
     }
 
-    const RemoveChannel = (channelName: string) =>
+    const RemoveChannel = (channelName: string, ) =>
     {
         delete channels.current[channelName]
     }
 
     useEffect(() => {
+
       const url:string = ws_url + '/ws/chat/'
       console.log(url)
-      socket.current = new WebSocket(url)
+      console.log ('------------>' + connected)
+      if (!connected.current)
+        socket.current = new WebSocket(url)
   
       socket.current.onopen = () => {
         console.log('Connected')
+        connected.current = true
       }
   
       socket.current.onclose = () => {
         console.log('Connection closed')
-        retry != retry
+        connected.current = false
       }
 
-      socket.current.onmessage = (message) => {
-        const { type, ...data } = JSON.parse(message.data)
-        const channelName: string = `${type}_${data.channel}`
-        console.log('type :' + type + '\n- ---> data :' + data.message )
-        // if (channels.current[channelName]) {
-        //   channels.current[channelName](data)
-        // }
-        // else
-        //     channels.current[type]?.(data)
+      socket.current.onmessage = (message)=>
+      {
+          try {
+            const { type, ...data } = JSON.parse(message.data);
+            const channelId = data.channel;
+            console.log(data)
+            if (data.ConversationType == 'Message') {
+                const message_received: Message = {
+                    id: inc,
+                    sender: data.user,
+                    content: data.message,
+                };
+                setInc(prevInc => prevInc + 1);
+                // Assuming chatContext.setConvs is a state update function
+                chatContext.setConvs((prevConvs: Conversation[]) => {
+                    const updatedConvs = prevConvs.map(conv =>
+                        conv.channelId === channelId
+                            ? { ...conv, messages: [...conv.messages, message_received] }
+                            : conv
+                    );
+                    console.log('Updated convs:', updatedConvs);
+                    if (chatContext?.active?.channelId === channelId) {
+                      chatContext.setActive((prevActive) => ({
+                          ...prevActive,
+                          messages: [...prevActive.messages, message_received]
+                      }));
+                  }
+                    return updatedConvs;
+                });
+
+                // Also update the active conversation if it's the same as the channelId
+            }
+        } catch (error) {
+            console.error('Error processing WebSocket message:', error);
+        }
       }
-  
       return () => {
         // Close the WebSocket connection when the component is unmounted
         if (socket.current) {
           socket.current.close()
         }
       }
-    }, [retry])
+    }, [connected])
 
     return (<WebSocketContext.Provider value={{AddMessage, RemoveChannel, socket}}>
             {children}

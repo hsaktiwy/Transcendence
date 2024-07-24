@@ -20,9 +20,10 @@ export interface Conversation {
 }
 export interface ContextType {
     convs: Conversation[] | undefined;
-    setActive: React.Dispatch<React.SetStateAction<Conversation | undefined>>;
+    setConvs: React.Dispatch<React.SetStateAction<Conversation[] | undefined>>
+    setActive: React.Dispatch<React.SetStateAction<Conversation | undefined>>
     active: Conversation | undefined
-    activeSectionOnSm: string;
+    activeSectionOnSm: string
     setActiveSection: React.Dispatch<React.SetStateAction<string >>;
     showProfile: boolean;
     setShowProfile: React.Dispatch<React.SetStateAction<boolean >>;

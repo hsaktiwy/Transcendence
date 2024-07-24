@@ -13,17 +13,17 @@ import { WebSocketContext } from "../utils/WSContext";
 import { ws_url } from "../utils/Constants";
 
 function ChatSession(){
-    const chatContext =useContext(ChatSectionContext)
+    const chatContext = useContext(ChatSectionContext)
     if (!chatContext)
      throw new Error('error')
     const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
         throw new Error('error')
 
-    const messageArray: Message[] = chatContext.active.messages 
+    const  [messageArray, setMessageArray] = useState<Message[] | undefined>(chatContext?.active?.messages)
     const [backToMessages, setBackToMessages] = useState<boolean>(false)
     const [message, setMessage] = useState('')
-    const  socket = SocketContext.socket;
+    const  {AddMessage, RemoveChannel, socket} = SocketContext;
     
     const sendMessage = (event: React.KeyboardEvent) =>
     {
@@ -33,7 +33,7 @@ function ChatSession(){
             console.log((socket.current && socket.current.readyState === WebSocket.OPEN))
             if (socket.current && socket.current.readyState === WebSocket.OPEN)
             {
-                const holder:string = JSON.stringify({type: 'MESSAGE', channel: 'GENERAL', message : message})
+                const holder:string = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
                 console.log(holder);
                 socket.current.send(holder)
                 setMessage('')
@@ -42,6 +42,60 @@ function ChatSession(){
                 console.error('WebSocket connection is not open')
         }
     }
+    const [inc, setInc] = useState(2222);
+
+    // useEffect(() => {
+    //     if (SocketContext.socket.current) {
+    //         SocketContext.socket.current.onmessage = (message) => {
+    //             try {
+    //                 console.log('????>>>>>>');
+    //                 const { type, ...data } = JSON.parse(message.data);
+    //                 const channelId: number = data.channel;
+    //                 console.log('type :' + type + '\n- ---> data :' + data.message);
+    //                 if (type == 'send_message') {
+    //                     const message_received: Message = {
+    //                         id: inc,
+    //                         sender: data.user,
+    //                         content: data.message,
+    //                     };
+    //                     setInc(prevInc => prevInc + 1);
+    //                     console.log('????2>>>>>>');
+    //                     //const channelId: number = parseInt(channelName.split('CHATROOM')[1]);
+
+    //                     // Assuming chatContext.convs is state managed by a hook
+    //                     // Assuming chatContext.setConvs is a state update function
+    //                     chatContext.setConvs((prevConvs: Conversation[] | undefined) => {
+    //                         const updatedConvs = prevConvs?.map(conv =>
+    //                             conv.channelId === channelId
+    //                                 ? { ...conv, messages: [...conv.messages, message_received] }
+    //                                 : conv
+    //                         )
+    //                         console.log('Updated convs:', updatedConvs)
+    //                         return updatedConvs
+    //                     });
+
+    //                     // Also update the active conversation if it's the same as the channelId
+    //                     if (chatContext?.active?.channelId === channelId) {
+    //                         chatContext.setActive((prevActive) => ({
+    //                             ...prevActive,
+    //                             messages: [...prevActive.messages, message_received]
+    //                         }));
+    //                         setMessageArray(chatContext.active?.messages)
+    //                     }
+    //                     console.log(chatContext.active)
+    //                     console.log(chatContext.convs)
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error processing WebSocket message:', error);
+    //             }
+    //         };
+    //     }
+    // }, [SocketContext, inc, chatContext]);
+    useEffect(()=>{
+        console.log('Update Current chat');
+        console.log(chatContext.active)
+    }, [chatContext.active])
+
     return(
 
         <div className={`bg-[url('https://e1.pxfuel.com/desktop-wallpaper/141/941/desktop-wallpaper-wide-q-gothic-gothic-background.jpg')] bg-cover bg-no-repeat animate-fade-down rounded shadow-xl    font-poppins flex flex-col justify-between overflow-hidden absolute right-0 ${chatContext.activeSectionOnSm === 'chat' ? 'w-[100%]' : 'w-0'} lg:w-[70%] xl:w-[78%] h-full transition-all duration-800 
