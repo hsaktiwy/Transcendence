@@ -88,13 +88,42 @@
 // }
 
 // export default Conversations
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
+import { WebSocketContext } from "../utils/WSContext";
+import { convs } from "../utils/ConversationsList";
+
+let inc:number=  22222
 function Conversations(){
    const chatContext =useContext(ChatSectionContext)
    if (!chatContext)
     throw new Error('error')
-  
+//    const SocketContext =useContext(WebSocketContext)
+
+//    const socket = SocketContext.socket
+
+//     useEffect(()=>
+//     {
+//         socket.current.onmessage = (message) => {
+//             console.log('????>>>>>>')
+//             const { type, ...data } = JSON.parse(message.data)
+//             const channelName: string = data.channel
+//             console.log('type :' + type + '\n- ---> data :' + data.message )
+//             if (channelName.startsWith('CHATROOM'))
+//             {
+//                 const message_received:Message = {
+//                     id: inc++,
+//                     sender: data.user,
+//                     content: data.message,
+//                 }
+//                 console.log('????2>>>>>>')
+//                 const channelId:number = parseInt(channelName.split('CHATROOM')[1])
+//                 chatContext.convs[channelId].messages.push(message_received)
+//             }
+
+//         }
+//     }, [socket])
+
 return(
     <div className={`bg-[#222222] rounded border-r-[1px] border-white  border-opacity-50 absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full  pt-4 font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all`}>
             <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2">

@@ -9,8 +9,8 @@ export interface channelType {
 }
 
 export interface WebSocketContextType {
-    addMessageHandler: (channelName: string, callback: CallbackType) => void;
-    removeChannel: (channelName: string) => void;
+    AddMessage: (channelName: string, callback: CallbackType) => void;
+    RemoveChannel: (channelName: string) => void;
     socket: React.MutableRefObject<WebSocket | undefined>
 }
   
