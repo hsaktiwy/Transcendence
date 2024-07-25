@@ -12,7 +12,7 @@ function ChatFriendInfo(){
     if (!chatContext)
      throw new Error('error')
     return(
-        <div className={` bg-[#2B2F32] border-l-[1px] border-white/50 font-poppins  rounded  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
+        <div className={` bg-[#2B2F32] border-l-[1px] border-white/50 font-poppins  rounded  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
             <div className=" bg-[#1D1E22]   w-full  overflow-auto relative   ">
                 <div id="friend-info-header" className=" m-4 text-[24px] text-white flex justify-between items-center">

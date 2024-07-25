@@ -7,6 +7,9 @@ import Auth from './auth/Authication'
 import Layout from './Layout'
 import ChatSection from './components/ChatSection'
 import LandingPage from './components/LandingPage'
+import ChatModal from './components/ChatModal'
+import Dashboard from './components/Dashboard'
+import BarChart from './BarChart'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -16,6 +19,7 @@ const App = () =>
     
       <Layout>
         <ChatSection/>
+        {/* <Dashboard/> */}
       </Layout>
         // <LandingPage/>
  
