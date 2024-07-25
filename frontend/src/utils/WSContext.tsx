@@ -12,7 +12,6 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     const channels = useRef<channelType>({})
     const socket = useRef<WebSocket>()
     const connected = useRef<boolean>(false)
-    const retry = useRef<boolean>(false)
     const [inc, setInc] = useState(200000);
 
     /// ??
@@ -20,7 +19,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     if (!chatContext) throw new Error('ChatSectionContext not found');
     /// ??
 
-    const AddMessage = (channelName: string, callback: CallbackType) => {
+    const AddChannel= (channelName: string, callback: CallbackType) => {
       channels.current[channelName] = callback
     }
 
@@ -29,8 +28,8 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         delete channels.current[channelName]
     }
 
-    useEffect(() => {
-
+    const ConnectSocket = ()=>
+    {
       const url:string = ws_url + '/ws/chat/'
       console.log(url)
       console.log ('------------>' + connected)
@@ -45,6 +44,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
       socket.current.onclose = () => {
         console.log('Connection closed')
         connected.current = false
+        ReconnectSocket()
       }
 
       socket.current.onmessage = (message)=>
@@ -68,21 +68,29 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                             : conv
                     );
                     console.log('Updated convs:', updatedConvs);
-                    if (chatContext?.active?.channelId === channelId) {
-                      chatContext.setActive((prevActive) => ({
-                          ...prevActive,
-                          messages: [...prevActive.messages, message_received]
-                      }));
-                  }
+                    // Also update the active conversation if it's the same as the channelId
+                    if (channels.current['CHATROOM'])
+                    {
+                      console.log("in :  channels.current['CHATROOM']")
+                      channels.current['CHATROOM'](message_received, channelId)
+                    }
                     return updatedConvs;
                 });
-
-                // Also update the active conversation if it's the same as the channelId
             }
         } catch (error) {
             console.error('Error processing WebSocket message:', error);
         }
       }
+    }
+    
+    const ReconnectSocket = ()=>
+    {
+          const delay = 1000 // Exponential backoff, max delay 30s
+          setTimeout(() => ConnectSocket(), delay)
+    }
+  
+    useEffect(() => {
+      ConnectSocket()
       return () => {
         // Close the WebSocket connection when the component is unmounted
         if (socket.current) {
@@ -91,7 +99,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
       }
     }, [connected])
 
-    return (<WebSocketContext.Provider value={{AddMessage, RemoveChannel, socket}}>
+    return (<WebSocketContext.Provider value={{AddChannel, RemoveChannel, socket}}>
             {children}
         </WebSocketContext.Provider>)
 }

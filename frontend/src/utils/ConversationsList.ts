@@ -218,8 +218,8 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
     if (received)
     {
       setLoading(false)
-      setConv(convs)
-      setActive(convs[0])
+     // setConv(convs)
+     // setActive(convs[0])
     }
       return 
   }
