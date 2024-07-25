@@ -5,11 +5,11 @@ export interface childrenInterface{
 
 // this will help us idenifying the channels element type in WSContext.ts 
 export interface channelType {
-[key: string]: CallbackType;
+    [key: string]: CallbackType;
 }
 
 export interface WebSocketContextType {
-    AddMessage: (channelName: string, callback: CallbackType) => void;
+    AddChannel: (channelName: string, callback: CallbackType) => void;
     RemoveChannel: (channelName: string) => void;
     socket: React.MutableRefObject<WebSocket | undefined>
 }

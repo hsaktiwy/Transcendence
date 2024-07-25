@@ -163,6 +163,7 @@ return(
                             return(
                                 
                                 <div key={index} className={` ${conv.channelId === chatContext.active.channelId ? "bg-black border-l-2 border-[#5E97A9]  " : ""} mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black duration-150 rounded p-4 `} onClick={() =>{
+                                    console.error(conv.channelId)
                                     chatContext.setActive(conv)
                                     chatContext.setActiveSection('chat')
                                 }}>

@@ -1,1 +1,1 @@
-export type CallbackType = (message: unknown) => void
+export type CallbackType = (message: any, channelid:number) => void
