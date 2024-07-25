@@ -23,6 +23,6 @@
   ::-webkit-scrollbar-thumb:hover {
     background:  #4e4f50;
   }
-#root {
-  height: 100vh;
+body{
+  background-color: #131313;
 }

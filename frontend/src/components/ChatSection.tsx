@@ -4,6 +4,7 @@ import Conversations from "./Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "../utils/ChatContext"
 import {convs} from "../utils/ConversationsList"
 import ChatFriendInfo from "./ChatFriendInfo";
+import ChatModal from "./ChatModal";
 
 import { createContext } from "react";
 
@@ -56,11 +57,14 @@ function ChatSection(){
     const [active, setActive] = useState<Conversation>(convs[0])
     const [activeSectionOnSm, setActiveSection] = useState<string>('conversations')
     const [showProfile, setShowProfile] = useState<boolean>(false)
+    const [openModal, setOpenModal] = useState<boolean>(false)
+    const [modalMessage, setModalMessage] = useState<string>("")
     return(
 
-        <ChatSectionContext.Provider value={{convs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile}}>
+        <ChatSectionContext.Provider value={{convs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile, openModal, setOpenModal, modalMessage, setModalMessage}}>
             {/* animate-fade-down ml-2 lg:ml-[140px]   mr-2 lg:mr-6 mt-6  mb-6 h-[calc(100vh-118px)] overflow-hidden relative */} 
-            <div className="rounded-lg bg-[#2B2F32] backdrop-filter backdrop-blur-3xl animate-fade-down absolute top-[30px]  left-[30px] h-[calc(90%)] w-[calc(100%-100px)] m-[10px]">
+            {openModal && <ChatModal/>}
+            <div className="rounded-lg bg-[#2B2F32] backdrop-filter backdrop-blur-3xl animate-fade-down absolute top-[60px]  left-0 lg:left-[80px] h-[calc(100%-80px)] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] m-[10px]">
                 <div className="  h-[100%] overflow-hidden relative ">
                     <Conversations/>
                     <ChatSession/>
