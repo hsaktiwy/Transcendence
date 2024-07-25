@@ -4,8 +4,8 @@ function ProfileOverView()
 {
     return(
         <>
-            <div className='profileinfos-div'>
-                    <div className='profileinfos'>
+            <div className='profileinfos-div '>
+                    <div className='profileinfos '>
                         <div className='profile-img'>
                             <img className="img-player" src="/images/Frame 28.svg" />
                         </div>

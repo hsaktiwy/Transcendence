@@ -4,7 +4,7 @@ import ProfileSection from './ProfileSection'
 function SearchInfoProfile()
 {
     return(
-        <div className="search-info-profile">
+        <div className="search-info-profile ">
             <SearchNavBar/>
             <ProfileSection/>
         </div>

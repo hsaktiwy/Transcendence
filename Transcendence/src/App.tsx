@@ -7,10 +7,15 @@ import Dashboard from './website/dashboard/dashboard.tsx'
 import Testcmpo from './website/components-Profile/testcmpo.tsx'
 import TopBar from './website/mobileVersion/topBar.tsx'
 
+import { motion } from "framer-motion"
+
+import Tmpfile from './tmpfile.tsx'
+
 function App() {
 
   return (
     <>
+      {/* <Tmpfile/> */}
       <TopBar/>
       {/* <Testcmpo/> */}
         {/* <Dashboard/> */}
