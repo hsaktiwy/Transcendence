@@ -9,10 +9,10 @@
 /*--------- side -bar -----------*/
 .side-bar-div
 {
-    height: 98vh;
+    height: 97vh;
     width: 75%;
     /* border: solid; */
-    margin: 10px 10px;
+    /* margin: 10px 10px; */
     border-radius:  8px;
     background-color: #1D1E22;
     display: flex;
@@ -27,7 +27,7 @@
 }
 .logo-center
 {
-    border: solid;
+    /* border: solid; */
     display: flex;
     align-items: center;
     width: 100%;
@@ -46,7 +46,7 @@
 }
 .size-image
 {
-    width: 29.2px;
+    width: 35px;
 }
 .size-image-bar
 {
@@ -93,13 +93,14 @@
     display: flex;
     /* border: solid; */
     justify-content: space-between;
-    padding: 0px 29px;
+    /* padding: 0px 29px; */
 }
 
 .search-bar-div
 {
+    /* border: solid; */
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 }
 .search-bar
@@ -108,11 +109,11 @@
     font-weight: 300;
     background-color: #2B2F32;
     border-radius: 50px;
-    width: 420px;
-    height: 35px;
-    margin: 0px 7px;
-    padding: 0px 20px;
-    font-size: 14px;
+    width: 620px;
+    height: 50px;
+    padding: 0px 35px;
+    font-size: 17px;
+    font-weight: 400;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 
 }
@@ -125,8 +126,8 @@
 }
 .nav-bar
 {
-    height: 45px;
-    width: 150px;
+    height: 55px;
+    width: 180px;
     padding: 0px 10px;
     background-color: #2B2F32;
     border-radius: 12px;
@@ -141,7 +142,7 @@
 {
     /* border: solid; */
     margin: 0px 20px;
-    height: 85%;
+    height: 470px;
     display: flex;
     align-items: center;
 }
@@ -150,7 +151,7 @@
 {
     /* border: solid; */
     height: 99%;
-    width: 314px;
+    width: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -161,7 +162,7 @@
 {
     
     /* border: solid; */
-    width: 90%;
+    width: 240px;
     height: 95%;
     border-radius: 8px;
     background-color: #2B2F32;
@@ -189,6 +190,7 @@
 {
     /* border: solid; */
     height: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -212,7 +214,7 @@
     /* border: solid; */
     border-radius: 12px;
     font-weight: 500;
-    font-size: 13px;
+    font-size: 10px;
     height: 25%;
     width: 90%;
     margin: auto;
@@ -594,4 +596,47 @@
       opacity: 1;
       transform: translateX(0);
     }
+  }
+
+
+
+
+
+
+
+
+
+  /* ------ */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr)); /* 12-column grid */
+    gap: 1rem; /* Adjust the gap between grid items */
+  }
+  
+  .grid-item {
+    /* Ensure items take full height */
+    height: 100%;
+  }
+  
+  @media (max-width: 1990px) {
+    /* Adjust grid layout for smaller screens */
+    .grid-container {
+      grid-template-columns: repeat(9, minmax(0, 1fr)); /* 9 columns on medium screens */
+    }
+    
+    /* Hide the third grid item */
+    .grid-item:nth-child(3) {
+      display: none;
+    }
+    
+    /* Expand second grid item to take full width */
+    .grid-item:nth-child(2) {
+      grid-column: span 10;
+       margin-left: 70px;/* Take up 9 columns on medium screens */
+    }
+  }
+
+  .cardv
+  {
+    @apply rounded-xl bg-[#1D1E22] p-3
   }
