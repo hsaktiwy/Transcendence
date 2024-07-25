@@ -60,3 +60,7 @@ hints:
 
         [=] if you found that the backend is screaming 'redis.exceptions.ConnectionError: Error 61 connecting to 127.0.0.1:6379. 61.', this is the result of not founding the redis server working at the port 127.0.0.1:6379 to eneable that go and run the redis_build.sh
         this can require the privelige and the docker existing in the system
+
+
+guidness : 
+    [+] to run the backend properly you need to create a docker container image of redis, run './redis_build.sh build' and she will nuild the image for you (no need to thx me), if you try to restart it (i mean you  if you already have a redis conatiner) run this './redis_build.sh start'
