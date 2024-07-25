@@ -52,11 +52,11 @@ function TopBar()
                         <MobileVersion/>
                         <div className="hidden mx-20 md:block">
                             <SearchNavBar/>
-                            <div className=" h-[85vh] grid grid-rows-25 ">
-                                <div className=" row-span-10">
+                            <div className="h-[85vh]   grid grid-rows-25">
+                                <div className="  ">
                                     <div className="grid-container grid  grid-cols-12 ">
                                         <div className="grid-item col-span-2 m-5 bg-[#2B2F32] min-w-[265px] flex  flex-col  justify-center items-center rounded-2xl h-[500px] ">
-                                                <img className="size-[248px] " src="./images/Frame 28.svg" />
+                                                <img className="size-[200px] " src="./images/Frame 28.svg" />
                                                 <div className=" flex  mt-5 flex-col justify-center ">
                                                     <h1 className="font-bold text-[150%]">Hamza Chahboune</h1>
                                                     <h1 className="mx-auto font-normal text-gray-300">@hachahbo</h1>
@@ -181,9 +181,27 @@ function TopBar()
                                                 </div>
                                         </div>
                                     </div>
+                                </div>
                                     {/* ------------------------------------------------------------------------------------ */}
-                                    <div className=" h-[43vh] grid   row-span-12">
-                                        <div className="border"></div>                  
+                                
+
+                                    <div className="row-span-11">
+                                    <div className="grid h-[46vh] gap-7 grid-cols-12 py-5 px-5 ">
+                                        <div className=" col-span-6">
+                                                <div className="h-full bg-[#2B2F32] p-5 rounded-2xl flex justify-center items-center ">
+                                                    <img src="./images/chart-big-one.svg" alt="" />
+                                                </div>
+                                        </div>
+                                        <div className=" col-span-3 ">
+                                                <div className="h-full bg-[#2B2F32] p-5 rounded-2xl flex justify-center items-center ">
+                                                    
+                                                </div>
+                                        </div>
+                                        <div className=" col-span-3 ">
+                                                <div className="h-full bg-[#2B2F32] p-5 rounded-2xl flex justify-center items-center ">
+                                                    
+                                                </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
