@@ -38,6 +38,9 @@ function ChatSession(){
     const messageArray: Message[] = chatContext.active.messages 
     const [backToMessages, setBackToMessages] = useState<boolean>(false)
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const DropMenuRef = useRef<HTMLDivElement | null>(null);
+
+    const testref = useRef<any>(null);
 
     const [openDrop, setOpenDrop] = useState<boolean>(false)
 
@@ -46,12 +49,31 @@ function ChatSession(){
         if (containerRef.current) {
           containerRef.current.scrollTop = containerRef.current.scrollHeight;
         }
-      }, [messageArray]);
+
+    }, [messageArray]);
+    useEffect(() =>{
+        const handleCloseMenu = (e:any) =>{
+            // if ()
+            //     console.log("d",e.target.parentElement.className)
+            
+            if(e.target  && e.target.parentElement && e.target.parentElement.className.split(' ')[0] !== 'drop')
+            {
+                if (openDrop)
+                    setOpenDrop(false)
+            }
+          
+        }
+        window.addEventListener('click', (e) => handleCloseMenu(e))
+        return () =>{
+            window.removeEventListener('click', handleCloseMenu)
+        }
+
+    },[openDrop])
     return(
-            <div  className={`  animate-fade-down     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)]` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%]`}  h-full transition-all duration-800
+            <div  className={`   rounded-xl lg:rounded-none animate-fade-down     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] lg:rounded-r-xl`}  h-full transition-all duration-800
             `}>
-                <div id="conversation-header-container" className="bg-[#1D1E22]">
-                    <div id="conversation-header" className="text-white grid grid-cols-4 px-4">
+                <div id="conversation-header-container" className="bg-[#5E97A9]/30">
+                    <div id="conversation-header" className="text-white grid grid-cols-4 px-4 py-[2px]">
                             <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center cursor-pointer">
                                 <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
                                     setOpenDrop(false)
@@ -59,29 +81,29 @@ function ChatSession(){
                                 }}>
                                 <IoArrowBackOutline />
                                 </span>
-                                <img src={`${chatContext.active.user2.profilePic}`} alt="user-pic" className="w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${chatContext.active &&  chatContext.active.user2.profilePic}`} alt="user-pic" className="w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
                                     chatContext.setShowProfile(true)
                                 }}/>
                                 <div className="cursor-pointer" onClick={()=>{
                                     chatContext.setShowProfile(true)
                                 }}>
-                                    <p className=" text-[14px] font-semibold">{chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
-                                    <p className=" text-[12px] text-gray-400">{`@${chatContext.active.user2.username}`}</p>
+                                    <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
+                                    <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.username}`}</p>
                                 </div>
                             </div>
-                            <div id='conv-header-menu' className="relative col-span-1 flex justify-self-end items-center text-[24px]">
-                                <span className=" m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={()=>{
+                            <div id='conv-header-menu ' className="drop relative col-span-1 flex justify-self-end items-center text-[24px]">
+                                <span className="  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}>
                                 <IoMdInformationCircleOutline />
                                 </span>
-                                <span className="  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
-                                    setOpenDrop(!openDrop)
-                                }}>
-                                <IoIosMore />
-                                </span>
-                                <div id='drop-menu' className= {` ${!openDrop ? 'hidden': 'block' } rounded-b-lg absolute text-base right-[-10px]  top-[100%] bg-[#1D1E22]  transition-all duration-75 animate-fade-down `}>
+                                    <span  ref={testref}   className="drop  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
+                                        setOpenDrop(!openDrop)
+                                    }}>
+                                     <IoIosMore/>
+                                    </span>
+                                <div id='drop-menu' ref={DropMenuRef} className= {` ${!openDrop ? 'hidden': 'block' } rounded-b-lg absolute text-base right-[-10px]  top-[100%] bg-[#1D1E22]  transition-all duration-75 animate-fade-down `}>
                                     <ul className="w-80 py-4">
                                         <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer ">
                                                 <span className="inline-block text-xl"><FiUser/></span>
