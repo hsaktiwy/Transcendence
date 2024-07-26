@@ -636,6 +636,39 @@
     }
   }
 
+  .grid-container1 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr)); /* 12-column grid */
+    gap: 1rem; /* Adjust the gap between grid items */
+  }
+  
+  .grid-item1 {
+    /* Ensure items take full height */
+    height: 100%;
+  }
+  
+  @media (max-width: 1990px) {
+    /* Adjust grid layout for smaller screens */
+    .grid-container1 {
+      grid-template-columns: repeat(9, minmax(0, 1fr)); /* 9 columns on medium screens */
+    }
+    
+    /* Hide the third grid item */
+    .grid-item1:nth-child(3) {
+      display: none;
+    }
+    
+    /* Expand first and second grid items to take full width */
+    .grid-item1:nth-child(1) {
+      grid-column: span 4;
+    }
+  
+    .grid-item1:nth-child(2) {
+      grid-column: span 8;
+      margin-right: 15px;
+    }
+  }
+
   .cardv
   {
     @apply rounded-xl bg-[#1D1E22] p-3
