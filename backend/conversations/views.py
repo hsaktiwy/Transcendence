@@ -4,6 +4,8 @@ from .models import Message, Channel
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from users.models import MyUser
+
 # Create your views here.
 
 class MessageRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -17,6 +19,22 @@ class MessageAPICreate(generics.ListCreateAPIView):
 	permission_classes = [IsAuthenticated]
 	queryset = Message.objects.all()
 	serializer_class = MessageSerializer
+
+	def perform_create(self, serializer):
+		# Save the new message
+		message = serializer.save()
+		
+		# Update the related channel's last_update field
+		try:
+			user = MyUser.objects.get(id=message.sender.id)
+		except MyUser.DoesNotExist:
+			raise Response({'Error' : 'Sender not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+		try:
+			channel = Channel.objects.get(id=message.id_channel_fk.id)
+		except Channel.DoesNotExist:
+			raise Response({'Error' : 'channel not found'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ChannelRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 	authentication_classes = [SessionAuthentication, BasicAuthentication]

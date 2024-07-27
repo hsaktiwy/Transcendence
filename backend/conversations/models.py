@@ -5,6 +5,7 @@ from users.models import MyUser
 class Channel(models.Model):
     users = models.ManyToManyField(MyUser)
     created_at = models.DateTimeField(auto_now_add=True)
+    last_update = models.DateTimeField(auto_now_add=True)
 
 class Message(models.Model):
     sender = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
