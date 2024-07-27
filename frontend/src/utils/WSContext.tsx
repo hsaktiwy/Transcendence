@@ -69,7 +69,9 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                     );
                     updatedConvs.sort((a, b)=>{
                       const DateA = new Date(a.LastUpdate) 
-                      const DateB = new Date(b.LastUpdate) 
+                      const DateB = new Date(b.LastUpdate)
+                      console.log(DateA)
+                      console.log(DateB)
                       return DateB - DateA;
                     })
                     console.log('Updated convs:', updatedConvs);
