@@ -64,3 +64,43 @@ hints:
 
 guidness : 
     [+] to run the backend properly you need to create a docker container image of redis, run './redis_build.sh build' and she will nuild the image for you (no need to thx me), if you try to restart it (i mean you  if you already have a redis conatiner) run this './redis_build.sh start'
+
+    [+] to make our application accessable from the local network:
+            - first you need to identifie you ip address, got to the bash and do the following command:
+                ?> ifconfig | grep 'inet '
+                    inet 127.0.0.1 netmask 0xff000000 
+                    inet 10.13.2.12 netmask 0xffff0000 broadcast 10.13.255.255
+                in the exemeple our ip address will be  10.13.2.12 then you can replace all {YOUR_COMPUTER_IP_IN_THE_NETWORK} with  10.13.2.12
+            - got to frontend and modife the src/utils/constants.js, and modifie the : 
+            BACKEND:string = "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:8000/", ws_host = '{YOUR_COMPUTER_IP_IN_THE_NETWORK}'
+            - in the backend got to the setting and add:
+            CORS_ORIGIN_WHITELIST = (
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://127.0.0.1:3000",
+                "http://127.0.0.1:5173",
+                "http://127.0.0.1:6379",
+                "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:5173",
+
+            )
+
+            CORS_ALLOWED_ORIGINS = [
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://127.0.0.1:3000",
+                "http://127.0.0.1:5173",
+                "http://127.0.0.1:6379",
+                "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:5173",
+
+            ]
+
+            CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:6379", "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:5173"]
+        and voila, every thing should work proporly if you have any problem try:
+            1 _ search for it on your own.
+            2 _ use Chatgpt
+            .
+            .
+            .
+            FINALY, if you couldn't solve the problem (poor newbie ...) ask me (hsaktiwy) 
+
+
