@@ -4,6 +4,7 @@ from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 from conversations.models import Channel, Message
 from conversations.serializers import UserSerializer
+from django.utils.dateformat import format
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -13,13 +14,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except:
                 return None
     
-    def creatMessage(self, user, room_id, message):
+    def creatMessage(self, user, room_id, message, message_id, lastUpdate):
         try:
             channel = Channel.objects.get(id=room_id)
-            Message.objects.create(sender=user, id_channel_fk=channel, content=message)
+            message_obj = Message.objects.create(sender=user, id_channel_fk=channel, content=message)
+            updated_channel = Channel.objects.get(id=room_id)
+            
+            return message_obj.id, updated_channel.last_update
         except Exception as e:
             print(f'Error while trying to create a Message : {e}')
             return
+
     def get_SerializedUser(self, user):
         try:
             return (UserSerializer(user))
@@ -77,16 +82,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message = message_json['message']
             room = message_json['channel']
             room_id = int(room.split("CHATROOM")[1])
+            message_id = 0
+            lastUpdate = None
             # create the message
             if room.startswith('CHATROOM'):
-                await sync_to_async(self.creatMessage)(user,room_id, message)
+                message_id, lastUpdate= await sync_to_async(self.creatMessage)(user,room_id, message, message_id, lastUpdate)
             SerializedUser = await sync_to_async(self.get_SerializedUser)(user)
-
+            lastUpdate = format(lastUpdate, 'Y-m-d H:i:s')
             await self.channel_layer.group_send(
                 room,
                 {
                     'type' : 'send_message',
                     'channel' : room_id,
+                    'message_id' : message_id,
+                    'LastUpdate' : lastUpdate,
                     'ConversationType' : 'Message',
                     'user' : SerializedUser.data,
                     'message' : message

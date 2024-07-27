@@ -17,7 +17,9 @@ export interface Conversation {
     user1: User;
     user2: User;
     messages: Message[];
+    LastUpdate: string
 }
+
 export interface ContextType {
     convs: Conversation[] | undefined;
     setConvs: React.Dispatch<React.SetStateAction<Conversation[] | undefined>>

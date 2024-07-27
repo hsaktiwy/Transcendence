@@ -55,7 +55,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
             console.log(data)
             if (data.ConversationType == 'Message') {
                 const message_received: Message = {
-                    id: inc,
+                    id: data.message_id,
                     sender: data.user,
                     content: data.message,
                 };
@@ -64,9 +64,14 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                 chatContext.setConvs((prevConvs: Conversation[]) => {
                     const updatedConvs = prevConvs.map(conv =>
                         conv.channelId === channelId
-                            ? { ...conv, messages: [...conv.messages, message_received] }
+                            ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received] }
                             : conv
                     );
+                    updatedConvs.sort((a, b)=>{
+                      const DateA = new Date(a.LastUpdate) 
+                      const DateB = new Date(b.LastUpdate) 
+                      return DateB - DateA;
+                    })
                     console.log('Updated convs:', updatedConvs);
                     // Also update the active conversation if it's the same as the channelId
                     if (channels.current['CHATROOM'])
