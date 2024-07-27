@@ -8,7 +8,9 @@ import RegistrationForm from './Registration';
 function Auth(children:childrenInterface)
 {
     return (
-        <>
+  
+            <div className='min-h-[100vh] h-[100vh]'>
+
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<RouteProtection>{children.children}</RouteProtection>}/>
@@ -17,7 +19,7 @@ function Auth(children:childrenInterface)
                     {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
                 </Routes>
             </BrowserRouter>
-        </>
+            </div>
     )
 }
 
