@@ -33,7 +33,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
       const url:string = ws_url + '/ws/chat/'
       console.log(url)
       console.log ('------------>' + connected)
-      if (!connected.current)
+      if (!connected.current)//
         socket.current = new WebSocket(url)
   
       socket.current.onopen = () => {
