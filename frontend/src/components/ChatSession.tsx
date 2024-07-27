@@ -51,7 +51,7 @@ function ChatSession(){
 
     useEffect(()=>
     {
-        const UpdateCurrentConvs = (message_received, __channelId:number) =>
+        const UpdateCurrentConv = (message_received, __channelId:number) =>
         {
             console.log('target tryin g to update it self ... '+ __channelId +' '+ chatContext.active?.channelId)
             if (__channelId == chatContext.active?.channelId)
@@ -66,7 +66,7 @@ function ChatSession(){
             }
         }
         console.log('init call back')
-        AddChannel('CHATROOM', UpdateCurrentConvs)
+        AddChannel('CHATROOM', UpdateCurrentConv)
         setInit(true)
     },[init, chatContext.active])
 
