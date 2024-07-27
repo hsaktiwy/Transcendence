@@ -76,7 +76,8 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 				'channelId' : channel.id,
 				'user1' : user1,
 				'user2' : user2,
-				'messages' : MessagesSerialized.data
+				'messages' : MessagesSerialized.data,
+				'LastUpdate' :  channel.last_update.strftime('%Y-%m-%d %H:%M:%S')
 			}
 			consversations.append(consversation)
 

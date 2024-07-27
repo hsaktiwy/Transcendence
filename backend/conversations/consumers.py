@@ -31,6 +31,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except:
             return None
 
+    async def add_groups(self, channels, user):
+        async for channel in channels:
+            room_name = f'CHATROOM{channel.id}'
+            print(f"Adding room: {room_name}")
+            self.rooms.add(room_name)
+            print(f'Room {room_name}, added to the {user.login} goups')
+
+            await self.channel_layer.group_add(
+                room_name,
+                self.channel_name
+            )
+            await self.channel_layer.group_send(
+                room_name,
+                {
+                    'type': 'send_message',
+                    'channel_id' : channel.id,
+                    'username': user.login,
+                    'ConversationType' : 'Connection',
+                    'message': f'ok, I am in channel {room_name}'
+                }
+            )
     async def connect(self):
         
         # first let get the room name
@@ -39,27 +60,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print(f"User {user.email} is authenticated, proceeding to get channels.")
             try:
                 channels = await sync_to_async(self.get_user_channels)(user.id)
-                print(f'channels number ')
                 self.rooms = set()
-                print("msg")
-                async for channel in channels:
-                    room_name = f'CHATROOM{channel.id}'
-                    print(f"Adding room: {room_name}")
-                    self.rooms.add(room_name)
-                    print(f'Room {room_name}, added to the {user.login} goups')
-
-                    await self.channel_layer.group_add(
-                        room_name,
-                        self.channel_name
-                    )
-                    await self.channel_layer.group_send(
-                        room_name,
-                        {
-                            'type': 'send_message',
-                            'ConversationType' : 'Connection',
-                            'message': f'ok, I am in channel {room_name}'
-                        }
-                    )
+                await self.add_groups(channels, user)
                 await self.accept()
             except Exception as e:
                 print(f"Error while connecting to channels: {e}")

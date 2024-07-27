@@ -29,6 +29,10 @@ export interface ContextType {
     setActiveSection: React.Dispatch<React.SetStateAction<string >>;
     showProfile: boolean;
     setShowProfile: React.Dispatch<React.SetStateAction<boolean >>;
+    openModal: boolean;
+    setOpenModal: React.Dispatch<React.SetStateAction<boolean >>;
+    modalMessage: string;
+    setModalMessage: React.Dispatch<React.SetStateAction<string >>;
 }
 
 export const ChatSectionContext = createContext<ContextType | undefined>(undefined)
