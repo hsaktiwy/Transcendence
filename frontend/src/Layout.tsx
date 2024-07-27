@@ -1,16 +1,23 @@
 import React, { ReactNode } from 'react';
 import NavBar from "./components/NavBar";
 import Sidebar from './components/Sidebar';
+import SideBarV2 from './components/SideBarV2';
+import NavarV2 from './components/NavBarV2';
+import NavBarV2 from './components/NavBarV2';
+import ChatModal from './components/ChatModal';
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className=" w-[80%] h-screen  relative m-auto ">
-      <NavBar/>
-      {children}
-    </div>
+   
+        
+          <>
+            <SideBarV2/>
+            <NavBarV2/>
+          {children}
+          </>
   );
 };
 

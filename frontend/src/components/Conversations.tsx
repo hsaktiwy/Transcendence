@@ -98,37 +98,12 @@ function Conversations(){
    const chatContext =useContext(ChatSectionContext)
    if (!chatContext)
     throw new Error('error')
-//    const SocketContext =useContext(WebSocketContext)
-
-//    const socket = SocketContext.socket
-
-//     useEffect(()=>
-//     {
-//         socket.current.onmessage = (message) => {
-//             console.log('????>>>>>>')
-//             const { type, ...data } = JSON.parse(message.data)
-//             const channelName: string = data.channel
-//             console.log('type :' + type + '\n- ---> data :' + data.message )
-//             if (channelName.startsWith('CHATROOM'))
-//             {
-//                 const message_received:Message = {
-//                     id: inc++,
-//                     sender: data.user,
-//                     content: data.message,
-//                 }
-//                 console.log('????2>>>>>>')
-//                 const channelId:number = parseInt(channelName.split('CHATROOM')[1])
-//                 chatContext.convs[channelId].messages.push(message_received)
-//             }
-
-//         }
-//     }, [socket])
 
 return(
-    <div className={`bg-[#222222] rounded border-r-[1px] border-white  border-opacity-50 absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full  pt-4 font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all`}>
-            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2">
+<div className={`  border-r-0 lg:border-r-[1px] border-white/50   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-xl rounded-r-xl lg:rounded-r-none`}>
+            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-[#5E97A9]/30 py-4">
                 <h1 className="self-start ml-4">All Chats</h1>
-                <div className="bg-zinc-300 w-[100%] h-[1px] lg:mt-5 rounded-full opacity-50"></div>
+                {/* <div className="bg-white w-[100%] h-[1px] lg:mt-5 rounded-full"></div> */}
             </div>
 
             {/* <div className="online-friends-container">
@@ -149,7 +124,7 @@ return(
             <div id="messages-conatiner" className="text-white my-2 flex flex-col gap-2 ">
                 {/* <div className=" mb-4 flex justify-center xl:justify-start gap-6"> */}
                     {
-                        chatContext.convs.map((conv, index): React.ReactNode => {
+                        chatContext.convs?.map((conv, index): React.ReactNode => {
                             interface convData{
                                 lastMessage: string;
                                 picture: string;
@@ -162,7 +137,7 @@ return(
                             }
                             return(
                                 
-                                <div key={index} className={` ${conv.channelId === chatContext.active.channelId ? "bg-black border-l-2 border-[#5E97A9]  " : ""} mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black duration-150 rounded p-4 `} onClick={() =>{
+                                <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? "bg-black border-l-2 border-[#5E97A9]  " : ""} mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black duration-150 rounded p-4 `} onClick={() =>{
                                     console.error(conv.channelId)
                                     chatContext.setActive(conv)
                                     chatContext.setActiveSection('chat')

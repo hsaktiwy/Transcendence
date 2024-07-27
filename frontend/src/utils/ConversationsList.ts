@@ -243,8 +243,8 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
         setLoading(false)
         convs = holder.conversations
         setConv(convs)
-        console.log(convs[0]);
-        setActive(convs[0])
+        // console.log(convs[0]);
+        // setActive(convs[0])
       }
     }
     catch (error)
