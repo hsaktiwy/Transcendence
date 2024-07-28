@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { BACKEND, SESSION_CHECKPATH } from '../utils/Constants';
 import { childrenInterface } from '../utils/interfaces';
 import React from 'react'
+import mailman from '../utils/AxiosFetcher';
 
 function RouteProtection(children: childrenInterface)
 {
@@ -25,18 +26,14 @@ function RouteProtection(children: childrenInterface)
     {
         const url:string = BACKEND + SESSION_CHECKPATH
         try {
-            const response = await fetch(url, {
-                credentials: "include"
-            });
-
-            if (response.ok) {
-                setAuth(1);
-            } else {
-                setAuth(0);
-                console.error(`Failed to check session: ${response.status}`);
+            const request = {
+                url: url,
+                withCredentials: true
             }
+            const response = await mailman(request)
+            setAuth(1)
         } catch (error) {
-            setAuth(0);
+            setAuth(0)
             console.error(`Error checking session: ${error}`);
         }
     }
