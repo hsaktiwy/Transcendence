@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ADD_USER, BACKEND } from '../utils/Constants';
 import { generateRandomString } from '../utils/functions';
 import { useNavigate } from 'react-router-dom';
+import mailman from '../utils/AxiosFetcher';
 
 interface RegistrationFormData {
   login: string;
@@ -61,21 +62,14 @@ const RegistrationForm: React.FC = () => {
       });
 
       const url = BACKEND + ADD_USER;
-
-      const response = await fetch(url, {
+      const request={
+        url: url,
         method: 'POST',
-        body: formDataToSend,
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Registration successful!');
-        navigate('/login');
-        // Redirect or update UI as needed
-      } else {
-        alert(`Registration failed: ${data.message || 'Unknown error'}`);
+        data: formDataToSend
       }
+      const response = await mailman(request)
+      alert('Registrated successfully!')
+      navigate('/login');
     } catch (error) {
       console.error('Error during registration:', error);
       alert('An error occurred during registration.');

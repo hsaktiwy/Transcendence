@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
 import {  cookies } from './Cookie';
 import { useNavigate } from 'react-router-dom';
+import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
 
 const Login = () => {
@@ -22,20 +23,15 @@ const Login = () => {
         {
             try {
                 const url = BACKEND + INIT_CSRFTOKEN_PATH;
-                const response = await fetch(url, { method: 'GET', credentials: 'include' });
-        
-                if (!response.ok) {
-                    throw new Error('Failed to fetch CSRF token');
+                const request = {
+                        url: url,
+                        method: 'GET',
+                        withCredentials: true
                 }
-        
-                const data = await response.json();
-                const token:string = data.csrfToken;
-                if (response.ok)
-                {
-                    csrfToken = token
-                    cookies.set('csrftoken', csrfToken)
-                    console.log('CSRF Token:', token); // Optional: Logging the token for verification
-                }
+                const response = await mailman(request)
+                const data = response.data;
+                csrfToken = data.csrfToken;
+                console.log('CSRF Token:', csrfToken);
             } catch (error) {
                 console.error('Error fetching CSRF token:', error);
             }
@@ -44,25 +40,20 @@ const Login = () => {
         {
             try{
                 console.log("csrft : " + csrfToken + " " + credential)
-                const response = await fetch(url, 
-                {
+                const request = {
+                    url: url,
                     method: 'POST',
                     headers:
                     {
                         "Content-Type": "application/x-www-form-urlencoded",
                         'X-CSRFToken' : csrfToken,
-                    }
-                    ,
-                    credentials: "include",
-                    body: credential
-                });
-                if (!response.ok)
-                    throw new Error(`HTTP error! Status: ${response.status}`)
-                if (response.ok)
-                {
-                    console.log("boomb has been planted ✅")
-                    Navigate('/')
+                    },
+                    data: credential,
+                    withCredentials: true,
                 }
+                const response = await mailman(request)
+                console.log("boomb has been planted ✅")
+                Navigate('/')
             }
             catch (err)
             {   
@@ -72,29 +63,6 @@ const Login = () => {
     }
 
     return (
-        // <form onSubmit={handleSubmit}>
-        //     <div>
-        //         <label htmlFor="username">Username:</label>
-        //         <input
-        //             type="username"
-        //             id="username"
-        //             value={username}
-        //             onChange={(e) => setUsername(e.target.value)}
-        //             required
-        //         />
-        //     </div>
-        //     <div>
-        //         <label htmlFor="password">Password:</label>
-        //         <input
-        //             type="password"
-        //             id="password"
-        //             value={password}
-        //             onChange={(e) => setPassword(e.target.value)}
-        //             required
-        //         />
-        //     </div>
-        //     <button type="submit">Login</button>
-        // </form>
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
                 <div className="mb-4">
