@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Conversations from "../components/Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "./ChatContext"
-import {BACKEND, CONVERSATION} from './Constants'
+import {BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE} from './Constants'
 import mailman from "./AxiosFetcher";
 // let initila the data using the http protocol
 export let convs : Conversation[]
@@ -27,10 +27,11 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
   {
     console.log("strange")
     try {
-      const url:string = BACKEND + CONVERSATION
+      const url:string = BACKEND + CONVERSATION + MESSAGES_PACKET_SIZE + '/'
       const request = {
         url: url,
-        withCredentials: true
+        method: 'GET',
+        withCredentials: true,
       }
       const response = await mailman(request)
       const  holder:Conversation[] =  response.data as Conversation[]

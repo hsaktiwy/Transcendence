@@ -15,7 +15,8 @@ import { IoTrashOutline } from "react-icons/io5";
 import Conversations from "./Conversations";
 import ChatModal from "./ChatModal";
 import { WebSocketContext } from "../utils/WSContext";
-import { ws_url } from "../utils/Constants";
+import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Constants";
+import mailman from "../utils/AxiosFetcher";
 
 function ChatSession(){
     const chatContext =useContext(ChatSectionContext)
@@ -33,18 +34,28 @@ function ChatSession(){
     const  {AddChannel, RemoveChannel, socket} = SocketContext;// hamza
     const containerRef = useRef<HTMLDivElement | null>(null);// amine 
     const DropMenuRef = useRef<HTMLDivElement | null>(null);// amine 
-
+    const [scrollPosition, setScrollPosition] = useState({scrollTop: 0, scrollLeft:0})
     const testref = useRef<any>(null);// amine 
 
     const [openDrop, setOpenDrop] = useState<boolean>(false)// amine 
     //amine
     useEffect(() => {
         // Scroll to the bottom whenever the messages array changes
+        console.log('initial scroll')
+        if (containerRef.current && chatContext.active?.scrollLeft == -1 && chatContext.active?.scrollTop == -1) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight
+            chatContext.setActive(prevconv => ({...prevconv, scrollLeft: containerRef.current?.scrollLeft, scrollTop:containerRef.current.scrollHeight}))
+        }
+    }, [messageArray]);
+
+    useEffect(() => {
+        // Scroll to the bottom whenever the messages array changes
         if (containerRef.current) {
           containerRef.current.scrollTop = containerRef.current.scrollHeight;
+          setUpdate(false)
         }
 
-    }, [messageArray]);
+    }, [update]);
     //amine
     useEffect(() =>{
         const handleCloseMenu = (e:any) =>{
@@ -99,11 +110,11 @@ function ChatSession(){
                 console.log('Updated success')
                 setUpdate(true)
             }
+            console.log('init')
         }
-        console.log('init call back')
         AddChannel('CHATROOM', UpdateCurrentConvs)
         setInit(true)
-    },[init, chatContext.active])
+    },[init])
 
     useEffect(()=>
     {
@@ -112,6 +123,75 @@ function ChatSession(){
         setMessageArray(chatContext.active?.messages)
     }, [update,chatContext.active ])
     
+    // this function will update our conv list and add packet of old messages to it
+    // const 
+    const FecthOldMessages = async ()=>
+    {
+        try
+        {
+            const extracting = 'update/' + chatContext.active?.channelId + '/' + MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
+            const url = BACKEND + CONVERSATION + extracting
+            const request = {
+                url: url,
+                method: 'GET',
+                withCredentials: true
+            }
+            const response = await mailman(request)
+            interface conversation_type {
+                messages : Message[]
+                next_packet_number : number
+                is_next_packet: number
+            }
+            const old_messages:conversation_type  = response.data as conversation_type
+            if (chatContext.active?.last_packet < old_messages.next_packet_number)
+            {
+                console.log('wtf')
+                console.log(old_messages)
+                console.log(chatContext.active)
+                chatContext.setActive((prevConv) => ({
+                    ...prevConv,
+                    last_packet: prevConv?.next_packet_number,
+                    next_packet_number: old_messages.next_packet_number,
+                    is_next_packet: old_messages.is_next_packet,
+                    messages: [...old_messages.messages, ...prevConv.messages]
+                }));
+                chatContext.setConvs((prevConvs: Conversation[]) => {
+                    const updatedConvs = prevConvs.map((conv)=> conv.channelId == chatContext.active?.channelId ?
+                        {...conv, 
+                        last_packet: conv?.next_packet_number,
+                        next_packet_number: old_messages.next_packet_number,
+                        is_next_packet: old_messages.is_next_packet,
+                        messages: [...old_messages.messages, ...conv.messages]
+                        }
+                    : conv
+                    )
+                    return updatedConvs
+                })
+            }
+        }
+        catch(error)
+        {
+            console.log(error)
+        }
+        console.log(chatContext.active)
+    }
+    useEffect(()=>
+    {
+        const {scrollTop} =  scrollPosition
+        if (scrollTop == 0 && chatContext.active?.is_next_packet)
+        {
+            FecthOldMessages()
+        }
+    }, [scrollPosition])
+    // function hthat will check for scrol behavior
+    const handleContainerScroll = ()=>{
+        if (containerRef.current)
+        {
+            const {scrollTop, scrollLeft} = containerRef.current
+            setScrollPosition({scrollTop, scrollLeft});
+        }
+    }
+
     return(
             <div  className={`   rounded-xl lg:rounded-none animate-fade-down     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] lg:rounded-r-xl`}  h-full transition-all duration-800
             `}>
@@ -183,7 +263,7 @@ function ChatSession(){
                     </div>
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
                 </div>
-                    <div ref={containerRef} className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
+                    <div ref={containerRef} onScroll={handleContainerScroll} className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
                     {
                         messageArray?.map((msg, index): React.ReactNode => {
                             return(

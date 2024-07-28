@@ -18,6 +18,11 @@ export interface Conversation {
     user2: User;
     messages: Message[];
     LastUpdate: string
+    last_packet: number
+    next_packet_number: number
+    is_next_packet: boolean
+    scrollTop: number
+    scrollLeft: number
 }
 
 export interface ContextType {
