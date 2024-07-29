@@ -287,7 +287,7 @@ function ChatSession(){
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
                 </div>
                     <div ref={containerRef} onScroll={handleContainerScroll} className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
-                    {loading ? <MessageLoading/> : <></>}
+                    {/* #{loading ? <MessageLoading/> : <></>} */}
                     {
                         messageArray?.map((msg, index): React.ReactNode => {
                             return(
