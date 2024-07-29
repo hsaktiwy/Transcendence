@@ -13,9 +13,6 @@ function sideBar()
                     <div className="div-side-bar-icon">
                         <img className="w-9 md:size-image-bar " src="/images/Home.svg" />
                     </div>
-                    {/* <div className="div-side-bar-icon">
-                        <img className="w-9 md:size-image-bar "  src="/images/profileVector.svg" />
-                    </div> */}
                     <div className="div-side-bar-icon">
                         <img className="w-9 md:size-image-bar " src="/images/Message.svg" />
                     </div>
