@@ -8,7 +8,7 @@ function mobileVersion()
     return(
         <>
             <div className=" bg-[#2B2F32] h-[570px] rounded-lg  md:hidden flex flex-col justify-center">
-                <img style={{width: '220px'}} className="size-image m-auto my-4" src="/images/Frame 28.svg" />
+                <img style={{width: '220px'}} className="size-image m-auto my-4" src="/images/profile-gray (1).svg" />
                 <div className="  bg-[#1D1E22] pt-8 h-80 flex rounded-t-3xl rounded-b-l flex-col ">
                     <h1 className="font-bold text-xl m-auto my-1"> Hamza Chahboune</h1>
                     <h1 className="font-light text-l m-auto my-0"> @hachahbo</h1>
