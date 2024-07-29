@@ -7,7 +7,7 @@ function DesktopVersion()
 {
     return(
         <>
-            <div className="hidden ml-9 2xl:mx-20 xl:block">
+            <div className="hidden ml-9 2xl:mx-20 2xl:block">
                             <SearchNavBar/>
                             <div className="h-[88vh] grid grid-rows-25 ">
                                     <div className="grid-container  grid  grid-cols-12 ">
