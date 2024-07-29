@@ -34,22 +34,45 @@ function ChatSession(){
     const  {AddChannel, RemoveChannel, socket} = SocketContext;// hamza
     const containerRef = useRef<HTMLDivElement | null>(null);// amine 
     const DropMenuRef = useRef<HTMLDivElement | null>(null);// amine 
-    const [scrollPosition, setScrollPosition] = useState({scrollTop: 0, scrollLeft:0})
+    const [scrollPosition, setScrollPosition] = useState({scrollTop: -1, scrollLeft:-1})
     const testref = useRef<any>(null);// amine 
-
+    const [loading, setLoading] = useState<boolean>(false)
     const [openDrop, setOpenDrop] = useState<boolean>(false)// amine 
     //amine
     useEffect(() => {
         // Scroll to the bottom whenever the messages array changes
-        console.log('initial scroll')
-        if (containerRef.current && chatContext.active?.scrollLeft == -1 && chatContext.active?.scrollTop == -1) {
-            containerRef.current.scrollTop = containerRef.current.scrollHeight
-            chatContext.setActive(prevconv => ({...prevconv, scrollLeft: containerRef.current?.scrollLeft, scrollTop:containerRef.current.scrollHeight}))
+        console.log('initial scroll');
+        if (containerRef.current && chatContext.active?.scrollLeft === -1 && chatContext.active?.scrollTop === -1) {
+            console.log('ola' + containerRef.current?.scrollLeft + ' ' + containerRef.current?.scrollHeight);
+
+            //containerRef.current.scrollTop = containerRef.current.scrollHeight;
+
+            const newScrollTop = containerRef.current.scrollHeight;
+            const newScrollLeft = containerRef.current.scrollLeft;
+
+            // Updating the active conversation's scroll properties
+            chatContext.setActive((prevConv) => ({
+                ...prevConv,
+                scrollTop: newScrollTop,
+                scrollLeft: newScrollLeft,
+            }));
+
+            chatContext.setConvs((prevConvs) => {
+                return prevConvs.map((conv) =>
+                    conv.channelId === chatContext.active?.channelId
+                        ? { ...conv, scrollTop: newScrollTop, scrollLeft: newScrollLeft }
+                        : conv
+                );
+            });
+            setUpdate(true)
+            console.log(chatContext.active);
         }
-    }, [messageArray]);
+    }, [scrollPosition, messageArray, chatContext.active, chatContext.setActive, chatContext.setConvs]);
+
 
     useEffect(() => {
         // Scroll to the bottom whenever the messages array changes
+        console.log('hahahaha --->')
         if (containerRef.current) {
           containerRef.current.scrollTop = containerRef.current.scrollHeight;
           setUpdate(false)
@@ -121,7 +144,7 @@ function ChatSession(){
         console.log('Update Current chat : ' + chatContext.active?.channelId);
         console.log(chatContext.active)
         setMessageArray(chatContext.active?.messages)
-    }, [update,chatContext.active ])
+    }, [chatContext.active])
     
     // this function will update our conv list and add packet of old messages to it
     // const 
@@ -264,6 +287,7 @@ function ChatSession(){
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
                 </div>
                     <div ref={containerRef} onScroll={handleContainerScroll} className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
+                    {loading ? <MessageLoading/> : <></>}
                     {
                         messageArray?.map((msg, index): React.ReactNode => {
                             return(
