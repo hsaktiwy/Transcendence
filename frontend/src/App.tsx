@@ -14,11 +14,11 @@ const App = () =>
   //       </Layout>}
   return (
       <Auth>
-        {/* <WebSocketProvider> */}
+        <WebSocketProvider>
           <Layout>
             <ChatSection/>
           </Layout>
-        {/* </WebSocketProvider> */}
+        </WebSocketProvider>
       </Auth>
   )
 }
