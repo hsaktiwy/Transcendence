@@ -99,7 +99,17 @@ function ChatSession(){
 
     },[openDrop])
     // hamza
-    const sendMessage = (event: React.KeyboardEvent) =>
+    const sendMessage = () =>
+    {
+        if (message.length > 0)
+        {
+            const holder:string = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
+            console.log(holder);
+            socket.current.send(holder)
+            setMessage('')
+        }
+    }
+    const TryToSendMessage = (event: React.KeyboardEvent) =>
     {
         //console.log('event.key ' + event.key + ' message ' + message)
         if (event.key === 'Enter' && message.length > 0)
@@ -107,10 +117,11 @@ function ChatSession(){
             console.log((socket.current && socket.current.readyState === WebSocket.OPEN))
             if (socket.current && socket.current.readyState === WebSocket.OPEN)
             {
-                const holder:string = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
-                console.log(holder);
-                socket.current.send(holder)
-                setMessage('')
+                sendMessage()
+                // const holder:string = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
+                // console.log(holder);
+                // socket.current.send(holder)
+                // setMessage('')
             }
             else
                 console.error('WebSocket connection is not open')
@@ -313,8 +324,8 @@ function ChatSession(){
                     <span className="bg-[#5E97A9] text-white rounded-full hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <HiPlus/>
                     </span>
-                    <input type="text" placeholder="Message" className=" rounded-full border-1 border-white focus:outline-none text-white bg-[#1D1E22]  text-sm sm:text-md pl-2 py-2 focus:text-black focus:bg-slate-200  focus:border-black duration-300 basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={sendMessage}/>
-                    <span className="bg-[#5E97A9] text-white rounded-lg hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
+                    <input type="text" placeholder="Message" className=" rounded-full border-1 border-white focus:outline-none text-white bg-[#1D1E22]  text-sm sm:text-md pl-2 py-2 focus:text-black focus:bg-slate-200  focus:border-black duration-300 basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
+                    <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <RiSendPlaneFill />
                     </span>
                 </div>
