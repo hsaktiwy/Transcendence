@@ -12,4 +12,4 @@ urlpatterns = [
     path('conversations/update/<int:channelId>/<int:packetSize>/<int:packetToAdd>/', ConversationUpdateAPIVIEW.as_view(), name="conversationsUpdate")
 ]
 
-#http://172.27.125.220:8000/chat/conversations/update/2/20/2/ 
+#http://10.13.8.16:8000/chat/conversations/update/2/20/2/ 

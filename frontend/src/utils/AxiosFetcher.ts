@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-const Url = "/choreo-apis/djangoreactproject/backend/v1";
-
 const mailman = axios.create();
 
 // Request Interceptor
