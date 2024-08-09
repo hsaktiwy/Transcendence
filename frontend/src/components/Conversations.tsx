@@ -131,7 +131,7 @@ return(
                                 friendName: string;
                             }
                             const currentConvData: convData = {
-                                lastMessage: conv.messages[conv.messages.length - 1].content,
+                                lastMessage: conv.messages[conv.messages.length - 1]?.content,
                                 picture: conv.user2.profile_pic,
                                 friendName: conv.user2.firstName +  " " +conv.user2.lastName
                             }
@@ -145,7 +145,7 @@ return(
                                         <img src={currentConvData.picture} alt="friend-pic" className="rounded-full  w-[40px] h-[40px]" />
                                         <div className="self-center ">
                                             <h1 className="text-md font-semibold">{currentConvData.friendName}</h1>
-                                            <p className="text-gray-300 text-sm">{currentConvData.lastMessage.length >= 20 ? currentConvData.lastMessage.substring(0,20) + "..." : currentConvData.lastMessage}</p>
+                                            <p className="text-gray-300 text-sm">{currentConvData.lastMessage?.length >= 20 ? currentConvData?.lastMessage.substring(0,20) + "..." : currentConvData?.lastMessage}</p>
                                             
                                         </div>
                                         
