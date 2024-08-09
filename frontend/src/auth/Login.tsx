@@ -1,17 +1,18 @@
 // Login.tsx
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
 import {  cookies } from './Cookie';
 import { useNavigate } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
-
+import { UserContext } from '../components/UserContext';
 const Login = () => {
     const Navigate = useNavigate();
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-
-
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("useUser must be used within a UserProvider");
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const url:string = BACKEND + LOGIN_PATH
@@ -52,7 +53,8 @@ const Login = () => {
                     withCredentials: true,
                 }
                 const response = await mailman(request)
-                console.log("boomb has been planted ✅")
+                userContextConsumer?.setUserId(response.data['user_id'])
+                localStorage.setItem("id", response.data['user_id'])
                 Navigate('/')
             }
             catch (err)

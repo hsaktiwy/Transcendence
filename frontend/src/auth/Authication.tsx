@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import { childrenInterface } from '../utils/interfaces';
 import RouteProtection from './RouteProtection';
@@ -7,6 +7,7 @@ import RegistrationForm from './Registration';
 
 function Auth(children:childrenInterface)
 {
+    
     return (
   
             <div className='min-h-[100vh] h-[100vh]'>

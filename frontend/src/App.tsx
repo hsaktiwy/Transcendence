@@ -7,19 +7,25 @@ import Auth from './auth/Authication'
 import Layout from './Layout'
 import ChatSection from './components/ChatSection'
 import { WebSocketProvider } from './utils/WSContext'
+import Settings from './components/Settings'
+import UserProvider from './components/UserContext'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
   //         <ChatSection/>
   //       </Layout>}
+
   return (
+    <UserProvider>
       <Auth>
-        {/* <WebSocketProvider> */}
+        <WebSocketProvider>
           <Layout>
             <ChatSection/>
+            {/* <Settings/> */}
           </Layout>
-        {/* </WebSocketProvider> */}
+        </WebSocketProvider>
       </Auth>
+    </UserProvider>
   )
 }
 

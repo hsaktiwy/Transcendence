@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import {Navigate} from 'react-router-dom';
 import { useEffect } from 'react';
 import { BACKEND, SESSION_CHECKPATH } from '../utils/Constants';
 import { childrenInterface } from '../utils/interfaces';
 import React from 'react'
 import mailman from '../utils/AxiosFetcher';
+import { UserContext } from '../components/UserContext';
 
 function RouteProtection(children: childrenInterface)
 {
     const [Auth, setAuth] = useState<number>(-1);
+
 
     useEffect( () =>
         {
@@ -31,6 +33,7 @@ function RouteProtection(children: childrenInterface)
                 withCredentials: true
             }
             const response = await mailman(request)
+            await console.log("response from protect   :", response.data)
             setAuth(1)
         } catch (error) {
             setAuth(0)

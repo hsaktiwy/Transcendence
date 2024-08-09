@@ -137,7 +137,11 @@ function ChatSession(){
         }
         AddChannel('CHATROOM', UpdateCurrentConvs)
         setInit(true)
-    },[init])
+        return () => {
+        // Remove the CHATROOM call back function when we exist the chat section
+            RemoveChannel('CHATROOM')
+        }
+    },[init, chatContext.active])
 
     useEffect(()=>
     {
