@@ -47,7 +47,7 @@ function GeneralSettings(){
     };
   
     return (
-      <form onSubmit={handleSubmit} className="animate-fadeIn general-settings m-2 sm:m-10 flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-8 flex justify-center flex-col items-center gap-20">
+      <form onSubmit={handleSubmit} className="animate-fadeIn general-settings m-4 sm:m-16  h-[1000px] flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-16 flex justify-center flex-col items-center gap-20">
         <div className="flex gap-20 justify-center items-center flex-wrap">
           <div className="flex items-center gap-4 justify-center flex-col sm:flex-row">
             <label htmlFor="firstName" className="w-[100px] self-start sm:self-center">First Name:</label>
