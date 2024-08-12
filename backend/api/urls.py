@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users.views import getCRSFToken, MyLogin
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     # this was here by defalt gave us grafical admin interface only for users assogne in django default users exemple (hsaktiwy, 1234)<- super user in production level #DestroyThis
     path('admin/', admin.site.urls),
@@ -36,4 +38,4 @@ urlpatterns = [
     path('game/', include('game.urls')),
     # #Game Invitation
     path('invitation/', include('invitation.urls'))
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

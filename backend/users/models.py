@@ -26,7 +26,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     lastName = models.CharField(max_length=50)
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address")
     birthDay = models.DateField()
-    profile_pic = models.CharField(max_length=500, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True) 
     created_at = models.DateTimeField(auto_now_add=True)
     two_factor_auth = models.BooleanField(default=False)
     two_factor_auth_code = models.CharField(max_length=255, blank=True, null=True)
