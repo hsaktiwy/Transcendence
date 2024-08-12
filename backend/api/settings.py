@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,7 +86,7 @@ CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:5173",
     "http://127.0.0.1:6379",
     "http://10.13.4.11:5173",
-    "http://10.32.99.172:5173",
+    "http://10.13.9.3:5173",
 
 )
 
@@ -96,11 +97,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:6379",
     "http://10.13.4.11:5173",
-    "http://10.32.99.172:5173",
+    "http://10.13.9.3:5173",
 
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:6379", "http://10.13.4.11:5173", "http://10.32.99.172:5173"] 
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:6379", "http://10.13.4.11:5173", "http://10.13.9.3:5173"] 
 CORS_ALLOW_CREDENTIALS = True
 # CSRF_COOKIE_SAMESITE = 'Strict'
 # SESSION_COOKIE_SAMESITE = 'Strict'
@@ -192,3 +193,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
