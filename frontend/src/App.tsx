@@ -20,8 +20,8 @@ const App = () =>
       <Auth>
         <WebSocketProvider>
           <Layout>
-            <ChatSection/>
-            {/* <Settings/> */}
+            {/* <ChatSection/> */}
+            <Settings/>
           </Layout>
         </WebSocketProvider>
       </Auth>
