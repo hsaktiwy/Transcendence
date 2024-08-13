@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, FormEvent } from "react";
 import { UserContext } from "./UserContext";
 import { FiEdit2 } from "react-icons/fi";
 import { Toaster, toast } from 'sonner'
@@ -24,27 +24,35 @@ function GeneralSettings(){
         setUsername(userContextConsumer.userData.login || '');
       }
     }, [userContextConsumer]);
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try{
-            const req = {
-                url: BACKEND + `api/user/${userContextConsumer?.id}/`,
-                method: 'PATCH',
-                data : {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    login: username,
-                }
+    
+    const handleSubmit = async (event: FormEvent) => {
+      event.preventDefault();
+      try{
+        if (!changed){
+          toast.warning('No change have been made')
+        }
+        else{
+          setChanged(false)
+          const req = {
+            url: BACKEND + `api/user/${userContextConsumer?.id}/`,
+            method: 'PATCH',
+            data : {
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              login: username,
             }
-            const response =  await mailman(req)
-        }
-        catch (err){
-            console.error("dddddd======????",err)
-        }
-        console.log({ firstName, lastName, email, username });
-    };
+          }
+          const response =  await mailman(req)
+          if (response.status === 200)
+            toast.success('Changes have been applied')
+          }
+      }
+      catch (err){
+        toast.error('Error occurred ! Try again')
+      }
+      console.log({ firstName, lastName, email, username });
+  };
   
     return (
       <form onSubmit={handleSubmit} className="animate-fadeIn general-settings m-4 sm:m-16  h-[1000px] flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-16 flex justify-center flex-col items-center gap-20">
@@ -130,15 +138,10 @@ function GeneralSettings(){
           </div>
         </div>
         <div className="relative flex gap-8 flex-wrap justify-center items-center">
-            <button type="submit" onClick={() => {
-                changed ? toast.success('Changes have been applied') : toast.warning('No change have been made')
-                changed && setChanged(false)
-                
-            }} 
-                className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl">
+            <button type="submit" className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl">
                 Save Changes
             </button>
-            <button className="w-[150px] bg-black/35 px-4 py-2 rounded-xl" onClick={() =>{
+            <button type="button" className="w-[150px] bg-black/35 px-4 py-2 rounded-xl" onClick={() =>{
                 setFirstName(userContextConsumer.userData?.firstName)
                 setLastName(userContextConsumer.userData?.lastName)
                 setEmail(userContextConsumer.userData?.email)

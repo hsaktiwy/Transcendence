@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
             firstName=validated_data.get('firstName', ''),
             lastName=validated_data.get('lastName', ''),
             birthDay=validated_data['birthDay'],
-            profile_pic=validated_data['profile_pic'],
+            # profile_pic=validated_data['profile_pic'],
             password=validated_data['password'],
         )
         return user

@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
 import ChatSection from "./ChatSection";
-
+import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import { FiEdit2 } from "react-icons/fi";
+import { toast } from "sonner";
 function Settings() {
 
 
@@ -56,6 +57,7 @@ function Settings() {
                 toFA,
                 toFAPass
             })
+            userContextConsumer?.setProfilePicChanged(false)
             
         }
         catch (err){
@@ -68,7 +70,41 @@ function Settings() {
     useEffect(() =>{
         fetchUserData()
 
-    }, [userContextConsumer.id])
+    }, [userContextConsumer.id, userContextConsumer.profilePicChanged])
+    const handleProfilChanged = async (e: ChangeEvent<HTMLInputElement>) =>{
+        e.preventDefault()
+        if (e.target.files &&e.target.files[0]){
+            const formData = new FormData();
+            formData.append('profile_pic', e.target.files[0]);
+            try{
+                let csrfToken:string = cookies.get('csrftoken');
+
+                const req = {
+                    url: BACKEND + `api/user/${userContextConsumer?.id}/upload_pic/`,
+                    withCredentials: true,
+                    method: 'POST',
+                    data : formData,
+                    headers : {
+                        'Content-Type': 'multipart/form-data',
+                        'X-CSRFToken': csrfToken,
+                    }
+                  }
+                const response =  await mailman(req)
+                if (response.status === 200)
+                {
+                    const newProfilePictureUrl = response.data
+                    console.log(newProfilePictureUrl)
+                    toast.success('Profile picture changed succesfully')
+                    userContextConsumer.setProfilePicChanged(true)
+                }
+            }
+            catch (err){
+                toast.error('Error occurred ! Try again')
+            }
+        }
+        else
+            toast.error("No file selected")
+    }
     return(
 
         <div className=" min-h-[calc(100vh-80px)] font-poppins absolute left-0 lg:left-[80px] top-[60px] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[10px] mx-[10px] 2xl:mx-[8%] text-white bg-black/35 backdrop-filter backdrop-blur-sm  rounded-xl ">
@@ -78,7 +114,7 @@ function Settings() {
                             <FiEdit2/>
                         </div>
                         <img src={userContextConsumer.userData?.profile_pic} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
-                        <input type="file" accept="image/*" className=" absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50 border-[1px] border-black w-[160px] h-[160px] rounded-full"/>
+                        <input type="file" accept='image/*' className=" absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50 border-[1px] border-black w-[160px] h-[160px] rounded-full" onChange={handleProfilChanged}/>
                     </div>
                 </div>
                 <div className="settings-container flex flex-col  my-20">
