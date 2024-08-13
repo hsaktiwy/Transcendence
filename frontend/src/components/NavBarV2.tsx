@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 import { IoSearchOutline } from "react-icons/io5";
-
+import { UserContext } from "./UserContext";
 
 function NavBarV2(){
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
     return(
         <div className=" h-[60px] w-[calc(100%-120px)]  m-[10px] text-white absolute top-0 left-[80px] flex justify-between ">
             <div id="nav-search-bar" className="relative w-[40%]">
@@ -27,7 +30,7 @@ function NavBarV2(){
                     </svg>
                 </div>
                 <div>
-                    <img src="./src/assets/profiles/1.jpg" alt="user-pic" className="w-[30px] h-[30px] rounded-full" />
+                    <img src={userContextConsumer.userData?.profile_pic} alt="user-pic" className="w-[30px] h-[30px] rounded-full" />
                 </div>
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">

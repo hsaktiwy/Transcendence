@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.middleware.csrf import get_token
 from rest_framework.response import Response
+import os
 # login
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -18,6 +19,9 @@ from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from django.contrib.auth import login as auth_login
 from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
+import logging
+logger = logging.getLogger(__name__)
 # Create your views here.
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
@@ -56,3 +60,23 @@ class CheckAuthentication(APIView):
 def getCRSFToken(request):
         csrf_token = get_token(request)
         return JsonResponse({'csrfToken': csrf_token})
+
+class UploadProfilePicture(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        try:
+            user = get_object_or_404(MyUser, login=request.user)
+            print(request.data)
+            serializer = UserSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                if not user.isDefaultImage():
+                    os.remove('media/' + user.profile_pic.name)  
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response({"error": str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
