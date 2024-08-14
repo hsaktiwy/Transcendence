@@ -69,7 +69,7 @@ function ChatSection(){
             {/* <WebSocketProvider> */}
                 {openModal && <ChatModal/>} 
                 <div className="rounded-xl  bg-black/35 backdrop-filter backdrop-blur-sm animate-fade-down absolute top-[60px]  left-0 lg:left-[80px] h-[calc(100%-80px)] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[10px] mx-[10px] 2xl:mx-[8%]">
-                    <div className="  h-[100%] overflow-hidden relative ">
+                    <div className="  h-[calc(100%-60px)] lg:h-[100%] overflow-hidden relative ">
                         {loading ?
                         (<LoadingIndecator/>) :
                         (<><Conversations/>
@@ -78,6 +78,7 @@ function ChatSection(){
                         {active && <ChatFriendInfo/>}</>)}
                         {/* <div className="bg-[#898989] rounded-lg shadow-xl hidden lg:block lg:col-span-3 row-span-12">User</div> */}
                         </div>
+                        
                 </div>
             {/* </WebSocketProvider> */}
 
