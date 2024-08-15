@@ -52,7 +52,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
           try {
             const { type, ...data } = JSON.parse(message.data);
             // const channelId = data.channel;
-            console.log(data)
+            console.log('allo' + data.channel)
             if (data.ConversationType == 'Message') {
                 const message_received: Message = {
                     id: data.message_id,
