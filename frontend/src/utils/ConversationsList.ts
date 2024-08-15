@@ -36,6 +36,7 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
       const response = await mailman(request)
       const  holder:Conversation[] =  response.data as Conversation[]
       convs = holder.conversations
+      console.log("resp == " + JSON.stringify(convs))
       received = true
       setLoading(false)
       setConv(convs)

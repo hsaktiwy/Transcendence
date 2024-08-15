@@ -92,9 +92,11 @@ import React, { useContext, useEffect, useState } from "react";
 import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
 import { WebSocketContext } from "../utils/WSContext";
 import { convs } from "../utils/ConversationsList";
+import { BACKEND } from "../utils/Constants";
 
 let inc:number=  22222
 function Conversations(){
+    const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
    const chatContext =useContext(ChatSectionContext)
    if (!chatContext)
     throw new Error('error')
@@ -142,7 +144,7 @@ return(
                                     chatContext.setActive(conv)
                                     chatContext.setActiveSection('chat')
                                 }}>
-                                        <img src={currentConvData.picture} alt="friend-pic" className="rounded-full  w-[40px] h-[40px]" />
+                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full  w-[40px] h-[40px]" />
                                         <div className="self-center ">
                                             <h1 className="text-md font-semibold">{currentConvData.friendName}</h1>
                                             <p className="text-gray-300 text-sm">{currentConvData.lastMessage?.length >= 20 ? currentConvData?.lastMessage.substring(0,20) + "..." : currentConvData?.lastMessage}</p>
@@ -150,8 +152,6 @@ return(
                                         </div>
                                         
                                     </div>
-                               
-
                             )
                         })
                     }

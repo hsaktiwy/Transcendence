@@ -19,6 +19,8 @@ import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Co
 import mailman from "../utils/AxiosFetcher";
 
 function ChatSession(){
+    const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
+
     const chatContext =useContext(ChatSectionContext)
     if (!chatContext)
      throw new Error('error')
@@ -231,7 +233,7 @@ function ChatSession(){
                                 }}>
                                 <IoArrowBackOutline />
                                 </span>
-                                <img src={`${chatContext.active &&  chatContext.active.user2.profile_pic}`} alt="user-pic" className="w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${chatContext.active &&  `${backendPath +  chatContext.active.user2.profile_pic}`}`} alt="user-pic" className="w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
                                     chatContext.setShowProfile(true)
                                 }}/>
                                 <div className="cursor-pointer" onClick={()=>{
@@ -296,7 +298,7 @@ function ChatSession(){
                         messageArray?.map((msg, index): React.ReactNode => {
                             return(
                                 <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                                <img src={`${msg.sender.profile_pic}`} alt="" className=" w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${backendPath + msg.sender.profile_pic}`} alt="" className=" w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}/>
