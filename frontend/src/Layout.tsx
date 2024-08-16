@@ -6,11 +6,12 @@ import NavarV2 from './components/NavBarV2';
 import NavBarV2 from './components/NavBarV2';
 import ChatModal from './components/ChatModal';
 import { Toaster, toast } from 'sonner'
+import { Outlet } from 'react-router-dom';
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout = () => {
   return (
    
         
@@ -18,7 +19,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Toaster position="top-right" richColors/>
             <SideBarV2/>
             <NavBarV2/>
-          {children}
+            <Outlet/>
+          {/* {children} */}
           </>
   );
 };

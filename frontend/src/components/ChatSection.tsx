@@ -68,7 +68,7 @@ function ChatSection(){
             {/* animate-fade-down ml-2 lg:ml-[140px]   mr-2 lg:mr-6 mt-6  mb-6 h-[calc(100vh-118px)] overflow-hidden relative */} 
             {/* <WebSocketProvider> */}
                 {openModal && <ChatModal/>} 
-                <div className="rounded-xl  bg-black/35 backdrop-filter backdrop-blur-sm animate-fade-down absolute top-[60px]  left-0 lg:left-[80px] h-[calc(100%-80px)] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[10px] mx-[10px] 2xl:mx-[8%]">
+                <div className="rounded-xl  bg-black/35 backdrop-filter backdrop-blur-sm animate-fade-down absolute top-[60px]  left-0 lg:left-[80px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
                     <div className="  h-[calc(100%-60px)] lg:h-[100%] overflow-hidden relative ">
                         {loading ?
                         (<LoadingIndecator/>) :

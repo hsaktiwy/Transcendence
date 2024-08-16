@@ -8,9 +8,10 @@ import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import { FiEdit2 } from "react-icons/fi";
 import { toast } from "sonner";
+import Skeleton from "react-loading-skeleton";
 function Settings() {
 
-
+    let csrfToken:string = cookies.get('csrftoken');
     const userContextConsumer = useContext(UserContext)
     // const [userData, setUserData] = useState<UserDataInterface | null>(null)
     const [activeSettingSection , setActiveSettingsSection] = useState<string>('general')
@@ -30,7 +31,12 @@ function Settings() {
         try{
             const req = {
                 url: BACKEND + `api/user/${userContextConsumer?.id}/`,
-                method: 'GET'
+                method: 'GET',
+                withCredentials: true,
+                headers : {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRFToken': csrfToken,
+                }
             }
             const resp = await mailman(req)
             const {
@@ -77,13 +83,13 @@ function Settings() {
             const formData = new FormData();
             formData.append('profile_pic', e.target.files[0]);
             try{
-                let csrfToken:string = cookies.get('csrftoken');
+                
 
                 const req = {
                     url: BACKEND + `api/user/${userContextConsumer?.id}/upload_pic/`,
-                    withCredentials: true,
                     method: 'POST',
                     data : formData,
+                    withCredentials: true,
                     headers : {
                         'Content-Type': 'multipart/form-data',
                         'X-CSRFToken': csrfToken,
