@@ -1,21 +1,29 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingIndecator from "../components/Loading";
+import { WebSocketContext } from "../utils/WSContext";
 
 function Game()
 {
     const [send, setSend] = useState<boolean>(false);
+    const socketContext = useContext(WebSocketContext);
+
+    const {socket}  = socketContext;
 
     useEffect(()=>{
         console.log('rendring : '+( send ? 'True' :  'False'))
     },[send])
-
+    
     const FoundOpponent = () =>
     {
         // we will send a ws request to the server to found a Opponent
         if (!send)
         {
             console.log('Send Request')
-            setSend(true);
+            const req = JSON.stringify({
+                type: 'FIND_OPPONENT'
+            })
+            socket?.current?.send(req)
+            setSend(false);
         }
     }
 

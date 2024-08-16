@@ -1,12 +1,12 @@
 import React, {useEffect, createContext, useRef, useState, useContext} from 'react'
 import { ws_url } from './Constants'
-import {channelType, WebSocketContextType, childrenInterface} from './interfaces'
+import {channelType, WebSocketContextType, childrenInterface, defaultContextValue} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 
 let inc: number = 222222 // desable the id that amine use later else we will use this 
 // type CallbackType = (message: any) => void
-export const WebSocketContext = createContext<WebSocketContextType | unknown>(undefined)
+export const WebSocketContext = createContext<WebSocketContextType>(defaultContextValue)
 
 export const WebSocketProvider = ({ children }:childrenInterface) => {
     const channels = useRef<channelType>({})

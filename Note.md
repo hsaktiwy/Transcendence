@@ -101,6 +101,50 @@ guidness :
             .
             .
             .
-            FINALY, if you couldn't solve the problem (poor newbie ...) ask me (hsaktiwy) 
+            FINALY, if you couldn't solve the problem (poor newbie ...) ask me (hsaktiwy)
 
+    [+] inplementig the celery for task sheceduling: base on ('https://www.caktusgroup.com/blog/2021/08/11/using-celery-scheduling-tasks/')
+        + key points:
+            - DJANGO_SETTINGS_MODULE must be set in the environment before starting a Celery process. Its presence
+                in the environment triggers internal magic in Celery to run the Django setup at the right time.
+            - The Celery "application" must be created and configured during startup of both Django and Celery.
+            - All the Celery tasks need to get imported during startup of both Django and Celery.
+        + install && conifguration
+            Note : Celery and all the dependencies it needs to use Redis with one command, run in our virtual
+                environment:
+            1 - $> pip install celery[redis]
+            2 - In your Django settings file, add:
+                ```
+                    CELERY_BROKER_URL = "redis://localhost:6379/0"
+                    CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+                ```
+                Note : The broker is the single most important configuration value, since it tells Django and Celery how to communicate. If they don't have the same value for this setting, no tasks will run.
+            Note:   We need a small Python file that will initialize Celery the way we want it,
+                    whether running in a Django or Celery process.
+                    It's tempting to just create a file celery.py at the top level of our project, but that's exactly 
+                    the name we cannot use, because Celery owns the celery package namespace. Instead,
+                    I'll create a celery.
+            3 - py inside one of my existing packages. Examples, that will be myapp/celery.py.
+                Here's the code that you need to add:
+                ```
+                    from celery import Celery
+
+                    # Create default Celery app
+                    app = Celery()
+
+                    # namespace='CELERY' means all celery-related configuration keys
+                    # should be uppercased and have a `CELERY_` prefix in Django settings.
+                    # https://docs.celeryproject.org/en/stable/userguide/configuration.html
+                    app.config_from_object("django.conf:settings", namespace="CELERY")
+
+                    # When we use the following in Django, it loads all the <appname>.tasks
+                    # files and registers any tasks it finds in them. We can import the
+                    # tasks files some other way if we prefer.
+                    app.autodiscover_tasks()
+                ```
+            4 - there's a Celery setting timezone. If we wanted to set that, we'd put something like this in our Django settings:
+            ```
+                CELERY_TIMEZONE = "America/New_York"
+            ```
+            
 
