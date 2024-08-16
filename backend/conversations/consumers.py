@@ -5,6 +5,7 @@ from asgiref.sync import sync_to_async
 from conversations.models import Channel, Message
 from conversations.serializers import UserSerializer
 from django.utils.dateformat import format
+from channels.exceptions import StopConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -57,6 +58,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # first let get the room name
         user = self.scope['user']
         if user.is_authenticated:
+            print(f'channel name  = {self.channel_name}')
             print(f"User {user.email} is authenticated, proceeding to get channels.")
             try:
                 channels = await sync_to_async(self.get_user_channels)(user.id)

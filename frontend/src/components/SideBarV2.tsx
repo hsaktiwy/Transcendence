@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Link } from 'react-router-dom'
 function SideBarV2(){
     const [showSideBar, setShowSideBar] = useState<boolean>(false)
     return (
@@ -9,9 +9,13 @@ function SideBarV2(){
                     <embed type="image/svg+xml" src="assets/svg/logo-2.svg" className="w-[80px] h-[80px]"></embed>
                 </div> */}
                 <div id="sidebar-menu" className="w-[100%] lg:w-auto  h-auto lg:h-[80%] flex flex-row lg:flex-col p-4 justify-center gap-[10%]">
-                    <embed type="image/svg+xml" src="assets/svg/Overview.svg" className="w-[30px] h-[30px]"></embed>
+                    <Link to="/" className=" cursor-pointer w-[30px] h-[30px] ">
+                        <img src="assets/svg/Overview.svg" alt="Home Icon" className="w-full h-full" />
+                    </Link>
                     <embed type="image/svg+xml" src="assets/svg/Vector.svg" className="w-[30px] h-[30px]"></embed>
-                    <embed type="image/svg+xml" src="assets/svg/Message.svg" className="w-[30px] h-[30px]"></embed>
+                    <Link to="/chat" className=" cursor-pointer w-[30px] h-[30px] ">
+                        <img src="assets/svg/Message.svg" alt="Message Icon" className="w-full h-full" />
+                    </Link>
                     <embed type="image/svg+xml" src="assets/svg/game.svg" className="w-[30px] h-[30px]"></embed>
 
                     

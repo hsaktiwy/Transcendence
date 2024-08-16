@@ -230,6 +230,7 @@ function ChatSession(){
                                 <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
                                     setOpenDrop(false)
                                     chatContext.setActiveSection('conversations')
+                                    chatContext.setActive(undefined)
                                 }}>
                                 <IoArrowBackOutline />
                                 </span>
