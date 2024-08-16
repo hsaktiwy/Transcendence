@@ -76,11 +76,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 room,
                 self.channel_name
             )
-    
-    async def receive(self, text_data):
+
+
+    # Handle chat message sending
+    async def handle_received_message(self,message_json):
         try:
             user = self.scope['user']
-            message_json = json.loads(text_data)
             message = message_json['message']
             room = message_json['channel']
             room_id = int(room.split("CHATROOM")[1])
@@ -105,6 +106,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
         except Exception as e:
             print(f"Error while receiving/sending message: {e}")
+    
+    async def receive(self, text_data):
+        try:
+            message_json = json.loads(text_data)
+            request_type = message_json['type']
+            print(message_json)
+            if request_type == 'MESSAGE':
+                await self.handle_received_message(message_json)
+            if request_type == "FIND_OPPONENT":
+                print("Find_OPPONENT TASK")
+
+        except Exception as e:
+            print(f"Error while receiving/sending main function: {e}")
     
     async def send_message(self, event):
         message = json.dumps(event)
