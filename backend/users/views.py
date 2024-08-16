@@ -24,6 +24,7 @@ import logging
 logger = logging.getLogger(__name__)
 # Create your views here.
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
 
