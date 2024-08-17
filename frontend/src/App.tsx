@@ -13,6 +13,7 @@ import { BrowserRouter,Routes, Route } from 'react-router-dom'
 import Dashboard from './components/Dashboard'
 import LoadingIndecator from './components/Loading'
 import { SkeletonTheme } from 'react-loading-skeleton'
+import ProfileTest from './components/ProfileTest'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -27,8 +28,9 @@ const App = () =>
               <SkeletonTheme baseColor="" highlightColor="#444">
                 <Routes>
                       <Route path='/' element={ <Layout/>}>
-                        <Route path='/chat' element={ <ChatSection/>}/>
                         <Route index  element={ <Settings/>}/>
+                        <Route path='/chat' element={ <ChatSection/>}/>
+                        <Route path='/profile/:username' element={ <ProfileTest/>}/>
                       </Route>
                       <Route path='*' element={<LoadingIndecator/>}/>
                 </Routes>
