@@ -9,6 +9,7 @@ import SecuritySettings from "./SecuritySettings";
 import { FiEdit2 } from "react-icons/fi";
 import { toast } from "sonner";
 import Skeleton from "react-loading-skeleton";
+import { UserDataInterface } from "../utils/UserDataInterface";
 function Settings() {
 
     let csrfToken:string = cookies.get('csrftoken');
@@ -27,56 +28,56 @@ function Settings() {
         toFA: boolean;
         toFAPass: string;
     }
-    const fetchUserData = async () =>{
-        try{
-            const req = {
-                url: BACKEND + `api/user/${userContextConsumer?.id}/`,
-                method: 'GET',
-                withCredentials: true,
-                headers : {
-                    'Content-Type': 'multipart/form-data',
-                    'X-CSRFToken': csrfToken,
-                }
-            }
-            const resp = await mailman(req)
-            const {
-                login,
-                firstName,
-                lastName,
-                profile_pic,
-                email,
-                password,
-                birthDay,
-                toFA,
-                toFAPass
-            } = resp.data
-            console.log("sss ====???? ",resp.data)
+    // const fetchUserData = async () =>{
+    //     try{
+    //         const req = {
+    //             url: BACKEND + `api/user/${userContextConsumer?.id}/`,
+    //             method: 'GET',
+    //             withCredentials: true,
+    //             headers : {
+    //                 'Content-Type': 'multipart/form-data',
+    //                 'X-CSRFToken': csrfToken,
+    //             }
+    //         }
+    //         const resp = await mailman(req)
+    //         const {
+    //             login,
+    //             firstName,
+    //             lastName,
+    //             profile_pic,
+    //             email,
+    //             password,
+    //             birthDay,
+    //             toFA,
+    //             toFAPass
+    //         } = resp.data
+    //         console.log("sss ====???? ",resp.data)
 
-            userContextConsumer?.setUserData({
-                login,
-                firstName,
-                lastName,
-                profile_pic,
-                email,
-                password,
-                birthDay,
-                toFA,
-                toFAPass
-            })
-            userContextConsumer?.setProfilePicChanged(false)
+    //         userContextConsumer?.setUserData({
+    //             login,
+    //             firstName,
+    //             lastName,
+    //             profile_pic,
+    //             email,
+    //             password,
+    //             birthDay,
+    //             toFA,
+    //             toFAPass
+    //         })
+    //         userContextConsumer?.setProfilePicChanged(false)
             
-        }
-        catch (err){
-            console.error("dddddd======????",err)
-        }
+    //     }
+    //     catch (err){
+    //         console.error("dddddd======????",err)
+    //     }
 
-    }
+    // }
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
-    useEffect(() =>{
-        fetchUserData()
+    // useEffect(() =>{
+    //     fetchUserData()
 
-    }, [userContextConsumer.id, userContextConsumer.profilePicChanged])
+    // }, [userContextConsumer.id, userContextConsumer.profilePicChanged])
     const handleProfilChanged = async (e: ChangeEvent<HTMLInputElement>) =>{
         e.preventDefault()
         if (e.target.files &&e.target.files[0]){

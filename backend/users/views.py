@@ -21,12 +21,21 @@ from django.contrib.auth import login as auth_login
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
 import logging
+from status.models import Notification
+from status.serializers import NotificationSerializer
 logger = logging.getLogger(__name__)
 # Create your views here.
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
+
+    def get_object(self):
+        identifier = self.kwargs.get('identifier')
+        if identifier.isdigit():
+            return get_object_or_404(MyUser, pk=identifier)
+        else:
+            return get_object_or_404(MyUser, login=identifier)
 
 class UserAPICreate(generics.ListCreateAPIView):
     queryset = MyUser.objects.all()
@@ -80,4 +89,14 @@ class UploadProfilePicture(APIView):
 
         except Exception as e:
             return Response({"error": str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UserNotification(generics.ListAPIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = NotificationSerializer
+    def get_queryset(self):
+        user_id = self.kwargs.get('pk')
+        return Notification.objects.filter(id_user_fk=user_id).order_by('created')
+
+
 

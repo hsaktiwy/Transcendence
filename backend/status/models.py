@@ -8,6 +8,7 @@ class NotificationType(Enum):
     friendship = 'friendship'
     gameInvitation = 'gameInvitation'
     tournament = 'tournament'
+    message = 'message'
 
 class Notification(models.Model):
     id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
@@ -18,6 +19,7 @@ class Notification(models.Model):
             default=NotificationType.system.value,
         )
     created = models.DateTimeField(auto_now_add=True)
+    is_readed =  models.BooleanField(default=False)
 
 class ProfileStatus(models.Model):
     id_user_fk =  models.ForeignKey('users.MyUser', on_delete=models.CASCADE)

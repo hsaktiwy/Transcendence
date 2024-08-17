@@ -52,7 +52,9 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
           try {
             const { type, ...data } = JSON.parse(message.data);
             // const channelId = data.channel;
-            console.log('allo' + data.channel)
+            console.log('allo' + message.data)
+            console.log(channels.current['CHATROOM'])
+            console.log(channels.current['CHAT'])
             if (data.ConversationType == 'Message') {
                 const message_received: Message = {
                     id: data.message_id,
@@ -77,6 +79,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                 //     console.log('Updated convs:', updatedConvs);
                 // Also update the active conversation if it's the same as the channelId
                 const channelId = data.channel;
+                console.log("wa zbi "+ channelId)
                 if (channels.current['CHAT'])
                 {
                   console.log("in :  channels.current['CHAT']")
