@@ -16,7 +16,10 @@ const Layout = () => {
    
         
           <>
-            <Toaster position="top-right" richColors/>
+            
+            <Toaster  Acti position="top-right" richColors expand={true}  closeButton={true} toastOptions={{
+              className: "bg-black/50 backdrop-filter backdrop-blur-sm text-white "
+            }}/>
             <SideBarV2/>
             <NavBarV2/>
             <Outlet/>
