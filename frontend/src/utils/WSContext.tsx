@@ -37,18 +37,18 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         socket.current = new WebSocket(url)
   
       socket.current.onopen = () => {
-        console.log('Connected')
         connected.current = true
       }
-  
+      
       socket.current.onclose = () => {
         console.log('Connection closed')
         connected.current = false
         ReconnectSocket()
       }
-
+      
       socket.current.onmessage = (message)=>
-      {
+        {
+        console.log('Connected' + socket.current?.protocol)
           try {
             const { type, ...data } = JSON.parse(message.data);
             // const channelId = data.channel;
