@@ -22,9 +22,9 @@ const App = () =>
 
   return (
     <BrowserRouter>
-      <UserProvider>
         <Auth>
           <WebSocketProvider>
+            <UserProvider>
               <SkeletonTheme baseColor="" highlightColor="#444">
                 <Routes>
                       <Route path='/' element={ <Layout/>}>
@@ -35,9 +35,9 @@ const App = () =>
                       <Route path='*' element={<LoadingIndecator/>}/>
                 </Routes>
               </SkeletonTheme>
+           </UserProvider>
           </WebSocketProvider>
-        </Auth>
-      </UserProvider>
+      </Auth>
     </BrowserRouter>
   )
 }

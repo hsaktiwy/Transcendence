@@ -57,4 +57,13 @@
     opacity: 0.9;
     z-index: 1;
 }
-  
+
+
+/* @keyframes notification-animation {
+  from{
+    transform: translateX(100%);
+  }
+  to{
+    transform: translateX(0);
+  }
+} */
