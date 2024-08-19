@@ -5,9 +5,12 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
-
-
+import { NotificationPropreties } from "./UserContext";
+import { WebSocketContext } from "../utils/WSContext";
 const ProfileTest  = () =>{
+    const SocketContext = useContext(WebSocketContext)
+    if (!SocketContext)
+        throw new Error('error')
    const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
@@ -64,7 +67,15 @@ const ProfileTest  = () =>{
                 {
                     userContextConsumer.userData?.login !== profileData?.login &&
                     <div className="relative flex gap-8 flex-wrap justify-center items-center">
-                        <button type="submit" className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl">
+                        <button type="submit" className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl" onClick={() =>{
+                            
+                            const notification = {
+                                type: 'NOTIFICATION_ADD_FRIEND',
+                                to : username
+                            }
+                            const message = JSON.stringify(notification)
+                            SocketContext.socket.current?.send(message)
+                        }}>
                             Add friend
                         </button>
                         <button type="button" className="w-[150px] bg-black/35 px-4 py-2 rounded-xl">

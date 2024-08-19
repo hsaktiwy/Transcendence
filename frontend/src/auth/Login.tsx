@@ -10,9 +10,9 @@ const Login = () => {
     const Navigate = useNavigate();
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const userContextConsumer = useContext(UserContext)
-    if (!userContextConsumer)
-        throw new Error("useUser must be used within a UserProvider");
+    // const userContextConsumer = useContext(UserContext)
+    // if (!userContextConsumer)
+    //     throw new Error("useUser must be used within a UserProvider");
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const url:string = BACKEND + LOGIN_PATH
@@ -53,7 +53,8 @@ const Login = () => {
                     withCredentials: true,
                 }
                 const response = await mailman(request)
-                userContextConsumer?.setUserId(response.data['user_id'])
+                // userContextConsumer?.setUserId(response.data['user_id'])
+                console
                 localStorage.setItem("id", response.data['user_id'])
                 Navigate('/')
             }
