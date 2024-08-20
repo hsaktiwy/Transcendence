@@ -14,7 +14,7 @@ export interface NotificationPropreties{
     type: string;
     created: string;
     is_readed: boolean;
-    id_user_fk: number
+    sender: string
 }
 interface UserContextInterface{
     id: number | undefined;
@@ -25,8 +25,8 @@ interface UserContextInterface{
     setProfilePicChanged: React.Dispatch<React.SetStateAction<boolean> >;
     notifications: NotificationPropreties[];
     setnotifications: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >
-    newNotification: boolean;
-    setNewNotification: React.Dispatch<React.SetStateAction<boolean>>
+    newNotification: NotificationPropreties[];
+    setNewNotification: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >
 
 }
 
@@ -42,7 +42,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [userData, setUserData] = useState<UserDataInterface | undefined>(undefined);
     const [profilePicChanged, setProfilePicChanged] = useState<boolean>(false);
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
-    const [newNotification, setNewNotification] = useState<boolean>(false)
+    const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
     const fetchUserData = async () =>{
 
         try{
@@ -131,14 +131,13 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 setUserId(Number(savedId))
         }
         const notificationHandler = (data: NotificationPropreties) => {
-            console.log(data)
 
                 setnotifications(prev => [...prev, data])
-                setNewNotification(true)
+                setNewNotification(prev => [...prev, data])
         }
-        SocketContext.AddChannel('NOTIFICATION', notificationHandler)
+        SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
         return () => {
-            SocketContext.RemoveChannel('NOTIFICATION')
+            SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
         }
 
     }, [])
@@ -150,7 +149,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     }, [id, profilePicChanged])
     return(
         <UserContext.Provider value={{id, setUserId, userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification}}>
-            {notifications.length > 0 && newNotification && <NotificationToast items={notifications}/>}
+            {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {children}
         </UserContext.Provider>
     )

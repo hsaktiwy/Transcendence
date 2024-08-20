@@ -25,16 +25,14 @@ const App = () =>
         <Auth>
           <WebSocketProvider>
             <UserProvider>
-              <SkeletonTheme baseColor="" highlightColor="#444">
                 <Routes>
-                      <Route path='/' element={ <Layout/>}>
-                        <Route index  element={ <Settings/>}/>
+                      <Route path='/'  element={ <Layout/>}>
+                        <Route index element={ <Settings/>}/>
                         <Route path='/chat' element={ <ChatSection/>}/>
                         <Route path='/profile/:username' element={ <ProfileTest/>}/>
                       </Route>
                       <Route path='*' element={<LoadingIndecator/>}/>
                 </Routes>
-              </SkeletonTheme>
            </UserProvider>
           </WebSocketProvider>
       </Auth>

@@ -127,7 +127,7 @@ function Settings() {
                 <div className="settings-container flex flex-col  my-20">
                     <div className="settings menu mt-10 mb-4 lg:mb-10 mx-4  flex flex-col items-center justify-start lg:justify-center ">
                         <ul className="flex flex-row  gap-8 flex-wrap items-center justify-center">
-                            <li className= {`relative bg-gradient-to-b from-slate-300/10 to-cyan-500/10 py-2 px-6 rounded-t-xl rounded-b-md hover:opacity-50 duration-200 ${activeSettingSection === 'general' && 'after:content-[""] after:absolute after:h-[2px]  after:w-[100%] after:bg-[#5E97A9]  after:left-0 after:bottom-0  after:rounded-md'} cursor-pointer`} onClick={()=>{
+                            <li className= {` relative bg-gradient-to-b from-slate-300/10 to-cyan-500/10 py-2 px-6 rounded-t-xl rounded-b-md hover:opacity-50 duration-200 ${activeSettingSection === 'general' && 'after:content-[""] after:absolute after:h-[2px]  after:w-[100%] after:bg-[#5E97A9]  after:left-0 after:bottom-0  after:rounded-md'} cursor-pointer`} onClick={()=>{
                                 setActiveSettingsSection("general")
                             }}>General Settings</li>
                             <li className={` relative bg-gradient-to-b from-slate-300/10 to-cyan-500/10 py-2 px-6 rounded-t-xl rounded-b-md hover:opacity-50 duration-200 ${activeSettingSection === 'security' && 'after:content-[""] after:absolute after:h-[2px]  after:w-[100%] after:bg-[#5E97A9]  after:left-0 after:bottom-0  after:rounded-md'} cursor-pointer `} onClick={()=>{

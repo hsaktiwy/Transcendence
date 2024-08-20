@@ -72,14 +72,13 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                   }
               }
             }
-            if (type === 'friendship'){
-              if(channels.current['NOTIFICATION'])
+            if (type === 'friendship' || type === 'message'){
+              if(channels.current['NOTIFICATION_ADD_FRIEND'])
               {
                 const notifData =  JSON.parse(message.data); 
-                channels.current['NOTIFICATION'](notifData)
+                channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
 
               }
-
             }
         } catch (error) {
             console.error('Error processing WebSocket message:', error);
