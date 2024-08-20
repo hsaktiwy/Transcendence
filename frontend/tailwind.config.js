@@ -22,14 +22,22 @@ export default {
         '100%': { opacity: 1 },
       },
       notificationAnimation:{
-        '0%': {transform: 'translateX(100%)'},
+        '0%': {
+        transform: 'translateX(100%)'
+        }
+        ,
         '100%': {transform: 'translateX(0)'}
+      },
+      notificationDelete:{
+        '0%': {transform: 'translateX(0)'},
+        '100%': {transform: 'translateX(100%)'}
       }
     },
     animation: {
       wiggle: 'wiggle 1s ease-in-out infinite',
       fadeIn: 'fadeIn 1s ease-in-out',
-      notificationAnimation: 'notificationAnimation .5s ease-in-out'
+      notificationAnimation: 'notificationAnimation .7s ease-in-out',
+      notificationDelete: 'notificationDelete .3s ease-in-out'
     },
   },
   plugins: [
