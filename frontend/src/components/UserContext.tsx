@@ -24,9 +24,12 @@ interface UserContextInterface{
     profilePicChanged: boolean;
     setProfilePicChanged: React.Dispatch<React.SetStateAction<boolean> >;
     notifications: NotificationPropreties[];
-    setnotifications: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >
+    setnotifications: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >;
     newNotification: NotificationPropreties[];
-    setNewNotification: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >
+    setNewNotification: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >;
+    notificationHandler: (data: NotificationPropreties) => void;
+    notificationReaded: boolean;
+    setNotificationReaded: React.Dispatch<React.SetStateAction<boolean> >;
 
 }
 
@@ -43,6 +46,13 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [profilePicChanged, setProfilePicChanged] = useState<boolean>(false);
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
+    const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
+    const notificationHandler = (data: NotificationPropreties) => {
+
+        console.log(data)
+        setnotifications(prev => [...prev, data])
+        setNewNotification(prev => [...prev, data])
+}
     const fetchUserData = async () =>{
 
         try{
@@ -114,7 +124,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             //     toast.dismiss(toastId);
             // }, 5000);
             const notificationData : NotificationPropreties[] = resp.data
-
+            console.log('waaaaaaa')
+            console.log(notificationData)
 
             setnotifications(notificationData)
             
@@ -130,25 +141,26 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             if (savedId !== null)
                 setUserId(Number(savedId))
         }
-        const notificationHandler = (data: NotificationPropreties) => {
 
-                setnotifications(prev => [...prev, data])
-                setNewNotification(prev => [...prev, data])
-        }
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
+        SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
         }
 
     }, [])
+    useEffect(() => {
+        if (id !== undefined){
+            fetchNotification()
+        }
+    },[id,notificationReaded])
     useEffect(() =>{
         if (id !== undefined){
             fetchUserData()
-            fetchNotification()
         }
     }, [id, profilePicChanged])
     return(
-        <UserContext.Provider value={{id, setUserId, userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification}}>
+        <UserContext.Provider value={{id, setUserId, userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {children}
         </UserContext.Provider>

@@ -27,7 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return None
     def create_message_notification(self, receiver, sender, message):
         try:
-            not_content = f'{sender}: {message}'
+            not_content = f'{sender} : {message}'
             user = MyUser.objects.filter(login=receiver).first()
             notification = Notification.objects.create(id_user_fk=user, content=not_content, type='message')
             return notification, user.id
