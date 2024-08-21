@@ -6,9 +6,11 @@ import { UserContext } from "./UserContext";
 import { RiNotification2Line } from "react-icons/ri";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
+import { BiMessageSquareDetail } from "react-icons/bi";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { Link } from "react-router-dom";
+
 
 interface senderInterface {
     login: string;
@@ -34,7 +36,7 @@ const notifType: typeInterface = {
     'friendship': <IoPersonAddOutline/>,
     'gameInvitation': <RiGamepadLine/>,
     'tournament': <RiGamepadLine/>,
-    'message': <RiGamepadLine/>,
+    'message': <BiMessageSquareDetail/>,
 }
 
 const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
@@ -100,13 +102,15 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                         <Link to={`/profile/${item.sender}`}>
                             <div key={index} className={`  relative duration-200 transition-all opacity-80   hover:scale-105 hover:opacity-100 cursor-pointer shadow-[0px_20px_207px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-[500px] h-[100px] bg-gradient-to-b from-gray-300 via-sky-50 to-cyan-50 rounded-lg flex`}>
                                 <div className="notif-icon bg-[#5E97A9]/70 h-full flex justify-center items-center text-2xl p-4 text-white/70 rounded-l-lg">
-                                    {notifType.friendship}
+                                    {
+                                        item.type === 'message' ? notifType.message : item.type === 'friendship' ? notifType.friendship : item.type === 'system' ? notifType.system : notifType.gameInvitation
+                                    }
                                 </div>
-                                <div className="notif-contetn-container  p-4">
+                                <div className="notif-contetn-container  p-4 flex flex-col gap-2">
                                     <h1 className="font-semibold text-lg">
                                         {`You have a new ${item.type==='message' ? 'Message' :'Notification' }`}
                                     </h1>
-                                    <div className="flex gap-4 justify-center items-center">
+                                    <div className="flex gap-4  items-center">
                                         {
                                             (item.type === 'friendship' || item.type === 'message') &&
                                             <div className=" h-[40px] w-[40px]">

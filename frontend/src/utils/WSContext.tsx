@@ -72,12 +72,20 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                   }
               }
             }
-            if (type === 'friendship' || type === 'message'){
+            if (type === 'friendship'){
               if(channels.current['NOTIFICATION_ADD_FRIEND'])
               {
                 const notifData =  JSON.parse(message.data); 
                 channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
 
+              }
+            }
+            if (type === 'message'){
+              if(channels.current['NOTIFICATION_MESSAGE'])
+              {
+                const notifData =  JSON.parse(message.data);
+                channels.current['NOTIFICATION_MESSAGE'](notifData)
+  
               }
             }
         } catch (error) {

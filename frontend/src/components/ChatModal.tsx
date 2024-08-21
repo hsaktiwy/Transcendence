@@ -1,6 +1,7 @@
 import React from "react";
 import { useContext, useRef, useState,useEffect } from "react";
 import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
+import { Navigate, Link } from "react-router-dom";
 function ChatModal(){
     const chatContext =useContext(ChatSectionContext)
     if (!chatContext)
@@ -16,7 +17,9 @@ function ChatModal(){
                     </svg>
                     <p className="text-lg font-medium">{`Are you sure you want to ${chatContext.modalMessage}?`}</p>
                     <div className="flex gap-4 flex-wrap items-center justify-center ">
-                        <button className="hover:opacity-70 cursor-pointer duration-150 transition-all bg-[#5E97A9] rounded-md text-white px-6 py-4 text-lg font-medium">Yes, I'm sure</button>
+                        <Link to='/'>
+                            <button className="hover:opacity-70 cursor-pointer duration-150 transition-all bg-[#5E97A9] rounded-md text-white px-6 py-4 text-lg font-medium">Yes, I'm sure</button>
+                        </Link>
                         <button className="hover:opacity-70 cursor-pointer duration-150 transition-all text-black bg-[#ffffff] border-[1px] border-black/10 rounded-md  px-6 py-4 text-lg font-medium" onClick={() =>{
                             chatContext.setOpenModal(false)
                         }}>

@@ -9,7 +9,7 @@ import LoadingIndecator from "./Loading";
 import ChatModal from "./ChatModal";
 import { WebSocketContext, WebSocketProvider } from "../utils/WSContext";
 import { createContext } from "react";
-
+import { UserContext } from "./UserContext";
 
 function ChatSection(){
     const [loading, setLoading] = useState<boolean>(true)
@@ -20,6 +20,9 @@ function ChatSection(){
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [modalMessage, setModalMessage] = useState<string>("")
     const SocketContext = useContext(WebSocketContext)
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
     if (!SocketContext)
         throw new Error('error')
     const {AddChannel,RemoveChannel, socket} = SocketContext
@@ -55,9 +58,11 @@ function ChatSection(){
                 return updatedConvs
             })
         }
+        RemoveChannel('NOTIFICATION_MESSAGE')
         AddChannel('CHAT', UpdateConvs)
         return () => {
-        // Remove the CHAT call back function when we exist the chat section
+            // Remove the CHAT call back function when we exist the chat section
+            AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
             RemoveChannel('CHAT')
         }
     }, [loading, active])

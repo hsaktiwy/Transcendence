@@ -36,7 +36,7 @@ export default {
     animation: {
       wiggle: 'wiggle 1s ease-in-out infinite',
       fadeIn: 'fadeIn 1s ease-in-out',
-      notificationAnimation: 'notificationAnimation .7s ease-in-out',
+      notificationAnimation: 'notificationAnimation .3s ease-in-out',
       notificationDelete: 'notificationDelete .3s ease-in-out'
     },
   },
