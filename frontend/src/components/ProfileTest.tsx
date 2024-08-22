@@ -55,7 +55,7 @@ const ProfileTest  = () =>{
     else{
         setProfileData(userContextConsumer?.userData)
     }
-   },[])
+   },[username])
 
     return(
         <div className="min-h-[calc(100vh-100px)] font-poppins absolute overflow-hidden left-0 lg:left-[80px] top-[60px] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%] text-white bg-black/35 backdrop-filter backdrop-blur-sm  rounded-xl flex justify-center items-center ">
