@@ -104,6 +104,16 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
 
     }
+    const getNotificationData = (notifications: NotificationPropreties[]) =>{
+        for(const notif of notifications){
+            const str: string = " "
+            if (notif.type === 'message' || notif.type === 'friendship' || notif.type === 'gameInvitation'){
+                const index = notif.content.indexOf(str)
+                notif.sender = notif.content.slice(0 , index)
+            }
+        }
+        return notifications
+    }
     const fetchNotification = async () =>{
 
         try{
@@ -123,11 +133,11 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             // setTimeout(() => {
             //     toast.dismiss(toastId);
             // }, 5000);
-            const notificationData : NotificationPropreties[] = resp.data
+            let notificationData : NotificationPropreties[] = resp.data
             console.log('waaaaaaa')
+            notificationData = getNotificationData(notificationData)
             console.log(notificationData)
-
-            setnotifications(notificationData)
+            setnotifications(notificationData.sort((a, b)=> b.id - a.id))
             
         }
         catch (err){

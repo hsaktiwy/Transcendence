@@ -99,8 +99,8 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
                         return(
-                        <Link to={`/profile/${item.sender}`}>
-                            <div key={index} className={`  relative duration-200 transition-all opacity-80   hover:scale-105 hover:opacity-100 cursor-pointer shadow-[0px_20px_207px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-[500px] h-[100px] bg-gradient-to-b from-gray-300 via-sky-50 to-cyan-50 rounded-lg flex`}>
+                        <Link key={index} to={`/profile/${item.sender}`}>
+                            <div  className={`  relative duration-200 transition-all opacity-80   hover:scale-105 hover:opacity-100 cursor-pointer shadow-[0px_20px_207px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-[500px] h-[100px] bg-gradient-to-b from-gray-300 via-sky-50 to-cyan-50 rounded-lg flex`}>
                                 <div className="notif-icon bg-[#5E97A9]/70 h-full flex justify-center items-center text-2xl p-4 text-white/70 rounded-l-lg">
                                     {
                                         item.type === 'message' ? notifType.message : item.type === 'friendship' ? notifType.friendship : item.type === 'system' ? notifType.system : notifType.gameInvitation
