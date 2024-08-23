@@ -25,7 +25,7 @@ function NavBarV2(){
                         </span>
                         <input type="text" placeholder="Search" className={`text-white rounded-full mx-10  ${isSearchBarActive ? 'w-[calc(70%)] border-[2px] border-white/40 px-4 py-1' : 'w-0'}  lg:w-[50%] lg:border-[2px] lg:border-white/40 lg:px-4 lg:py-1 focus:lg:w-[90%] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `} />
                     </div>
-                    <div className={`gap-0 lg:gap-6 bg-[#2B2F32] text-white/60  w-[70%] sm:w-[45%] md:w-[40%] lg:w-auto justify-between items-center rounded-lg self-start p-2 ${isSearchBarActive ? 'hidden' : 'flex'} lg:flex`}>
+                    <div className={`gap-0 lg:gap-6  text-white/60  w-[70%] sm:w-[45%] md:w-[40%] lg:w-auto justify-between items-center rounded-lg self-start p-2 ${isSearchBarActive ? 'hidden' : 'flex'} lg:flex`}>
                         <div className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
                                 setOpenModal(true)
                             }}>

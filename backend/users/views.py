@@ -24,6 +24,8 @@ import logging
 from status.models import Notification
 from status.serializers import NotificationSerializer
 logger = logging.getLogger(__name__)
+
+from rest_framework.permissions import AllowAny
 # Create your views here.
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
@@ -40,6 +42,8 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 class UserAPICreate(generics.ListCreateAPIView):
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+    
 
 class UserListAPIView(generics.ListAPIView):
     queryset = MyUser.objects.all()

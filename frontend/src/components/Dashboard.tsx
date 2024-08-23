@@ -9,13 +9,13 @@ import { BsFire } from "react-icons/bs";
 
 function Dashboard(){
     return(
-        <div className="font-poppins dashboard-container bg-red-400 w-[calc(100%-160px)] my-[20px] mx-[40px] absolute top-[80px] left-[80px] grid grid-cols-12  grid-rows-12 gap-4" >
-            <div className="col-span-6 row-span-5 bg-[#2B2F32] rounded-lg p-8 flex gap-4 flex-col">
+        <div className="font-poppins dashboard-container  w-[calc(100%-160px)] my-[20px] mx-[40px] absolute top-[80px] left-[80px]    gap-4 flex flex-wrap" >
+            <div className="  h-[500px] bg-black/35 backdrop-filter backdrop-blur-sm rounded-lg p-8 flex gap-4 flex-col">
                 <div className="flex gap-4 w-full">
                     <div className="self-center">
                         <img src="./src/assets/profiles/1.jpg" alt="user-profil" className="w-[112px] h-[112px] rounded-full"/>
                     </div>
-                    <div className="progress-container bg-[#1D1E22] rounded-lg text-white p-6 flex flex-col gap-4 flex-1">
+                    <div className="progress-container bg-black/45 rounded-lg text-white p-6 flex flex-col gap-4 flex-1">
                         <h1 className="text-3xl font-semibold">Hello Hamza</h1>
                         <div className="text-center text-xl">
                             <p className="font-semibold">
@@ -110,21 +110,23 @@ function Dashboard(){
                     </div>
                 </div>
             </div>
-            <div className="col-span-3 row-span-5 bg-blue-400 ">
+            <div className=" rounded-lg col-span-3  bg-blue-400 min-w-[700px]">
                 usr-activty-chart
             </div>
-            <div className="col-span-3  row-span-12  bg-gray-400 ">
-                friends-list
+            <div className="  min-w-[500px] rounded-lg col-span-3    bg-gray-400 overflow-hidden">
+                <div className="bg-black/20   m-4">
+                       
+                </div>
             </div>
-            <div className="col-span-5 bg-yellow-400 row-span-11">
+            <div className=" min-w-[30%] rounded-lg col-span-5 bg-yellow-400 ">
                 win-chart
             </div>
-            <div className="col-span-4 bg-purple-500  row-span-11">
+            <div className=" min-w-[47%] rounded-lg col-span-4 bg-purple-500  ">
                 leaderBoard
             </div>
-            {/* <div className="col-span-3 bg-orange-300  row-span-11 ">
+            <div className=" min-w-[21%] rounded-lg col-span-3 bg-orange-300   ">
                 statistics
-            </div> */}
+            </div>
         </div>
     )
 }

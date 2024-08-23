@@ -10,6 +10,8 @@ import { BiMessageSquareDetail } from "react-icons/bi";
 import { NotificationPropreties } from "./UserContext";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
+import { PiMaskSadLight } from "react-icons/pi";
+
 
 
 function formatDate(date: Date | string): string {
@@ -101,7 +103,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
     },[])
     return(
         <div className=" h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 ">
-        <div className=" scale-90 mx-auto sm:mx-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2   bg-slate-100 w-[90%] sm:w-[550px] rounded-xl flex flex-col justify-center     z-50 overflow-hidden shadow-[2px_5px_18px_12px_rgba(94,151,169,0.36)]">
+        <div className=" scale-90 mx-auto sm:mx-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2   bg-slate-100 w-[90%] sm:w-[550px] rounded-2xl flex flex-col justify-center     z-50 overflow-hidden shadow-[2px_5px_18px_12px_rgba(94,151,169,0.36)]">
             <div className="notif-header p-6 flex justify-between bg-[#1D1E22] text-white/80 border-b-[1px] border-b-white/30">
 
                 <h1 className="text-2xl sm:text-3xl font-semibold font-poppins">{`Notifications (${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length})`}</h1>
@@ -114,7 +116,8 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
             <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden bg-[#2B2F32] ">
 
             {
-                userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item) =>{
+                userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 
+                (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item) =>{
                     return(
                         <div key={item.id} className=" font-poppins border-b-[1px] border-[#5E97A9]/85 min-h-[100px]">
                             <div className="px-2 sm:px-4 py-4 flex gap-8 items-center  justify-center sm:justify-between flex-wrap ">
@@ -143,7 +146,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                                         </div>
                                     </div>
                                 </div>
-                                <div className="hidden sm:block text-sm  text-white" >
+                                <div className="hidden sm:block text-sm  text-white w-[80px] text-center" >
                                     <p >
                                         {formatDate(item.created)}
                                     </p>
@@ -151,7 +154,9 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                             </div>
                         </div>
                         )
-                    })
+                    })) : <div className="h-[50vh] flex justify-center items-center">
+                                <h1 className=" text-white/85 font-semibold text-3xl">No Notifications yet !</h1>
+                            </div>
                 }
             </div>
         </div>
