@@ -13,11 +13,11 @@ def validateImage(image):
         raise ValidationError(f"Max size of file is {limit_mb} MB")
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, login, email, firstName, lastName, birthDay, password, **extra_fields):
+    def create_user(self, login, email, firstName, lastName, birthDay,  password, **extra_fields):
         if not login:
             ValueError("User must set the login")
         email = self.normalize_email(email)
-        user = self.model(login=login, email=email, firstName=firstName, lastName=lastName, birthDay=birthDay, **extra_fields)
+        user = self.model(login=login, email=email, firstName=firstName, lastName=lastName, profile_pic=None, birthDay=birthDay, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -51,7 +51,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.profile_pic.name == 'default.jpg'
 
     USERNAME_FIELD = "login"
-    REQUIRED_FIELDS = ["email", "firstName", "lastName", "birthDay", "profile_pic"]
+    REQUIRED_FIELDS = ["email", "firstName", "lastName", "birthDay"]
 
     objects = MyUserManager()
 
