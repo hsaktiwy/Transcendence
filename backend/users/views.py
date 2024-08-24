@@ -39,7 +39,7 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         else:
             return get_object_or_404(MyUser, login=identifier)
 
-class UserAPICreate(generics.ListCreateAPIView):
+class UserAPICreate(generics.CreateAPIView):
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
