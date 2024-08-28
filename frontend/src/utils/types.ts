@@ -1,0 +1,1 @@
+export type CallbackType = (...args:any) => void

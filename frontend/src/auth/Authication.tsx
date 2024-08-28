@@ -1,0 +1,26 @@
+import React, { useContext } from 'react'
+import { BrowserRouter, Routes, Route} from 'react-router-dom'
+import { childrenInterface } from '../utils/interfaces';
+import RouteProtection from './RouteProtection';
+import Login from './Login'
+import RegistrationForm from './Registration';
+import ChatSection from '../components/ChatSection';
+import Settings from '../components/Settings';
+
+function Auth(children:childrenInterface)
+{
+    
+    return (
+  
+                <Routes>
+                    <Route path="/*" element={<RouteProtection>{children.children}</RouteProtection>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/signup" element={<RegistrationForm/>}/>
+                    {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
+                </Routes>
+
+          
+    )
+}
+
+export default Auth;
