@@ -1,0 +1,123 @@
+
+
+user:
+  id_user int pk
+  login varchar(30)
+  FirstName varchar(30)
+  LastName varchar(30)
+  email varchar(255)
+  password_hash varchar(255)
+  created_at timestamp=now()
+  profile_pic varchar(500)
+  two_factor_enabled state(on,off)
+  two_factor_secret varchar(255)
+
+message:
+  id_message int pk
+  id_user_fk fk user.id_user
+  id_channel_fk int pk fk channel.id_channel
+  content text
+  timestamp timestamp=now()
+
+channel:
+  id_channel  int pk
+  id_user1_fk fk user.id_user
+  id_user2_fk fk user.id_user
+  created_at timestamp=now()
+
+notification:
+  id_notification int pk
+  id_user_fk fk user.id_user
+  content varchar(80)
+  type state(system, friendship, gameInvitation, tournament)
+
+ProfileStatus:
+  id_status int pk
+  id_user_fk fk user.id_user
+  total_games int
+  wins int
+  lostes int
+  rank int
+
+game:
+  id_game int pk
+  id_player1_fk fk user.id_user
+  id_player2_fk fk user.id_user
+  game_status state(waiting, in_progress, ended)
+  winner_id fk user.id_user
+  start_time timestamp=now()
+  end_time timestamp
+
+gameStatus:
+  id_game_fk fk game.id_game
+
+game_invitation:
+  id_invitation int pk
+  id_game_fk fk game.id_game
+  id_user_from_fk fk user.id_user
+  id_user_to_fk fk user.id_user
+  status state(pending, accepted, declined)
+  created_at timestamp=now()
+
+friendship:
+  id_friendship int pk
+  id_user1_fk fk user.id_user
+  id_user2_fk fk user.id_user
+  status state(pending, accepted, declined, blocked)
+  created_at timestamp=now()
+
+tournament:
+  id_tournament int pk
+  start timestamp
+  end timestamp
+
+tournament_participant:
+  id_tournament_fk int pk fk tournament.id_tournament
+  id_user_fk int pk fk user.id_user
+
+Database Terms Explained:
+  UUID: Universally Unique Identifier, a 128-bit number used to uniquely identify information in a database.
+  VARCHAR: Variable Character Field, used to store strings of text with a variable length up to the specified number of characters.
+  TIMESTAMP: A data type that stores date and time values.
+  FK (Foreign Key): A field in one table that uniquely identifies a row of another table. It establishes a link between the two tables.
+  PK (Primary Key): A field in a table that uniquely identifies each row/record in that table.
+  STATE: A custom data type representing a limited set of possible values for a column.
+  INT: Integer, a whole number without decimal points.
+
+Explanation for Team Members:
+  This database model is designed to manage user accounts, messaging, channels, notifications, profile statuses, games, game invitations, friendships, and tournaments. Each table has specific columns and constraints to maintain data integrity and relationships between entities.
+  User: Stores user details, including login, name, email, password hash, and two-factor authentication settings.
+  Message: Stores messages sent by users with references to the sender.
+  Channel: Represents communication channels between two users.
+  Notification: Stores notifications for users, with different types such as system, friendship, game invitations, and tournaments.
+  Channel Message: Links messages to channels, forming a many-to-many relationship between channels and messages.
+  Profile Status: Stores user profile statistics like total games, wins, losses, and rank.
+  Game: Represents game instances, including player references, game status, winner, and timestamps.
+  Game Status: Stores statuses of games (still working on it).
+  Game Invitation: Manages game invitations between users, including the status of the invitation.
+  Friendship: Manages friendship requests and statuses between users.
+  Tournament: Represents tournaments with start and end times.
+  Tournament Participant: Links users to tournaments, forming a many-to-many relationship.
+
+# Description
+
+# user
+  # The user table contains the user information
+
+# message
+  # The message table contains the message information
+
+# channel
+  # The channel (or we can call them conversation pages) table contains the channel information
+
+# notification
+  # The notification table contains the notification information
+
+# channel message
+  # The channel_message table contains the message that is sent in the channel
+
+# gameStatus
+  # The gameStatus table contains the status of all games played by the user
+  # this is created to provide the info need to display it in the user profile
+  # they are collected from the game table
+  # this where we can see our user progress, level ... etc 
