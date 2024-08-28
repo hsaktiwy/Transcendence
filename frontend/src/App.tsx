@@ -14,6 +14,7 @@ import Dashboard from './components/Dashboard'
 import LoadingIndecator from './components/Loading'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import ProfileTest from './components/ProfileTest'
+import TopBar from './components//website/mobileVersion/topBar'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -29,7 +30,7 @@ const App = () =>
                       <Route path='/'  element={ <Layout/>}>
                         <Route index element={ <Dashboard/>}/>
                         <Route path='/chat' element={ <ChatSection/>}/>
-                        <Route path='/profile/:username' element={ <ProfileTest/>}/>
+                        <Route path='/profile/:username' element={ <TopBar/>}/>
                       </Route>
                       <Route path='*' element={<LoadingIndecator/>}/>
                 </Routes>
