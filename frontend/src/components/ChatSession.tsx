@@ -226,7 +226,7 @@ function ChatSession(){
     return(
             <div  className={`   rounded-xl lg:rounded-none animate-fade-down     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] lg:rounded-r-xl`}  h-full transition-all duration-800
             `}>
-                <div id="conversation-header-container" className="bg-[#5E97A9]/30">
+                <div id="conversation-header-container" className="bg-[#5E97A9]/80">
                     <div id="conversation-header" className="text-white grid grid-cols-4 px-4 py-[2px]">
                             <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center cursor-pointer">
                                 <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
@@ -295,7 +295,7 @@ function ChatSession(){
                     </div>
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
                 </div>
-                    <div ref={containerRef} onScroll={handleContainerScroll} className="text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
+                    <div ref={containerRef} onScroll={handleContainerScroll} className=" text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
                     {/* #{loading ? <MessageLoading/> : <></>} */}
                     {
                         messageArray?.map((msg, index): React.ReactNode => {

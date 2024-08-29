@@ -62,8 +62,8 @@ function Dashboard(){
         ]
       });
     return(
-        <div className="font-poppins dashboard-container  w-[90%] lg:w-[calc(100%-160px)] my-[20px]  lg:mx-[40px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid  xl:grid-cols-4  gap-4 " >
-            <div className="     bg-black/35 backdrop-filter backdrop-blur-sm rounded-lg p-8 flex  gap-4 flex-col xl:col-span-4 2xl:col-span-2 overflow-hidden">
+        <div className="  hidden bg-transparent font-poppins dashboard-container  w-[90%] lg:w-[calc(100%-160px)] my-[20px]  lg:mx-[40px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid  xl:grid-cols-4  gap-4 " >
+            <div className="     bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-lg p-8 flex  gap-4 flex-col xl:col-span-4 2xl:col-span-2 overflow-hidden">
                 <div className="flex gap-4 w-full">
                     <div className="self-center">
                         <img src="./src/assets/profiles/1.jpg" alt="user-profil" className="w-[112px] h-[112px] rounded-full"/>
@@ -163,25 +163,25 @@ function Dashboard(){
                     </div>
                 </div>
             </div>
-            <div className=" rounded-lg    xl:col-span-2 2xl:col-span-1 bg-black/35 backdrop-filter backdrop-blur-sm text-center text-xl text-white flex flex-col items-start gap-4 justify-center p-4">
+            <div className=" rounded-lg    xl:col-span-2 2xl:col-span-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10  text-center text-xl text-white flex flex-col items-start gap-4 justify-center p-4">
                 <h1 className="text-2xl font-semibold">Activity Chart</h1>
                 {/* <Bar options={{}} data={chartData}/> */}
             </div>
-            <div className="   rounded-lg    xl:col-span-2 2xl:col-span-1  row-span-2 bg-black/35 backdrop-filter backdrop-blur-sm text-center text-xl text-white flex gap-4 xl:flex-col p-4 xl:min-h-[1167px]">
-                <div className="bg-black/20   xl:h-[55%] rounded-lg">
+            <div className="   rounded-lg    xl:col-span-2 2xl:col-span-1  row-span-2 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 backdrop-filter backdrop-blur-sm text-center text-xl text-white flex gap-4 xl:flex-col p-4 xl:min-h-[1167px]">
+                <div className="bg-black/25   xl:h-[55%] rounded-lg">
                        online friends
                 </div>
-                <div className="  rounded-lg  bg-black/20 xl:h-[45%] flex flex-col items-start gap-4 justify-center p-4">
+                <div className="  rounded-lg  bg-black/25 xl:h-[45%] flex flex-col items-start gap-4 justify-center p-4">
                     <h1 className="text-2xl font-semibold">Statistics</h1>
                     {/* <Radar options={{}} data={chartData}/> */}
                     
                 </div>
             </div>
-            <div className="  rounded-lg 2xl:col-span-2 bg-black/35 backdrop-filter backdrop-blur-sm text-center text-xl text-white  min-h-[650px] flex flex-col items-center gap-4 justify-center p-4">
+            <div className="  rounded-lg 2xl:col-span-2 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 backdrop-filter backdrop-blur-sm text-center text-xl text-white  min-h-[650px] flex flex-col items-center gap-4 justify-center p-4">
                     <h1 className="text-2xl font-semibold">Statistics</h1>
                     {/* <Doughnut className="scale-90" options={{}} data={chartData}/> */}
             </div>
-            <div className="  rounded-lg  bg-black/35 backdrop-filter backdrop-blur-sm text-center text-xl text-white   min-h-[650px]">
+            <div className="  rounded-lg  bg-gradient-to-b from-slate-300/10 to-cyan-500/10 backdrop-filter backdrop-blur-sm text-center text-xl text-white   min-h-[650px]">
                 leaderBoard
             </div>
         </div>

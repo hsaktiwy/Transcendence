@@ -30,7 +30,7 @@ const App = () =>
                       <Route path='/'  element={ <Layout/>}>
                         <Route index element={ <Dashboard/>}/>
                         <Route path='/chat' element={ <ChatSection/>}/>
-                        <Route path='/profile/:username' element={ <TopBar/>}/>
+                        <Route path='/profile/:username' element={ <ProfileTest/>}/>
                       </Route>
                       <Route path='*' element={<LoadingIndecator/>}/>
                 </Routes>
