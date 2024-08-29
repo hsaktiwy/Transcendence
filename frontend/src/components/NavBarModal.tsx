@@ -18,9 +18,9 @@ function formatDate(date: Date | string): string {
     const now = new Date();
     const inputDate = new Date(date);
     const diffMs = now.getTime() - inputDate.getTime();
-    const diffMins = Math.floor(diffMs / (1000 * 60)); // Difference in minutes
-    const diffHrs = Math.floor(diffMins / 60); // Difference in hours
-    const diffDays = Math.floor(diffHrs / 24); // Difference in days
+    const diffMins = Math.floor(diffMs / (1000 * 60)); 
+    const diffHrs = Math.floor(diffMins / 60); 
+    const diffDays = Math.floor(diffHrs / 24); 
 
     if (diffDays === 0) {
         if (diffHrs < 1) {
@@ -102,9 +102,9 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
         fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message'))
     },[])
     return(
-        <div className=" h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 ">
+        <div className="   h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 ">
         <div className=" scale-90 mx-auto sm:mx-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2   bg-slate-100 w-[90%] sm:w-[550px] rounded-2xl flex flex-col justify-center     z-50 overflow-hidden shadow-[2px_5px_18px_12px_rgba(94,151,169,0.36)]">
-            <div className="notif-header p-6 flex justify-between bg-[#1D1E22] text-white/80 border-b-[1px] border-b-white/30">
+            <div className="notif-header p-6 flex justify-between bg-gradient-to-t from-slate-950 to-slate-800 text-white/80 border-b-[1px] border-b-white/30">
 
                 <h1 className="text-2xl sm:text-3xl font-semibold font-poppins">{`Notifications (${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length})`}</h1>
                 <span className="text-xl sm:text-4xl  opacity-60 hover:opacity-100 hover:scale-110 duration-100 cursor-pointer" onClick={() =>{
@@ -113,7 +113,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                     <IoCloseOutline/>
                 </span>
             </div>
-            <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden bg-[#2B2F32] ">
+            <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden bg-gradient-to-t from-slate-950 to-gray-800 ">
 
             {
                 userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 
