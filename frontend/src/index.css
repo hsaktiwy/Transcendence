@@ -40,13 +40,13 @@
     top: 0;
     left: 0;
     z-index: -1;
-    background-color: #30333a;
+    background-color: #131313;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
 
-#overlay::before {
+/* #overlay::before {
     content: '';
     position: absolute;
     top: 0;
@@ -56,7 +56,7 @@
     background: radial-gradient(circle, #5e98a9, #527386, #445160, #30333a, #181818);
     opacity: 0.9;
     z-index: 1;
-}
+} */
 
 
 /* @keyframes notification-animation {

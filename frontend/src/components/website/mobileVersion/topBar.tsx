@@ -38,7 +38,7 @@ function TopBar()
                         </div>
                     </aside> */}
             
-                    <main className=" border-[1px] border-black flex-1  rounded-lg mb-5  md:ml-32">
+                    <main className=" mt-24 flex-1  rounded-lg mb-5  md:ml-32">
 
                         <MobileVersion/>
                         <TabletVersion/>
