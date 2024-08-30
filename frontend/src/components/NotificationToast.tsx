@@ -86,7 +86,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         const interval = setInterval(() =>{
             if (items.length)
                 removeItem(items[0].id )
-        }, 6000)
+        }, 3000)
             
         return () => {
             clearInterval(interval)
@@ -94,7 +94,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     }, [items])
     return(
 
-        <div className="   border-[1px] border-black font-poppins animate-notificationAnimation fixed z-50  bottom-0 right-0  flex flex-col gap-4 m-4">
+        <div className="    font-poppins animate-notificationAnimation fixed z-50  bottom-0 right-0  flex flex-col gap-4 m-4">
   
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{

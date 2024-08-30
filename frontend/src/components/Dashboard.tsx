@@ -62,7 +62,7 @@ function Dashboard(){
         ]
       });
     return(
-        <div className="  hidden bg-transparent font-poppins dashboard-container  w-[90%] lg:w-[calc(100%-160px)] my-[20px]  lg:mx-[40px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid  xl:grid-cols-4  gap-4 " >
+        <div className=" bg-transparent font-poppins dashboard-container  w-[90%] lg:w-[calc(100%-160px)] my-[20px]  lg:mx-[40px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid  xl:grid-cols-4  gap-4 " >
             <div className="     bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-lg p-8 flex  gap-4 flex-col xl:col-span-4 2xl:col-span-2 overflow-hidden">
                 <div className="flex gap-4 w-full">
                     <div className="self-center">
