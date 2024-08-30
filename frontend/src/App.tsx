@@ -28,7 +28,7 @@ const App = () =>
             <UserProvider>
                 <Routes>
                       <Route path='/'  element={ <Layout/>}>
-                        <Route index element={ <Dashboard/>}/>
+                        <Route index element={ <Settings/>}/>
                         <Route path='/chat' element={ <ChatSection/>}/>
                         <Route path='/profile/:username' element={ <ProfileTest/>}/>
                       </Route>

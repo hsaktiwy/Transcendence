@@ -103,7 +103,7 @@ function Conversations(){
 
 return(
 <div className={`  border-r-0 lg:border-r-[1px] border-white/75   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-xl rounded-r-xl lg:rounded-r-none`}>
-            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-[#5E97A9]/80 py-4">
+            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-gradient-to-l from-[#5e98a9c9] via-[#5e98a9ba] to-[#5e98a995] py-4">
                 <h1 className="self-start ml-4">All Chats</h1>
                 {/* <div className="bg-white w-[100%] h-[1px] lg:mt-5 rounded-full"></div> */}
             </div>
@@ -139,7 +139,7 @@ return(
                             }
                             return(
                                 
-                                <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? "bg-black border-l-2 border-[#5E97A9]  " : ""} mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black duration-150 rounded p-4 `} onClick={() =>{
+                                <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? "relative bg-black/25 border-l-2 border-[#5E97A9]  " : ""} relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
                                     console.error(conv.channelId)
                                     chatContext.setActive(conv)
                                     chatContext.setActiveSection('chat')
@@ -149,6 +149,9 @@ return(
                                             <h1 className="text-md font-semibold">{currentConvData.friendName}</h1>
                                             <p className="text-gray-300 text-sm">{currentConvData.lastMessage?.length >= 20 ? currentConvData?.lastMessage.substring(0,20) + "..." : currentConvData?.lastMessage}</p>
                                             
+                                        </div>
+                                        <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
+
                                         </div>
                                         
                                     </div>
