@@ -1,0 +1,40 @@
+services:
+  backend:
+    build: backend/.
+    container_name: backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - .env
+    networks:
+      - transendence
+    depends_on:
+      - redis
+  frontend:
+    build: frontend/.
+    container_name: frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    networks:
+      - transendence
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"  # Redis default port
+    networks:
+      - transendence
+networks:
+  transendence:
+    name: transendence
+    
