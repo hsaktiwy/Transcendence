@@ -9,8 +9,9 @@ export default {
         poppins: ['Poppins', 'sans-serif'],
       },
       screens: {
-        'xsm': '421px' ,
-      }
+        'xsm': '421px',
+        'xxl': '2000px', // Custom breakpoint at 1400px
+      },
     },
     keyframes: {
       wiggle: {

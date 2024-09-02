@@ -67,3 +67,8 @@
     transform: translateX(0);
   }
 } */
+
+.level
+{
+  @apply flex justify-center items-center p-4
+}
