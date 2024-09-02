@@ -672,7 +672,7 @@
 
   .cardv
   {
-    @apply rounded-xl bg-[#1D1E22] p-3
+    @apply rounded-xl bg-[#1D1E22] p-3  mt-6 h-32 w-32 2xl:h-48 2xl:w-48
   }
 
 
@@ -681,3 +681,4 @@
   {
     @apply rounded-xl bg-[#1D1E22] p-3
   }
+
