@@ -9,7 +9,9 @@ import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { IoCloseOutline } from "react-icons/io5";
+
 
 
 interface senderInterface {
@@ -44,6 +46,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     // const [remove, setRemove] = useState<boolean[]>([])
     const [dataFetched, setdatafetched] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
+    const navigate = useNavigate()
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     
@@ -79,53 +82,61 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         const requests = items.filter(item => item.type === 'friendship' || item.type === 'message' )
         fetchRequestSenderData(requests)
     },[])
-    useEffect(() =>{
+    // useEffect(() =>{
 
-        // const requests = items.filter(item => item.type === 'friendship')
-        // fetchRequestSenderData(requests)
-        const interval = setInterval(() =>{
-            if (items.length)
-                removeItem(items[0].id )
-        }, 3000)
+    //     // const requests = items.filter(item => item.type === 'friendship')
+    //     // fetchRequestSenderData(requests)
+    //     const interval = setInterval(() =>{
+    //         if (items.length)
+    //             removeItem(items[0].id )
+    //     }, 3000)
             
-        return () => {
-            clearInterval(interval)
-        }
-    }, [items])
+    //     return () => {
+    //         clearInterval(interval)
+    //     }
+    // }, [items])
     return(
 
-        <div className="    font-poppins animate-notificationAnimation fixed z-50  bottom-0 right-0  flex flex-col gap-4 m-4">
+        <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4">
   
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
                         return(
-                        <Link key={index} to={`/profile/${item.sender}`}>
-                            <div  className={`  relative duration-200 transition-all opacity-80   hover:scale-105 hover:opacity-100 cursor-pointer shadow-[0px_20px_207px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-[500px] h-[100px] bg-gradient-to-b from-gray-300 via-sky-50 to-cyan-50 rounded-lg flex`}>
-                                <div className="notif-icon bg-[#5E97A9]/70 h-full flex justify-center items-center text-2xl p-4 text-white/70 rounded-l-lg">
+                      
+                            <div  className={`  relative duration-200 transition-all    hover:scale-105  cursor-pointer shadow-[0px_20px_207px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-[500px] h-[120px] bg-gradient-to-b from-slate-800 to-slate-900 rounded-lg flex text-white `}>
+                                <div className="notif-icon bg-[#5E97A9] h-full flex justify-center items-center text-2xl p-4 text-white rounded-l-lg" onClick={()=>{
+                                navigate(`/profile/${item.sender}`)
+                            }}>
                                     {
                                         item.type === 'message' ? notifType.message : item.type === 'friendship' ? notifType.friendship : item.type === 'system' ? notifType.system : notifType.gameInvitation
                                     }
                                 </div>
-                                <div className="notif-contetn-container  p-4 flex flex-col gap-2">
-                                    <h1 className="font-semibold text-lg">
+                                <div className="notif-contetn-container  p-4 flex flex-col gap-2 border-r-[1px] border-r-white/50 rounded-r-lg flex-1 relative" onClick={()=>{
+                                navigate(`/profile/${item.sender}`)
+                            }}>
+                                    <h1 className="font-semibold text-xl">
                                         {`You have a new ${item.type==='message' ? 'Message' :'Notification' }`}
                                     </h1>
                                     <div className="flex gap-4  items-center">
                                         {
                                             (item.type === 'friendship' || item.type === 'message') &&
-                                            <div className=" h-[40px] w-[40px]">
+                                            <div className=" h-[50px] w-[50px]">
                                                 {/* <p>{usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}</p> */}
-                                                <img src={usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic} alt="sender_image" className="object-cover rounded-full border-[2px] border-black"/>
+                                                <img src={usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                             </div>
                                         }
-                                        <p>
-                                            {item.content}
+                                        <p className="text-white/80">
+                                            {item.content.length > 50 ? `${item.content.substring(0,50)}...` : item.content}
                                         </p>
-
                                     </div>
                                 </div>
+                                    <div className="absolute right-2 text-2xl text-white/70 hover:text-white hover:scale-105 duration-75 z-[45] bg-black" onClick={() =>{
+                                        removeItem(item.id)
+                                    }}>
+                                        <IoCloseOutline/>
+                                    </div>
                             </div>
-                        </Link>
+
                         )
                     })
         }
