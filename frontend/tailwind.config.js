@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: [
+export default {   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
@@ -10,7 +9,8 @@ export default {
       },
       screens: {
         'xsm': '421px',
-        'xxl': '2000px', // Custom breakpoint at 1400px
+        'xxl': '2020px', // Custom breakpoint at 1400px
+        'r-size': '1889',
       },
     },
     keyframes: {
