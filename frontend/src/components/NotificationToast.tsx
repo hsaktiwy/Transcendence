@@ -130,7 +130,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                         </p>
                                     </div>
                                 </div>
-                                    <div className="absolute right-2 text-2xl text-white/70 hover:text-white hover:scale-105 duration-75 z-[45] bg-black" onClick={() =>{
+                                    <div className="absolute right-2 text-2xl text-white/70 hover:text-white hover:scale-105 duration-75 z-[45] " onClick={() =>{
                                         removeItem(item.id)
                                     }}>
                                         <IoCloseOutline/>
