@@ -116,10 +116,10 @@ function Dashboard(){
         </div>
     
         <div className=" row-span-4 md:col-span-12  md:row-span-4 rounded-2xl p-4 bg-[#2B2F32]   xl:col-span-8 xl:row-span-3 2xl:col-span-5 2xl:row-span-6 xxl:col-span-6">
-        <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
-            <LineCharFile />
+            <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+                <LineCharFile />
             </div>
-            </div>
+        </div>
         <div className="  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
             <RankFile/>
         </div>
