@@ -4,14 +4,24 @@ import { MdOutlineStarBorder } from "react-icons/md";
 import { PiPingPongFill } from "react-icons/pi";
 import { LiaMedalSolid } from "react-icons/lia";
 import { BsFire } from "react-icons/bs";
-import OnlineFriends from "./OnlineFreinds.tsx";
 import Chart from "chart.js/auto";
 import "../index.css"
 import { CategoryScale } from "chart.js";
 import { useState } from "react";
 import { Pie, Bar, Radar, Doughnut } from "react-chartjs-2";
 import { ChartFile } from "./Chartfile.tsx";
+import { LineCharFile } from "./lineChart.tsx";
+import { RadarChartFile } from "./RadarChartFile.tsx";
+import { RadarChart } from "recharts";
+import RankFile from "./rankfile.tsx";
+import OnlineFriends from "./OnlineFriends.tsx";
+import { ScrollArea } from "@/components/ui/scroll-area"
+import Achievements from "./Achievements.tsx";
+import { PieChartFile } from "./PieChart.tsx";
+
+
 Chart.register(CategoryScale);
+
 const Data = [
     {
       id: 1,
@@ -65,7 +75,7 @@ function Dashboard(){
         ]
       });
     return(
-        <div className="font-poppins h-[1200px] dashboard-container  md:h-[1200px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
+        <div className="font-poppins  h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
         <div className="  row-span-1 flex justify-center items-center   md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6">
              <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                  <div className=" text-white  w-full ">
@@ -78,69 +88,13 @@ function Dashboard(){
                                                                         </div>
                                                                     </div>
                                                                     <div className=" flex flex-col justify-center  items-center mb-7">
-                                                                        <h1 className="text-2xl font-semibold 2xl:text-3xl">53%</h1>
+                                                                        <h1 className="text-2xl font-semibold 2xl:text-3xl">7.5 Level</h1>
                                                                         <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
                                                                             <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
                                                                         </div>
                                                                     </div>
                                                                  </div>
-
-                                                                <div className="gap-12 grid grid-cols-6  m-auto ">
-                                                                    <div className="cardv  col-span-2">
-                                                                        <div className="h-3/5">
-                                                                            <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
-                                                                                <h1 className="text-3xl 2xl:text-5xl font-medium text-[#5E97A9] ">42</h1>
-                                                                                <h1 className="text-lg 2xltext-xl font-medium">Wins</h1>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="h-2/5 flex justify-center items-center">
-                                                                            <div className="w-[65%] h-[100%]  flex gap-3 flex-col justify-center items-center">
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                            </div>
-                                                                            <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                                <img src="../images/emoji_trophy.svg"/>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="cardv  col-span-2">
-                                                                        <div className="h-3/5">
-                                                                            <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
-                                                                                <h1 className="text-3xl 2xl:text-5xl font-medium text-[#5E97A9] ">42</h1>
-                                                                                <h1 className="text-lg 2xltext-xl font-medium">Wins</h1>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="h-2/5 flex justify-center items-center">
-                                                                            <div className="w-[65%] h-[100%]  flex gap-3 flex-col justify-center items-center">
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                            </div>
-                                                                            <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                                <img src="../images/emoji_trophy.svg"/>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    {/* <div className="cardv  col-span-2">
-                                                                        <div className="h-3/5">
-                                                                            <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
-                                                                                <h1 className="text-3xl 2xl:text-5xl font-medium text-[#5E97A9] ">42</h1>
-                                                                                <h1 className="text-lg 2xltext-xl font-medium">Wins</h1>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="h-2/5 flex justify-center items-center">
-                                                                            <div className="w-[65%] h-[100%]  flex gap-3 flex-col justify-center items-center">
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                                <div className="w-[80%] border-b-[2px] border rounded-full 2xl:border-b-[3px]"></div>
-                                                                            </div>
-                                                                            <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                                <img src="../images/emoji_trophy.svg"/>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> */}
-                                                             </div>
+                                                                        <Achievements/>
                                                          </div>    
                                                      </div>
                                          </div>
@@ -153,227 +107,40 @@ function Dashboard(){
                         <div className=" p-5 w-[105%] flex justify-center items-center ">
                                <ChartFile/>
                         </div>
-                        <div className="flex text-sm gap-8">
-                            <div>Mon</div>
-                            <div>Tues</div>
-                            <div>Wed</div>
-                            <div>Thu</div>
-                            <div>Fri</div>
-                            <div>Sat</div>
-                            <div>San</div>
-                        </div>
                  </div>
              </div>
         </div>
         <div className=" row-span-4 hidden xl:block xl:col-span-4 xl:row-span-7 2xl:col-span-3 2xl:row-span-7">
-                
-                 <div className='onlineFriends-div h-full'>
-                    <div className='divs-online'>
-                        <div className='bar-search-freinds'>
-                            <input className='search-bar-div-friends'  placeholder='Search' />
-                            <img style={{width: '15px', marginRight: '10px'}} className="size-image" src="/images/profileVector.svg" />
-                            <img style={{width: '23px'}} className="size-image" src="/images/Settings.svg" />
-                        </div>
-                        <h3 className="font-semibold m-4 w-20 2xl:mx-7">Friends</h3>
-                        <div className='online-users  px-4'>
-                            <div className='each-user '>
-                                <img className="w-14" src="/images/Frame 28 (1).svg" />
-                                <div className=" mx-3  flex flex-col items-start justify-center  w-72">
-                                <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                </div>
-                                <div className='is-online '>
-                                    <div className='green-dot'></div>
-                                </div>
-                                
-                            </div>
-                            <div className='each-user'>
-                                <img className="w-14" src="/images/Frame 28 (1).svg" />
-                                <div className=" mx-3  flex flex-col items-start justify-center  w-72">
-                                    <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                    <h1 className="font-normal opacity-80  text-xs text-left">@hachahbo</h1>
-                                </div>
-                                <div className='is-online'>
-                                    <div className='green-dot'></div>
-                                </div>
-                                
-                            </div>
-                            <div className='each-user '>
-                                <img className="w-14" src="/images/Frame 28 (1).svg" />
-                                <div className=" mx-3  flex flex-col items-start justify-center  w-72">
-                                    <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                    <h1 className="font-normal opacity-80  text-xs text-left">@hachahbo</h1>
-                                </div>
-                                <div className='is-online'>
-                                    <div className='green-dot'></div>
-                                </div>
-                                
-                            </div>
-                            <div className='each-user'>
-                                <img className="w-14" src="/images/Frame 28 (1).svg" />
-                                <div className=" mx-3  flex flex-col items-start justify-center  w-72">
-                                    <h1 className="font-semibold">Hamza Chahboune</h1>
-                                    <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                </div>
-                                <div className='is-online'>
-                                    <div className='green-dot'></div>
-                                </div>
-                                
-                            </div>
-                            <div className='each-user'>
-                                <img className="w-14" src="/images/Frame 28 (1).svg" />
-                                <div className=" mx-3  flex flex-col items-start justify-center  w-72">
-                                    <h1 className="font-medium ">Hamza Chahboune</h1>
-                                    <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                </div>
-                                <div className='is-online'>
-                                    <div className='green-dot'></div>
-                                </div>
-                                
-                            </div>
-                            <div className='each-user'>
-                                <img className="w-14" src="/images/Frame 28 (1).svg" />
-                                <div className=" mx-3  flex flex-col items-start justify-center  w-72">
-                                    <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                    <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                </div>
-                                <div className='is-online'>
-                                    <div className='green-dot'></div>
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-                        <div className='chat-direction'>
-                            <div className='chat-button'>
-                                <img style={{width: '20px'}} className="size-image" src="/images/chat_bubble.svg" />
-                                    <h3 style={{fontWeight: '400', margin:'0px 4px', fontSize: '12px'}}>Chat</h3>
-                            </div>
-                        </div>
-                    </div>
-            </div >
+                <OnlineFriends/>
+                 
         </div>
     
-        <div className="border row-span-4 md:col-span-12 md:row-span-4 xl:col-span-8 xl:row-span-3 2xl:col-span-5 2xl:row-span-6 xxl:col-span-6">big chart</div>
-        <div className="border row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
-        <div className=" 2xl:col-span-2 rounded-2xl bg-[#2B2F32]  text-center text-xl text-white h-full  ">
-                <div className="grid-item1 col-span-3 ">
-                                                <div className="h-full  bg-[#2B2F32] p-2  2xl:p-5 rounded-2xl flex justify-center items-center ">
-                                                <div className="h-full  rounded-2xl p-7 w-full bg-[#1D1E22] flex flex-col justify-center items-center">
-                                                        <div className="w-full">
-                                                                <h1 className="font-semibold text-left mb-2 md:text-2xl">Rank</h1>
-                                                                <div className="border-rank  w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div>
-                                                        <div className=" w-full  m-1">
-                                                            <div className="h-16 gap-3  md:px-5 flex  items-center">
-                                                                <h1 className="  text-xl md:text-base font-medium">#1</h1>
-                                                                <div className="min-w-32  w-[100%] h-full  flex items-center">
-                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
-                                                                    <div className="mx-3">
-                                                                            <h1 className="font-medium text-xs">Hamza Chahboune</h1>
-                                                                            <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                                                    </div>
-                                                                </div>
-                                                                <img className="hidden xxl:block" src="../images/plus.svg" alt="" />
-                                                            </div>
-                                                            <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div>
-                                                        <div className=" w-full  m-1">
-                                                            <div className="h-16 gap-3  md:px-5 flex  items-center">
-                                                                <h1 className="  text-xl md:text-base font-medium">#1</h1>
-                                                                <div className="min-w-32  w-[100%] h-full  flex items-center">
-                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
-                                                                    <div className="mx-3">
-                                                                            <h1 className="font-medium text-xs">Hamza Chahboune</h1>
-                                                                            <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                                                    </div>
-                                                                </div>
-                                                                <img className="hidden xxl:block" src="../images/plus.svg" alt="" />
-                                                            </div>
-                                                            <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div>
-                                                        <div className=" w-full  m-1">
-                                                            <div className="h-16 gap-3  md:px-5 flex  items-center">
-                                                                <h1 className="  text-xl md:text-base font-medium">#1</h1>
-                                                                <div className="min-w-32  w-[100%] h-full  flex items-center">
-                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
-                                                                    <div className="mx-3">
-                                                                            <h1 className="font-medium text-xs">Hamza Chahboune</h1>
-                                                                            <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                                                    </div>
-                                                                </div>
-                                                                <img className="hidden xxl:block" src="../images/plus.svg" alt="" />
-                                                            </div>
-                                                            <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div>
-                                                        {/* <div className=" w-full  m-1">
-                                                            <div className="h-16 gap-3  px-5 flex  items-center">
-                                                                <h1 className="  text-xl font-medium">#1</h1>
-                                                                <div className="min-w-32  w-[100%] h-full  flex items-center">
-                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
-                                                                    <div className="mx-3">
-                                                                              <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                                                            <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                                                    </div>
-                                                                </div>
-                                                                <img className="xl:hidden xxl:block" src="../images/plus.svg" alt="" />
-                                                            </div>
-                                                            <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div>
-                                                        <div className=" w-full  m-1">
-                                                            <div className="h-16 gap-3  px-5 flex  items-center">
-                                                                <h1 className="  text-xl font-medium">#1</h1>
-                                                                <div className="min-w-32  w-[100%] h-full  flex items-center">
-                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
-                                                                    <div className="mx-3">
-                                                                              <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                                                            <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                                                    </div>
-                                                                </div>
-                                                                <img className="xl:hidden xxl:block" src="../images/plus.svg" alt="" />
-                                                            </div>
-                                                            <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div>
-                                                        <div className=" w-full  m-1">
-                                                            <div className="h-16 gap-3  px-5 flex  items-center">
-                                                                <h1 className="  text-xl font-medium">#1</h1>
-                                                                <div className="min-w-32  w-[100%] h-full  flex items-center">
-                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
-                                                                    <div className="mx-3">
-                                                                              <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                                                            <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                                                    </div>
-                                                                </div>
-                                                                <img className="xl:hidden xxl:block" src="../images/plus.svg" alt="" />
-                                                            </div>
-                                                            <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div>
-                                                        <div className=" w-full  m-1">
-                                                            <div className="h-16 gap-3  px-5 flex  items-center">
-                                                                <h1 className="  text-xl font-medium">#1</h1>
-                                                                <div className="min-w-32  w-[100%] h-full  flex items-center">
-                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
-                                                                    <div className="mx-3">
-                                                                              <h1 className="font-medium text-base">Hamza Chahboune</h1>
-                                                                            <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
-                                                                    </div>
-                                                                </div>
-                                                                <img className="xl:hidden xxl:block" src="../images/plus.svg" alt="" />
-                                                            </div>
-                                                            <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
-                                                        </div> */}
-                                                    </div>
-                                                </div>
-                                        </div> </div>
+        <div className=" row-span-4 md:col-span-12  md:row-span-4 rounded-2xl p-4 bg-[#2B2F32]   xl:col-span-8 xl:row-span-3 2xl:col-span-5 2xl:row-span-6 xxl:col-span-6">
+        <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+            <LineCharFile />
+            </div>
+            </div>
+        <div className="  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
+            <RankFile/>
         </div>
-        <div className="border row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5">
+        <div className="2xl:px-7  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5">
         <div className="  rounded-lg bg-[#2B2F32] h-full w-full  flex items-center mr-6  justify-center p-4">
-                    {/* <img className="w-[90%]" src="/images/graf.svg" alt="" /> */}
-                    
-                </div>
+                   <RadarChartFile/>
         </div>
-        <div className="border row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">activities chart</div>
-        <div className="border row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 xl:hidden">activities chart</div>
+        </div>
+        <div className="pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
+            <div className="  rounded-2xl bg-[#2B2F32] h-full p-7 ">
+                    <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
+                            <h1 className=" font-medium"> User Activities</h1>
+                            <div className=" p-5 w-[105%] flex justify-center items-center ">
+                                <ChartFile/>
+                            </div>
+                    </div>
+            </div>
+        </div>
+        <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 bg-[#2B2F32] rounded-2xl p-4 xl:hidden">
+            <PieChartFile/>
+        </div>
     </div>
        
     )
