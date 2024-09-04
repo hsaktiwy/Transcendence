@@ -59,7 +59,7 @@ export function PieChartFile() {
   }, [])
 
   return (
-    <Card className="flex flex-col border-none bg-[#1D1E22]">
+    <Card className=" h-full w-full flex flex-col border-none bg-[#1D1E22]">
       <CardHeader className="items-center pb-0">
         <CardTitle>Pie Chart - Donut with Text</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
@@ -67,7 +67,7 @@ export function PieChartFile() {
       <CardContent className="flex-1  pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[300px]"
         >
           <PieChart>
             <ChartTooltip
