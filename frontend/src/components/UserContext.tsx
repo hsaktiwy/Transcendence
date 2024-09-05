@@ -48,9 +48,9 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const notificationHandler = (data: NotificationPropreties) => {
-
+        // notificationData.sort((a, b)=> b.id - a.id)
         console.log(data)
-        setnotifications(prev => [...prev, data])
+        setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
 }
     const fetchUserData = async () =>{
@@ -145,6 +145,28 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
 
     }
+    const fetchFriendRequests = async () =>{
+ 
+            try{
+                const req = {
+                    url: BACKEND + `friendship/request/listFriends/${id}`,
+                    method: 'GET',
+                    withCredentials: true,
+                    headers : {
+                        'Content-Type': 'multipart/form-data',
+                        'X-CSRFToken': csrfToken,
+                    }
+                }
+                const resp = await mailman(req)
+                console.log("friend_req")
+                console.log(resp.data)
+                
+            }
+            catch (err){
+                console.error("dddddd======????",err)
+            }
+    
+    }
     useEffect(() =>{
         if (id === undefined){
             const savedId = localStorage.getItem("id")
@@ -167,6 +189,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     useEffect(() =>{
         if (id !== undefined){
             fetchUserData()
+            // fetchFriendRequests()
         }
     }, [id, profilePicChanged])
     return(

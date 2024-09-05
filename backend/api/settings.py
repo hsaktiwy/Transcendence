@@ -69,13 +69,14 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
 ]
+
 
 CORS_ALLOW_ALL_ORIGINS = True  
 CORS_ALLOW_CREDENTIALS = True
@@ -86,8 +87,8 @@ CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:5173",
     "http://127.0.0.1:6379",
     "http://10.13.4.11:5173",
-    "http://10.13.2.1:5173",
     "http://172.21.0.3:5173",
+    "http://10.13.2.8:5173",
 
 )
 
@@ -98,12 +99,22 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:6379",
     "http://10.13.4.11:5173",
-    "http://10.13.2.1:5173",
     "http://172.21.0.3:5173",
-
+    "http://10.13.2.8:5173",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:6379", "http://10.13.4.11:5173", "http://10.13.2.1:5173", "http://172.21.0.3:5173",] 
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:6379",
+    "http://10.13.4.11:5173",
+    "http://10.13.2.8:5173",
+    "http://172.21.0.3:5173",
+]
+
 CORS_ALLOW_CREDENTIALS = True
 # CSRF_COOKIE_SAMESITE = 'Strict'
 # SESSION_COOKIE_SAMESITE = 'Strict'

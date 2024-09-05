@@ -15,16 +15,16 @@ function TabletVersion()
 
                                     <div className='nav-bar-div '>
                                         <div className='nav-bar'>
-                                            <img className="w-8" src="/images/Notification.svg" />
-                                            <img className="w-8" src="/images/Message.svg" />
-                                            <img style={{width: '35px'}} className="size-image" src="/images/Frame 30.png" />
-                                            <img style={{width: '25px'}} src="/images/Downarrow.svg" />
+                                            <img className="w-8" src="../../../images/Notification.svg" />
+                                            <img className="w-8" src="../../../images/Message.svg" />
+                                            <img style={{width: '35px'}} className="size-image" src="../../../images/Frame 30.png" />
+                                            <img style={{width: '25px'}} src="../../../images/Downarrow.svg" />
                                         </div>
                                     </div>
                                 </div>
                                     <div className=" gap-3 h-[340px] grid grid-cols-12 p-4">
                                         <div className=" h-full col-span-4 bg-[#2B2F32] rounded-2xl flex flex-col justify-center items-center">
-                                            <img className="w-36" src="/images/profile-gray (1).svg" />
+                                            <img className="w-36" src="../../../images/profile-gray (1).svg" />
                                             <div className=" flex  mt-2 flex-col justify-center ">
                                                     <h1 className="font-bold text-[80%]">Hamza Chahboune</h1>
                                                     <h1 className="mx-auto font-normal text-[60%] mb-4 text-gray-300">@hachahbo</h1>
@@ -63,7 +63,7 @@ function TabletVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[2px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img src="./images/emoji_trophy.svg"/>
+                                                                            <img src=".../../../images/emoji_trophy.svg"/>
                                                                         </div>
                                                                     </div>
                                                             </div>
@@ -81,7 +81,7 @@ function TabletVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[2px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img src="./images/emoji_trophy.svg"/>
+                                                                            <img src=".../../../images/emoji_trophy.svg"/>
                                                                         </div>
                                                                     </div>
                                                             </div>
@@ -99,7 +99,7 @@ function TabletVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[2px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img src="./images/emoji_trophy.svg"/>
+                                                                            <img src=".../../../images/emoji_trophy.svg"/>
                                                                         </div>
                                                                     </div>
                                                             </div>
@@ -110,7 +110,7 @@ function TabletVersion()
                                     </div>
                                     <div className=" gap-3 h-[290px] px-4 flex justify-center items-center">
                                         <div className="bg-[#2B2F32] h-full w-full rounded-2xl flex justify-center items-center">
-                                            <img className="w-[95%] max-w-[640px] " src="./images/Group 21.svg" alt="" />
+                                            <img className="w-[95%] max-w-[640px] " src=".../../../images/Group 21.svg" alt="" />
                                         </div>
                                     </div>
                                     <div className="p-5  gap-3 grid grid-cols-12">
@@ -124,13 +124,13 @@ function TabletVersion()
                                                                 <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                     <h1 className="  text-base font-medium">#1</h1>
                                                                     <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                        <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                        <img className="w-11" src=".../../../images/profile-gray.svg" alt="" />
                                                                         <div className="mx-3">
                                                                                 <h1 className="font-semibold text-xs">Hamza Chahboune</h1>
                                                                                 <h1 className="font-medium text-[10px]">@hachahbo</h1>
                                                                         </div>
                                                                     </div>
-                                                                    <img src="./images/plus.svg" alt="" />
+                                                                    <img src=".../../../images/plus.svg" alt="" />
                                                                 </div>
                                                                 <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                             </div>
@@ -138,13 +138,13 @@ function TabletVersion()
                                                                 <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                     <h1 className="  text-base font-medium">#2</h1>
                                                                     <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                        <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                        <img className="w-11" src=".../../../images/profile-gray.svg" alt="" />
                                                                         <div className="mx-3">
                                                                                 <h1 className="font-semibold text-xs">Hamza Chahboune</h1>
                                                                                 <h1 className="font-medium text-[10px]">@hachahbo</h1>
                                                                         </div>
                                                                     </div>
-                                                                    <img src="./images/plus.svg" alt="" />
+                                                                    <img src=".../../../images/plus.svg" alt="" />
                                                                 </div>
                                                                 <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                             </div>
@@ -152,13 +152,13 @@ function TabletVersion()
                                                                 <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                     <h1 className="  text-base font-medium">#3</h1>
                                                                     <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                        <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                        <img className="w-11" src=".../../../images/profile-gray.svg" alt="" />
                                                                         <div className="mx-3">
                                                                                 <h1 className="font-semibold text-xs">Hamza Chahboune</h1>
                                                                                 <h1 className="font-medium text-[10px]">@hachahbo</h1>
                                                                         </div>
                                                                     </div>
-                                                                    <img src="./images/plus.svg" alt="" />
+                                                                    <img src=".../../../images/plus.svg" alt="" />
                                                                 </div>
                                                                 <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                             </div>
@@ -168,17 +168,17 @@ function TabletVersion()
                                         </div>
                                         <div className="bg-[#2B2F32]  flex justify-center items-center p-3 rounded-2xl col-span-5">
 
-                                            <img className="w-[100%]"  src="./images/chart-circle.svg" alt="" />
+                                            <img className="w-[100%]"  src=".../../../images/chart-circle.svg" alt="" />
                                         </div>
 
                                     </div>
                                     <div className="p-5 pt-0 gap-3  grid grid-cols-12 ">
                                         <div className="bg-[#2B2F32] p-2 rounded-2xl col-span-6 flex justify-center items-center">
-                                            <img className="w-[100%]"  src="./images/graf.svg" alt="" />
+                                            <img className="w-[100%]"  src=".../../../images/graf.svg" alt="" />
 
                                         </div>
                                         <div className="bg-[#2B2F32] p-3 flex items-center justify-center rounded-2xl col-span-6">
-                                            <img className="w-[100%]" src="./images/chart-tablet.svg" alt="" />
+                                            <img className="w-[100%]" src=".../../../images/chart-tablet.svg" alt="" />
                                         </div>
 
                                     </div>
