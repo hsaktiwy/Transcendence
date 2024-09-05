@@ -7,12 +7,12 @@ function DesktopVersion()
 {
     return(
         <>
-            <div className="hidden ml-9 2xl:mx-20 2xl:block">
+            <div className="hidden  ml-9 2xl:mx-20 2xl:block">
                             {/* <SearchNavBar/> */}
                             <div className="h-[88vh] grid grid-rows-25 ">
                                     <div className="grid-container  grid  grid-cols-12 ">
                                         <div className="grid-item col-span-2 m-5 bg-[#2B2F32] min-w-[265px] flex  flex-col  justify-center items-center rounded-2xl h-[500px] ">
-                                                <img className="size-[200px] " src="./images/profile-gray (1).svg" />
+                                                <img className="size-[200px] " src="../images/profile-gray (1).svg" />
                                                 <div className=" flex  mt-5 flex-col justify-center ">
                                                     <h1 className="font-bold text-[150%]">Hamza Chahboune</h1>
                                                     <h1 className="mx-auto font-normal text-gray-300">@hachahbo</h1>
@@ -52,7 +52,7 @@ function DesktopVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[3px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img src="./images/emoji_trophy.svg"/>
+                                                                            <img src="../images/emoji_trophy.svg"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -70,7 +70,7 @@ function DesktopVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[3px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img className="mb-4 size-14" src="./images/flag.svg"/>
+                                                                            <img className="mb-4 size-14" src="../images/flag.svg"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -88,7 +88,7 @@ function DesktopVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[3px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img src="./images/medaille.svg"/>
+                                                                            <img src="../images/medaille.svg"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -106,7 +106,7 @@ function DesktopVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[3px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img src="./images/pong.svg"/>
+                                                                            <img src="../images/pong.svg"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -124,7 +124,7 @@ function DesktopVersion()
                                                                             <div className="w-[80%] border rounded-full border-b-[3px]"></div>
                                                                         </div>
                                                                         <div className="w-[35%] h-[100%] flex justify-center items-center ">
-                                                                            <img className="mb-2" src="./images/star.svg"/>
+                                                                            <img className="mb-2" src="../images/star.svg"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -134,7 +134,7 @@ function DesktopVersion()
                                         </div>
                                         <div className=" grid-item col-span-3 py-5">
                                                 <div className="h-full bg-[#2B2F32] p-5 rounded-2xl flex justify-center items-center ">
-                                                    <img src="./images/blue-chart.svg" alt="" />
+                                                    <img src="../images/blue-chart.svg" alt="" />
                                                 </div>
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@ function DesktopVersion()
                                                                     <h1 className="font-medium mb-[15px] text-xl">Total Wins/Loses</h1>
                                                             </div>
                                                             <div className=" mb-5">
-                                                                    <img  src="./images/Group 19.svg"></img>
+                                                                    <img  src="../images/Group 19.svg"></img>
                                                                     <div className="h-[100px] bg-[#2B2F32] p-6 mt-4 gap-3 rounded-2xl flex flex-col justify-center items-center">
                                                                             <div className="h-1/2 w-full  flex justify-center items-center ">
                                                                                 <div className="w-32  rounded-2xl h-6  bg-[#5E97A9] flex justify-between items-center px-4 font-medium text-sm ">Wins</div>
@@ -167,7 +167,7 @@ function DesktopVersion()
                                             </div>
                                             <div className="  grid-item1 col-span-6 ">
                                                     <div className="h-full bg-[#2B2F32] p-5  rounded-2xl flex justify-center items-center ">
-                                                        <img src="./images/chart-big-one(1).svg" alt="" />
+                                                        <img src="../images/chart-big-one(1).svg" alt="" />
                                                     </div>
                                             </div>
                                         <div className="grid-item1 col-span-3 ">
@@ -181,13 +181,13 @@ function DesktopVersion()
                                                             <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                 <h1 className="  text-xl font-medium">#1</h1>
                                                                 <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                    <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
                                                                     <div className="mx-3">
                                                                             <h1 className="font-semibold">Hamza Chahboune</h1>
                                                                             <h1 className="font-medium text-xs">@hachahbo</h1>
                                                                     </div>
                                                                 </div>
-                                                                <img src="./images/plus.svg" alt="" />
+                                                                <img src="../images/plus.svg" alt="" />
                                                             </div>
                                                             <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
@@ -195,13 +195,13 @@ function DesktopVersion()
                                                             <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                 <h1 className="  text-xl font-medium">#1</h1>
                                                                 <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                    <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
                                                                     <div className="mx-3">
                                                                             <h1 className="font-semibold">Hamza Chahboune</h1>
                                                                             <h1 className="font-medium text-xs">@hachahbo</h1>
                                                                     </div>
                                                                 </div>
-                                                                <img src="./images/plus.svg" alt="" />
+                                                                <img src="../images/plus.svg" alt="" />
                                                             </div>
                                                             <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
@@ -209,13 +209,13 @@ function DesktopVersion()
                                                             <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                 <h1 className="  text-xl font-medium">#1</h1>
                                                                 <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                    <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
                                                                     <div className="mx-3">
                                                                             <h1 className="font-semibold">Hamza Chahboune</h1>
                                                                             <h1 className="font-medium text-xs">@hachahbo</h1>
                                                                     </div>
                                                                 </div>
-                                                                <img src="./images/plus.svg" alt="" />
+                                                                <img src="../images/plus.svg" alt="" />
                                                             </div>
                                                             <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
@@ -223,13 +223,13 @@ function DesktopVersion()
                                                             <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                 <h1 className="  text-xl font-medium">#1</h1>
                                                                 <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                    <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
                                                                     <div className="mx-3">
                                                                             <h1 className="font-semibold">Hamza Chahboune</h1>
                                                                             <h1 className="font-medium text-xs">@hachahbo</h1>
                                                                     </div>
                                                                 </div>
-                                                                <img src="./images/plus.svg" alt="" />
+                                                                <img src="../images/plus.svg" alt="" />
                                                             </div>
                                                             <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
@@ -237,13 +237,13 @@ function DesktopVersion()
                                                             <div className="h-16 gap-3  px-5 flex justify-between items-center">
                                                                 <h1 className="  text-xl font-medium">#1</h1>
                                                                 <div className="min-w-32 w-[300px] h-full  flex items-center">
-                                                                    <img className="w-11" src="./images/profile-gray.svg" alt="" />
+                                                                    <img className="w-11" src="../images/profile-gray.svg" alt="" />
                                                                     <div className="mx-3">
                                                                             <h1 className="font-semibold">Hamza Chahboune</h1>
                                                                             <h1 className="font-medium text-xs">@hachahbo</h1>
                                                                     </div>
                                                                 </div>
-                                                                <img src="./images/plus.svg" alt="" />
+                                                                <img src="../images/plus.svg" alt="" />
                                                             </div>
                                                             <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>

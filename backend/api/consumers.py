@@ -191,7 +191,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         event['type'] = event['notification_type']
         del event['notification_type']
-        print(f'xzzzzaaaab iii   {event}')
         message = json.dumps(event)
         await self.send(text_data=message)
     

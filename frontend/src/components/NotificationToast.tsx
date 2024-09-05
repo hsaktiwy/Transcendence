@@ -82,19 +82,19 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         const requests = items.filter(item => item.type === 'friendship' || item.type === 'message' )
         fetchRequestSenderData(requests)
     },[])
-    // useEffect(() =>{
+    useEffect(() =>{
 
-    //     // const requests = items.filter(item => item.type === 'friendship')
-    //     // fetchRequestSenderData(requests)
-    //     const interval = setInterval(() =>{
-    //         if (items.length)
-    //             removeItem(items[0].id )
-    //     }, 3000)
+        // const requests = items.filter(item => item.type === 'friendship')
+        // fetchRequestSenderData(requests)
+        const interval = setInterval(() =>{
+            if (items.length)
+                removeItem(items[0].id )
+        }, 3000)
             
-    //     return () => {
-    //         clearInterval(interval)
-    //     }
-    // }, [items])
+        return () => {
+            clearInterval(interval)
+        }
+    }, [items])
     return(
 
         <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4">

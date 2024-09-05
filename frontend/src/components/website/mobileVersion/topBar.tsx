@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { UserDataInterface, ProfileDataInterface } from "@/utils/UserDataInterface";
 import '../components-Profile/style-component.css'
 import SideBar  from'../components-Profile/side-bar.tsx'
 import SearchInfoProfile from '../components-Profile/serach-infos-profile.tsx'
-
+import { useParams } from "react-router-dom";
 import ProfileOverView from '../components-Profile/ProfileOverView'
 import StatsComponent from '../components-Profile/statsComponents'
 import MobileVersion from "./mobileVersion.tsx";
@@ -11,41 +12,170 @@ import SearchNavBar from '../components-Profile/nav-bar-search.tsx'
 import TabletVersion from "./tabletVersion.tsx";
 import SideBarTablet from "./side_bar_tablet.tsx";
 import LaptopVersion from "./laptopVersion.tsx";
+import Achievements from "@/components/Achievements.tsx";
+import { ChartFile } from "@/components/Chartfile.tsx";
+import { PieChartFile } from "@/components/PieChart.tsx";
+import { LineCharFile } from "@/components/lineChart.tsx";
+import RankFile from "@/components/rankfile.tsx";
+import { UserContext } from "@/components/UserContext.tsx";
+import { WebSocketContext } from "@/utils/WSContext";
+import { BACKEND } from "@/utils/Constants";
+import mailman from "@/utils/AxiosFetcher";
+import { cookies } from "@/auth/Cookie";
 function TopBar()
 {
+    let csrfToken:string = cookies.get('csrftoken');
+    const SocketContext = useContext(WebSocketContext)
+    if (!SocketContext)
+        throw new Error('error')
+   const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
+   const {username} = useParams();
+   const userContextConsumer = useContext(UserContext)
+   if (!userContextConsumer)
+    throw new Error("userContext must be used within a UserProvider");
+   const fetchUserData = async () =>{
+    try{
+        const req = {
+            url: BACKEND + `api/user/${username}/`,
+            method: 'GET',
+        }
+        const resp = await mailman(req)
+        const {
+            login,
+            firstName,
+            lastName,
+            profile_pic,
+            email,
+            birthDay,
+        } = resp.data
+        console.log("sss ====???? ",resp.data)
+
+        setProfileData({
+            login,
+            firstName,
+            lastName,
+            profile_pic,
+            email,
+            birthDay,
+        })
+        
+    }
+    catch (err){
+        console.error("dddddd======????",err)
+    }
+}
+   const fetchFriendRequests = async () =>{
+    if (userContextConsumer.id){
+        try{
+            const req = {
+                url: BACKEND + `friendship/request/listFriends/${userContextConsumer.id}`,
+                method: 'GET',
+                withCredentials: true,
+                headers : {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRFToken': csrfToken,
+                }
+            }
+            const resp = await mailman(req)
+            console.log("friend_req")
+            // console.log(resp.data)
+            
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
+    }
+
+}
+   useEffect(() =>{
+    if (userContextConsumer?.userData?.login !== username){
+        fetchUserData()
+        fetchFriendRequests()
+    }
+    else{
+        setProfileData(userContextConsumer?.userData)
+    }
+   },[username])
     return(
         <>
-            {/* <div className="m-4  grid  gap-2 md:grid-cols-12 lg:grid-cols-13 xl:grid-cols-11">
-                <div className="min-h-[69px] rounded-lg bg-[#2B2F32]  md:col-span-2 lg:col-span-1 xl:col-span-2  xl:max-w-36">
-                    <div className="m-3">
-                        <svg className="fill-current  text-white size-10"  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-
-                    </div>
-
-
+            <div className="lg:mb-0  font-poppins  h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
+                <div className=" rounded-2xl row-span-1 bg-[#2B2F32] justify-center items-center   md:col-span-12  md:row-span-3 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
+                   <div className="h-full col-span-3 xxl:col-span-2 flex flex-col justify-center items-center">
+                            <div className=" h-full col-span-2  bg-[#2B2F32] flex  flex-col  justify-center items-center rounded-2xl ">
+                                <img className="rounded-full md:size-36 2xl:size-56" src={profileData?.profile_pic} />
+                                        <div className=" flex  mt-5 flex-col justify-center ">
+                                            <h1 className="md:text-[100%] text-center font-bold 2xl:text-[120%]">{profileData?.firstName + ' ' + profileData?.lastName}</h1>
+                                            <h1 className="md:text-[80%] text-center font-normal text-gray-300">{`@${profileData?.login}`}</h1>
+                                        </div>
+                                        {
+                                            userContextConsumer.userData?.login !== profileData?.login &&
+                                            <button className=" m-7 px-9 py-2  2xl:px-14 2xl:py-3 font-semibold rounded-xl bg-[#5E97A9]" onClick={() =>{
+                            
+                                                const notification = {
+                                                    type: 'NOTIFICATION_ADD_FRIEND',
+                                                    to : username
+                                                }
+                                                const message = JSON.stringify(notification)
+                                                SocketContext.socket.current?.send(message)
+                                            }}>Connect</button>
+                                        }
+                            </div>
+                   </div>
+                   <div className=" h-full2 col-span-9 xxl:col-span-10">
+                   <div className=" rounded-lg  flex   gap-2 w-full h-full">
+                        <div className=" text-white  w-full ">
+                            <div className="flex items-center justify-center w-full p-2 h-full  2xl:p-10 bg-[#2B2F32] rounded-2xl  ">
+                                                         <div className="w-full h-full  grid grid-rows-2 ">
+                                                             <div className=" bg-[#1D1E22] px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
+                                                                <div className=" h-20  flex items-center 2xl:items-end ">
+                                                                        <div className="h-10 w-40 2xl:h-14 2xl:w-48 bg-[#5E97A9] rounded-2xl flex justify-center items-center">
+                                                                            <div className="text-xl font-semibold 2xl:text-2xl ">{`Hello  ${profileData?.firstName}`}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className=" flex flex-col justify-center  items-center mb-7">
+                                                                        <h1 className="text-2xl font-semibold 2xl:text-3xl">7.5 Level</h1>
+                                                                        <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
+                                                                            <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                 </div>
+                                                                        <Achievements/>
+                                                         </div>    
+                                                     </div>
+                                         </div>
                 </div>
-                <div className="min-h-[100vh] rounded-lg bg-[#2B2F32]  md:col-span-10 lg:col-span-11 xl:col-span-10 ">
-
+                   </div>
                 </div>
-            </div> */}
-            <div className=" m-4 gap-2 flex flex-col md:flex-row h-screen text-white">
-                    {/* <aside className="    text-white  w-full md:w-36  md:fixed md:m-4  md:top-0 md:left-0 md:bottom-0">
-                        <SideBarTablet/>
-                        <div className="hidden h-full w-full  2xl:block ">
-                            <SideBar/>
+                <div className=" md:hidden xl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-6">
+                <div className="  rounded-2xl bg-[#2B2F32] h-full p-7 ">
+                 <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
+                        <h1 className=" font-medium"> User Activities</h1>
+                        <div className=" p-5 w-[105%] flex justify-center items-center ">
+                               <ChartFile/>
                         </div>
-                    </aside> */}
-            
-                    <main className=" border-[1px] border-black flex-1  rounded-lg mb-5  md:ml-32">
-
-                        <MobileVersion/>
-                        <TabletVersion/>
-                        <LaptopVersion/>
-                        <DesktopVersion/>
-                        
-                    </main>
+                 </div>
+             </div>
+                </div>
+                <div className=" rounded-2xl 2xl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:hidden xxl:block 2xl:row-span-6 p-10 flex justify-center items-center bg-[#2B2F32]">
+                    <PieChartFile/>
+                </div>
+                <div className="row-span-4 md:col-span-12  md:row-span-3 rounded-2xl p-4 bg-[#2B2F32]   xl:col-span-8 xl:row-span-4 2xl:col-span-8 2xl:row-span-6 xxl:col-span-6">
+                    <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+                       <LineCharFile />
+                    </div>
+                </div>
+                <div className="row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
+                    <RankFile/>
+                </div>
+                <div className="border pr-5 row-span-2 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
+                    
+                </div>
+                <div className="border pr-5 row-span-2 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
+                    
+                </div>
+                <div className="border = row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 bg-[#2B2F32] rounded-2xl p-4 xl:hidden">
+                    
+                </div>
             </div>
         </>
     )

@@ -4,7 +4,7 @@ import './style-component.css'
 function sideBar()
 {
     return(
-        <div className="w-36  min-w-[200px]">
+        <div className="w-36 min-w-[260px]">
             <div className="  side-bar-div  lineRight">
                 <div className="side-bar-div-grid  logo-center">
                     <img className="" src="/images/Logo (1).svg" />

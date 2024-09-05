@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BsTrophy } from "react-icons/bs";
 import { MdOutlineStarBorder } from "react-icons/md";
 import { PiPingPongFill } from "react-icons/pi";
 import { LiaMedalSolid } from "react-icons/lia";
 import { BsFire } from "react-icons/bs";
 import Chart from "chart.js/auto";
+import "../index.css"
 import { CategoryScale } from "chart.js";
 import { useState } from "react";
 import { Pie, Bar, Radar, Doughnut } from "react-chartjs-2";
+import { ChartFile } from "./Chartfile.tsx";
+import { LineCharFile } from "./lineChart.tsx";
+import { RadarChartFile } from "./RadarChartFile.tsx";
+import { RadarChart } from "recharts";
+import RankFile from "./rankfile.tsx";
+import OnlineFriends from "./OnlineFriends.tsx";
+import { ScrollArea } from "@/components/ui/scroll-area"
+import Achievements from "./Achievements.tsx";
+import { PieChartFile } from "./PieChart.tsx";
+import { UserContext } from "./UserContext";
+
 Chart.register(CategoryScale);
+
 const Data = [
     {
       id: 1,
@@ -43,6 +56,10 @@ const Data = [
   ];
 
 function Dashboard(){
+
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
     const [chartData, setChartData] = useState({
         labels: Data.map((data) => data.year), 
         datasets: [
@@ -62,129 +79,74 @@ function Dashboard(){
         ]
       });
     return(
-        <div className=" bg-transparent font-poppins dashboard-container  w-[90%] lg:w-[calc(100%-160px)] my-[20px]  lg:mx-[40px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid  xl:grid-cols-4  gap-4 " >
-            <div className="     bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-lg p-8 flex  gap-4 flex-col xl:col-span-4 2xl:col-span-2 overflow-hidden">
-                <div className="flex gap-4 w-full">
-                    <div className="self-center">
-                        <img src="./src/assets/profiles/1.jpg" alt="user-profil" className="w-[112px] h-[112px] rounded-full"/>
-                    </div>
-                    <div className="progress-container bg-black/45 rounded-lg text-white p-6 flex flex-col gap-4 flex-1">
-                        <h1 className="text-3xl font-semibold">Hello Hamza</h1>
-                        <div className="text-center text-xl">
-                            <p className="font-semibold">
-                                Level:
-                                <span className="font-bold">7.53</span>
-                            </p>
-                        </div>
-                        <div className="relative h-[12px] rounded-full bg-[#444444] after:content-[''] after:absolute after:top-0 after:left-0 after:w-[50%] after:h-full after:rounded-full after:bg-[#5E97A9]">
-                        </div>
-                    </div>
-                </div>
-                <div className="achievements-cards ml-8 flex gap-4 ">
-                    <div className="bg-[#1D1E22] rounded-lg p-4 flex gap-2 flex-col justify-start ">
-                        <div className="bg-[#2B2F32] p-4 rounded-lg text-center self-start">
-                            <p className="text-[#5E97A9] text-4xl font-bold">40</p>
-                            <p className="text-white text-3xl font-medium">Wins</p>
-                        </div>
-                        <div className="flex  text-white gap-4">
-                            <div className="self-center flex flex-col gap-4">
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                            </div>
-                            <div className="text-6xl self-center text-[#5E97A9]">
-                                <BsTrophy/>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-[#1D1E22] rounded-lg p-4 flex gap-2 flex-col justify-start ">
-                        <div className="bg-[#2B2F32] p-4 rounded-lg text-center self-start">
-                            <p className="text-[#5E97A9] text-4xl font-bold">40</p>
-                            <p className="text-white text-3xl font-medium">Wins</p>
-                        </div>
-                        <div className="flex  text-white gap-4">
-                            <div className="self-center flex flex-col gap-4">
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                            </div>
-                            <div className="text-6xl self-center text-[#5E97A9]">
-                                <BsFire/>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-[#1D1E22] rounded-lg p-4 flex gap-2 flex-col justify-start ">
-                        <div className="bg-[#2B2F32] p-4 rounded-lg text-center self-start">
-                            <p className="text-[#5E97A9] text-4xl font-bold">40</p>
-                            <p className="text-white text-3xl font-medium">Wins</p>
-                        </div>
-                        <div className="flex  text-white gap-4">
-                            <div className="self-center flex flex-col gap-4">
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                            </div>
-                            <div className="text-6xl self-center text-[#5E97A9]">
-                                <LiaMedalSolid/>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-[#1D1E22] rounded-lg p-4 flex gap-2 flex-col justify-start ">
-                        <div className="bg-[#2B2F32] p-4 rounded-lg text-center self-start">
-                            <p className="text-[#5E97A9] text-4xl font-bold">40</p>
-                            <p className="text-white text-3xl font-medium">Wins</p>
-                        </div>
-                        <div className="flex  text-white gap-4">
-                            <div className="self-center flex flex-col gap-4">
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                            </div>
-                            <div className="text-6xl self-center text-[#5E97A9]">
-                                <PiPingPongFill/>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-[#1D1E22] rounded-lg p-4 flex gap-2 flex-col justify-start ">
-                        <div className="bg-[#2B2F32] p-4 rounded-lg text-center self-start">
-                            <p className="text-[#5E97A9] text-4xl font-bold">40</p>
-                            <p className="text-white text-3xl font-medium">Wins</p>
-                        </div>
-                        <div className="flex  text-white gap-4">
-                            <div className="self-center flex flex-col gap-4">
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                                <div className="h-[3px] w-[90px] bg-white "></div>
-                            </div>
-                            <div className="text-6xl self-center text-[#5E97A9]">
-                                <MdOutlineStarBorder/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className=" rounded-lg    xl:col-span-2 2xl:col-span-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10  text-center text-xl text-white flex flex-col items-start gap-4 justify-center p-4">
-                <h1 className="text-2xl font-semibold">Activity Chart</h1>
-                {/* <Bar options={{}} data={chartData}/> */}
-            </div>
-            <div className="   rounded-lg    xl:col-span-2 2xl:col-span-1  row-span-2 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 backdrop-filter backdrop-blur-sm text-center text-xl text-white flex gap-4 xl:flex-col p-4 xl:min-h-[1167px]">
-                <div className="bg-black/25   xl:h-[55%] rounded-lg">
-                       online friends
-                </div>
-                <div className="  rounded-lg  bg-black/25 xl:h-[45%] flex flex-col items-start gap-4 justify-center p-4">
-                    <h1 className="text-2xl font-semibold">Statistics</h1>
-                    {/* <Radar options={{}} data={chartData}/> */}
-                    
-                </div>
-            </div>
-            <div className="  rounded-lg 2xl:col-span-2 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 backdrop-filter backdrop-blur-sm text-center text-xl text-white  min-h-[650px] flex flex-col items-center gap-4 justify-center p-4">
-                    <h1 className="text-2xl font-semibold">Statistics</h1>
-                    {/* <Doughnut className="scale-90" options={{}} data={chartData}/> */}
-            </div>
-            <div className="  rounded-lg  bg-gradient-to-b from-slate-300/10 to-cyan-500/10 backdrop-filter backdrop-blur-sm text-center text-xl text-white   min-h-[650px]">
-                leaderBoard
+        <div className="font-poppins  h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4 ">
+        <div className="  row-span-1 flex justify-center items-center   md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6 ">
+             <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
+                 <div className=" text-white  w-full ">
+                         <div className="flex items-center justify-center w-full p-2 h-full  2xl:p-10 bg-[#2B2F32] rounded-2xl  ">
+                                                         <div className="w-full h-full  grid grid-rows-2 ">
+                                                             <div className=" bg-[#1D1E22] px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
+                                                                <div className=" h-20  flex items-center 2xl:items-end ">
+                                                                        <div className="h-10 w-40 2xl:h-14 2xl:w-48 bg-[#5E97A9] rounded-2xl flex justify-center items-center">
+                                                                            <div className="text-xl font-semibold 2xl:text-2xl ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className=" flex flex-col justify-center  items-center mb-7">
+                                                                        <h1 className="text-2xl font-semibold 2xl:text-3xl">7.5 Level</h1>
+                                                                        <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
+                                                                            <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                 </div>
+                                                                        <Achievements/>
+                                                         </div>    
+                                                     </div>
+                                         </div>
             </div>
         </div>
+        <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
+                 <div className="  rounded-2xl bg-[#2B2F32] h-full p-7 ">
+                 <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
+                        <h1 className=" font-medium"> User Activities</h1>
+                        <div className=" p-5 w-[105%] flex justify-center items-center ">
+                               <ChartFile/>
+                        </div>
+                 </div>
+             </div>
+        </div>
+        <div className=" row-span-4 hidden xl:block xl:col-span-4 xl:row-span-7 2xl:col-span-3 2xl:row-span-7">
+                <OnlineFriends/>
+                 
+        </div>
+    
+        <div className=" row-span-4 md:col-span-12  md:row-span-4 rounded-2xl p-4 bg-[#2B2F32]   xl:col-span-8 xl:row-span-3 2xl:col-span-5 2xl:row-span-6 xxl:col-span-6">
+            <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+                <LineCharFile />
+            </div>
+        </div>
+        <div className="  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
+            <RankFile/>
+        </div>
+        <div className="2xl:px-7  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5">
+        <div className="  rounded-lg bg-[#2B2F32] h-full w-full  flex items-center mr-6  justify-center p-4">
+                   <RadarChartFile/>
+        </div>
+        </div>
+        <div className="pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
+            <div className="  rounded-2xl bg-[#2B2F32] h-full p-7 ">
+                    <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
+                            <h1 className=" font-medium"> User Activities</h1>
+                            <div className=" p-5 w-[105%] flex justify-center items-center ">
+                                <ChartFile/>
+                            </div>
+                    </div>
+            </div>
+        </div>
+        <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 bg-[#2B2F32] rounded-2xl p-4 xl:hidden">
+            <PieChartFile/>
+        </div>
+    </div>
+       
     )
 }
 
