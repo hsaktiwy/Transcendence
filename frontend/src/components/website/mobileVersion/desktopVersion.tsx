@@ -74,6 +74,7 @@ function DesktopVersion()
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                
                                                                 <div className="cardv grid-cols-2">
                                                                     <div className="h-3/5">
                                                                         <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
