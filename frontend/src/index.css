@@ -40,7 +40,7 @@
     top: 0;
     left: 0;
     z-index: -1;
-    background-color: #131313;
+    background: linear-gradient(to top right, #121415, #2B2F32);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

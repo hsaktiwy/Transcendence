@@ -12,6 +12,9 @@ export default {   content: [
         'xxl': '2020px', // Custom breakpoint at 1400px
         'r-size': '1889',
       },
+      boxShadow: {
+        '3xl': '0px 0px 20px 0px rgba(0, 0, 0, 0.3)',
+      }
     },
     keyframes: {
       wiggle: {
