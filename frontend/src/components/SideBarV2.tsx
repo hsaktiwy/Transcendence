@@ -8,8 +8,8 @@ function SideBarV2(){
         throw new Error("userContext must be used within a UserProvider");
     return (
         
-            <aside className={`font-poppins w-full lg:h-full lg:w-[120px] shadow-lg flex justify-center items-center`}>
-                <div className="font-poppins h-[60px] w-full lg:h-[98%] lg:w-[120px]  bg-[#222427] bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm fixed bottom-0 lg:rounded-2xl lg:ml-3 lg:top-3 left-0 text-white flex flex-row lg:flex-col items-center justify-center z-10">
+            <aside className={`font-poppins w-full lg:h-full lg:w-[120px] shadow-lg mb-7 flex justify-center items-center`}>
+                <div className="font-poppins h-[60px] w-full lg:h-[98%] lg:w-[120px]  bg-[#222427] bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm fixed bottom-0 lg:rounded-2xl lg:ml-3 lg:top-2 2xl:top-3 left-0 text-white flex flex-row lg:flex-col items-center justify-center ">
                     <div id="sidebar-menu" className="w-[100%] lg:w-auto  h-auto lg:h-[80%] flex flex-row lg:flex-col p-4 justify-center gap-[10%]">
                         <Link to="/" className=" cursor-pointer w-[30px] h-[30px] ">
                             <img src="/assets/svg/Overview.svg" alt="Home Icon" className="w-full h-full" />

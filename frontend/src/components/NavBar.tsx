@@ -17,7 +17,7 @@ function NavBar(){
     const [open, setOpen] = useState<boolean>(false)
     return(
        <>
-        <div className=" rounded-lg shadow-xl w-[100%] h-[80px] flex justify-center items-center gap-8 overflow-hidden invisible">
+        <div className=" border rounded-lg shadow-xl w-[100%] h-[80px] flex justify-center items-center gap-8 overflow-hidden invisible">
             <span className="text-white text-4xl basis-[5%] lg:hidden px-4" onClick={() => {setOpen(!open)}}> {!open ? <IoMenuSharp/> : <IoCloseSharp/>} </span>
             <div className=" basis-[55%] lg:basis-[75%] flex justify-center">
                 <input type="text" placeholder="Search" className=" w-[50%] rounded-full border-1 border-white focus:outline-none  bg-[#404549] pr-4 pl-8 pt-2 pb-2 focus:bg-slate-200  focus:border-black duration-300"/>

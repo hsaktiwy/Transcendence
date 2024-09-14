@@ -8,7 +8,7 @@ function ChatModal(){
      throw new Error('error')
 
     return(
-        <div className="h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 animate-delay-75  duration-75">
+        <div className="h-[100%]  w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 animate-delay-75  duration-75">
                 <div className="mx-auto sm:mx-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#ffffff]  w-[90%] sm:w-[500px] rounded-md flex flex-col items-center gap-4 text-center px-2 py-4 ">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="60" height="60" color="#5E97A9" fill="none">
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />

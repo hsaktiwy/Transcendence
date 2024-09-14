@@ -102,7 +102,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
         fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message'))
     },[])
     return(
-        <div className=" h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 ">
+        <div className=" h-[100%] b w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 ">
         <div className=" scale-90 mx-auto sm:mx-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2   bg-slate-100 w-[90%] sm:w-[550px] rounded-2xl flex flex-col justify-center     z-50 overflow-hidden shadow-[2px_5px_18px_12px_rgba(94,151,169,0.36)]">
             <div className="notif-header p-6 flex justify-between bg-[#1D1E22] text-white/80 border-b-[1px] border-b-white/30">
 
@@ -154,7 +154,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                             </div>
                         </div>
                         )
-                    })) : <div className="h-[50vh] flex justify-center items-center">
+                    })) : <div className="h-[50vh] flex  justify-center items-center">
                                 <h1 className=" text-white/85 font-semibold text-3xl">No Notifications yet !</h1>
                             </div>
                 }

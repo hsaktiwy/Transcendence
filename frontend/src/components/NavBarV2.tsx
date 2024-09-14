@@ -16,16 +16,17 @@ function NavBarV2(){
         {
             openModal ?  <NavBarModal type='allo' setOpenModal={setOpenModal} /> :
             
-            <div className={` h-[60px] overflow-hidden w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] mx-[10px] 2xl:mx-[8%] my-[20px] text-white absolute top-0 left-0 lg:left-[80px] flex ${isSearchBarActive ? 'justify-start ' : 'justify-between'} lg:justify-between items-center`}>
+            <div className={` h-[60px] overflow-hidden w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] mx-[10px] 2xl:mx-[8%] my-[10px] text-white absolute top-0 left-0 lg:left-[80px] flex ${isSearchBarActive ? 'justify-start ' : 'justify-between'} lg:justify-between items-center`}>
                 <div id="nav-search-bar" className={`relative ${isSearchBarActive ? 'w-[100%]' : 'w-[40%]'} lg:w-[40%] `}>
-                    <span className="text-white/40 left-[20px] lg:left-[40px] text-[32px] absolute   cursor-pointer top-[70%] -translate-y-[70%]" onClick={() => setSearchBar(
+                    {/* <span className="text-white/40 left-[20px] lg:left-[40px] text-[32px] absolute   cursor-pointer top-[70%] -translate-y-[70%]" onClick={() => setSearchBar(
                             (current) => !current
                         )}>
                             <IoSearchOutline/>
-                        </span>
-                        <input type="text" placeholder="Search" className={`text-white rounded-full mx-10  ${isSearchBarActive ? 'w-[calc(70%)] border-[2px] border-white/40 px-4 py-1' : 'w-0'}  lg:w-[50%] lg:border-[2px] lg:border-white/40 lg:px-4 lg:py-1 focus:lg:w-[90%] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `} />
+                        </span> */}
+                        {/* <input type="text" placeholder="Search" className={`text-white rounded-full mx-10  ${isSearchBarActive ? '  w-[calc(70%)] border-[2px] border-white/40 px-4 py-1' : 'w-0'} bg-[#2B2F32] lg:w-[50%] lg:border-[2px] lg:border-white/40 lg:px-4 lg:py-1 focus:lg:w-[90%] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `} /> */}
+                        <input type="text" placeholder="Search" className="ml-20 h-10 w-96 px-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl border-none "/>
                     </div>
-                    <div className={`gap-0 lg:gap-6  text-white/60  w-[70%] sm:w-[45%] md:w-[40%] lg:w-auto justify-between items-center rounded-lg self-start p-2 ${isSearchBarActive ? 'hidden' : 'flex'} lg:flex`}>
+                    <div className={`gap-0 xl:w-44  px-4 bg-gradient-to-bl mt-1 from-[#1D1E22] to-[#1f2123] rounded-2xl lg:gap-6  xl:mr-9 text-white/60  w-[70%] sm:w-[45%] md:w-[40%] lg:w-auto justify-between items-center  self-start p-2 ${isSearchBarActive ? 'hidden' : 'flex'} lg:flex`}>
                         <div className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
                                 setOpenModal(true)
                             }}>

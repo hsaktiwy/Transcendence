@@ -75,20 +75,20 @@ function Dashboard(){
         ]
       });
     return(
-        <div className="font-poppins  h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
-        <div className="  row-span-1 flex justify-center items-center   md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6">
+        <div className="font-poppins   lg:ml-[70px] h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] 2xl:my-[20px] p-3 2xl:p-10 lg:mx-[50px] absolute top-[80px] left-[50%]-translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-11 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
+        <div className=" row-span-1 flex justify-center items-center  md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6">
              <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                  <div className=" text-white  w-full ">
-                         <div className="flex items-center   justify-center w-full p-2 h-full  2xl:p-10  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
+                         <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
                                                          <div className="w-full h-full  grid grid-rows-2 ">
                                                              <div className=" bg-[#1D1E22] px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
                                                                 <div className=" h-20  flex items-center 2xl:items-end ">
                                                                         <div className="h-10 w-40 2xl:h-14 2xl:w-48 bg-[#5E97A9] rounded-2xl flex justify-center items-center">
-                                                                            <div className="text-xl font-semibold 2xl:text-2xl ">Hello  Hamza</div>
+                                                                            <div className="text-xl font-medium 2xl:font-semibold 2xl:text-2xl ">Hello  Hamza</div>
                                                                         </div>
                                                                     </div>
                                                                     <div className=" flex flex-col justify-center  items-center mb-7">
-                                                                        <h1 className="text-2xl font-semibold 2xl:text-3xl">7.5 Level</h1>
+                                                                        <h1 className="text-2xl font-medium 2xl:font-semibold 2xl:text-3xl">7.5 Level</h1>
                                                                         <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
                                                                             <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
                                                                         </div>
@@ -124,15 +124,15 @@ function Dashboard(){
             <RankFile/>
         </div>
         <div className="2xl:px-7  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5">
-        <div className="  rounded-lg bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] h-full w-full  flex items-center mr-6  justify-center p-4">
+        <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] h-full w-full  flex items-center mr-6  justify-center p-4">
                    <RadarChartFile/>
         </div>
         </div>
         <div className="pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
-            <div className="  rounded-2xl bg-[#2B2F32] h-full p-7 ">
+            <div className="  rounded-2xl bg-gradient-to-tr from-[#2c353a] to-[#2B2F32] h-full p-4 ">
                     <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
                             <h1 className=" font-medium"> User Activities</h1>
-                            <div className=" p-5 w-[105%] flex justify-center items-center ">
+                            <div className=" p-2 w-[105%] flex justify-center items-center ">
                                 <ChartFile/>
                             </div>
                     </div>
