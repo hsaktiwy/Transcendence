@@ -75,8 +75,8 @@ function Dashboard(){
         ]
       });
     return(
-        <div className="font-poppins   lg:ml-[70px] h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] 2xl:my-[20px] p-3 2xl:p-10 lg:mx-[50px] absolute top-[80px] left-[50%]-translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-11 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
-        <div className=" row-span-1 flex justify-center items-center  md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6">
+        <div className="font-poppins    h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[100%] lg:w-[calc(100%-140px)] 2xl:my-[20px]  p-3 2xl:p-10 lg:mx-[10px] absolute top-[80px]  lg:-translate-x-0 lg:left-[120px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-11 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
+        <div className=" row-span-1 flex justify-center items-center  md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6 ">
              <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                  <div className=" text-white  w-full ">
                          <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
