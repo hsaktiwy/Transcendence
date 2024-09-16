@@ -51,6 +51,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=OFFLINE)
     last_visit = models.DateTimeField(null=True, blank=True)
+    oauth = models.BooleanField(default=False)
 
 
     is_active = models.BooleanField(default=True)

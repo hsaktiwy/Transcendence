@@ -20,5 +20,6 @@ urlpatterns = [
     path('users/', views.GetUsers.as_view()),
     path('user/register/', views.RegisterView.as_view()),
     path('user/login/', views.LoginView.as_view()),
+    path('user/', views.getAuthenticatedUser.as_view()),
     # path('login/', views.LoginView.as_view())
 ]
