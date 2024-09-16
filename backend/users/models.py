@@ -13,33 +13,44 @@ def validateImage(image):
         raise ValidationError(f"Max size of file is {limit_mb} MB")
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, login, email, firstName, lastName, birthDay,  password, **extra_fields):
-        if not login:
-            ValueError("User must set the login")
+    def create_user(self, email, login, first_name, last_name, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
-        user = self.model(login=login, email=email, firstName=firstName, lastName=lastName, profile_pic=None, birthDay=birthDay, **extra_fields)
+        user = self.model(email=email, login=login, first_name=first_name, last_name=last_name, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
-    def create_superuser(self, login, email, firstName, lastName, birthDay, profile_pic=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_admin', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_staff', True)
 
-        return self.create_user(login, email, firstName, lastName, birthDay, profile_pic, password, **extra_fields)
+    def create_superuser(self, email, login, first_name, last_name, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        return self.create_user(email, login, first_name, last_name, password, **extra_fields)
 
 # Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
-    #password field already exist in the AbstractBaseUser model no need to overide it
+    ONLINE = 'online'
+    IN_GAME = 'in_game'
+    OFFLINE = 'offline'
+    
+    STATE_CHOICES = [
+        (ONLINE, 'Online'),
+        (IN_GAME, 'In Game'),
+        (OFFLINE, 'Offline'),
+    ]
+
     login = models.CharField(max_length=50, unique=True)
     firstName = models.CharField(max_length=50)
     lastName = models.CharField(max_length=50)
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address")
-    birthDay = models.DateField()
-    profile_pic = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpg', validators=[validateImage])
-    created_at = models.DateTimeField(auto_now_add=True)
     two_factor_auth = models.BooleanField(default=False)
     two_factor_auth_code = models.CharField(max_length=255, blank=True, null=True)
+    profile_pic = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpg', validators=[validateImage])
+    created_at = models.DateTimeField(auto_now_add=True)
+    state = models.CharField(max_length=20, choices=STATE_CHOICES, default=OFFLINE)
+    last_visit = models.DateTimeField(null=True, blank=True)
 
 
     is_active = models.BooleanField(default=True)
@@ -51,8 +62,13 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.profile_pic.name == 'default.jpg'
 
     USERNAME_FIELD = "login"
-    REQUIRED_FIELDS = ["email", "firstName", "lastName", "birthDay"]
+    REQUIRED_FIELDS = ["email", "firstName", "lastName"]
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
 
+    def has_module_perms(self, app_label):
+        return self.is_superuser
+    
     objects = MyUserManager()
 
     def __str__(self):
