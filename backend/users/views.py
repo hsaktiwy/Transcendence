@@ -64,6 +64,13 @@ class GetUsers(APIView):
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class getAuthenticatedUser(APIView):
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):

@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyUser
-        fields = ['login', 'email', 'firstName', 'lastName', 'password', 'state', 'last_visit']
+        fields = ['login', 'email', 'firstName', 'lastName', 'password', 'state', 'last_visit', 'profile_pic']
 
     def create(self, validated_data):
         return MyUser.objects.create_user(
@@ -48,6 +48,9 @@ class UserLoginSerializer(serializers.ModelSerializer):
         user = authenticate(login=login, password=password)
         if user is None:
             raise serializers.ValidationError("Invalid username or password.")
+        if isinstance(user, MyUser):
+            user.state = 'online'
+            user.save()
         return{
             'user': user
         }
