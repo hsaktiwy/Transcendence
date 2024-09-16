@@ -1,32 +1,53 @@
 from rest_framework import serializers
 from .models import MyUser
+from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = MyUser
-        fields = ['login', 'firstName', 'lastName', 'email', "birthDay",'profile_pic', 'password', 'two_factor_auth', 'two_factor_auth_code']
-    def __init__(self, *args, **kwargs):
-        context = kwargs.get('context', {})
-        request = context.get('request', None)
-        super(UserSerializer, self).__init__(*args, **kwargs)
-        if request and not request.user.is_authenticated:
-            self.fields.pop('password')
-            self.fields.pop('two_factor_auth')
-            self.fields.pop('two_factor_auth_code')
+        fields = ['login', 'email', 'firstName', 'lastName', 'password', 'state', 'last_visit']
 
     def create(self, validated_data):
-        user = MyUser.objects.create_user(
+        return MyUser.objects.create_user(
             login=validated_data['login'],
             email=validated_data['email'],
-            firstName=validated_data.get('firstName', ''),
-            lastName=validated_data.get('lastName', ''),
-            birthDay=validated_data['birthDay'],
-            # profile_pic=validated_data['profile_pic'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
             password=validated_data['password'],
         )
-        return user
 
-class PublicUserSerializer(serializers.ModelSerializer):
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(min_length=6, write_only=True)
+    password2 = serializers.CharField(min_length=6, write_only=True)
+
     class Meta:
         model = MyUser
-        fields = ['login', 'firstName', 'lastName', 'email', "birthDay",'profile_pic']
+        fields = ['login', 'email', 'first_name', 'last_name', 'password', 'password2']
+
+    def validate(self, data):
+        if (data['password'] != data['password2']):
+           raise serializers.ValidationError("Passwords do not match.")
+        return data
+    def create(self, validated_data):
+        validated_data.pop('password2')
+        return MyUser.objects.create_user(**validated_data)
+
+class UserLoginSerializer(serializers.ModelSerializer):
+    login = serializers.CharField()
+    password = serializers.CharField()
+
+    class Meta:
+        model = MyUser
+        fields = ['login',  'password']
+
+    def validate(self, data):
+        login = data.get('login')
+        password = data.get('password')
+        user = authenticate(login=login, password=password)
+        if user is None:
+            raise serializers.ValidationError("Invalid username or password.")
+        return{
+            'user': user
+        }

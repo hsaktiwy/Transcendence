@@ -69,8 +69,8 @@ guidness :
             - first you need to identifie you ip address, got to the bash and do the following command:
                 ?> ifconfig | grep 'inet '
                     inet 127.0.0.1 netmask 0xff000000 
-                    inet 10.13.2.82 netmask 0xffff0000 broadcast 10.13.255.255
-                in the exemeple our ip address will be  10.13.2.82 then you can replace all {YOUR_COMPUTER_IP_IN_THE_NETWORK} with  10.13.2.82
+                    inet 10.13.3.32 netmask 0xffff0000 broadcast 10.13.255.255
+                in the exemeple our ip address will be  10.13.3.32 then you can replace all {YOUR_COMPUTER_IP_IN_THE_NETWORK} with  10.13.3.32
             - got to frontend and modife the src/utils/constants.js, and modifie the : 
             BACKEND:string = "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:8000/", ws_host = '{YOUR_COMPUTER_IP_IN_THE_NETWORK}'
             - in the backend got to the setting and add:
