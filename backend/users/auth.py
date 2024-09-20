@@ -8,15 +8,21 @@ from .utils import decode_token
 User = get_user_model()
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        authorization_header = request.headers.get('Authorization')
-        if not authorization_header:
+        # authorization_header = request.headers.get('Authorization')
+        access_token = request.COOKIES.get('access_token')
+        print(access_token)
+        # refresh_token = request.COOKIES.get('refresh_token')
+        if not access_token:
             return None
         
-        token = authorization_header.split(' ')[1]
-        payload = decode_token(token)
+        payload = decode_token(access_token)
+        print(payload)
         
-        if payload is None:
-            raise AuthenticationFailed('Invalid or expired token')
+        if payload == 0:
+            raise AuthenticationFailed('Expired token')
+        elif payload == -1:
+            raise AuthenticationFailed('Invalid token')
+            
 
         try:
             user = User.objects.get(id=payload['user_id'])

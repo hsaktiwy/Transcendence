@@ -28,6 +28,6 @@ def decode_token(token):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
-        return None
+        return 0
     except jwt.InvalidTokenError:
-        return None
+        return -1
