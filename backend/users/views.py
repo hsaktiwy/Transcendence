@@ -35,6 +35,8 @@ from .models import MyUser
 from .serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer
 from .utils import generate_access_token, generate_refresh_token
 from rest_framework.permissions import AllowAny
+import datetime
+from django.conf import settings
 
 # Create your views here.
 # class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -88,11 +90,24 @@ class LoginView(APIView):
             user = serializer.validated_data['user']
             access_token = generate_access_token(user)
             refresh_token = generate_refresh_token(user)
-            return Response({
-                'access': access_token,
-                'refresh': refresh_token,
-                'user' : user.id
+            resp = Response({
+                'message': 'user logged in successfuly'
             }, status=status.HTTP_200_OK)
+            resp.set_cookie(
+                key='access_token',
+                value=access_token,
+                httponly=True,
+                max_age=datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFETIME),
+                samesite='Lax'
+            )
+            resp.set_cookie(
+                key='refresh_token',
+                value=refresh_token,
+                httponly=True,
+                max_age=datetime.timedelta(days=settings.REFRESH_TOKEN_LIFETIME),
+                samesite='Lax'
+            )
+            return resp
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 # @sensitive_post_parameters()
