@@ -7,11 +7,12 @@ ACCESS_TOKEN_EXPIRATION = datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFET
 REFRESH_TOKEN_EXPIRATION = datetime.timedelta(days=settings.REFRESH_TOKEN_LIFETIME)
 ALGORITHM='HS256'
 
-def generate_access_token(user):
+def generate_access_token(user, csrf_token):
     payload = {
         'user_id': user.id,
         'exp': datetime.datetime.utcnow() + ACCESS_TOKEN_EXPIRATION,
         'iat': datetime.datetime.utcnow(),
+        'csrf_token' : csrf_token
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
