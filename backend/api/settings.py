@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-r@#v5v%q!xj3gdyr*y)v69xmzq4n#u+rcn_cjsxzk*v7f&j25h'
 
 JWT_SECRET_KEY = '4484877278439867979ffd7ecc7f5a5e82f53544e22b4d0fdd2211dcae3b4c0e'
-ACCESS_TOKEN_LIFETIME = 15
+ACCESS_TOKEN_LIFETIME = 1
 REFRESH_TOKEN_LIFETIME = 7 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'status.apps.StatusConfig',
     'friendship.apps.FriendshipConfig',
     'game.apps.GameConfig',
-    'invitation.apps.InvitationConfig'
+    'invitation.apps.InvitationConfig',
 ]
 AUTH_USER_MODEL = "users.MyUser"
 

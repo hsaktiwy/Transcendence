@@ -37,6 +37,13 @@ from .utils import generate_access_token, generate_refresh_token
 from rest_framework.permissions import AllowAny
 import datetime
 from django.conf import settings
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
+from django.middleware.csrf import get_token
+from .utils import decode_token
+from rest_framework.exceptions import PermissionDenied
+from django.contrib.auth.models import AnonymousUser
+from rest_framework.exceptions import AuthenticationFailed
 
 # Create your views here.
 # class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -85,10 +92,16 @@ class RegisterView(APIView):
 class LoginView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
+        print(request.user)
+        if not isinstance(request.user, AnonymousUser):
+            return Response({
+                'message': 'user already logged in'
+            }, status=status.HTTP_200_OK)
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            access_token = generate_access_token(user)
+            csrf_token = get_token(request)
+            access_token = generate_access_token(user, csrf_token)
             refresh_token = generate_refresh_token(user)
             resp = Response({
                 'message': 'user logged in successfuly'
@@ -97,18 +110,52 @@ class LoginView(APIView):
                 key='access_token',
                 value=access_token,
                 httponly=True,
-                max_age=datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFETIME),
                 samesite='Lax'
             )
             resp.set_cookie(
                 key='refresh_token',
                 value=refresh_token,
                 httponly=True,
-                max_age=datetime.timedelta(days=settings.REFRESH_TOKEN_LIFETIME),
                 samesite='Lax'
             )
+            resp.headers['csrf_token'] = csrf_token
             return resp
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+    
+class RefreshToken(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        # raise AuthenticationFailed('Invalid token')
+        refreshToken = request.COOKIES.get('refresh_token')
+        try:
+            if not refreshToken:
+                raise PermissionDenied('Refresh Token not provided')
+            payload = decode_token(refreshToken)
+            if payload == 0:
+                raise PermissionDenied('Expired token')
+            elif payload == -1:
+                raise PermissionDenied('Invalid token')
+            try:
+                user = MyUser.objects.get(id=payload['user_id'])
+                csrf_token = get_token(request)
+                access_token = generate_access_token(user, csrf_token)
+                resp = Response({
+                    'message': 'access token refreshed'
+                }, status=status.HTTP_200_OK)
+                resp.set_cookie(
+                    key='access_token',
+                    value=access_token,
+                    httponly=True,
+                    samesite='Lax'
+                )
+                resp.headers['csrf_token'] = csrf_token
+                return resp
+            except MyUser.DoesNotExist:
+                raise PermissionDenied('User not found')
+        except Exception as e:
+            return Response(e, status=status.HTTP_401_UNAUTHORIZED)
+            
+            
 
 # @sensitive_post_parameters()
 # @require_http_methods(["POST"])
