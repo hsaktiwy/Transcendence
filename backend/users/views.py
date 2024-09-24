@@ -125,7 +125,10 @@ class LoginView(APIView):
 class RefreshToken(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
-        # raise AuthenticationFailed('Invalid token')
+        if not isinstance(request.user, AnonymousUser):
+            return Response({
+                'message': 'user already logged in'
+            }, status=status.HTTP_200_OK)
         refreshToken = request.COOKIES.get('refresh_token')
         try:
             if not refreshToken:
@@ -137,7 +140,7 @@ class RefreshToken(APIView):
                 raise PermissionDenied('Invalid token')
             try:
                 user = MyUser.objects.get(id=payload['user_id'])
-                csrf_token = get_token(request)
+                csrf_token  = request.headers.get('X-CSRFToken')
                 access_token = generate_access_token(user, csrf_token)
                 resp = Response({
                     'message': 'access token refreshed'
@@ -148,7 +151,7 @@ class RefreshToken(APIView):
                     httponly=True,
                     samesite='Lax'
                 )
-                resp.headers['csrf_token'] = csrf_token
+                # resp.headers['csrf_token'] = csrf_token
                 return resp
             except MyUser.DoesNotExist:
                 raise PermissionDenied('User not found')
@@ -203,8 +206,8 @@ class UploadProfilePicture(APIView):
 class UserNotification(generics.ListAPIView):
     serializer_class = NotificationSerializer
     def get_queryset(self):
-        user_id = self.kwargs.get('pk')
-        return Notification.objects.filter(id_user_fk=user_id).order_by('created')
+        user=self.request.user
+        return Notification.objects.filter(id_user_fk=user).order_by('created')
 
 
 

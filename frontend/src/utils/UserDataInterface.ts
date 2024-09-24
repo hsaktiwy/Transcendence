@@ -1,13 +1,11 @@
 export interface UserDataInterface {
-    login: string;
-    firstName: string;
-    lastName: string;
-    profile_pic: string;
-    email: string;
-    password: string;
-    birthDay: string;
-    toFA: boolean;
-    toFAPass: string;
+    login:string;
+    email:string;
+    firstName:string;
+    lastName:string;
+    state:string;
+    last_visit:string | null;
+    profile_pic:string;
 }
 export interface ProfileDataInterface {
     login: string;
@@ -17,3 +15,5 @@ export interface ProfileDataInterface {
     email: string;
     birthDay: string;
 }
+
+

@@ -7,6 +7,7 @@ import mailman from "../utils/AxiosFetcher";
 import { toast } from "sonner";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
+import { AuthContext } from "./AuhtenticationContext";
 
 export interface NotificationPropreties{
     id: number;
@@ -17,8 +18,8 @@ export interface NotificationPropreties{
     sender: string
 }
 interface UserContextInterface{
-    id: number | undefined;
-    setUserId: React.Dispatch<React.SetStateAction<number | undefined> >;
+    // id: number | undefined;
+    // setUserId: React.Dispatch<React.SetStateAction<number | undefined> >;
     userData: UserDataInterface | undefined
     setUserData: React.Dispatch<React.SetStateAction<UserDataInterface | undefined> >;
     profilePicChanged: boolean;
@@ -36,12 +37,11 @@ interface UserContextInterface{
 export const UserContext = createContext<UserContextInterface | undefined>(undefined)
 
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
-
+    const AuthContextConsummer = useContext(AuthContext)
     const SocketContext = useContext(WebSocketContext)
-    if (!SocketContext)
+    if (!SocketContext || !AuthContext)
         throw new Error('error')
-    let csrfToken:string = cookies.get('csrftoken');
-    const [id, setUserId] = useState<number | undefined>(undefined);
+    // const [id, setUserId] = useState<number | undefined>(undefined);
     const [userData, setUserData] = useState<UserDataInterface | undefined>(undefined);
     const [profilePicChanged, setProfilePicChanged] = useState<boolean>(false);
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
@@ -57,13 +57,9 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         try{
             const req = {
-                url: BACKEND + `api/user/${id}/`,
+                url: `api/user/`,
                 method: 'GET',
                 withCredentials: true,
-                headers : {
-                    'Content-Type': 'multipart/form-data',
-                    'X-CSRFToken': csrfToken,
-                }
             }
             const resp = await mailman(req)
             // toast.success('Welcome!', {
@@ -74,27 +70,23 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             // }, 5000);
             const {
                 login,
+                email,
                 firstName,
                 lastName,
+                state,
+                last_visit,
                 profile_pic,
-                email,
-                password,
-                birthDay,
-                toFA,
-                toFAPass
             } = resp.data
             console.log("sss ====???? ",resp.data)
 
             setUserData({
                 login,
+                email,
                 firstName,
                 lastName,
+                state,
+                last_visit,
                 profile_pic,
-                email,
-                password,
-                birthDay,
-                toFA,
-                toFAPass
             })
             setProfilePicChanged(false)
             
@@ -118,13 +110,9 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         try{
             const req = {
-                url: BACKEND + `api/user/${id}/notification/`,
+                url: BACKEND + `api/user/notification/`,
                 method: 'GET',
                 withCredentials: true,
-                headers : {
-                    'Content-Type': 'multipart/form-data',
-                    'X-CSRFToken': csrfToken,
-                }
             }
             const resp = await mailman(req)
             // toast.success('Welcome!', {
@@ -149,13 +137,9 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
  
             try{
                 const req = {
-                    url: BACKEND + `friendship/request/listFriends/${id}`,
+                    url: BACKEND + `friendship/request/listFriends/`,
                     method: 'GET',
                     withCredentials: true,
-                    headers : {
-                        'Content-Type': 'multipart/form-data',
-                        'X-CSRFToken': csrfToken,
-                    }
                 }
                 const resp = await mailman(req)
                 console.log("friend_req")
@@ -168,11 +152,11 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     
     }
     useEffect(() =>{
-        if (id === undefined){
-            const savedId = localStorage.getItem("id")
-            if (savedId !== null)
-                setUserId(Number(savedId))
-        }
+        // if (id === undefined){
+        //     const savedId = localStorage.getItem("id")
+        //     if (savedId !== null)
+        //         setUserId(Number(savedId))
+        // }
 
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
@@ -182,18 +166,18 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
     }, [])
     useEffect(() => {
-        if (id !== undefined){
+        if (AuthContextConsummer?.loggedIn){
             fetchNotification()
         }
-    },[id,notificationReaded])
+    },[AuthContextConsummer?.loggedIn, notificationReaded])
     useEffect(() =>{
-        if (id !== undefined){
+        if (AuthContextConsummer?.loggedIn){
             fetchUserData()
             // fetchFriendRequests()
         }
-    }, [id, profilePicChanged])
+    }, [AuthContextConsummer?.loggedIn, profilePicChanged])
     return(
-        <UserContext.Provider value={{id, setUserId, userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {children}
         </UserContext.Provider>
