@@ -22,5 +22,6 @@ urlpatterns = [
     path('user/login/', views.LoginView.as_view()),
     path('user/', views.getAuthenticatedUser.as_view()),
     path('user/refresh_token/', views.RefreshToken.as_view()),
+    path('user/notification/', views.UserNotification.as_view(), name="User_Notification"),
     # path('login/', views.LoginView.as_view())
 ]

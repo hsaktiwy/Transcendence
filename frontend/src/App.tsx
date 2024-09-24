@@ -15,7 +15,8 @@ import LoadingIndecator from './components/Loading'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import ProfileTest from './components/ProfileTest'
 import TopBar from './components//website/mobileVersion/topBar'
-import Profile from './components/Profile'
+// import Profile from './components/Profile'
+import AuthProvider from './components/AuhtenticationContext'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -24,6 +25,7 @@ const App = () =>
 
   return (
     <BrowserRouter>
+      <AuthProvider>
         <Auth>
           <WebSocketProvider>
             <UserProvider>
@@ -38,7 +40,8 @@ const App = () =>
                 </Routes>
            </UserProvider>
           </WebSocketProvider>
-      </Auth>
+        </Auth>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

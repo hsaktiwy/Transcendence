@@ -1,6 +1,10 @@
 import jwt
 import datetime
 from django.conf import settings
+from rest_framework.response import Response
+from django.utils import timezone
+# from rest_framework.views import exception_handler as drf_exception_handler
+from rest_framework.exceptions import AuthenticationFailed
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 ACCESS_TOKEN_EXPIRATION = datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFETIME)
@@ -32,3 +36,21 @@ def decode_token(token):
         return 0
     except jwt.InvalidTokenError:
         return -1
+
+def my_exception_handler(exc, context):
+    from rest_framework.views import exception_handler as drf_exception_handler
+    response = drf_exception_handler(exc, context)
+    response = Response({
+            'detail': str(exc),
+        }, status=401)
+    exception_message = str(exc.detail) if hasattr(exc, 'detail') else str(exc)
+    print(exception_message)
+    if isinstance(exc, AuthenticationFailed) and exception_message == 'Expired token':
+       response.set_cookie(
+            key='access_token',
+            value='',
+            max_age=0,
+            httponly=True,
+            samesite='Lax'
+       )
+    return response
