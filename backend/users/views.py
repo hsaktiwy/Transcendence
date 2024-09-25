@@ -46,17 +46,17 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
 
 # Create your views here.
-# class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
-#     queryset = MyUser.objects.all()
-#     serializer_class = UserSerializer
+    queryset = MyUser.objects.all()
+    serializer_class = UserSerializer
 
-#     def get_object(self):
-#         identifier = self.kwargs.get('identifier')
-#         if identifier.isdigit():
-#             return get_object_or_404(MyUser, pk=identifier)
-#         else:
-#             return get_object_or_404(MyUser, login=identifier)
+    def get_object(self):
+        identifier = self.kwargs.get('identifier')
+        if identifier.isdigit():
+            return get_object_or_404(MyUser, pk=identifier)
+        else:
+            return get_object_or_404(MyUser, login=identifier)
 
 # class UserAPICreate(generics.CreateAPIView):
 #     queryset = MyUser.objects.all()
@@ -92,7 +92,6 @@ class RegisterView(APIView):
 class LoginView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
-        print(request.user)
         if not isinstance(request.user, AnonymousUser):
             return Response({
                 'message': 'user already logged in'
@@ -101,7 +100,7 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             csrf_token = get_token(request)
-            access_token = generate_access_token(user, csrf_token)
+            access_token = generate_access_token(user)
             refresh_token = generate_refresh_token(user)
             resp = Response({
                 'message': 'user logged in successfuly'
@@ -118,9 +117,14 @@ class LoginView(APIView):
                 httponly=True,
                 samesite='Lax'
             )
-            resp.headers['csrf_token'] = csrf_token
+            resp.set_cookie(
+                key='csrftoken',
+                value=csrf_token,
+                httponly=False,
+                samesite='Lax'
+            )
             return resp
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        return Response('serializer.errors', status=status.HTTP_401_UNAUTHORIZED)
     
 class RefreshToken(APIView):
     permission_classes = [AllowAny]
@@ -140,8 +144,7 @@ class RefreshToken(APIView):
                 raise PermissionDenied('Invalid token')
             try:
                 user = MyUser.objects.get(id=payload['user_id'])
-                csrf_token  = request.headers.get('X-CSRFToken')
-                access_token = generate_access_token(user, csrf_token)
+                access_token = generate_access_token(user)
                 resp = Response({
                     'message': 'access token refreshed'
                 }, status=status.HTTP_200_OK)
@@ -159,7 +162,27 @@ class RefreshToken(APIView):
             return Response(e, status=status.HTTP_401_UNAUTHORIZED)
             
             
-
+class CheckAuth(APIView):
+    def get(self, request):
+        csrf_token  = request.headers.get('X-CSRFToken')
+        csrf_cookie = request.COOKIES.get('csrftoken')
+        if not isinstance(request.user, AnonymousUser):
+            # if not csrf_token or not csrf_cookie:
+            #     return Response({
+            #         'message': 'invalid csrf credentials'
+            #     }, status=status.HTTP_401_UNAUTHORIZED)
+            # elif csrf_cookie != csrf_token:
+            #     return Response({
+            #         'message': 'csrf_token mismatch'
+            #     }, status=status.HTTP_401_UNAUTHORIZED)
+            # else:
+                return Response({
+                    'message': 'user already logged in'
+                }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'message': 'Anonymous user'
+            }, status=status.HTTP_401_UNAUTHORIZED)
 # @sensitive_post_parameters()
 # @require_http_methods(["POST"])
 # @csrf_protect

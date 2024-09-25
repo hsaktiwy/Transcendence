@@ -10,14 +10,10 @@ import json
 # Create your views here.
 
 class MessageRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-	authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [IsAuthenticated]
 	queryset = Message.objects.all()
 	serializer_class = MessageSerializer
 
 class MessageAPICreate(generics.ListCreateAPIView):
-	authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [IsAuthenticated]
 	queryset = Message.objects.all()
 	serializer_class = MessageSerializer
 
@@ -38,20 +34,14 @@ class MessageAPICreate(generics.ListCreateAPIView):
 
 
 class ChannelRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-	authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [IsAuthenticated]
 	queryset = Channel.objects.all()
 	serializer_class = ChannelSerializer
 
 class ChannelAPICreate(generics.ListCreateAPIView):
-	authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [IsAuthenticated]
 	queryset = Channel.objects.all()
 	serializer_class = ChannelSerializer
 
 class ConversationAPIVIEW(generics.RetrieveAPIView):
-	authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [IsAuthenticated]
 	serializer_class = ChannelSerializer
 
 	def get(self, request, packetSize,*args, **kwargs):
@@ -99,8 +89,6 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 			return  Response({'Wala' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class ConversationUpdateAPIVIEW(generics.RetrieveAPIView):
-	authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [IsAuthenticated]
 	serializer_class = ChannelSerializer
 
 	def get(self, request, channelId,packetSize, packetToAdd,*args, **kwargs):

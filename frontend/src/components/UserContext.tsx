@@ -57,7 +57,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         try{
             const req = {
-                url: `api/user/`,
+                url: `/api/user/`,
                 method: 'GET',
                 withCredentials: true,
             }
@@ -110,7 +110,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         try{
             const req = {
-                url: BACKEND + `api/user/notification/`,
+                url: `/api/user/notification/`,
                 method: 'GET',
                 withCredentials: true,
             }
@@ -137,7 +137,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
  
             try{
                 const req = {
-                    url: BACKEND + `friendship/request/listFriends/`,
+                    url: `/friendship/request/listFriends/`,
                     method: 'GET',
                     withCredentials: true,
                 }

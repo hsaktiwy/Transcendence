@@ -60,7 +60,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                 if (!usersDataArr.current.find(user => item.sender === user.login)){
                     try{
                         const req = {
-                            url: BACKEND + `api/user/${item.sender}/`,
+                            url: `/api/users/${item.sender}/`,
                             method: 'GET',
                         }
                         const resp = await mailman(req)

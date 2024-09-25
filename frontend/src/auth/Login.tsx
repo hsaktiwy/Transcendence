@@ -7,6 +7,7 @@ import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
 import { UserContext } from '../components/UserContext';
 import { AuthContext, LoginDataInterface, LoginError, LoginResp } from '@/components/AuhtenticationContext';
+import LoadingIndecator from '@/components/Loading';
 const Login = () => {
     const AuthContextConsummer = useContext(AuthContext)
     if (!AuthContextConsummer)
@@ -80,16 +81,20 @@ const Login = () => {
             console.log(resp)
         }
         else{
+            console.log(resp)
             AuthContextConsummer.setLoggedIn(true)
             Navigate('/')
         }
     }
 
     useEffect(() => {
-        if(AuthContextConsummer.loggedIn)
+        if(AuthContextConsummer.loggedIn === true)
             Navigate('/')
+        // else
+        //     AuthContextConsummer.checkLoggedInUser()
     },[AuthContextConsummer.loggedIn, Navigate])
     return (
+        AuthContextConsummer.loggedIn != undefined ?
         <div className="flex items-center justify-center min-h-screen ">
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
                 <div className="mb-4">
@@ -118,7 +123,9 @@ const Login = () => {
                     Login
                 </button>
             </form>
-        </div>
+        </div> :
+        <LoadingIndecator/>
+
     );
 };
 
