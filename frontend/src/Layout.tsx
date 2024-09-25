@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from 'react';
+import React, { ReactNode, useContext, useEffect } from 'react';
 import NavBar from "./components/NavBar";
 import Sidebar from './components/Sidebar';
 import SideBarV2 from './components/SideBarV2';
@@ -9,14 +9,19 @@ import { Toaster, toast } from 'sonner'
 import { Outlet } from 'react-router-dom';
 import { UserContext } from "./components/UserContext";
 import NotificationToast from './components/NotificationToast';
+import { AuthContext } from './components/AuhtenticationContext';
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout = () => {
   const userContextConsumer = useContext(UserContext)
+  const AuthContextConsummer = useContext(AuthContext)
   if (!userContextConsumer)
    throw new Error("userContext must be used within a UserProvider");
+  if (!AuthContextConsummer)
+    throw new Error("error")
+
   return (
    
         

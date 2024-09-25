@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import Cookies from 'js-cookie';
 
 const mailman = axios.create(
     {
@@ -12,7 +12,7 @@ const mailman = axios.create(
 mailman.interceptors.request.use(
     (config) => {
         config.headers['Content-Type'] = 'application/json';
-        const csrfToken = localStorage.getItem('csrf_token');
+        const csrfToken = Cookies.get('csrftoken');
         if (csrfToken)
             config.headers['X-CSRFToken'] = csrfToken;
         return config;
@@ -24,8 +24,8 @@ mailman.interceptors.request.use(
 
 mailman.interceptors.response.use(
     (response) =>{
-        if(response.headers['Csrf_token'])
-            localStorage.setItem("csrf_token", response.headers['Csrf_token'])
+        if(response.headers['csrf_token'])
+            localStorage.setItem("csrf_token", response.headers['csrf_token'])
         return response
     },
     async (error) =>{

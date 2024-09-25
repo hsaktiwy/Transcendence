@@ -28,7 +28,7 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
   {
     console.log("strange")
     try {
-      const url:string = BACKEND + CONVERSATION + MESSAGES_PACKET_SIZE + '/'
+      const url:string = CONVERSATION + MESSAGES_PACKET_SIZE + '/'
       const request = {
         url: url,
         method: 'GET',

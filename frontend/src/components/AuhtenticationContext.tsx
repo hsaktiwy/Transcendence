@@ -1,7 +1,7 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import mailman from "@/utils/AxiosFetcher";
 import { AxiosError } from "axios";
-
+import { useLocation } from "react-router-dom";
 export interface LoginDataInterface{
     login: string,
     password: string
@@ -17,16 +17,18 @@ export interface LoginError{
     status: number
 }
 interface AuthContextInterface{
-    loggedIn: boolean,
-    setLoggedIn : React.Dispatch<React.SetStateAction<boolean> >,
-    LoginAction : (data: LoginDataInterface) => Promise<LoginResp | LoginError>;
+    loggedIn: boolean | undefined,
+    setLoggedIn : React.Dispatch<React.SetStateAction<boolean | undefined> >,
+    LoginAction : (data: LoginDataInterface) => Promise<LoginResp | LoginError>,
+    checkLoggedInUser : () => void
 
 }
 
 export const AuthContext = createContext<AuthContextInterface | undefined>(undefined)
 
 const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
-    const [loggedIn, setLoggedIn] = useState<boolean>(false)
+    const location = useLocation()
+    const [loggedIn, setLoggedIn] = useState<boolean | undefined>(undefined)
     const LoginAction = async (data: LoginDataInterface): Promise<LoginResp | LoginError> =>{
         try{
             const request = {
@@ -36,6 +38,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                 data: data
             }
             const resp = await mailman(request)
+            console.log(resp.headers['csrf_token'])
             if (!loggedIn)
                 setLoggedIn(true)
             return resp.data
@@ -50,7 +53,25 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
             return loginError
         }
     }
-    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction}}>
+    const checkLoggedInUser = async () => {
+        try{
+            const req = {
+                url: '/api/user/check/',
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req)
+            console.log("ZZZZZKNAXAHIOHACOH")
+            setLoggedIn(true)
+        }
+        catch(error){
+            setLoggedIn(false)
+        }
+    }
+    useEffect (() =>{
+        checkLoggedInUser()
+    },[location])
+    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, checkLoggedInUser}}>
         {children}
     </AuthContext.Provider>
 }
