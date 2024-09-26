@@ -40,12 +40,77 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
-from .utils import decode_token
+from .utils import decode_token, generate_tokens_response
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
 
-# Create your views here.
+
+
+from django.contrib.auth import login
+from rest_framework.decorators import api_view, permission_classes
+import requests
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def LoginWithOAuth42(request):
+    code = request.data.get('code')
+    
+    client_id = 'u-s4t2ud-c6b6242240c2da879e3afe370e67288527613cf82675711a26a3e860f8cc74d0'
+    client_secret = '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'
+    redirect_uri = 'http://localhost:5173/login'
+
+    token_url = 'https://api.intra.42.fr/oauth/token'
+    user_info_url = 'https://api.intra.42.fr/v2/me'
+
+    payload = {
+        'grant_type': 'authorization_code',
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'code': code,
+        'redirect_uri': redirect_uri,
+    }
+    print(payload)
+    # Exchange the code for an access token
+    response = requests.post(token_url, data=payload)
+    print(response)
+    if response.status_code != 200:
+        return Response({'error': 'Failed to retrieve access token'}, status=400)
+    
+    access_token = response.json().get('access_token')
+    print("ssssssss ======= >>>",access_token)
+
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+    }
+    user_info_response = requests.get(user_info_url, headers=headers)
+    if user_info_response.status_code != 200:
+        return Response({'error': 'Failed to retrieve user info'}, status=400)
+
+    user_info = user_info_response.json()
+    
+    login_42 = user_info.get('login')
+    email = user_info.get('email')
+    first_name = user_info.get('first_name')
+    last_name = user_info.get('last_name')
+
+   
+    try:
+        user = MyUser.objects.get(login=login_42)
+       
+        resp = generate_tokens_response(user, request)
+        return resp
+    except MyUser.DoesNotExist:
+
+        user = MyUser.objects.create_user(
+            login=login_42,
+            email=email,
+            firstName=first_name,
+            lastName=last_name
+        )
+
+        resp = generate_tokens_response(user, request)
+        return resp
+
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = MyUser.objects.all()
@@ -99,30 +164,7 @@ class LoginView(APIView):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            csrf_token = get_token(request)
-            access_token = generate_access_token(user)
-            refresh_token = generate_refresh_token(user)
-            resp = Response({
-                'message': 'user logged in successfuly'
-            }, status=status.HTTP_200_OK)
-            resp.set_cookie(
-                key='access_token',
-                value=access_token,
-                httponly=True,
-                samesite='Lax'
-            )
-            resp.set_cookie(
-                key='refresh_token',
-                value=refresh_token,
-                httponly=True,
-                samesite='Lax'
-            )
-            resp.set_cookie(
-                key='csrftoken',
-                value=csrf_token,
-                httponly=False,
-                samesite='Lax'
-            )
+            resp = generate_tokens_response(user, request)
             return resp
         return Response('serializer.errors', status=status.HTTP_401_UNAUTHORIZED)
     

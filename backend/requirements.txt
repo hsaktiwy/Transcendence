@@ -29,3 +29,4 @@ typing-extensions==4.12.2
 zope.interface==6.4.post2
 Pillow
 pyjwt
+requests
