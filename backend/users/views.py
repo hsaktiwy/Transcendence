@@ -104,3 +104,112 @@ class UserNotification(generics.ListAPIView):
 
 
 
+# import requests
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+
+# @api_view(['POST'])
+# def LoginWithOAuth42(request):
+#     code = request.data.get('code')
+#     client_id = 'u-s4t2ud-c6b6242240c2da879e3afe370e67288527613cf82675711a26a3e860f8cc74d0'
+#     client_secret = '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'
+#     redirect_uri = 'http://10.11.4.4:5173/login'
+    
+#     token_url = 'https://api.intra.42.fr/oauth/token'
+    
+#     payload = {
+#         'grant_type': 'authorization_code',
+#         'client_id': client_id,
+#         'client_secret': client_secret,
+#         'code': code,
+#         'redirect_uri': redirect_uri,
+#     }
+    
+#     token_response = requests.post(token_url, data=payload)
+    
+#     if token_response.status_code == 200:
+#         access_token = token_response.json().get('access_token')
+
+#         user_data_url = 'https://api.intra.42.fr/v2/me'
+#         headers = {
+#             'Authorization': f'Bearer {access_token}'
+#         }
+        
+#         user_data_response = requests.get(user_data_url, headers=headers)
+        
+#         if user_data_response.status_code == 200:
+#             user_data = user_data_response.json()
+#             return Response(user_data)
+#         else:
+#             return Response({'error': 'Failed to fetch user data'}, status=user_data_response.status_code)
+#     else:
+#         return Response({'error': 'Failed to retrieve access token'}, status=token_response.status_code)
+
+    
+
+
+from django.contrib.auth import login
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from users.models import MyUser
+import requests
+
+@api_view(['POST'])
+def LoginWithOAuth42(request):
+    code = request.data.get('code')
+
+    client_id = 'u-s4t2ud-c6b6242240c2da879e3afe370e67288527613cf82675711a26a3e860f8cc74d0'
+    client_secret = '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'
+    redirect_uri = 'http://10.11.4.4:5173/login'
+
+    token_url = 'https://api.intra.42.fr/oauth/token'
+    user_info_url = 'https://api.intra.42.fr/v2/me'
+
+    payload = {
+        'grant_type': 'authorization_code',
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'code': code,
+        'redirect_uri': redirect_uri,
+    }
+
+    # Exchange the code for an access token
+    response = requests.post(token_url, data=payload)
+    if response.status_code != 200:
+        return Response({'error': 'Failed to retrieve access token'}, status=400)
+    
+    access_token = response.json().get('access_token')
+
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+    }
+    user_info_response = requests.get(user_info_url, headers=headers)
+    if user_info_response.status_code != 200:
+        return Response({'error': 'Failed to retrieve user info'}, status=400)
+
+    user_info = user_info_response.json()
+    login_42 = user_info.get('login')
+    email = user_info.get('email')
+    first_name = user_info.get('first_name')
+    last_name = user_info.get('last_name')
+    birth_date = user_info.get('birthdate')
+
+   
+    try:
+        user = MyUser.objects.get(login=login_42)
+       
+        login(request, user)
+        return Response({'message': 'User logged in successfully'})
+    except MyUser.DoesNotExist:
+
+        user = MyUser.objects.create_user(
+            login=login_42,
+            email=email,
+            firstName=first_name,
+            lastName=last_name,
+            birthDay=birth_date,
+        )
+
+      
+        login(request, user)
+        return Response({'message': 'User created and logged in successfully'})

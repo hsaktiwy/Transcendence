@@ -23,4 +23,4 @@ class UserAdmin(BaseUserAdmin):
     )
     ordering = ('login',)
 
-admin.site.register(MyUser, UserAdmin)
+admin.site.register(MyUser)

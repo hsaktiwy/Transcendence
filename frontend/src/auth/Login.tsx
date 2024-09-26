@@ -1,15 +1,19 @@
 // Login.tsx
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect , useRef, useState } from 'react';
 import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
 import {  cookies } from './Cookie';
 import { useNavigate } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
+import { useSearchParams } from 'react-router-dom'
 // import { user_id } from '../utils/Constants';
 import { UserContext } from '../components/UserContext';
+import {  } from 'react';
+
 const Login = () => {
     const Navigate = useNavigate();
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [searchParams, setSearchParams] = useSearchParams();
     // const userContextConsumer = useContext(UserContext)
     // if (!userContextConsumer)
     //     throw new Error("useUser must be used within a UserProvider");
@@ -64,6 +68,35 @@ const Login = () => {
             }
         }
     }
+    const handleSubmitWith42 = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        window.location.href = 
+            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c6b6242240c2da879e3afe370e67288527613cf82675711a26a3e860f8cc74d0&redirect_uri=http%3A%2F%2F10.11.4.4%3A5173%2Flogin&response_type=code";
+    };
+    
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const code = searchParams.get('code');
+        
+        if (code) {
+
+            fetch('http://localhost:8000/api/LoginWithOAuth42/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    console.log('data', data);
+                }
+                window.history.replaceState({}, document.title, window.location.pathname);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }, []);
 
     return (
         <div className="flex items-center justify-center min-h-screen ">
@@ -94,8 +127,14 @@ const Login = () => {
                     Login
                 </button>
             </form>
+
+                <form onSubmit={handleSubmitWith42}>
+                    <button type="submit"  className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
+                        Login wih 42 
+                    </button>
+                </form>
         </div>
     );
-};
+};      
 
 export default Login;

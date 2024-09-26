@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from .validators import Validator_birthDay
 from django.core.exceptions import ValidationError
 from PIL import Image
+import  requests
 
 def user_pic_location(instance, filename):
     return 'user{0}/{1}'.format(instance.id,filename)
@@ -13,20 +14,39 @@ def validateImage(image):
         raise ValidationError(f"Max size of file is {limit_mb} MB")
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, login, email, firstName, lastName, birthDay,  password, **extra_fields):
+    def create_user(self, login, email, firstName, lastName, birthDay, password=None, **extra_fields):
         if not login:
-            ValueError("User must set the login")
+            raise ValueError("User must set the login")
+        
+        if not email:
+            raise ValueError("User must provide a valid email address")
+
         email = self.normalize_email(email)
-        user = self.model(login=login, email=email, firstName=firstName, lastName=lastName, profile_pic=None, birthDay=birthDay, **extra_fields)
-        user.set_password(password)
+        
+        user = self.model(
+            login=login,
+            email=email,
+            firstName=firstName,
+            lastName=lastName,
+            birthDay=birthDay,
+            **extra_fields
+        )
+
+        if password:
+            user.set_password(password)
+        else:
+            # For OAuth, we can set an unusable password if password is not provided
+            user.set_unusable_password()
+
         user.save(using=self._db)
         return user
-    def create_superuser(self, login, email, firstName, lastName, birthDay, profile_pic=None, password=None, **extra_fields):
+
+    def create_superuser(self, login, email, firstName, lastName, birthDay, password=None, **extra_fields):
         extra_fields.setdefault('is_admin', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
 
-        return self.create_user(login, email, firstName, lastName, birthDay, profile_pic, password, **extra_fields)
+        return self.create_user(login, email, firstName, lastName, birthDay, password, **extra_fields)
 
 # Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
@@ -35,7 +55,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     firstName = models.CharField(max_length=50)
     lastName = models.CharField(max_length=50)
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address")
-    birthDay = models.DateField()
+    birthDay = models.DateField(blank=True, null=True)
     profile_pic = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpg', validators=[validateImage])
     created_at = models.DateTimeField(auto_now_add=True)
     two_factor_auth = models.BooleanField(default=False)
