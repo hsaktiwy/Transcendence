@@ -6,18 +6,22 @@ import Login from './Login'
 import RegistrationForm from './Registration';
 import ChatSection from '../components/ChatSection';
 import Settings from '../components/Settings';
-
+import { Toaster, toast } from 'sonner'
 function Auth(children:childrenInterface)
 {
     
     return (
-  
-                <Routes>
-                    <Route path="/*" element={<RouteProtection>{children.children}</RouteProtection>}/>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/signup" element={<RegistrationForm/>}/>
-                    {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
-                </Routes>
+                <>
+                    <Toaster position="top-right" richColors expand={true}  closeButton={true} toastOptions={{
+                        className: "bg-black/50 backdrop-filter backdrop-blur-sm text-white "
+                    }}/>
+                    <Routes>
+                        <Route path="/*" element={<RouteProtection>{children.children}</RouteProtection>}/>
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/signup" element={<RegistrationForm/>}/>
+                        {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
+                    </Routes>
+                </>
 
           
     )

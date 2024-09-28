@@ -32,7 +32,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import MyUser
-from .serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer
+from .serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer, PublicUserSerializer
 from .utils import generate_access_token, generate_refresh_token
 from rest_framework.permissions import AllowAny
 import datetime
@@ -77,7 +77,6 @@ def LoginWithOAuth42(request):
         return Response({'error': 'Failed to retrieve access token'}, status=400)
     
     access_token = response.json().get('access_token')
-    print("ssssssss ======= >>>",access_token)
 
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -135,14 +134,38 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 class GetUsers(APIView):
     def get(self, request):
         users = MyUser.objects.all()
-        serializer = UserSerializer(users, many=True)
+        serializer = PublicUserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class getPublicUser(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request,*args, **kwargs):
+        identifier = self.kwargs.get('identifier')
+        try:
+            if identifier.isdigit():
+                user = MyUser.objects.get(pk=identifier)
+            else:
+                user = MyUser.objects.get(login=identifier)
+        except MyUser.DoesNotExist:
+                return Response({
+                    'message': 'User not found'
+                }, status=404)
+        serializer = PublicUserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
 
 class getAuthenticatedUser(APIView):
     def get(self, request):
         user = request.user
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    def patch(self, request):
+        user = request.user
+        serializer = UserSerializer(instance=user, data=request.data)
+        if serializer.is_valid():
+            user = serializer.update(instance=user, validated_data=serializer.validated_data)
+            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
         
 
 class RegisterView(APIView):
@@ -166,7 +189,16 @@ class LoginView(APIView):
             user = serializer.validated_data['user']
             resp = generate_tokens_response(user, request)
             return resp
-        return Response('serializer.errors', status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+class UpdateUserData(APIView):
+    def patch(self, request):
+        user = request.user
+        serializer = UserSerializer(instance=user, data=request.data)
+        if serializer.is_valid():
+            user = serializer.update(instance=user, validated_data=serializer.validated_data)
+            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
     
 class RefreshToken(APIView):
     permission_classes = [AllowAny]
@@ -205,6 +237,7 @@ class RefreshToken(APIView):
             
             
 class CheckAuth(APIView):
+    permission_classes = [AllowAny]
     def get(self, request):
         csrf_token  = request.headers.get('X-CSRFToken')
         csrf_cookie = request.COOKIES.get('csrftoken')
@@ -224,7 +257,7 @@ class CheckAuth(APIView):
         else:
             return Response({
                 'message': 'Anonymous user'
-            }, status=status.HTTP_401_UNAUTHORIZED)
+            }, status=status.HTTP_200_OK)
 # @sensitive_post_parameters()
 # @require_http_methods(["POST"])
 # @csrf_protect
