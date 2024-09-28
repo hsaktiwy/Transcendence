@@ -4,7 +4,7 @@ function OnlineFriends() {
   return (
     <>
         <div className='onlineFriends-div  pt-5 h-full'>
-                    <div className='divs-online'>
+                    <div className='divs-online bg-gradient-to-tr from-[#2c353a] to-[#2B2F32]'>
                         <div className='bar-search-freinds'>
                             <input className='search-bar-div-friends'  placeholder='Search' />
                             <img style={{width: '15px', marginRight: '10px'}} className="size-image" src="/images/profileVector.svg" />
