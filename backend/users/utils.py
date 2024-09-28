@@ -61,7 +61,7 @@ def generate_tokens_response(user, request):
     access_token = generate_access_token(user)
     refresh_token = generate_refresh_token(user)
     resp = Response({
-        'message': 'user logged in successfuly'
+        'message': 'User logged in successfuly'
     }, status=status.HTTP_200_OK)
     resp.set_cookie(
         key='access_token',

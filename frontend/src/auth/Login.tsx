@@ -5,9 +5,11 @@ import { cookies } from './Cookie';
 import { useNavigate } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
+import { toast } from 'sonner'
 import { UserContext } from '../components/UserContext';
 import { AuthContext, LoginDataInterface, LoginError, LoginResp } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
+import { resolve } from 'path';
 
 const Loading__ = () => {
     return (
@@ -21,7 +23,6 @@ const Loading__ = () => {
     )
 }
 
-import { toast } from "sonner";
 const Login = () => {
     const AuthContextConsummer = useContext(AuthContext)
     if (!AuthContextConsummer)
@@ -99,9 +100,16 @@ const Login = () => {
         console.log(data)
         const resp = await AuthContextConsummer.LoginAction(data)
         if ('errorType' in resp) {
-            console.log(resp)
+            interface tmp {
+                non_field_errors: string[]
+            }
+            const tmpError = resp.errorType as tmp
+            if(tmpError['non_field_errors'] !== undefined)
+                toast.error(tmpError['non_field_errors'][0])
+            console.log(resp.errorType)
         }
         else {
+            toast.success(resp.message)
             console.log(resp)
             AuthContextConsummer.setLoggedIn(true)
             Navigate('/')
@@ -130,7 +138,6 @@ const Login = () => {
                 if (resp.status === 200) {
                     // setLoading(false)
                     location.reload();
-                    // Navigate('/')
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
                 // Navigate('/')

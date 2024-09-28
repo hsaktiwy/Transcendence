@@ -46,7 +46,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
         catch (error){
             const axiosError = error as AxiosError
             const loginError: LoginError = {
-                message: 'login failed',
+                message: 'Login failed',
                 errorType: axiosError.response ? axiosError.response?.data : axiosError.message,
                 status: axiosError.response ? axiosError.response.status : 500
             }
@@ -61,8 +61,13 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-            console.log("ZZZZZKNAXAHIOHACOH")
-            setLoggedIn(true)
+     
+            if(resp.data['message'] && resp.data['message'] === 'user already logged in')
+                setLoggedIn(true)
+            else
+                setLoggedIn(false)
+
+
         }
         catch(error){
             setLoggedIn(false)
