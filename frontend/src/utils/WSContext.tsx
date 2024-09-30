@@ -6,7 +6,7 @@ import {Message } from './ChatContext'
 
 let inc: number = 222222 // desable the id that amine use later else we will use this 
 // type CallbackType = (message: any) => void
-export const WebSocketContext = createContext<WebSocketContextType>(defaultContextValue)
+export const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined)
 
 export const WebSocketProvider = ({ children }:childrenInterface) => {
     const channels = useRef<channelType>({})
@@ -37,58 +37,56 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         socket.current = new WebSocket(url)
   
       socket.current.onopen = () => {
-        console.log('Connected')
         connected.current = true
       }
-  
+      
       socket.current.onclose = () => {
         console.log('Connection closed')
         connected.current = false
         ReconnectSocket()
       }
-
+      
       socket.current.onmessage = (message)=>
-      {
+        {
+        console.log('Connected' + socket.current?.protocol)
           try {
             const { type, ...data } = JSON.parse(message.data);
-            // const channelId = data.channel;
-            console.log(data)
-            if (data.ConversationType == 'Message') {
-                const message_received: Message = {
-                    id: data.message_id,
-                    sender: data.user,
-                    content: data.message,
-                };
-                // setInc(prevInc => prevInc + 1);
-                // // Assuming chatContext.setConvs is a state update function
-                // chatContext.setConvs((prevConvs: Conversation[]) => {
-                //     const updatedConvs = prevConvs.map(conv =>
-                //         conv.channelId === channelId
-                //             ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received] }
-                //             : conv
-                //     );
-                //     updatedConvs.sort((a, b)=>{
-                //       const DateA = new Date(a.LastUpdate) 
-                //       const DateB = new Date(b.LastUpdate)
-                //       console.log(DateA)
-                //       console.log(DateB)
-                //       return DateB - DateA;
-                //     })
-                //     console.log('Updated convs:', updatedConvs);
-                // Also update the active conversation if it's the same as the channelId
-                const channelId = data.channel;
-                if (channels.current['CHAT'])
-                {
-                  console.log("in :  channels.current['CHAT']")
-                  channels.current['CHAT'](data)
-                }
-                if (channels.current['CHATROOM'])
-                {
-                  console.log("in :  channels.current['CHATROOM']")
-                  channels.current['CHATROOM'](message_received, channelId)
-                }
-                // return updatedConvs;
-                // });
+            if (type === 'send_message'){
+              if (data.ConversationType == 'Message') {
+                  const message_received: Message = {
+                      id: data.message_id,
+                      sender: data.user,
+                      content: data.message,
+                  };
+                  const channelId = data.channel;
+                  console.log("wa zbi "+ channelId)
+                  if (channels.current['CHAT'])
+                  {
+                    console.log("in :  channels.current['CHAT']")
+                    channels.current['CHAT'](data)
+                  }
+                  if (channels.current['CHATROOM'])
+                  {
+                    console.log("in :  channels.current['CHATROOM']")
+                    channels.current['CHATROOM'](message_received, channelId)
+                  }
+              }
+            }
+            if (type === 'friendship'){
+              if(channels.current['NOTIFICATION_ADD_FRIEND'])
+              {
+                const notifData =  JSON.parse(message.data); 
+                channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
+
+              }
+            }
+            if (type === 'message'){
+              if(channels.current['NOTIFICATION_MESSAGE'])
+              {
+                const notifData =  JSON.parse(message.data);
+                channels.current['NOTIFICATION_MESSAGE'](notifData)
+  
+              }
             }
         } catch (error) {
             console.error('Error processing WebSocket message:', error);

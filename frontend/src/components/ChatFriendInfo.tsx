@@ -8,11 +8,13 @@ import { IoPersonRemoveOutline } from "react-icons/io5";
 import { MdOutlineBlock } from "react-icons/md";
 import { VscGame } from "react-icons/vsc";
 import { User } from "../utils/ChatContext";
+import { BACKEND } from "../utils/Constants";
 
 
 
 
 function ChatFriendInfo(){
+    const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     if (!chatContext)
      throw new Error('error')
@@ -20,7 +22,7 @@ function ChatFriendInfo(){
     return(
         <div className={`  rounded-l-xl lg:rounded-l-none rounded-r-xl border-r-0 lg:border-l-[1px] border-white/50 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
-            <div className=" bg-[#5E97A9]/30   w-full  overflow-auto relative   ">
+            <div className=" bg-black/35   w-full  overflow-auto relative   ">
                 <div id="friend-info-header" className=" m-4 text-[24px] text-white flex justify-between items-center">
 
                     <h1 className="text-xl font-semibold">Contact Info</h1>
@@ -34,7 +36,7 @@ function ChatFriendInfo(){
             </div>
             <div id="friend-info" className=" m-4 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-lg flex flex-col justify-center ">
                 <div className=" p-4 profile-info-header flex flex-col justify-center items-center">
-                    <img src={chatContext.active && chatContext.active.user2.profile_pic} alt="" className="rounded-full w-28 h-28"  />
+                    <img src={chatContext.active && backendPath + chatContext.active.user2.profile_pic} alt="" className="rounded-full w-28 h-28"  />
                     <h1 className=" mt-4 font-semibold">{chatContext.active && chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</h1>
                     <p className="text-gray-400">{chatContext.active &&  "@" + chatContext.active.user2.login}</p>
                     <h2 className="">Level: <span>{chatContext.active &&  user2_level}</span></h2>

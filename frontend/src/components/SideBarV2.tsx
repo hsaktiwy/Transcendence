@@ -1,41 +1,46 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { Link } from 'react-router-dom'
+import { UserContext } from "./UserContext";
+import { GiSettingsKnobs } from "react-icons/gi";
 
 function SideBarV2(){
     const [showSideBar, setShowSideBar] = useState<boolean>(false)
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
     return (
-        <>
-            <div className=" z-30 absolute top-3 left-[20px] block lg:hidden cursor-pointer" onClick={()=>{
-                setShowSideBar(!showSideBar)
-            }}>
-                {
-                    !showSideBar ?                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#ffffff" fill="none">
-                    <path d="M4 5L16 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M4 12L20 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M4 19L12 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg> : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#ffffff" fill="none">
-                            <path d="M19.0005 4.99988L5.00049 18.9999M5.00049 4.99988L19.0005 18.9999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                }
+        
+        <aside className={`font-poppins w-full lg:h-full lg:w-[120px] shadow-lg mb-7 flex justify-center items-center z-50`}>
+        <div className="font-poppins h-[60px] w-full lg:h-[98%] lg:w-[120px]  bg-[#222427] bg-gradient-to-br z-50  from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm fixed bottom-0 lg:rounded-2xl lg:ml-3 lg:top-2 2xl:top-3 left-0 text-white flex flex-row lg:flex-col items-center justify-center ">
+            <div id="sidebar-menu" className="w-[100%] lg:w-auto  h-auto lg:h-[80%] flex flex-row lg:flex-col p-4 justify-center gap-[10%]">
+                <Link to="/" className=" cursor-pointer w-[30px] h-[30px] ">
+                    <img src="/assets/svg/Overview.svg" alt="Home Icon" className="w-full h-full" />
+                </Link>
+                {/* <embed type="image/svg+xml" src="/assets/svg/Vector.svg" className="w-[30px] h-[30px]"></embed> */}
+                <Link to={`/profile/${userContextConsumer?.userData?.login}`} className=" cursor-pointer w-[30px] h-[30px] ">
+                    <img src="/assets/svg/Vector.svg" alt="Message Icon" className="w-full h-full" />
+                </Link>
+                <Link to="/chat" className=" cursor-pointer w-[30px] h-[30px] ">
+                    <img src="/assets/svg/Message.svg" alt="Message Icon" className="w-full h-full" />
+                </Link>
+                <Link to="/game" className=" cursor-pointer w-[30px] h-[30px] ">
+                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-full h-full" />
+                </Link>
+                {/* <embed type="image/svg+xml" src="/assets/svg/game.svg" className="w-[30px] h-[30px]"></embed> */}
+                <Link to="/settings" className=" cursor-pointer w-[30px] h-[30px] ">
+                        <div className="text-3xl font-bold">
+                            <GiSettingsKnobs/>
+                        </div>
+                    </Link>
 
+                
             </div>
-            <aside className={`font-poppins h-full w-[80px] shadow-lg shadow-white/25 bg-[#1D1E22] fixed top-0 ${showSideBar ?'left-0' : '-left-1/2'} lg:left-0 text-white backdrop-filter backdrop-blur-md  flex flex-col items-center justify-between z-10 duration-800 transition-all`} >
-                {/* <div id="logo" className="w-full h-[10%] mt-[100px] text-center">
-                    <embed type="image/svg+xml" src="assets/svg/logo-2.svg" className="w-[80px] h-[80px]"></embed>
-                </div> */}
-                <div id="sidebar-menu" className="h-[80%] flex flex-col p-4 justify-center gap-[10%]">
-                    <embed type="image/svg+xml" src="assets/svg/Overview.svg" className="w-[30px] h-[30px]"></embed>
-                    <embed type="image/svg+xml" src="assets/svg/Vector.svg" className="w-[30px] h-[30px]"></embed>
-                    <embed type="image/svg+xml" src="assets/svg/Message.svg" className="w-[30px] h-[30px]"></embed>
-                    <embed type="image/svg+xml" src="assets/svg/game.svg" className="w-[30px] h-[30px]"></embed>
-
-                    
-                </div>
-                <div id="log-out" className="mb-16 font-poppins text-center flex flex-col items-center justify-center gap-4 h-[10%]">
-                    <embed type="image/svg+xml" src="assets/svg/Logout.svg" className="w-[30px] h-[30px]"></embed>
-                    <h1 className="text-lg font-semibold text-white/40">Log out</h1>
-                </div>
-            </aside>
-        </>
+            <div id="log-out" className="mb-16 font-poppins text-center hidden lg:flex flex-col items-center justify-center gap-4 h-[10%]">
+                <embed type="image/svg+xml" src="/assets/svg/Logout.svg" className="w-[30px] h-[30px]"></embed>
+                <h1 className="text-lg font-semibold text-white/40">Log out</h1>
+            </div>
+        </div>    
+    </aside>
     )
 }
 

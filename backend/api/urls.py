@@ -16,13 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from users.views import getCRSFToken, MyLogin
+# from users.views import getCRSFToken, MyLogin
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     # this was here by defalt gave us grafical admin interface only for users assogne in django default users exemple (hsaktiwy, 1234)<- super user in production level #DestroyThis
     path('admin/', admin.site.urls),
     path('auth/', include('rest_framework.urls')),
-    path('login/', MyLogin, name='MyAuthentication_User'),
-    path('csrftoken/', getCRSFToken, name='csrftoken_set'),
+    # path('login/', MyLogin, name='MyAuthentication_User'),
+    # path('csrftoken/', getCRSFToken, name='csrftoken_set'),
     #users app
     path('api/', include('users.urls')),
     #channel app
@@ -36,4 +38,4 @@ urlpatterns = [
     path('game/', include('game.urls')),
     # #Game Invitation
     path('invitation/', include('invitation.urls'))
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

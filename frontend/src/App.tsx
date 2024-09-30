@@ -8,25 +8,43 @@ import Auth from './auth/Authication'
 import Layout from './Layout'
 import ChatSection from './components/ChatSection'
 import { WebSocketProvider } from './utils/WSContext'
+import Settings from './components/Settings'
+import UserProvider from './components/UserContext'
+import Dashboard from './components/Dashboard'
+import LoadingIndecator from './components/Loading'
+import { SkeletonTheme } from 'react-loading-skeleton'
+import ProfileTest from './components/ProfileTest'
+import TopBar from './components//website/mobileVersion/topBar'
 import Game from './game/Game'
+// import Profile from './components/Profile'
+import AuthProvider from './components/AuhtenticationContext'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
   //         <ChatSection/>
   //       </Layout>}
+
   return (
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Auth>
           <WebSocketProvider>
-            <Layout>
+            <UserProvider>
                 <Routes>
-                  <Route path='/' element={ <ChatSection/>}/>
-                  <Route path='/Game' element={<Game />}/>
+                      <Route path='/'  element={ <Layout/>}>
+                        <Route path='/profile/:username' element={ <TopBar/>}/>
+                        <Route index element={ <Dashboard/>}/>
+                        <Route path='/chat' element={ <ChatSection/>}/>
+                        <Route path='/settings' element={ <Settings/>}/>
+                        <Route path='/Game' element={<Game />}/>
+                      </Route>
+                      <Route path='*' element={<LoadingIndecator/>}/>
                 </Routes>
-            </Layout>
+           </UserProvider>
           </WebSocketProvider>
         </Auth>
-      </BrowserRouter>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

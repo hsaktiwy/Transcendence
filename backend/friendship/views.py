@@ -59,7 +59,7 @@ class ListFriendRequests(generics.ListAPIView):
         })
 
 class ListFriends(generics.ListAPIView):
-	permission_classes = [IsAuthenticated]
+	# permission_classes = [IsAuthenticated]
 	serializer_class = FriendshipSerializer
 	def get_sentedRequest(self):
 		user_id = self.kwargs['user_id']
