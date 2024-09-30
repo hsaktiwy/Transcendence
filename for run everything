@@ -1,0 +1,11 @@
+./redis_build.sh build
+python3 -m venv .venv       
+source .venv/bin/activate     
+cd frontend          
+npm i  
+cd backend
+source .venv/bin/activate     
+pip install -r requirements.txt
+ifconfig | grep inet
+ifconfig | grep inet
+python manage.py runserver 0.0.0.0:8000

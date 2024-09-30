@@ -1,0 +1,684 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+/*--------- side -bar -----------*/
+.side-bar-div
+{
+    height: 97vh;
+    width: 75%;
+    /* border: solid; */
+    /* margin: 10px 10px; */
+    border-radius:  8px;
+    background-color: #1D1E22;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.side-bar-div-grid
+{
+    /* border: solid; */
+}
+.logo-center
+{
+    /* border: solid; */
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    justify-content: center;
+}
+.center-sid-bar
+{
+    /* border: solid; */
+    height: 278px;
+    width: 100px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    flex-direction: column;
+}
+.size-image
+{
+    width: 35px;
+}
+.size-image-bar
+{
+    width: 20px;
+}
+.div-side-bar-icon
+{
+  display: flex;
+  justify-content: center;
+  padding: 0px 12px;
+}
+.log-out
+{
+    
+    width: 300.2px;
+    padding-left: 25px;
+    padding-bottom: 40px;
+}
+/* ------------------------------- */
+/*-------------Search-info-profile-------------*/
+
+.search-info-profile
+{
+    /* border: solid; */
+    width: 100%;
+    /* display: flex; */
+
+}
+
+.top {
+
+}
+
+.flex {
+    display: flex;
+}
+/* ------------------------------- */
+/*------------- Search-navbar -------------*/
+
+.SearchNavBar
+{
+    height: 80px;
+    width: 100%;
+    display: flex;
+    /* border: solid; */
+    justify-content: space-between;
+    /* padding: 0px 29px; */
+}
+
+.search-bar-div
+{
+    /* border: solid; */
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+.search-bar
+{
+    padding-top: 2px;
+    font-weight: 300;
+    background-color: #2B2F32;
+    border-radius: 50px;
+    width: 620px;
+    height: 50px;
+    padding: 0px 35px;
+    font-size: 17px;
+    font-weight: 400;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+}
+.nav-bar-div
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.nav-bar
+{
+    height: 45px;
+    width: 150px;
+    padding: 0px 10px;
+    background-color: #2B2F32;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* ------------------------------- */
+/*------------- Pofile-section -------------*/
+
+.ProfileSection
+{
+    /* border: solid; */
+    margin: 0px 20px;
+    height: 470px;
+    display: flex;
+    align-items: center;
+}
+
+.profileinfos-div
+{
+    /* border: solid; */
+    height: 99%;
+    width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.profileinfos
+{
+    
+    /* border: solid; */
+    width: 240px;
+    height: 95%;
+    border-radius: 8px;
+    background-color: #2B2F32;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 9px;
+    
+}
+.profile-img
+{
+    /* border: solid; */
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+.img-player
+{
+    width: 65%;
+    margin-top: 20px;
+}
+.stats-profile
+{
+    /* border: solid; */
+    height: 80%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+.stats-profile-info
+{
+    width: 70%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* border: solid; */
+    background-color:#1D1E22;
+    border-radius: 12px;
+    padding: 10px 10px;
+}
+
+.div-col-stats
+{
+    /* border: solid; */
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 10px;
+    height: 25%;
+    width: 90%;
+    margin: auto;
+    margin-top: 4px;
+    margin: 3px 0px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#2B2F32;
+
+}
+.rank
+{
+    /* border: solid; */
+    height: 24%;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.col-div-parent
+{
+    height: 100%;
+    border: solid;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.collect-cols
+{
+    height: 100%;
+    width: 100%;
+    /* border: solid;  */
+    border-radius: 12px;
+    padding: 5px 10px;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+/* ------------------------------- */
+/*------------- Pofile-stats-section -------------*/
+
+
+.stats-div
+{
+    /* border: solid; */
+    height: 95%;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.frist-stats-section
+{
+    height: 45%;
+    /* border: solid; */
+    display: flex;
+    background-color: #2B2F32;
+    border-radius: 8px;
+}
+
+.name-leve-section
+{
+    /* border: solid; */
+    height: 100%;
+    width: 55%;
+    
+}
+.pos-name
+{
+    padding: 25px;
+    /* border: solid; */
+    
+}
+.name-section
+{
+    font-weight: bold;
+    font-size: 200%;
+}
+
+.level-section
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.level-div
+{
+    /* border: solid; */
+    background-color:#1D1E22;
+    height: 100px;
+    width: 90%;
+    border-radius: 14px;
+}
+
+.blank-level
+{
+
+    margin: 0px 17px;
+    border-radius: 50px;
+    height: 15%;
+    background-color: #D9D9D9;
+}
+.score-level
+{
+    height: 100%;
+    width: 50%;
+    border-radius: 50px;
+    background-color: #5E97A9;
+}
+
+.chart-section
+{
+    /* border: solid; */
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ------------------------------- */
+/*------------- Pofile-stats-section -------------*/
+
+.second-stats-section
+{
+    /* border: solid; */
+    height: 55%;
+    display: flex; 
+}
+
+.wins-stats-section
+{
+    width: 50%;
+    display: flex; 
+    align-items: center;
+    
+}
+.wins-lose
+{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    height: 95%;
+    border-radius: 12px;
+    background-color:#2B2F32;
+}
+.wins-lose-orgin
+{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 95%;
+    border-radius: 12px;
+    background-color:#2B2F32;
+}
+
+.wins-lose-div
+{
+    /* border: solid; */
+    background-color: #1D1E22;
+    width: 80%;
+    height: 94%;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.wins-lose-player
+{
+    background-color:#2B2F32;
+    border-radius: 14px;
+    margin: 4px;
+    /* border: solid; */
+    height: 17%;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.score-game
+{
+    width: 60px;
+    /* border: solid; */
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: #1D1E22;
+    margin: 0px 10px;
+}
+/* ------------------------------- */
+/*------------- Online-Friends -------------*/
+.onlineFriends-div
+{
+    /* border: solid; */
+    /* height: 99%; */
+    /* width: 314px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.divs-online
+{
+    
+    /* border: solid; */
+    width: 90%;
+    height: 100%;
+    border-radius: 6px;
+    background-color: #2B2F32;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 9px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    
+}
+.bar-search-freinds
+{
+    /* border: solid; */
+    width: 100%;
+    height: 10%;
+    border-radius: 6px;
+    background-color:#1D1E22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+}
+.search-bar-div-friends
+{
+    border-radius: 12px;
+    width: 80%;
+    height: 80%;
+    padding: 0px 15px;
+    background-color: #2B2F32;
+    font-size: 13px;
+    font-weight: 300;
+    margin-right: 10px;
+}
+.online-users
+{
+    height: 70%;
+    /* border: solid; */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+}
+.each-user
+{
+    height: 17%;
+  
+    /* border: solid; */
+    display: flex;
+    justify-content: center;
+
+}
+.is-online
+{
+    width: 5%;
+    /* border: solid; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.green-dot
+{
+    width: 8px;
+    height: 8px;
+    /* border: solid; */
+    border-radius: 50px;
+    background-color: #73BF67;
+}
+.chat-direction
+{
+    width: 100%;
+    height: 9%;
+    /* border: solid; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.chat-button
+{
+    width: 35%;
+    height: 80%;
+    border-radius: 12px;
+    /* border: solid; */
+    background-color:#5E97A9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+}
+/*-------- Transitions---------*/
+
+.lineUp {
+    animation: 2.5s anim-lineUp ease-out;
+  }
+  
+  .lineUp.delay {
+    animation-delay: 0.5s;
+
+  }
+  
+  @keyframes anim-lineUp {
+    0% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(40%);
+    }
+    20% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+/* ------------------- */
+  .lineDown {
+    animation: 2s anim-lineDown ease-out;
+  }
+  
+  @keyframes anim-lineDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20%); /* Start above viewport */
+    }
+    20% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(0); /* Move to original position */
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  /*-----------------*/
+  .lineRight {
+    animation: 2s anim-lineRight ease-out;
+  }
+  
+  @keyframes anim-lineRight {
+    0% {
+      opacity: 0;
+      transform: translateX(-40%); /* Start off-screen to the right */
+    }
+    20% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(0); /* Move to original position */
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+
+
+
+
+
+
+
+
+  /* ------ */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr)); /* 12-column grid */
+    gap: 1rem; /* Adjust the gap between grid items */
+  }
+  
+  .grid-item {
+    /* Ensure items take full height */
+    height: 100%;
+  }
+  
+  @media (max-width: 1990px) {
+    /* Adjust grid layout for smaller screens */
+    .grid-container {
+      grid-template-columns: repeat(9, minmax(0, 1fr)); /* 9 columns on medium screens */
+    }
+    
+    /* Hide the third grid item */
+    .grid-item:nth-child(3) {
+      display: none;
+    }
+    
+    /* Expand second grid item to take full width */
+    .grid-item:nth-child(2) {
+      grid-column: span 10;
+       margin-left: 70px;/* Take up 9 columns on medium screens */
+    }
+  }
+
+  .grid-container1 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr)); /* 12-column grid */
+    gap: 1rem; /* Adjust the gap between grid items */
+  }
+  
+  .grid-item1 {
+    /* Ensure items take full height */
+    height: 100%;
+  }
+  
+  @media (max-width: 1990px) {
+    /* Adjust grid layout for smaller screens */
+    .grid-container1 {
+      grid-template-columns: repeat(9, minmax(0, 1fr)); /* 9 columns on medium screens */
+    }
+    
+    /* Hide the third grid item */
+    .grid-item1:nth-child(3) {
+      display: none;
+    }
+    
+    /* Expand first and second grid items to take full width */
+    .grid-item1:nth-child(1) {
+      grid-column: span 4;
+    }
+  
+    .grid-item1:nth-child(2) {
+      grid-column: span 8;
+      margin-right: 15px;
+    }
+  }
+
+  .cardv
+  {
+    @apply rounded-xl bg-[#1D1E22] p-3  mt-6 h-32 w-32 2xl:h-48 2xl:w-48
+  }
+
+
+
+  .leve-xl
+  {
+    @apply rounded-xl bg-[#1D1E22] p-3
+  }
+

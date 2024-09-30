@@ -4,12 +4,13 @@ import {ChatSectionContext, Conversation, Message, User} from "./ChatContext"
 import {BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE} from './Constants'
 import mailman from "./AxiosFetcher";
 // let initila the data using the http protocol
-export let convs : Conversation[]
-export let initialized:boolean = false
-export let received:boolean = false
+
 
 export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean>>,setActive:React.Dispatch<React.SetStateAction<Conversation | undefined>>, setConv:React.Dispatch<React.SetStateAction<Conversation[] | undefined>>) =>
 {
+    let convs : Conversation[]
+    let initialized:boolean = false
+    let received:boolean = false
   console.log("bool" + initialized)
   if (initialized)
   {
@@ -27,7 +28,7 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
   {
     console.log("strange")
     try {
-      const url:string = BACKEND + CONVERSATION + MESSAGES_PACKET_SIZE + '/'
+      const url:string = CONVERSATION + MESSAGES_PACKET_SIZE + '/'
       const request = {
         url: url,
         method: 'GET',

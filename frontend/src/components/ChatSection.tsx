@@ -9,7 +9,7 @@ import LoadingIndecator from "./Loading";
 import ChatModal from "./ChatModal";
 import { WebSocketContext, WebSocketProvider } from "../utils/WSContext";
 import { createContext } from "react";
-
+import { UserContext } from "./UserContext";
 
 function ChatSection(){
     const [loading, setLoading] = useState<boolean>(true)
@@ -20,6 +20,9 @@ function ChatSection(){
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [modalMessage, setModalMessage] = useState<string>("")
     const SocketContext = useContext(WebSocketContext)
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
     if (!SocketContext)
         throw new Error('error')
     const {AddChannel,RemoveChannel, socket} = SocketContext
@@ -55,9 +58,11 @@ function ChatSection(){
                 return updatedConvs
             })
         }
+        RemoveChannel('NOTIFICATION_MESSAGE')
         AddChannel('CHAT', UpdateConvs)
         return () => {
-        // Remove the CHAT call back function when we exist the chat section
+            // Remove the CHAT call back function when we exist the chat section
+            AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
             RemoveChannel('CHAT')
         }
     }, [loading, active])
@@ -68,8 +73,8 @@ function ChatSection(){
             {/* animate-fade-down ml-2 lg:ml-[140px]   mr-2 lg:mr-6 mt-6  mb-6 h-[calc(100vh-118px)] overflow-hidden relative */} 
             {/* <WebSocketProvider> */}
                 {openModal && <ChatModal/>} 
-                <div className="rounded-xl  bg-black/35 backdrop-filter backdrop-blur-sm animate-fade-down absolute top-[60px]  left-0 lg:left-[80px] h-[calc(100%-80px)] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[10px] mx-[10px] 2xl:mx-[8%]">
-                    <div className="  h-[100%] overflow-hidden relative ">
+                <div className="  bg-gradient-to-b from-[#5E97A9]/5 via-[#5E97A9]/10 to-[#5E97A9]/15 shadow-[-1px_4px_47px_1px_#f7fafc25] rounded-xl   absolute top-[60px]  left-0 lg:left-[120px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
+                    <div className="  h-[calc(100%-60px)] lg:h-[100%] overflow-hidden relative ">
                         {loading ?
                         (<LoadingIndecator/>) :
                         (<><Conversations/>
@@ -78,6 +83,7 @@ function ChatSection(){
                         {active && <ChatFriendInfo/>}</>)}
                         {/* <div className="bg-[#898989] rounded-lg shadow-xl hidden lg:block lg:col-span-3 row-span-12">User</div> */}
                         </div>
+                        
                 </div>
             {/* </WebSocketProvider> */}
 

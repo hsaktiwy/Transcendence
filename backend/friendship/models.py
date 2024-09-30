@@ -21,3 +21,7 @@ class Friendship(models.Model):
 
 	def __str__(self):
 		return self.user.login + " - " + self.friend.login + " - " + self.status
+
+# class FriendList(models.Model):
+# 	user = models.OneToOneField(MyUser, on_delete=models.CASCADE, related_name='user')
+# 	friend_list = models.OneToOneField(M)
