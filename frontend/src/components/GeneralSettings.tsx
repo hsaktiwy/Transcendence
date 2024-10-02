@@ -34,7 +34,7 @@ function GeneralSettings(){
         else{
           setChanged(false)
           const req = {
-            url: BACKEND + `api/user/${userContextConsumer?.id}/`,
+            url: `/api/user/`,
             method: 'PATCH',
             data : {
               firstName: firstName,
