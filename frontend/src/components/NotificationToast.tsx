@@ -87,8 +87,8 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         // const requests = items.filter(item => item.type === 'friendship')
         // fetchRequestSenderData(requests)
         const interval = setInterval(() =>{
-            if (items.length)
-                removeItem(items[0].id )
+            // if (items.length)
+            //     removeItem(items[0].id )
         }, 3000)
             
         return () => {
@@ -103,7 +103,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                     items.filter(item => !item.is_readed).map((item, index) =>{
                         return(
                       
-                            <div  className={`  relative duration-200 transition-all    hover:scale-105  cursor-pointer shadow-[0px_20px_207px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-[500px] h-[120px] bg-gradient-to-b from-slate-800 to-slate-900 rounded-lg flex text-white `}>
+                            <div  className={`  relative duration-200 transition-all    hover:scale-105  cursor-pointer shadow-[0px_20px_77px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-full sm:w-[500px] h-[120px]  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm rounded-lg flex text-white `}>
                                 <div className="notif-icon bg-[#5E97A9] h-full flex justify-center items-center text-2xl p-4 text-white rounded-l-lg" onClick={()=>{
                                 navigate(`/profile/${item.sender}`)
                             }}>
@@ -111,7 +111,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                         item.type === 'message' ? notifType.message : item.type === 'friendship' ? notifType.friendship : item.type === 'system' ? notifType.system : notifType.gameInvitation
                                     }
                                 </div>
-                                <div className="notif-contetn-container  p-4 flex flex-col gap-2 border-r-[1px] border-r-white/50 rounded-r-lg flex-1 relative" onClick={()=>{
+                                <div className="notif-contetn-container  p-4 flex flex-col gap-2 border-r-[1px] border-r-white/20 rounded-r-lg flex-1 relative" onClick={()=>{
                                 navigate(`/profile/${item.sender}`)
                             }}>
                                     <h1 className="font-semibold text-xl">
@@ -122,7 +122,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                             (item.type === 'friendship' || item.type === 'message') &&
                                             <div className=" h-[50px] w-[50px]">
                                                 {/* <p>{usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}</p> */}
-                                                <img src={usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
+                                                <img src={`http://localhost:8000${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                             </div>
                                         }
                                         <p className="text-white/80">

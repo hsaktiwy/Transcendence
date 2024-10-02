@@ -87,8 +87,8 @@ function Settings() {
                 
 
                 const req = {
-                    url: BACKEND + `api/user/${userContextConsumer?.id}/upload_pic/`,
-                    method: 'POST',
+                    url: `/api/user/`,
+                    method: 'PATCH',
                     data : formData,
                     withCredentials: true,
                     headers : {
@@ -120,7 +120,7 @@ function Settings() {
                         <div className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-40 hidden group-hover:block">
                             <FiEdit2/>
                         </div>
-                        <img src={userContextConsumer.userData?.profile_pic} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
+                        <img src={`http://localhost:8000${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
                         <input type="file" accept='image/*' className=" absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50 border-[1px] border-black w-[160px] h-[160px] rounded-full" onChange={handleProfilChanged}/>
                     </div>
                 </div>

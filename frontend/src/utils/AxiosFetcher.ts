@@ -11,7 +11,8 @@ const mailman = axios.create(
 // Request Interceptor
 mailman.interceptors.request.use(
     (config) => {
-        config.headers['Content-Type'] = 'application/json';
+        if (!config.headers['Content-Type'])
+            config.headers['Content-Type'] = 'application/json';
         const csrfToken = Cookies.get('csrftoken');
         if (csrfToken)
             config.headers['X-CSRFToken'] = csrfToken;

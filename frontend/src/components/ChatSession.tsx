@@ -161,11 +161,12 @@ function ChatSession(){
         try
         {
             const extracting = 'update/' + chatContext.active?.channelId + '/' + MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
-            const url = BACKEND + CONVERSATION + extracting
+            const url = CONVERSATION + extracting
+            console.log(url)
             const request = {
                 url: url,
                 method: 'GET',
-                withCredentials: true
+                // withCredentials: true
             }
             const response = await mailman(request)
             interface conversation_type {

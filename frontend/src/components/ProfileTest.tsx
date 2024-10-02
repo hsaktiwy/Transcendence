@@ -19,27 +19,29 @@ const ProfileTest  = () =>{
    const fetchUserData = async () =>{
     try{
         const req = {
-            url: BACKEND + `api/user/${username}/`,
+            url: `/api/users/${username}/`,
             method: 'GET',
         }
         const resp = await mailman(req)
         const {
             login,
+            email,
             firstName,
             lastName,
+            state,
+            last_visit,
             profile_pic,
-            email,
-            birthDay,
         } = resp.data
         console.log("sss ====???? ",resp.data)
 
         setProfileData({
             login,
+            email,
             firstName,
             lastName,
+            state,
+            last_visit,
             profile_pic,
-            email,
-            birthDay,
         })
         
     }
@@ -61,7 +63,7 @@ const ProfileTest  = () =>{
         <div className="shadow-[-1px_8px_47px_1px_#f7fafc25] min-h-[calc(100vh-100px)] font-poppins absolute overflow-hidden left-0 lg:left-[80px] top-[60px] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%] text-white  rounded-xl flex justify-center items-center ">
             <div className="w-[50%] bg-black/30 flex flex-col items-center p-4 rounded-xl gap-4">
                 <div className="w-[120px] h-[120px]">
-                    <img src={profileData?.profile_pic} alt="user-image" className="h-full w-full object-cover rounded-full"/>
+                    <img src={`http://localhost:8000${profileData?.profile_pic}`} alt="user-image" className="h-full w-full object-cover rounded-full"/>
                 </div>
                 <h1>{`${profileData?.firstName} ${profileData?.lastName}`}</h1>
                 {
