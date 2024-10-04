@@ -97,13 +97,13 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     }, [items])
     return(
 
-        <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4">
+        <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4 w-[90%] sm:w-[500px]">
   
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
                         return(
                       
-                            <div  className={`  relative duration-200 transition-all    hover:scale-105  cursor-pointer shadow-[0px_20px_77px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-full sm:w-[500px] h-[120px]  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm rounded-lg flex text-white `}>
+                            <div  className={`  relative duration-200 transition-all    hover:scale-[1.02]  sm:hover:scale-105  cursor-pointer shadow-[0px_20px_77px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-full sm:w-[500px] h-[120px]  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm rounded-lg flex text-white `}>
                                 <div className="notif-icon bg-[#5E97A9] h-full flex justify-center items-center text-2xl p-4 text-white rounded-l-lg" onClick={()=>{
                                 navigate(`/profile/${item.sender}`)
                             }}>
@@ -114,13 +114,13 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                 <div className="notif-contetn-container  p-4 flex flex-col gap-2 border-r-[1px] border-r-white/20 rounded-r-lg flex-1 relative" onClick={()=>{
                                 navigate(`/profile/${item.sender}`)
                             }}>
-                                    <h1 className="font-semibold text-xl">
+                                    <h1 className="font-semibold sm:text-xl">
                                         {`You have a new ${item.type==='message' ? 'Message' :'Notification' }`}
                                     </h1>
                                     <div className="flex gap-4  items-center">
                                         {
                                             (item.type === 'friendship' || item.type === 'message') &&
-                                            <div className=" h-[50px] w-[50px]">
+                                            <div className=" h-[35px] w-[35px] sm:h-[50px] sm:w-[50px]">
                                                 {/* <p>{usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}</p> */}
                                                 <img src={`http://localhost:8000${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                             </div>
