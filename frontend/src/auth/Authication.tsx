@@ -7,6 +7,7 @@ import RegistrationForm from './Registration';
 import ChatSection from '../components/ChatSection';
 import Settings from '../components/Settings';
 import { Toaster, toast } from 'sonner'
+import LandingPage from '@/components/LandingPage';
 function Auth(children:childrenInterface)
 {
     
@@ -17,7 +18,7 @@ function Auth(children:childrenInterface)
                     }}/>
                     <Routes>
                         <Route path="/*" element={<RouteProtection>{children.children}</RouteProtection>}/>
-                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/login" element={<LandingPage/>}/>
                         <Route path="/signup" element={<RegistrationForm/>}/>
                         {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
                     </Routes>
