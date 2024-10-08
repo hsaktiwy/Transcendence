@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 
-import {motion} from 'framer-motion';
+import {motion, useScroll} from 'framer-motion';
 
 
 function LandingPage(){
+    const ref = useRef<HTMLDivElement>(null)
+    const feature1 = useRef<HTMLDivElement>(null)
+    const feature2 = useRef<HTMLDivElement>(null)
+    const feature3 = useRef<HTMLDivElement>(null)
+    const feature4 = useRef<HTMLDivElement>(null)
 
+    const { scrollYProgress} = useScroll({
+        target: [feature1, feature2, feature3, feature4],
+        offset: ["0 1", "0.88 1"]
+    })
     return(
-        <div className="   px-[100px] min-h-[100vh] py-4 bg-[#070320] font-poppins">
+        <div className="   px-[100px] min-h-[100vh] py-4 bg-gradient-to-b from-[#070320] to-[#5e97a9] font-poppins">
             <div className="h-[100vh]">
                 <div className="nav-container  flex justify-between my-8">
                     <div className="logo mx-4 text-4xl font-bold text-white">
@@ -38,30 +47,62 @@ function LandingPage(){
                     </div>
                 </motion.div>
             </div> 
-            <div className="   text-center pt-8 ">
-                    <h1 className="text-5xl text-white font-bold">
+            <motion.div ref={ref}
+                    className=" text-center pt-8 ">
+                    <h1 className="text-6xl text-white font-bold">
                         Key Features
                     </h1>
 
-                    <div className="features-container  mt-[100px] flex flex-col gap-[50px] justify-center mx-[500px]">
-                        <div className="  w-[600px] h-[550px] border-[2px] border-[#5E97A9]/50 rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-start p-4 flex">
-                                <div className="w-[180px] h-[180px]">
-                                    <img src="target-front-color.png" alt="icon" className="w-full h-full"/>
+                    <div className="features-container  mt-[200px] flex flex-col gap-[50px] justify-center mx-[500px]">
+                        <motion.div ref={feature1} className="  w-[600px] h-[550px] border-[2px] border-[#b6b4b2] rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-start p-4 flex flex-col items-center  gap-10 ">
+                                <div className="flex  flex-col items-center justify-center ">
+                                    <div className="w-[180px] h-[180px]">
+                                        <img src="target-front-color.png" alt="icon" className="w-full h-full"/>
+                                    </div>
+                                    <h1 className="text-white text-3xl font-semibold ">Local and Remote Game Play</h1>
                                 </div>
-                                
-                                <h1 className="text-white text-3xl">Local and Remote Game Play</h1>
-                        </div>
-                        <div className="  w-[600px] h-[550px] border-2 border-[#5E97A9]/50 rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-end">
-
-                        </div>
-                        <div className="  w-[600px] h-[550px] border-2 border-[#5E97A9]/50 rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-start">
-
-                        </div>
-                        <div className="  w-[600px] h-[550px] border-2 border-[#5E97A9]/50 rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-end">
-
-                        </div>
+                                <div className="text-white/80 text-center tracking-wider ">
+                                    <p>Experience the thrill of competition right at your fingertips! Our Local Gameplay feature allows you to challenge friends and family in real-time, whether you're facing off in an intense ping pong match or a strategic chess battle. With a seamless interface and easy access to game settings, you can enjoy hours of fun together, fostering connection and friendly rivalry. Get ready to rally and strategize—let the games begin!</p>
+                                </div>
+                        </motion.div>
+                        <motion.div ref={feature2} className="  w-[600px] h-[550px] border-[2px] border-[#b6b4b2] rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-end p-4 flex flex-col items-center  gap-10">
+                                <div className="flex  flex-col items-center justify-center ">
+                                    <div className="w-[180px] h-[180px]">
+                                        <img src="img.png" alt="icon" className="w-full h-full"/>
+                                    </div>
+                                    <h1 className="text-white text-3xl font-semibold ">Local and Remote Game Play</h1>
+                                </div>
+                                <div className="text-white/80 text-center tracking-wider ">
+                                    <p>Experience the thrill of competition right at your fingertips! Our Local Gameplay feature allows you to challenge friends and family in real-time, whether you're facing off in an intense ping pong match or a strategic chess battle. With a seamless interface and easy access to game settings, you can enjoy hours of fun together, fostering connection and friendly rivalry. Get ready to rally and strategize—let the games begin!</p>
+                                </div>
+                        </motion.div>
+                        <motion.div ref={feature3} className="  w-[600px] h-[550px] border-[2px] border-[#b6b4b2] rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-start p-4 flex flex-col items-center  gap-10">
+                                <div className="flex  flex-col items-center justify-center ">
+                                    <div className="w-[180px] h-[180px]">
+                                        <img src="chaticon.png" alt="icon" className="w-full h-full"/>
+                                    </div>
+                                    <h1 className="text-white text-3xl font-semibold ">Local and Remote Game Play</h1>
+                                </div>
+                                <div className="text-white/80 text-center tracking-wider ">
+                                    <p>Experience the thrill of competition right at your fingertips! Our Local Gameplay feature allows you to challenge friends and family in real-time, whether you're facing off in an intense ping pong match or a strategic chess battle. With a seamless interface and easy access to game settings, you can enjoy hours of fun together, fostering connection and friendly rivalry. Get ready to rally and strategize—let the games begin!</p>
+                                </div>
+                        </motion.div>
+                        <motion.div ref={feature4} className="  w-[600px] h-[550px] border-[2px] border-[#b6b4b2] rounded-tl-[40px] rounded-br-[40px] rounded-tr-none rounded-bl-none self-end p-4 flex flex-col items-center  gap-10">
+                                <div className="flex  flex-col items-center justify-center ">
+                                    <div className="w-[180px] h-[180px]">
+                                        <img src="shield.png" alt="icon" className="w-full h-full"/>
+                                    </div>
+                                    <h1 className="text-white text-3xl font-semibold ">Local and Remote Game Play</h1>
+                                </div>
+                                <div className="text-white/80 text-center tracking-wider ">
+                                    <p>Experience the thrill of competition right at your fingertips! Our Local Gameplay feature allows you to challenge friends and family in real-time, whether you're facing off in an intense ping pong match or a strategic chess battle. With a seamless interface and easy access to game settings, you can enjoy hours of fun together, fostering connection and friendly rivalry. Get ready to rally and strategize—let the games begin!</p>
+                                </div>
+                        </motion.div>
 
                     </div>
+            </motion.div>
+            <div className="h-[100vh] ">
+
             </div>
 
         </div>
