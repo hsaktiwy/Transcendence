@@ -55,7 +55,14 @@ function GeneralSettings(){
   };
   
     return (
-      <form onSubmit={handleSubmit} className="animate-fadeIn general-settings m-4 sm:m-16  h-[1000px] flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-16 flex justify-center flex-col items-center gap-20">
+
+      <form onSubmit={handleSubmit} className="animate-fadeIn general-settings m-4 sm:m-16  h-[1000px] flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-16 flex justify-center flex-col items-center gap-20 relative">
+        {/* <div className="absolute left-0 top-0 h-full w-full backdrop-filter bg-black/80 backdrop-blur-2xl z-50 rounded-xl flex justify-center items-center"> 
+          <div className="bg-white p-10 text-black">
+            you are connected with 42 
+
+          </div>
+        </div> */}
         <div className="flex gap-20 justify-center items-center flex-wrap">
           <div className="flex items-center gap-4 justify-center flex-col sm:flex-row">
             <label htmlFor="firstName" className="w-[100px] self-start sm:self-center">First Name:</label>
@@ -65,12 +72,12 @@ function GeneralSettings(){
                 type="text"
                 value={firstName}
                 onChange={(e) => {
-                    setFirstName(e.target.value)
-                    if (!changed)
-                        setChanged(true)
+                  setFirstName(e.target.value)
+                  if (!changed)
+                    setChanged(true)
                 }}
                 className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
-              />
+                />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />
               </div>
@@ -84,12 +91,12 @@ function GeneralSettings(){
                 type="text"
                 value={lastName}
                 onChange={(e) => {
-                    setLastName(e.target.value)
-                    if (!changed)
-                        setChanged(true)
+                  setLastName(e.target.value)
+                  if (!changed)
+                    setChanged(true)
                 }
-                }
-                className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
+              }
+              className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
               />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />
@@ -106,12 +113,12 @@ function GeneralSettings(){
                 type="email"
                 value={email}
                 onChange={(e) => {
-                    setEmail(e.target.value)
-                    if (!changed)
-                        setChanged(true)
+                  setEmail(e.target.value)
+                  if (!changed)
+                    setChanged(true)
                 }}
                 className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
-              />
+                />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />
               </div>
@@ -125,12 +132,12 @@ function GeneralSettings(){
                 type="text"
                 value={username}
                 onChange={(e) => {
-                    setUsername(e.target.value)
-                    if (!changed)
-                        setChanged(true)
+                  setUsername(e.target.value)
+                  if (!changed)
+                    setChanged(true)
                 }}
                 className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
-              />
+                />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />
               </div>
@@ -142,11 +149,11 @@ function GeneralSettings(){
                 Save Changes
             </button>
             <button type="button" className="w-[150px] bg-black/35 px-4 py-2 rounded-xl" onClick={() =>{
-                setFirstName(userContextConsumer.userData?.firstName)
-                setLastName(userContextConsumer.userData?.lastName)
-                setEmail(userContextConsumer.userData?.email)
-                setUsername(userContextConsumer.userData?.login)
-                changed ? toast.warning('Changes have been declined') : toast.warning('No change have been made')
+              setFirstName(userContextConsumer.userData?.firstName)
+              setLastName(userContextConsumer.userData?.lastName)
+              setEmail(userContextConsumer.userData?.email)
+              setUsername(userContextConsumer.userData?.login)
+              changed ? toast.warning('Changes have been declined') : toast.warning('No change have been made')
             }}>
                 Cancel
             </button>
@@ -154,6 +161,7 @@ function GeneralSettings(){
       </form>
     );
 }
+       
 
 
 export default GeneralSettings
