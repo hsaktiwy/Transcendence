@@ -144,10 +144,10 @@ return(
                                     chatContext.setActive(conv)
                                     chatContext.setActiveSection('chat')
                                 }}>
-                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full  w-[40px] h-[40px]" />
+                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]" />
                                         <div className="self-center ">
-                                            <h1 className="text-md font-semibold">{currentConvData.friendName}</h1>
-                                            <p className="text-gray-300 text-sm">{currentConvData.lastMessage?.length >= 20 ? currentConvData?.lastMessage.substring(0,20) + "..." : currentConvData?.lastMessage}</p>
+                                            <h1 className="text-base 2xl:text-lg font-semibold">{currentConvData.friendName}</h1>
+                                            <p className="text-gray-300 text-sm 2xl:text-base">{currentConvData.lastMessage?.length >= 20 ? currentConvData?.lastMessage.substring(0,20) + "..." : currentConvData?.lastMessage}</p>
                                             
                                         </div>
                                         <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
