@@ -10,6 +10,8 @@ import { UserContext } from '../components/UserContext';
 import { AuthContext, LoginDataInterface, LoginError, LoginResp } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
 import { resolve } from 'path';
+import { LuEye } from "react-icons/lu";
+import { LuEyeOff } from "react-icons/lu";
 
 const Loading__ = () => {
     return (
@@ -85,7 +87,7 @@ const Login = () => {
     //         }
     //     }
     // }
-    const handleSubmitWith42 = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         window.location.href =
             "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c6b6242240c2da879e3afe370e67288527613cf82675711a26a3e860f8cc74d0&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Flogin&response_type=code";
@@ -187,42 +189,54 @@ const Login = () => {
         // }
         loginwith42(code)
     }, [AuthContextConsummer.loggedIn]);
+    const [hide, setHide] = useState<boolean>(true)
 
     return (
         AuthContextConsummer.loggedIn != undefined ?
-            <div className="flex items-center justify-center min-h-screen ">
-                <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+            <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white">
+                <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-full max-w-sm">
+                    <div className='form-header text-center text-5xl font-semibold text-white/70 tracking-wider mb-10'>
+                        <h1>LOGIN</h1>
+                    </div>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700 font-bold mb-2">Username:</label>
+                        <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
                         <input
                             type="username"
                             id="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                            className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
                         />
                     </div>
-                    <div className="mb-6">
-                        <label htmlFor="password" className="block text-gray-700 font-bold mb-2">Password:</label>
+                    <div className="mb-6 relative ">
+                        <label htmlFor="password" className="block text-white font-bold mb-2">Password:</label>
                         <input
-                            type="password"
+                            type={hide  ? 'password' : 'text'}
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                            className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
                         />
+                        <div className='p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75' onClick={() =>{
+                            setHide(!hide)
+                        }}>
+                            {hide ? <LuEyeOff/> : <LuEye/>}
+                        </div>
                     </div>
-                    <button type="submit" className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
-                        Login
-                    </button>
+                    <div className='flex flex-col gap-6 mt-9'>
+
+                        <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  opacity-70 hover:opacity-100  duration-75">
+                            Login
+                        </button>
+                        <button type="submit" className="w-full  bg-[#131313] text-white font-bold py-2 px-4 rounded opacity-70 hover:opacity-100  duration-75" onClick={handleSubmitWith42}>
+                        {!loading ? <p >Login with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
+                        </button>
+                    </div>
                 </form>
-                <form onSubmit={handleSubmitWith42}>
-                    <button type="submit" className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
-                       {!loading ? " Login wih 42" : <Loading__/>}
-                    </button>
-                </form>
+                {/* <form onSubmit={handleSubmitWith42}>
+                </form> */}
             </div> :
             <LoadingIndecator />
 

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
-
+import LoadingIndecator from "./Loading";
 export interface NotificationPropreties{
     id: number;
     content: string;
@@ -179,7 +179,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     return(
         <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
-            {children}
+            {userData ? children : <LoadingIndecator/>}
         </UserContext.Provider>
     )
 }
