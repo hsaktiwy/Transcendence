@@ -56,7 +56,7 @@ function GeneralSettings(){
   
     return (
 
-      <form onSubmit={handleSubmit} className="animate-fadeIn general-settings m-4 sm:m-16  h-[1000px] flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-16 flex justify-center flex-col items-center gap-20 relative">
+      <form onSubmit={handleSubmit} className=" general-settings m-4 sm:m-16  h-[1000px] flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-16 flex justify-center flex-col items-center gap-20 relative">
         {/* <div className="absolute left-0 top-0 h-full w-full backdrop-filter bg-black/80 backdrop-blur-2xl z-50 rounded-xl flex justify-center items-center"> 
           <div className="bg-white p-10 text-black">
             you are connected with 42 
