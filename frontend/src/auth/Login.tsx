@@ -201,6 +201,7 @@ const Login = () => {
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
                         <input
+                            autoComplete='off'
                             type="username"
                             id="username"
                             value={username}

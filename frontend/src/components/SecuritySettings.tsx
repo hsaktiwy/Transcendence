@@ -15,13 +15,12 @@ function SecuritySettings(){
     return(
         <div className="  security-settings m-4 sm:m-10 flex-1   bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl flex flex-col gap-10">
             <div className=" px-4 sm:px-10 py-4 flex justify-center 2xl:justify-between  items-center 2xl:items-start gap-8 2xl:gap-0 relative flex-col 2xl:flex-row ">
+                <h1 className="text-3xl pt-4 text-center sm:text-start">Change Password</h1>
                 {/* <div className="absolute top-0 left-0 w-full h-full backdrop-filter backdrop-blur-[2px] z-40  flex justify-center items-center">
-                    <div className="p-10 bg-white text-black/80 text-lg font-semibold rounded-xl w-[300px]">
-                        you are using a third-party Authentication you can't change the account passoword
-
+                    <div className="p-10 bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] text-white text-lg font-semibold rounded-xl w-[700px] text-center">
+                        <h1 className="text-2xl font-semibold ">You are using a third-party Authentication you can't change the account passoword</h1>
                     </div>
                 </div> */}
-                <h1 className="text-3xl pt-4 text-center sm:text-start">Change Password</h1>
 
                 <form action="" className="flex flex-col gap-8  ">
                     <div className="relative w-full 2xl:w-[780px] m-4 sm:m-0">
@@ -76,9 +75,12 @@ function SecuritySettings(){
                     </div>
                 </form>
             </div>
-            <div className=" px-10 py-4 flex justify-center 2xl:justify-between relative flex-col 2xl:flex-row items-center 2xl:items-start gap-8 2xl:gap-0">
-                {/* <div className="absolute top-0 left-0 w-full h-full backdrop-filter backdrop-blur-sm z-40">
-                    <div></div>
+            <div className=" px-10 py-10 sm:py-9 flex justify-center 2xl:justify-between relative flex-col 2xl:flex-row items-center 2xl:items-start gap-8 2xl:gap-0">
+                {/* <div className="absolute top-0 left-0 w-full h-full backdrop-filter backdrop-blur-[2px] z-40 flex justify-center items-center ">
+                    <div className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] text-white p-4 sm:p-10 rounded-xl text-center flex flex-col justify-center items-center gap-8 w-[700px]">
+                        <h1 className="text-2xl font-semibold ">Two-Factory Authentication is already enabled</h1>
+                        <button className=" bg-[#5E97A9]/70 px-4 py-2 rounded-xl  opacity-85 hover:opacity-100 hover:scale-105 duration-75" type="button">Disable 2fa</button>
+                    </div>
                 </div> */}
                 <h1 className="self-center text-3xl pt-4 text-center sm:text-start">Two-Factor Authentication</h1>
                 <div className="flex gap-6 flex-col-reverse 2xl:flex-row items-center justify-center">
