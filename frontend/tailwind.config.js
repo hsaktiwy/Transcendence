@@ -14,6 +14,12 @@ export default {   content: [
       },
     },
     keyframes: {
+   
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+     
       wiggle: {
         '0%, 100%': { transform: 'rotate(-3deg)' },
         '50%': { transform: 'rotate(3deg)' },
@@ -38,7 +44,8 @@ export default {   content: [
       wiggle: 'wiggle 1s ease-in-out infinite',
       fadeIn: 'fadeIn 1s ease-in-out',
       notificationAnimation: 'notificationAnimation .3s ease-in-out',
-      notificationDelete: 'notificationDelete .3s ease-in-out'
+      notificationDelete: 'notificationDelete .3s ease-in-out',
+      spin: 'spin 1s linear infinite',
     },
   },
   plugins: [

@@ -40,7 +40,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
-from .utils import decode_token, generate_tokens_response
+from .utils import decode_token, generate_tokens_response, generat_qr_code
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
@@ -306,6 +306,13 @@ class UserNotification(generics.ListAPIView):
     def get_queryset(self):
         user=self.request.user
         return Notification.objects.filter(id_user_fk=user).order_by('created')
+
+
+class GenerateQRCodeView(APIView):
+    def get(self, request):
+        user = request.user
+        resp = generat_qr_code(user)
+        return resp
 
 
 

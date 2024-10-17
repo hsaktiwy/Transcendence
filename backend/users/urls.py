@@ -25,6 +25,7 @@ urlpatterns = [
     path('user/refresh_token/', views.RefreshToken.as_view()),
     path('user/notification/', views.UserNotification.as_view(), name="User_Notification"),
     path('user/check/', views.CheckAuth.as_view()),
-     path('LoginWithOAuth42/', views.LoginWithOAuth42, name="LoginWithOAuth42"),
+    path('LoginWithOAuth42/', views.LoginWithOAuth42, name="LoginWithOAuth42"),
+    path('user/getqrcode/', views.GenerateQRCodeView.as_view(), name="generate_qr_code")
     # path('login/', views.LoginView.as_view())
 ]

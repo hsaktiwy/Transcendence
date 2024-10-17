@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from .validators import Validator_birthDay
 from django.core.exceptions import ValidationError
 from PIL import Image
+import pyotp
 
 def user_pic_location(instance, filename):
     return 'user{0}/{1}'.format(instance.id,filename)
@@ -46,7 +47,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     lastName = models.CharField(max_length=50)
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address")
     two_factor_auth = models.BooleanField(default=False)
-    two_factor_auth_code = models.CharField(max_length=255, blank=True, null=True)
+    two_factor_auth_code = models.CharField(max_length=16, default=pyotp.random_base32)
     profile_pic = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpg', validators=[validateImage])
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=OFFLINE)
