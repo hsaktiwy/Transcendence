@@ -6,6 +6,7 @@ export interface UserDataInterface {
     state:string;
     last_visit:string | null;
     profile_pic:string;
+    two_factor_auth: boolean
 }
 export interface ProfileDataInterface {
     login:string;

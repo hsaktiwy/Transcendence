@@ -25,7 +25,7 @@ function SecuritySettings(){
                 <form action="" className="flex flex-col gap-8  ">
                     <div className="relative w-full 2xl:w-[780px] m-4 sm:m-0">
                         <label htmlFor="oldPassword"></label>
-                        <input type={hide[0]  ? 'password' : 'text'} placeholder="Old Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full outline-none focus:outline-1 focus:outline-[#5E97A9]"/>
+                        <input disabled type={hide[0]  ? 'password' : 'text'} placeholder="Old Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full outline-none focus:outline-1 focus:outline-[#5E97A9]"/>
                         <div className=" p-4 text-lg duration-100  absolute right-[10%] sm:right-1 text-white top-[50%] -translate-y-[50%] cursor-pointer " onClick={() =>{
                             setHide(prev => {
                                 const newArr = [...prev]

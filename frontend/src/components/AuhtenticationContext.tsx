@@ -38,7 +38,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                 data: data
             }
             const resp = await mailman(request)
-            console.log(resp.headers['csrf_token'])
             if (!loggedIn)
                 setLoggedIn(true)
             return resp.data
