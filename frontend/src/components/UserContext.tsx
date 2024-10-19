@@ -76,6 +76,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 state,
                 last_visit,
                 profile_pic,
+                two_factor_auth,
+
             } = resp.data
             console.log("sss ====???? ",resp.data)
 
@@ -87,6 +89,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 state,
                 last_visit,
                 profile_pic,
+                two_factor_auth
             })
             setProfilePicChanged(false)
             

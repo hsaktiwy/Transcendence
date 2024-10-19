@@ -97,3 +97,9 @@ def generat_qr_code(user):
     qr_image.save(tmp_stream, "PNG")
     tmp_stream.seek(0)
     return HttpResponse(tmp_stream, content_type="image/png")
+
+def verify2faCode(user, code):
+    totp = pyotp.TOTP(user.two_factor_auth_code)
+    if totp.verify(code):
+            return True
+    return False

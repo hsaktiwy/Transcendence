@@ -40,7 +40,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
-from .utils import decode_token, generate_tokens_response, generat_qr_code
+from .utils import decode_token, generate_tokens_response, generat_qr_code, verify2faCode
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
@@ -313,6 +313,40 @@ class GenerateQRCodeView(APIView):
         user = request.user
         resp = generat_qr_code(user)
         return resp
+
+class Enable2faView(APIView):
+    def post(self, request):
+        code = request.data.get('otp_code')
+        user = request.user
+        if verify2faCode(user, code):
+            if user.two_factor_auth == False:
+                user.two_factor_auth = True
+                user.save()
+                return Response({
+                    'message' : 'Two Factory Authentication enabled succefully'
+                }, status=200)
+            else:
+                return Response({
+                    'message' : 'Two Factory Authentication already enabled'
+                }, status=200)
+        return Response({
+            'message' : 'Invalid OTP'
+        }, status=400)
+        
+class Verify2faOTPView(APIView):
+    def post(self, request):
+        code = request.data.get('otp_code')
+        user = request.user
+        if verify2faCode(user, code):
+            return Response({
+                'message' : 'OTP verified'
+            }, status=200)
+        return Response({
+            'message' : 'Invalid OTP'
+        }, status=400)
+        
+            
+        
 
 
 
