@@ -87,7 +87,7 @@ function Settings() {
                 
 
                 const req = {
-                    url: `/api/user/`,
+                    url: `/api/user/upload_pic/`,
                     method: 'PATCH',
                     data : formData,
                     withCredentials: true,

@@ -44,6 +44,7 @@ from .utils import decode_token, generate_tokens_response, generat_qr_code, veri
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
+import json
 
 
 
@@ -55,8 +56,8 @@ import requests
 def LoginWithOAuth42(request):
     code = request.data.get('code')
     
-    client_id = 'u-s4t2ud-c6b6242240c2da879e3afe370e67288527613cf82675711a26a3e860f8cc74d0'
-    client_secret = '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'
+    client_id = 'u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041'
+    client_secret = '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'
     redirect_uri = 'http://localhost:5173/login'
 
     token_url = 'https://api.intra.42.fr/oauth/token'
@@ -86,11 +87,12 @@ def LoginWithOAuth42(request):
         return Response({'error': 'Failed to retrieve user info'}, status=400)
 
     user_info = user_info_response.json()
-    
+   
     login_42 = user_info.get('login')
     email = user_info.get('email')
     first_name = user_info.get('first_name')
     last_name = user_info.get('last_name')
+    profile_pic = user_info["image"]["versions"]["medium"]
 
    
     try:
@@ -104,7 +106,8 @@ def LoginWithOAuth42(request):
             login=login_42,
             email=email,
             firstName=first_name,
-            lastName=last_name
+            lastName=last_name,
+            profile_pic=profile_pic
         )
 
         resp = generate_tokens_response(user, request)
@@ -285,11 +288,10 @@ class CheckAuth(APIView):
 #         return JsonResponse({'csrfToken': csrf_token})
 
 class UploadProfilePicture(APIView):
-    def post(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         try:
             user = get_object_or_404(MyUser, login=request.user)
-            print(request.data)
-            serializer = UserSerializer(user, data=request.data, partial=True)
+            serializer = UserSerializer(instance=user, data=request.data)
             if serializer.is_valid():
                 if not user.isDefaultImage():
                     os.remove('media/' + user.profile_pic.name)  
@@ -299,7 +301,7 @@ class UploadProfilePicture(APIView):
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            return Response({"error": str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
 class UserNotification(generics.ListAPIView):
     serializer_class = NotificationSerializer
@@ -344,7 +346,7 @@ class Verify2faOTPView(APIView):
         return Response({
             'message' : 'Invalid OTP'
         }, status=400)
-        
+
             
         
 

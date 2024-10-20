@@ -86,7 +86,7 @@ const Login = () => {
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         window.location.href =
-            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c6b6242240c2da879e3afe370e67288527613cf82675711a26a3e860f8cc74d0&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Flogin&response_type=code";
+            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Flogin&response_type=code";
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

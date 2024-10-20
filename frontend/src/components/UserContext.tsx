@@ -9,6 +9,7 @@ import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
 import LoadingIndecator from "./Loading";
+import { backendPath } from "./ChatSession";
 export interface NotificationPropreties{
     id: number;
     content: string;
@@ -16,6 +17,12 @@ export interface NotificationPropreties{
     created: string;
     is_readed: boolean;
     sender: string
+}
+
+const getProfilePicPath = (str:string) =>{
+    if (str.startsWith('/media/'))
+        return backendPath+str
+    return str
 }
 interface UserContextInterface{
     // id: number | undefined;
@@ -80,7 +87,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
             } = resp.data
             console.log("sss ====???? ",resp.data)
-
             setUserData({
                 login,
                 email,
