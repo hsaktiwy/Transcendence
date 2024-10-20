@@ -18,9 +18,9 @@ import { WebSocketContext } from "../utils/WSContext";
 import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 
+export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
 function ChatSession(){
-    const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
-
+    
     const chatContext =useContext(ChatSectionContext)
     if (!chatContext)
      throw new Error('error')
