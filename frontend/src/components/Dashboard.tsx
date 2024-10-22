@@ -87,8 +87,8 @@ function Dashboard(){
                                                           <div className="w-full h-full  grid grid-rows-2 ">
                                                               <div className=" bg-[#1D1E22] px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
                                                                   <div className=" h-20  flex items-center 2xl:items-end ">
-                                                                          <div className="h-10 w-40 2xl:h-14 2xl:w-48 bg-[#5E97A9] rounded-2xl flex justify-center items-center">
-                                                                          <div className="text-xl font-semibold 2xl:text-2xl ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
+                                                                          <div className=" w-40  2xl:w-auto bg-[#5E97A9] rounded-2xl flex justify-center items-center text-center">
+                                                                            <div className="text-xl font-semibold 2xl:text-lg ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
                                                                           </div>
                                                                       </div>
                                                                       <div className=" flex flex-col justify-center  items-center mb-7">

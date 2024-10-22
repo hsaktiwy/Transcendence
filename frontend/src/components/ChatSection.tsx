@@ -71,7 +71,7 @@ function ChatSection(){
         
         <ChatSectionContext.Provider value={{convs, setConvs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile, openModal, setOpenModal, modalMessage, setModalMessage}}>
                 {openModal && <ChatModal/>} 
-                <div className="   bg-gradient-to-l from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm  rounded-xl   absolute top-[60px]  left-0 lg:left-[142px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
+                <div className="  bg-gradient-to-br from-[#2f3a41] to-[#2B2F32] backdrop-filter backdrop-blur-sm  rounded-xl   absolute top-[60px]  left-0 lg:left-[142px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
                     <div className="  h-[calc(100%-60px)] lg:h-[100%] overflow-hidden relative ">
                         {loading ?
                         (<LoadingIndecator/>) :
