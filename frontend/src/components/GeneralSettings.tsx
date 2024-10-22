@@ -46,6 +46,7 @@ function GeneralSettings(){
           const response =  await mailman(req)
           if (response.status === 200)
             toast.success('Changes have been applied')
+            userContextConsumer.setUserData(prev => ({...prev!, firstName: firstName! , lastName: lastName! , email: email!, login:username!}))
           }
       }
       catch (err){

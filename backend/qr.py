@@ -1,7 +1,7 @@
-import pyotp
-import qrcode
-test = pyotp.random_base32()
-totp = pyotp.TOTP(test)
-otp_uri = totp.provisioning_uri('amine331@gmail.com', issuer_name="YourAppName")
-qr_img = qrcode.make(otp_uri)
-qr_img.save('qr.png')
+import requests
+from io import BytesIO
+responseImage = requests.get('https://cdn.intra.42.fr/users/5916df7e3dde8c3e2e997ef632485035/medium_aalami.jpg')
+if responseImage.status_code == 200:
+    profile_pic = BytesIO(responseImage.content)
+    with open('local_image.jpg', 'wb') as f:
+        f.write(profile_pic.getbuffer()) 

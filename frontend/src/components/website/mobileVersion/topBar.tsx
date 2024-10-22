@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import '../components-Profile/style-component.css'
 import SideBar  from'../components-Profile/side-bar.tsx'
 import SearchInfoProfile from '../components-Profile/serach-infos-profile.tsx'
@@ -17,19 +17,23 @@ import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
 import RankFile from "@/components/rankfile.tsx";
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
-
+import { UserContext } from "@/components/UserContext.tsx";
 function TopBar()
 {
+
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
     return(
         <>
             <div className="lg:mb-0  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]  h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
                 <div className=" rounded-2xl row-span-1 justify-center items-center   md:col-span-12  md:row-span-3  xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                    <div className="h-full col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl xxl:col-span-2 flex flex-col justify-center items-center">
                             <div className=" h-full col-span-2  flex  flex-col  justify-center items-center rounded-2xl ">
-                                <img className="md:size-36 xl:size-44 2xl:size-48" src="../images/profile-gray (1).svg" />
+                                <img className="md:size-36 xl:size-44 2xl:size-48 rounded-full" src={`http://localhost:8000${userContextConsumer.userData?.profile_pic}`} />
                                         <div className=" flex  mt-5 flex-col justify-center ">
-                                            <h1 className="md:text-[100%] text-center font-bold 2xl:text-[120%]">Hamza Chahboune</h1>
-                                            <h1 className="md:text-[80%] text-center font-normal text-gray-300">@hachahbo</h1>
+                                            <h1 className="md:text-[100%] text-center font-bold 2xl:text-[120%]">{`${userContextConsumer.userData?.firstName} ${userContextConsumer.userData?.lastName}`}</h1>
+                                            <h1 className="md:text-[80%] text-center font-normal text-gray-300">{`@${userContextConsumer.userData?.login}`}</h1>
                                         </div>
                                         <button className=" m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9]">Connect</button>
                             </div>

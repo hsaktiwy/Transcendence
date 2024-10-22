@@ -45,7 +45,8 @@ from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
 import json
-
+from io import BytesIO
+from django.core.files import File
 
 
 from django.contrib.auth import login
@@ -92,9 +93,11 @@ def LoginWithOAuth42(request):
     email = user_info.get('email')
     first_name = user_info.get('first_name')
     last_name = user_info.get('last_name')
-    profile_pic = user_info["image"]["versions"]["medium"]
-
-   
+    responseImage = requests.get(user_info["image"]["versions"]["medium"])
+    if responseImage.status_code == 200:
+        profile_pic = File(BytesIO(responseImage.content), name=f"{login_42}_profile_pic.jpg")
+    else:
+        profile_pic = None
     try:
         user = MyUser.objects.get(login=login_42)
        
@@ -107,8 +110,10 @@ def LoginWithOAuth42(request):
             email=email,
             firstName=first_name,
             lastName=last_name,
-            profile_pic=profile_pic
+            oauth=True
         )
+        if profile_pic:
+            user.profile_pic.save(f"{login_42}_profile_pic.jpg",profile_pic)
 
         resp = generate_tokens_response(user, request)
         return resp
