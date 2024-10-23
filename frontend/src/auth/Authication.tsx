@@ -9,6 +9,8 @@ import Game from '../game/Game';
 import ChatSection from '../components/ChatSection';
 import Settings from '../components/Settings';
 import { Toaster, toast } from 'sonner'
+import LandingPage from '@/components/LandingPage';
+import LoadingIndecator from '@/components/Loading';
 function Auth(children:childrenInterface)
 {
     

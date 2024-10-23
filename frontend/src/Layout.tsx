@@ -28,9 +28,9 @@ const Layout = () => {
           <>
             
             
-            <Toaster position="top-right" richColors expand={true}  closeButton={true} toastOptions={{
+            {/* <Toaster position="top-right" richColors expand={true}  closeButton={true} toastOptions={{
               className: "bg-black/50 backdrop-filter backdrop-blur-sm text-white "
-            }}/>
+            }}/> */}
             <SideBarV2/>
             <NavBarV2/>
             {userContextConsumer.newNotification.length > 0 && <NotificationToast items={userContextConsumer.newNotification}/>}

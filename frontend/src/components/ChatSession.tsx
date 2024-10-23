@@ -18,9 +18,9 @@ import { WebSocketContext } from "../utils/WSContext";
 import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 
+export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
 function ChatSession(){
-    const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
-
+    
     const chatContext =useContext(ChatSectionContext)
     if (!chatContext)
      throw new Error('error')
@@ -171,11 +171,12 @@ function ChatSession(){
         try
         {
             const extracting = 'update/' + chatContext.active?.channelId + '/' + MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
-            const url = BACKEND + CONVERSATION + extracting
+            const url = CONVERSATION + extracting
+            console.log(url)
             const request = {
                 url: url,
                 method: 'GET',
-                withCredentials: true
+                // withCredentials: true
             }
             const response = await mailman(request)
             interface conversation_type {
@@ -311,11 +312,11 @@ function ChatSession(){
                         messageArray?.map((msg, index): React.ReactNode => {
                             return(
                                 <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                                <img src={`${backendPath + msg.sender.profile_pic}`} alt="" className=" w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${backendPath + msg.sender.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] rounded-full cursor-pointer" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}/>
-                                <div id='message' className={`${msg.sender.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  `}>
+                                <div id='message' className={`${msg.sender.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg`}>
                                     <p >{msg.content}</p>
                                 </div>
                             </div>

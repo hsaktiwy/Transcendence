@@ -1,9 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { axiosPath } from './Constants';
 
 const mailman = axios.create(
     {
-        baseURL: 'http://localhost:8000',
+        baseURL: axiosPath,
         withCredentials: true
     }
 );
@@ -11,7 +12,8 @@ const mailman = axios.create(
 // Request Interceptor
 mailman.interceptors.request.use(
     (config) => {
-        config.headers['Content-Type'] = 'application/json';
+        if (!config.headers['Content-Type'])
+            config.headers['Content-Type'] = 'application/json';
         const csrfToken = Cookies.get('csrftoken');
         if (csrfToken)
             config.headers['X-CSRFToken'] = csrfToken;
@@ -33,7 +35,8 @@ mailman.interceptors.response.use(
         if (error.response && error.response.status == 401 && error.response.data['detail'] && error.response.data['detail'] == 'Expired token' && !originalRequest._retry){
             originalRequest._retry = true
             try{
-                const refreshToken = await axios.get('http://localhost:8000/api/user/refresh_token/', {
+                const req:string = axiosPath+"/api/user/refresh_token/"
+                const refreshToken = await axios.get(req, {
                     withCredentials: true
                 })
                 return mailman(originalRequest);

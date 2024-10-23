@@ -4,7 +4,7 @@ import { UserContext } from "./UserContext";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { TbMessage } from "react-icons/tb";
 import NavBarModal from "./NavBarModal";
-
+import {axiosPath} from "../utils/Constants"
 function NavBarV2(){
     const [isSearchBarActive, setSearchBar] = useState<boolean>(false)
     const [openModal, setOpenModal] = useState<boolean>(false)
@@ -43,7 +43,7 @@ function NavBarV2(){
                                 </span>
                             </div>
                             <div className="w-[30px] h-[30px] cursor-pointer relative">
-                                <img src={userContextConsumer.userData?.profile_pic} alt="user-pic" className="w-full h-full rounded-full object-fill" />
+                                <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full rounded-full object-fill" />
                                 <div className="hidden fixed right-[10px] 2xl:right-[8%] top-[75px] h-[250px] w-[200px] bg-black/45 backdrop-filter backdrop-blur-sm  rounded-xl z-50 text-black overflow-visible">
                     
                                 </div>

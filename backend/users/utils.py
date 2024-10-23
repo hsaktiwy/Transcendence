@@ -7,6 +7,10 @@ from django.utils import timezone
 from rest_framework.exceptions import AuthenticationFailed
 from django.middleware.csrf import get_token
 from rest_framework import status
+import pyotp
+import qrcode
+import io
+from django.http import HttpResponse
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 ACCESS_TOKEN_EXPIRATION = datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFETIME)
@@ -82,3 +86,20 @@ def generate_tokens_response(user, request):
         samesite='Lax'
     )
     return resp
+def generat_qr_code(user):
+    if not user.two_factor_auth_code:
+        user.two_factor_auth_code = pyotp.random_base32()
+        user.save()
+    time_otp = pyotp.TOTP(user.two_factor_auth_code)
+    otp_uri = time_otp.provisioning_uri(user.email, issuer_name="ft_transcendence")
+    qr_image = qrcode.make(otp_uri)
+    tmp_stream = io.BytesIO()
+    qr_image.save(tmp_stream, "PNG")
+    tmp_stream.seek(0)
+    return HttpResponse(tmp_stream, content_type="image/png")
+
+def verify2faCode(user, code):
+    totp = pyotp.TOTP(user.two_factor_auth_code)
+    if totp.verify(code):
+            return True
+    return False

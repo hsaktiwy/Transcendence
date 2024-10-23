@@ -30,3 +30,5 @@ zope.interface==6.4.post2
 Pillow
 pyjwt
 requests
+pyotp
+qrcode[pil]
