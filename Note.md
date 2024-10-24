@@ -28,7 +28,7 @@ Production levels:
 Do List:
     [ ] create a way where you can add welcome notification and ProfileStatus at the time where the user is created
     [ ] when trying to get the user channel try to identife the last channel a user did sent a message in it bye adding to the channels a property named lastUpdate
- 
+    [ ] thre is problem when user still try to send message in  channel that is already deleted (case still opening the channel in the chat, (channel was deleted just after fiew seconds from being active, where one of the user try to send data to the other one,)), problem is that we need something to signal to the other user that the channel is deleted (cause he can't see noting).
 hints:
     [=] if you need to connect your frontend with the backend, and get the error 401 UnAuthorized or 403 Forbiden,
         cooled be that the server refuse the connection, that because in our back end setting.py there is protect that use to limite the hosts to connect, and trust only (http://localhost:3000, http://127.0.0.1:3000, http://localhost:5173, http://127.0.0.1:5173), you can  you host and pore in this arrays in setting.py and the problem will be fixed:

@@ -60,9 +60,13 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 				#page = 1
 				packet = paginator.page(1)
 				# reverce the packet after recieving it
+				print("--------------->before,", channel.id)
 				packet = list(packet.object_list)[::-1]
+				print("--------------->Wala,", channel.id)
 				MessagesSerialized = MessageSerializer2(packet, many=True)
 				users = channel.users.all()
+				if len(users) < 2:
+					return  Response({'Wala' : 'the users on this channel are less then 2 (probably one is deleted)'}, status=status.HTTP_400_BAD_REQUEST)
 				UserSerialized = UserSerializer(users, many=True)
 				if UserSerialized.data[0]['id'] == user.id:
 					user1 = UserSerialized.data[0]
