@@ -87,9 +87,9 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         // const requests = items.filter(item => item.type === 'friendship')
         // fetchRequestSenderData(requests)
         const interval = setInterval(() =>{
-            // if (items.length)
-            //     removeItem(items[0].id )
-        }, 3000)
+            if (items.length)
+                removeItem(items[0].id )
+        }, 7000)
             
         return () => {
             clearInterval(interval)

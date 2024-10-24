@@ -27,5 +27,3 @@ class ProfileStatus(models.Model):
     wins = models.IntegerField()
     lostes = models.IntegerField()
     rank = models.IntegerField()
-
-

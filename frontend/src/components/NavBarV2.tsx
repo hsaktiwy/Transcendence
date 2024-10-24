@@ -27,8 +27,14 @@ function NavBarV2(){
                         )}>
                             <IoSearchOutline/>
                         </span>
+                        <div>
+
+                        </div>
                         <input type="text" placeholder="Search" className={`text-white rounded-full mx-10  ${isSearchBarActive ? '  w-[calc(70%)] px-4 py-1' : 'w-0'} bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] h-10 lg:w-[50%]  lg:px-4 lg:py-1 focus:lg:w-[90%] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `} />
                         {/* <input type="text" placeholder="Search" className="mx-12 h-10 w-96 px-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl border-none "/> */}
+                        <div className="bg-red-500 absolute w-full h-[100px] top-[15px] left-[47px] z-50">
+                            cc
+                        </div>
                     </div>
                     <div className={`  gap-0 xl:w-44  px-4 bg-gradient-to-bl mt-1 from-[#1D1E22] to-[#1f2123] rounded-2xl lg:gap-6  xl:mr-9 text-white/60  w-[70%] sm:w-[45%] md:w-[40%] lg:w-auto justify-between items-center  self-start p-2 ${isSearchBarActive ? 'hidden' : 'flex'} lg:flex`}>
                         <div className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
@@ -46,9 +52,9 @@ function NavBarV2(){
                                     <TbMessage/>
                                 </span>
                             </div>
-                            <div className="w-[30px] h-[30px] cursor-pointer relative ">
+                            <div className="w-[30px] h-[30px] cursor-pointer relative bg-red-700">
                                 <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full rounded-full object-fill" />
-                                <div className=" absolute -right-4  top-[40px] h-[220px] w-[200px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm  rounded-xl z-50 text-white font-poppins overflow-visible flex flex-col r items-center py-4 px-6 justify-center gap-8">
+                                <div className="hidden absolute -right-4  top-[40px] h-[220px] w-[200px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm  rounded-xl z-50 text-white font-poppins overflow-visible  flex-col r items-center py-4 px-6 justify-center gap-8">
                                     <div className="w-full flex justify-between text-2xl opacity-80 hover:opacity-100 duration-75">
                                         <span className="text-2xl">
                                             <FiUser/>
