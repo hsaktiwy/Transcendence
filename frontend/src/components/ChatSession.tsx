@@ -119,7 +119,7 @@ function ChatSession(){
             console.log((socket.current && socket.current.readyState === WebSocket.OPEN))
             if (socket.current && socket.current.readyState === WebSocket.OPEN)
             {
-                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.login}` , message : message})
+                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.login}` , message : message, channel_id: chatContext.active?.channelId})
                 socket.current.send(holder)
                 holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
                 socket.current.send(holder)

@@ -3,6 +3,7 @@ import ChatSession from "./ChatSession";
 import Conversations from "./Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "../utils/ChatContext"
 import {init_conv, initialized, received} from "../utils/ConversationsList"
+import { useParams } from "react-router-dom";
 import ChatFriendInfo from "./ChatFriendInfo";
 import NoActiveChat from "./NoActiveChat";
 import LoadingIndecator from "./Loading";
@@ -10,8 +11,11 @@ import ChatModal from "./ChatModal";
 import { WebSocketContext, WebSocketProvider } from "../utils/WSContext";
 import { createContext } from "react";
 import { UserContext } from "./UserContext";
+import { useLocation } from "react-router-dom";
 
 function ChatSection(){
+    const location = useLocation()
+    const [channelId, setChannelId] = useState<number| undefined>(undefined)
     const [loading, setLoading] = useState<boolean>(true)
     const [convs, setConvs] = useState<Conversation[] | undefined>(undefined)
     const [active, setActive] = useState<Conversation | undefined>(undefined)
@@ -26,10 +30,16 @@ function ChatSection(){
     if (!SocketContext)
         throw new Error('error')
     const {AddChannel,RemoveChannel, socket} = SocketContext
-
+    
     useEffect(()=>
     {
-        init_conv(setLoading,setActive, setConvs);
+        if (location?.state?.channel_id)
+        {
+            const {channel_id} = location.state 
+            setChannelId(channel_id)
+        }
+        console.log("wala ", channelId)
+        init_conv(setLoading,setActive, setConvs, channelId);
         // create a function that will update the general data
         const UpdateConvs = (data:any)=>
         {
@@ -65,7 +75,7 @@ function ChatSection(){
             AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
             RemoveChannel('CHAT')
         }
-    }, [loading, active])
+    }, [loading, channelId, location?.state?.channel_id])
 
     return(
         
