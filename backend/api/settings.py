@@ -85,12 +85,14 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://localhost",
 )
 
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://localhost",
 ]
 
 
@@ -103,6 +105,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://10.13.4.11:5173",
     "http://10.13.3.3:5173",
     "http://172.21.0.3:5173",
+    "https://localhost",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -190,7 +193,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/api/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

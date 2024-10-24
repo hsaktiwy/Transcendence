@@ -67,7 +67,7 @@ function GeneralSettings(){
         <div className="flex gap-20 justify-center items-center flex-wrap">
           <div className="flex items-center gap-4 justify-center flex-col sm:flex-row">
             <label htmlFor="firstName" className="w-[100px] self-start sm:self-center">First Name:</label>
-            <div className="group relative w-[220px]">
+            <div className="group relative w-[220px] sm:w-[280px]">
               <input
                 id={"firstName"}
                 type="text"
@@ -77,7 +77,7 @@ function GeneralSettings(){
                   if (!changed)
                     setChanged(true)
                 }}
-                className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
+                className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] sm:w-[280px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
                 />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />
@@ -86,7 +86,7 @@ function GeneralSettings(){
           </div>
           <div className="flex items-center gap-4 justify-start sm:justify-center flex-col sm:flex-row">
             <label htmlFor="lastName" className="w-[100px] self-start sm:self-center">Last Name:</label>
-            <div className="group relative w-[220px]">
+            <div className="group relative w-[220px] sm:w-[280px]">
               <input
                 id="lastName"
                 type="text"
@@ -97,7 +97,7 @@ function GeneralSettings(){
                     setChanged(true)
                 }
               }
-              className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
+              className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] sm:w-[280px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
               />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />
@@ -108,7 +108,7 @@ function GeneralSettings(){
         <div className="flex gap-20 justify-center items-center flex-wrap">
           <div className="flex items-center gap-4 justify-start sm:justify-center flex-col sm:flex-row">
             <label htmlFor="email" className="w-[100px] self-start sm:self-center">Email:</label>
-            <div className="group relative w-[220px]">
+            <div className="group relative w-[220px] sm:w-[280px]">
               <input
                 id="email"
                 type="email"
@@ -118,7 +118,7 @@ function GeneralSettings(){
                   if (!changed)
                     setChanged(true)
                 }}
-                className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
+                className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] sm:w-[280px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
                 />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />
@@ -127,7 +127,7 @@ function GeneralSettings(){
           </div>
           <div className="flex items-center gap-4 justify-start sm:justify-center flex-col sm:flex-row">
             <label htmlFor="username" className="w-[100px] self-start sm:self-center">Username:</label>
-            <div className="group relative w-[220px]">
+            <div className="group relative w-[220px] sm:w-[280px]">
               <input
                 id="username"
                 type="text"
@@ -137,7 +137,7 @@ function GeneralSettings(){
                   if (!changed)
                     setChanged(true)
                 }}
-                className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
+                className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-1 px-4 flex justify-start items-start w-[220px] sm:w-[280px] outline-none focus:outline-1 focus:outline-[#5E97A9]"
                 />
               <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[50%] -translate-y-[50%]">
                 <FiEdit2 />

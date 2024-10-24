@@ -3,8 +3,8 @@ services:
     build: backend/.
     container_name: backend
     restart: always
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     volumes:
       - ./backend:/app
     env_file:
@@ -17,8 +17,8 @@ services:
     build: frontend/.
     container_name: frontend
     restart: always
-    ports:
-      - "5173:5173"
+    # ports:
+    #   - "5173:5173"
     volumes:
       - ./frontend:/app
     env_file:
@@ -31,6 +31,19 @@ services:
     restart: always
     ports:
       - "6379:6379"  # Redis default port
+    networks:
+      - transendence
+  nginx:
+    build: nginx/.
+    container_name: nginx
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - "443:443"
     networks:
       - transendence
 networks:

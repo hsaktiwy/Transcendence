@@ -4,6 +4,8 @@ import { childrenInterface } from '../utils/interfaces';
 import RouteProtection from './RouteProtection';
 import Login from './Login'
 import RegistrationForm from './Registration';
+import Game from '../game/Game';
+
 import ChatSection from '../components/ChatSection';
 import Settings from '../components/Settings';
 import { Toaster, toast } from 'sonner'

@@ -1,14 +1,10 @@
 FROM debian:bullseye
 
-RUN mkdir -p /etc/nginx/ssl/certs/
+RUN apt-get update
+RUN apt-get install -y nginx openssl
 
-RUN apt-get update && apt-get install -y nginx && apt install openssl -y
-
-COPY ./conf/default.conf /etc/nginx/conf.d/
-COPY ./tools /tools
-
-WORKDIR /tools
-
+COPY ./tools/script.sh .
+COPY ./conf/default.conf /etc/nginx/conf.d/default.conf
 RUN chmod +x script.sh
-
-CMD ./script.sh
+CMD ["./script.sh"]
+# CMD ["tail","-f","/dev/null"]

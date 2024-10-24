@@ -2,7 +2,7 @@ import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "rea
 import { UserContext } from "./UserContext";
 import ChatSection from "./ChatSection";
 import { cookies } from "../auth/Cookie";
-import { BACKEND } from "../utils/Constants";
+import { BACKEND, axiosPath } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
@@ -121,7 +121,7 @@ function Settings() {
                         <div className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-40 hidden group-hover:block">
                             <FiEdit2/>
                         </div>
-                        <img src={`http://localhost:8000${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
+                        <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
                         <input type="file" accept='image/*' className=" absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50 border-[1px] border-black w-[160px] h-[160px] rounded-full" onChange={handleProfilChanged}/>
                     </div>
                 </div>

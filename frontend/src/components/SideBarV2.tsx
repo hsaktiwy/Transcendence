@@ -23,7 +23,10 @@ function SideBarV2(){
                 <Link to="/chat" className=" cursor-pointer w-[30px] h-[30px] ">
                     <img src="/assets/svg/Message.svg" alt="Message Icon" className="w-full h-full" />
                 </Link>
-                <embed type="image/svg+xml" src="/assets/svg/game.svg" className="w-[30px] h-[30px]"></embed>
+                <Link to="/game" className=" cursor-pointer w-[30px] h-[30px] ">
+                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-full h-full" />
+                </Link>
+                {/* <embed type="image/svg+xml" src="/assets/svg/game.svg" className="w-[30px] h-[30px]"></embed> */}
                 <Link to="/settings" className=" cursor-pointer w-[30px] h-[30px] ">
                         <div className="text-3xl font-bold">
                             <GiSettingsKnobs/>
