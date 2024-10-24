@@ -7,7 +7,7 @@ import { RiNotification2Line } from "react-icons/ri";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
-import { BACKEND } from "../utils/Constants";
+import { axiosPath, BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { Link, useNavigate } from "react-router-dom";
 import { IoCloseOutline } from "react-icons/io5";
@@ -122,7 +122,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                             (item.type === 'friendship' || item.type === 'message') &&
                                             <div className=" h-[35px] w-[35px] sm:h-[50px] sm:w-[50px]">
                                                 {/* <p>{usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}</p> */}
-                                                <img src={`http://localhost:8000${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
+                                                <img src={`${axiosPath}${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                             </div>
                                         }
                                         <p className="text-white/80">

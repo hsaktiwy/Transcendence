@@ -8,7 +8,7 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { NotificationPropreties } from "./UserContext";
-import { BACKEND } from "../utils/Constants";
+import { axiosPath, BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { PiMaskSadLight } from "react-icons/pi";
 
@@ -123,7 +123,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                         <div key={item.id} className={`font-poppins ${index < userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length - 1 &&`border-b-[1px] border-[#5E97A9]/85`} min-h-[100px]`}>
                             <div className="px-2 sm:px-4 py-4 flex gap-8 items-center  justify-center sm:justify-between flex-wrap ">
                                 <div className="  w-[60px] h-[60px] relative ">
-                                    <img src={`http://localhost:8000${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="test" className=" rounded-full border-[1px] border-white/25 h-full w-full object-cover"/>
+                                    <img src={`${axiosPath}${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="test" className=" rounded-full border-[1px] border-white/25 h-full w-full object-cover"/>
                                     <span className=" absolute text-sm bg-[#5E97A9] p-[2px] sm:p-[4px] text-white rounded-full bottom-0 right-0">
                                         {notifType.friendship}
                                     </span>

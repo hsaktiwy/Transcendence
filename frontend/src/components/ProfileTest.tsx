@@ -3,7 +3,7 @@ import { UserDataInterface, ProfileDataInterface } from "../utils/UserDataInterf
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
-import { BACKEND } from "../utils/Constants";
+import { axiosPath ,BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { NotificationPropreties } from "./UserContext";
 import { WebSocketContext } from "../utils/WSContext";
@@ -63,7 +63,7 @@ const ProfileTest  = () =>{
         <div className="shadow-[-1px_8px_47px_1px_#f7fafc25] min-h-[calc(100vh-100px)] font-poppins absolute overflow-hidden left-0 lg:left-[80px] top-[60px] w-[calc(100%-20px)] lg:w-[calc(100%-100px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%] text-white  rounded-xl flex justify-center items-center ">
             <div className="w-[50%] bg-black/30 flex flex-col items-center p-4 rounded-xl gap-4">
                 <div className="w-[120px] h-[120px]">
-                    <img src={`http://localhost:8000${profileData?.profile_pic}`} alt="user-image" className="h-full w-full object-cover rounded-full"/>
+                    <img src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" className="h-full w-full object-cover rounded-full"/>
                 </div>
                 <h1>{`${profileData?.firstName} ${profileData?.lastName}`}</h1>
                 {

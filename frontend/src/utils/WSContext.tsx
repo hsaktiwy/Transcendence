@@ -1,6 +1,6 @@
 import React, {useEffect, createContext, useRef, useState, useContext} from 'react'
 import { ws_url } from './Constants'
-import {channelType, WebSocketContextType, childrenInterface} from './interfaces'
+import {channelType, WebSocketContextType, childrenInterface, defaultContextValue} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 

@@ -18,6 +18,7 @@ import { LineCharFile } from "@/components/lineChart.tsx";
 import RankFile from "@/components/rankfile.tsx";
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
 import { UserContext } from "@/components/UserContext.tsx";
+import { axiosPath } from "@/utils/Constants.ts";
 function TopBar()
 {
 
@@ -30,7 +31,7 @@ function TopBar()
                 <div className=" rounded-2xl row-span-1 justify-center items-center   md:col-span-12  md:row-span-3  xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                    <div className="h-full col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl xxl:col-span-2 flex flex-col justify-center items-center">
                             <div className=" h-full col-span-2  flex  flex-col  justify-center items-center rounded-2xl ">
-                                <img className="md:size-36 xl:size-44 2xl:size-48 rounded-full" src={`http://localhost:8000${userContextConsumer.userData?.profile_pic}`} />
+                                <img className="md:size-36 xl:size-44 2xl:size-48 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} />
                                         <div className=" flex  mt-5 flex-col justify-center ">
                                             <h1 className="md:text-[100%] text-center font-bold 2xl:text-[120%]">{`${userContextConsumer.userData?.firstName} ${userContextConsumer.userData?.lastName}`}</h1>
                                             <h1 className="md:text-[80%] text-center font-normal text-gray-300">{`@${userContextConsumer.userData?.login}`}</h1>
