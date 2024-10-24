@@ -6,7 +6,7 @@ import mailman from "./AxiosFetcher";
 // let initila the data using the http protocol
 
 
-export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean>>,setActive:React.Dispatch<React.SetStateAction<Conversation | undefined>>, setConv:React.Dispatch<React.SetStateAction<Conversation[] | undefined>>) =>
+export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean>>,setActive:React.Dispatch<React.SetStateAction<Conversation | undefined>>, setConv:React.Dispatch<React.SetStateAction<Conversation[] | undefined>>, channel_id : number | undefined) =>
 {
     let convs : Conversation[]
     let initialized:boolean = false
@@ -40,6 +40,15 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
       received = true
       setLoading(false)
       setConv(convs)
+      if (channel_id != undefined)
+      {
+        for (const conv of convs) {
+          if (conv.channelId === channel_id) {
+            setActive(conv)
+            break;
+          }
+        }
+      }
     }
     catch (error)
     {

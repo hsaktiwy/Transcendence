@@ -32,7 +32,7 @@ function NavBarV2(){
                         </div>
                         <input type="text" placeholder="Search" className={`text-white rounded-full mx-10  ${isSearchBarActive ? '  w-[calc(70%)] px-4 py-1' : 'w-0'} bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] h-10 lg:w-[50%]  lg:px-4 lg:py-1 focus:lg:w-[90%] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `} />
                         {/* <input type="text" placeholder="Search" className="mx-12 h-10 w-96 px-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl border-none "/> */}
-                        <div className="bg-red-500 absolute w-full h-[100px] top-[15px] left-[47px] z-50">
+                        <div className=" hidden bg-red-500 absolute w-full h-[100px] top-[15px] left-[47px] z-50">
                             cc
                         </div>
                     </div>

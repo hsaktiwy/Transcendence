@@ -150,9 +150,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if message_json['type'] == 'NOTIFICATION_ADD_FRIEND' or 'NOTIFICATION_MESSAGE':
                 print(text_data)
                 receiver = message_json['to']
+                channel_id = -1
                 if message_json['type'] == 'NOTIFICATION_ADD_FRIEND':
                     notification, receiver_id = await sync_to_async(self.create_add_friend_notification)(receiver, user)
                 else:
+                    channel_id = message_json["channel_id"]
                     notification, receiver_id = await sync_to_async(self.create_message_notification)(receiver, user, message_json['message'])
                 group_name = f'notification_user_{receiver}'
 
@@ -171,6 +173,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'id': notificationSerialized['id'],
                         'content': notificationSerialized['content'],
                         'created': notificationSerialized['created'],
+                        'channel_id' : channel_id,
                         'notification_type': notificationSerialized['type'],
                         'is_readed': notificationSerialized['is_readed'],
                         'sender': SerializedSender['login']
