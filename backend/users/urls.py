@@ -17,6 +17,7 @@ from django.urls import path
 
 urlpatterns = [
     path('users/', views.GetUsers.as_view()),
+    path('users/search/<identifier>',views.Search, name="Search"),
     path('user/login/', views.LoginView.as_view()),
     path('users/<identifier>/', views.getPublicUser.as_view(), name="Access_User"),
     path('user/register/', views.RegisterView.as_view()),

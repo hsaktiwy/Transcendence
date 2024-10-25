@@ -104,16 +104,12 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                             <Link to={'/chat'} state={{ channel_id: item.channel_id } }>
                                 
                                 <div  className={`  relative duration-200 transition-all    hover:scale-[1.02]  sm:hover:scale-105  cursor-pointer shadow-[0px_20px_77px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-full sm:w-[500px] h-[120px]  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm rounded-lg flex text-white `}>
-                                    <div className="notif-icon bg-[#5E97A9] h-full flex justify-center items-center text-2xl p-4 text-white rounded-l-lg" onClick={()=>{
-                                    navigate(`/chat/${item.channel_id}`)
-                                }}>
+                                    <div className="notif-icon bg-[#5E97A9] h-full flex justify-center items-center text-2xl p-4 text-white rounded-l-lg">
                                         {
                                             item.type === 'message' ? notifType.message : item.type === 'friendship' ? notifType.friendship : item.type === 'system' ? notifType.system : notifType.gameInvitation
                                         }
                                     </div>
-                                    <div className="notif-contetn-container  p-4 flex flex-col gap-2 border-r-[1px] border-r-white/20 rounded-r-lg flex-1 relative" onClick={()=>{
-                                    navigate(`/chat/${item.channel_id}`)
-                                }}>
+                                    <div className="notif-contetn-container  p-4 flex flex-col gap-2 border-r-[1px] border-r-white/20 rounded-r-lg flex-1 relative">
                                         <h1 className="font-semibold sm:text-xl">
                                             {`You have a new ${item.type==='message' ? 'Message' :'Notification' }`}
                                         </h1>

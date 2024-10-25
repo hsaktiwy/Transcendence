@@ -19,14 +19,16 @@ import RankFile from "@/components/rankfile.tsx";
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
 import { UserContext } from "@/components/UserContext.tsx";
 import { axiosPath } from "@/utils/Constants.ts";
+import { useParams } from "react-router-dom";
 function TopBar()
 {
-
+    const {username} = useParams()
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     return(
         <>
+            {username}
             <div className="lg:mb-0  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]  h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
                 <div className=" rounded-2xl row-span-1 justify-center items-center   md:col-span-12  md:row-span-3  xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                    <div className="h-full col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl xxl:col-span-2 flex flex-col justify-center items-center">

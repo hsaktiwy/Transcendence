@@ -44,6 +44,10 @@ class PublicUserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ['login', 'email', 'firstName', 'lastName', 'state', 'last_visit', 'profile_pic']
     
+class SearchUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = ['login', 'firstName', 'lastName', 'profile_pic']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=6, write_only=True)
