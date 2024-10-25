@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import './profile.css';
 import SideBar  from'../components-Profile/side-bar.tsx'
 import SearchInfoProfile from '../components-Profile/serach-infos-profile.tsx'

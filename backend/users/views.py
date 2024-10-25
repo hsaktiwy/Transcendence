@@ -32,9 +32,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import MyUser
-from .serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer, PublicUserSerializer
+from .serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer, PublicUserSerializer, SearchUserSerializer
 from .utils import generate_access_token, generate_refresh_token
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny , IsAuthenticated
 import datetime
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
@@ -352,8 +352,8 @@ class Verify2faOTPView(APIView):
             'message' : 'Invalid OTP'
         }, status=400)
 
-            
-        
-
-
-
+@api_view(['GET'])
+def Search(request, identifier):
+    Users = MyUser.objects.filter(login__icontains=identifier)
+    SerializedUsers = SearchUserSerializer(Users, many=True)
+    return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
