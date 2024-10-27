@@ -16,6 +16,7 @@ export interface NotificationPropreties{
     type: string;
     created: string;
     channel_id: number;
+    friend_request_id: number;
     is_readed: boolean;
     sender: string
 }
