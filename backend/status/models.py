@@ -18,6 +18,8 @@ class Notification(models.Model):
             choices=[(tag.value, tag.name) for tag in NotificationType],
             default=NotificationType.system.value,
         )
+    channel_id = models.IntegerField(null=True)
+    friend_request_id = models.IntegerField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     is_readed =  models.BooleanField(default=False)
 
