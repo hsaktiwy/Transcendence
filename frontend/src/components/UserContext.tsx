@@ -71,12 +71,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-            // toast.success('Welcome!', {
-            //     id: toastId, // Use the same toast ID to update the existing toast
-            // });
-            // setTimeout(() => {
-            //     toast.dismiss(toastId);
-            // }, 5000);
+
             const {
                 login,
                 email,
@@ -163,12 +158,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     
     }
     useEffect(() =>{
-        // if (id === undefined){
-        //     const savedId = localStorage.getItem("id")
-        //     if (savedId !== null)
-        //         setUserId(Number(savedId))
-        // }
-
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
         return () => {

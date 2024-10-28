@@ -93,13 +93,17 @@ import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/C
 import { WebSocketContext } from "../utils/WSContext";
 import { convs } from "../utils/ConversationsList";
 import { BACKEND } from "../utils/Constants";
+import { UserContext } from "./UserContext";
 
 let inc:number=  22222
 function Conversations(){
     const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
-   const chatContext =useContext(ChatSectionContext)
-   if (!chatContext)
-    throw new Error('error')
+    const chatContext =useContext(ChatSectionContext)
+    if (!chatContext)
+        throw new Error('error')
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error('error')
 
 return(
 <div className={`  border-r-0 lg:border-r-[1px] border-white/75   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-xl rounded-r-xl lg:rounded-r-none`}>
@@ -128,12 +132,12 @@ return(
                     {
                         chatContext.convs?.map((conv, index): React.ReactNode => {
                             interface convData{
-                                lastMessage: string;
+                                lastMessage: Message;
                                 picture: string;
                                 friendName: string;
                             }
                             const currentConvData: convData = {
-                                lastMessage: conv.messages[conv.messages.length - 1]?.content,
+                                lastMessage: conv.messages[conv.messages.length - 1],
                                 picture: conv.user2.profile_pic,
                                 friendName: conv.user2.firstName +  " " +conv.user2.lastName
                             }
@@ -147,7 +151,8 @@ return(
                                         <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]" />
                                         <div className="self-center ">
                                             <h1 className="text-base 2xl:text-lg font-semibold">{currentConvData.friendName}</h1>
-                                            <p className="text-gray-300 text-sm 2xl:text-base">{currentConvData.lastMessage?.length >= 20 ? currentConvData?.lastMessage.substring(0,20) + "..." : currentConvData?.lastMessage}</p>
+                                            
+                                            <p className="text-gray-300 text-sm 2xl:text-base"><span className={`${currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login ? 'inline-block' :'hidden'} mr-3`}>You : </span>{currentConvData.lastMessage?.content.length >= 20 ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : currentConvData?.lastMessage.content}</p>
                                             
                                         </div>
                                         <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
