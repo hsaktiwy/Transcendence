@@ -130,9 +130,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.user_id = user.id
                 self.notification_group_name = f'notification_user_{user}'
                 await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
-                channels = await sync_to_async(self.get_user_channels)(user.id)
+                # channels = await sync_to_async(self.get_user_channels)(user.id)
                 self.rooms = set()
-                await self.add_groups(channels, user)
+                # await self.add_groups(channels, user)
                 await self.accept()
             except Exception as e:
                 print(f"Error while connecting to channels: {e}")

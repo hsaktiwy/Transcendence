@@ -69,6 +69,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
 
         }
         catch(error){
+            console.log(error)
             setLoggedIn(false)
         }
     }
