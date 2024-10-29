@@ -266,6 +266,7 @@ class CheckAuth(APIView):
             return Response({
                 'message': 'Anonymous user'
             }, status=status.HTTP_200_OK)
+           
 # @sensitive_post_parameters()
 # @require_http_methods(["POST"])
 # @csrf_protect
