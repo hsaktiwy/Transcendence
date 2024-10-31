@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import FriendShip, FriendRequest, RelationShipStatus
+from .models import FriendShip, FriendRequest, RelationShipStatus, BlockList
 from .serializers import FriendshipSerializer
 from users.models import MyUser
 from conversations.models import Message
@@ -188,4 +188,18 @@ def AcceptFriendRequest(request, id):
 			message = Message.objects.create(sender=friend_request.sender, id_channel_fk=channel, content=random_quote())
 		return Response({'message': 'Accept request sent'}, status=status.HTTP_200_OK)
 	except:
-		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_)
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def BlockUser(request, _login):
+	try:
+		blocked_user = MyUser.objects.get(login=_login)
+		if blocked_user:
+			myuser = request.user
+			list, create = BlockList.objects.get_or_create(user=myuser)
+			check = list.block_users.filter(id=blocked_user.id).exists()
+			if (not check):
+				list.block_users.add(blocked_user)
+		return Response({'message': 'User '+_login+' in the Block List'}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
