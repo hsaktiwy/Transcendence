@@ -16,13 +16,16 @@ import Conversations from "./Conversations";
 import ChatModal from "./ChatModal";
 import { WebSocketContext } from "../utils/WSContext";
 import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Constants";
+import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
+import { UserContext } from "./UserContext";
 
 export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
 function ChatSession(){
     
     const chatContext =useContext(ChatSectionContext)
-    if (!chatContext)
+    const userContext = useContext(UserContext)
+    if (!chatContext || !userContext)
      throw new Error('error')
     const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
@@ -123,7 +126,7 @@ function ChatSession(){
                 socket.current.send(holder)
                 holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
                 socket.current.send(holder)
-                console.log(holder);
+                console.log(holder)
                 setMessage('')
             }
             else
@@ -281,6 +284,8 @@ function ChatSession(){
                                             () => {
                                                 chatContext.setOpenModal(true)
                                                 chatContext.setModalMessage("block this user")
+                                                const action:Action = {type: ActionType.BLOCK, Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                                                userContext?.setAction(action)
                                             }
                                         }>
                                                 <span className="inline-block text-xl"><MdOutlineBlock/></span>

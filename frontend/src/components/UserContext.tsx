@@ -4,12 +4,14 @@ import { useContext, useState } from "react";
 import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
+import { Action, ActionType, MiniNotification} from "@/utils/interfaces";
 import { toast } from "sonner";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
 import LoadingIndecator from "./Loading";
 import { backendPath } from "./ChatSession";
+
 export interface NotificationPropreties{
     id: number;
     content: string;
@@ -20,6 +22,7 @@ export interface NotificationPropreties{
     is_readed: boolean;
     sender: string
 }
+
 
 const getProfilePicPath = (str:string) =>{
     if (str.startsWith('/media/'))
@@ -40,7 +43,8 @@ interface UserContextInterface{
     notificationHandler: (data: NotificationPropreties) => void;
     notificationReaded: boolean;
     setNotificationReaded: React.Dispatch<React.SetStateAction<boolean> >;
-
+    action: Action | undefined;
+    setAction:  React.Dispatch<React.SetStateAction<Action |  undefined> >;
 }
 
 export const UserContext = createContext<UserContextInterface | undefined>(undefined)
@@ -56,12 +60,20 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
+    const [action, setAction] = useState<Action |  undefined>(undefined)
     const notificationHandler = (data: NotificationPropreties) => {
         // notificationData.sort((a, b)=> b.id - a.id)
         console.log(data)
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
-}
+    }
+    const PureNotification = (data:MiniNotification) =>
+    {
+        if (data.notification == 'Error')
+            toast.error(data.content)
+        // console.log("mini notififcation data",data)
+
+    }
     const fetchUserData = async () =>{
 
         try{
@@ -171,6 +183,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
+        SocketContext.AddChannel('NOTIFICATION', PureNotification)
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
         }
@@ -188,7 +201,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }, [AuthContextConsummer?.loggedIn, profilePicChanged])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {userData ? children : <LoadingIndecator/>}
         </UserContext.Provider>

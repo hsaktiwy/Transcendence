@@ -9,6 +9,9 @@ import { MdOutlineBlock } from "react-icons/md";
 import { VscGame } from "react-icons/vsc";
 import { User } from "../utils/ChatContext";
 import { BACKEND } from "../utils/Constants";
+import { Action, ActionType} from "@/utils/interfaces";
+import { UserContext } from '../components/UserContext';
+
 
 
 
@@ -16,7 +19,8 @@ import { BACKEND } from "../utils/Constants";
 function ChatFriendInfo(){
     const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
-    if (!chatContext)
+    const userContext = useContext(UserContext)
+    if (!chatContext || !userContext)
      throw new Error('error')
     const user2_level:number = (Math.random() * 10)
     return(
@@ -47,6 +51,8 @@ function ChatFriendInfo(){
                         <div className="cursor-pointer  hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl  w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center" onClick={() =>{
                                 chatContext.setOpenModal(true)
                                 chatContext.setModalMessage("unfriend this user")
+                                const action:Action = {type: ActionType.UNFRIEND, Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                                userContext?.setAction(action)
                         }}>
                             <span className="text-2xl"><IoPersonRemoveOutline/></span>
                             <p className="text-white/70">Unfriend</p>
@@ -58,6 +64,8 @@ function ChatFriendInfo(){
                         <div className="cursor-pointer  hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center" onClick={() =>{
                             chatContext.setOpenModal(true)
                             chatContext.setModalMessage("block this user")
+                            const action:Action = {type: ActionType.BLOCK, Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                            userContext?.setAction(action)
                         }}>
                             <span className="text-2xl text-red-500"><MdOutlineBlock/></span>
                             <p className="text-red-500">Block</p>

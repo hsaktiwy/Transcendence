@@ -88,6 +88,15 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
   
               }
             }
+            if (type == "NOTIFICATION")
+            {
+              if(channels.current['NOTIFICATION'])
+              {
+                const notifData =  JSON.parse(message.data);
+                console.log(notifData)
+                channels.current['NOTIFICATION'](notifData)
+              }
+            }
         } catch (error) {
             console.error('Error processing WebSocket message:', error);
         }
