@@ -194,12 +194,27 @@ def AcceptFriendRequest(request, id):
 def BlockUser(request, _login):
 	try:
 		blocked_user = MyUser.objects.get(login=_login)
-		if blocked_user:
-			myuser = request.user
-			list, create = BlockList.objects.get_or_create(user=myuser)
-			check = list.block_users.filter(id=blocked_user.id).exists()
-			if (not check):
-				list.block_users.add(blocked_user)
+		myuser = request.user
+		list, create = BlockList.objects.get_or_create(user=myuser)
+		check = list.block_users.filter(id=blocked_user.id).exists()
+		if (not check):
+			list.block_users.add(blocked_user)
 		return Response({'message': 'User '+_login+' in the Block List'}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def UnFriendUser(request, _login):
+	try:
+		friend = MyUser.objects.get(login=_login)
+		myuser = request.user
+		friendship = FriendShip.objects.filter((Q(user=myuser) & Q(friend=friend)) | (Q(user=friend) & Q(friend=myuser)))
+		f_request = FriendRequest.objects.filter((Q(sender=myuser) & Q(receiver=friend)) | (Q(sender=friend) & Q(receiver=myuser)))
+		if len(friendship) > 0:
+			friendship.first().delete()
+		else:
+			return Response({'mesasge': 'No friendship was found with '+_login+"!"}, status=status.HTTP_200_OK)
+		if len(f_request) > 0:
+			f_request.first().delete()
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)

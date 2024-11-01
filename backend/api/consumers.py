@@ -12,7 +12,7 @@ from friendship.models import FriendShip, FriendRequest
 from datetime import datetime
 from status.serializers import NotificationSerializer
 from django.db.models import Q
-from friendship.models import BlockList
+from friendship.models import BlockList, FriendShip
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -54,15 +54,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if list1:
                 isblock = list1.block_users.filter(id=otherUser.id).exists()
                 if isblock:
-                    return False
+                    return False, 'BLOCKED!'
             if list2:
                 isblock = list2.block_users.filter(id=user.id).exists()
                 if isblock:
-                    return False
-            return True
+                    return False, 'BLOCKED!'
+            friendship = FriendShip.objects.filter((Q(user=user) & Q(friend=otherUser)) | (Q(user=otherUser) & Q(friend=user))).exists()
+            if not friendship:
+                return False, 'NOT A FRIEND!'
+            return True, 'CLEAR'
         except Exception as e:
             print(e)
-            return False
+            return False, "CAN'T DO THAT!"
 
     @database_sync_to_async
     def get_user_channel(self, channe_id):
@@ -186,7 +189,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     await self.add_group(channel, user)
                 # create the message
                 # check if the user is not in the block list
-                valide = await sync_to_async(self.check_if_valide_message)(user,room_id)
+                valide, Error = await sync_to_async(self.check_if_valide_message)(user,room_id)
                 print(valide)
                 if valide:
                     message_id, lastUpdate= await sync_to_async(self.creatMessage)(user,room_id, message, message_id, lastUpdate)
@@ -207,7 +210,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 else:
                     responce = {
                         'type': 'NOTIFICATION',
-                        'content' : 'BLOCK',
+                        'content' : Error,
                         'notification':'Error'
                     }
                     await self.send(text_data=json.dumps(responce))
