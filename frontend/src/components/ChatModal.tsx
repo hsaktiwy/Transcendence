@@ -13,8 +13,9 @@ function ChatModal(){
     const DoAction = async ()=>
     {
         try{
+            const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": "unfriend")
             const req = {
-                url: "friendship/"+(userContext?.action?.type == ActionType.BLOCK ? "block":"unfriend")+"/"+userContext?.action?.Target_User_Login,
+                url: "friendship/"+action+"/"+userContext?.action?.Target_User_Login,
                 method: "GET",
                 withCredentials: true,
             }

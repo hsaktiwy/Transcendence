@@ -2,6 +2,7 @@ import { CallbackType } from "./types";
 
 export enum ActionType{
     UNFRIEND,
+    UNBLOCK,
     BLOCK,
     NONE
 }

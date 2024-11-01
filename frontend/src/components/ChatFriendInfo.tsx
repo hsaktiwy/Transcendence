@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState , useEffect} from "react";
 import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
 import { IoCloseSharp } from "react-icons/io5";
 import { BsTrophy } from "react-icons/bs";
@@ -11,6 +11,7 @@ import { User } from "../utils/ChatContext";
 import { BACKEND } from "../utils/Constants";
 import { Action, ActionType} from "@/utils/interfaces";
 import { UserContext } from '../components/UserContext';
+import mailman from "@/utils/AxiosFetcher";
 
 
 
@@ -20,9 +21,31 @@ function ChatFriendInfo(){
     const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
+    const [Status, setStatus] = useState<string>("Block")
     if (!chatContext || !userContext)
      throw new Error('error')
     const user2_level:number = (Math.random() * 10)
+    const BlockStatusCheck = async ()=>
+    {
+        try{
+            const req = {
+                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.login,
+                method: 'GET',
+                withCredentials:true,
+            }
+            const resp = await mailman(req)
+            const  responce:boolean = resp.data['status']
+            setStatus((responce) ? 'UnBlock' : 'Block')
+            console.log(resp)
+        }
+        catch(err)
+        {
+            console.log("Block status ", err)
+        }
+    }
+    useEffect(()=>{
+        BlockStatusCheck()
+    },[])
     return(
         <div className={`  rounded-l-xl lg:rounded-l-none rounded-r-xl border-r-0 lg:border-l-[1px] border-white/50 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
@@ -64,11 +87,11 @@ function ChatFriendInfo(){
                         <div className="cursor-pointer  hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center" onClick={() =>{
                             chatContext.setOpenModal(true)
                             chatContext.setModalMessage("block this user")
-                            const action:Action = {type: ActionType.BLOCK, Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                            const action:Action = {type: (Status=='Block' ? ActionType.BLOCK : ActionType.UNBLOCK), Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
                             userContext?.setAction(action)
                         }}>
                             <span className="text-2xl text-red-500"><MdOutlineBlock/></span>
-                            <p className="text-red-500">Block</p>
+                            <p className="text-red-500">{Status}</p>
                         </div>
                     </div>
                 </div>
