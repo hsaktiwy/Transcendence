@@ -178,7 +178,7 @@ def AcceptFriendRequest(request, id):
 		friend_request.status = RelationShipStatus.ACCEPTED.value
 		friend_request.save()
 		friendship, created = FriendShip.objects.get_or_create(user=friend_request.sender, friend=friend_request.receiver)
-		exist = Channel.objects.filter(Q(users=friend_request.sender) & Q(users=friend_request.receiver)).first()
+		exist = Channel.objects.filter(users=friend_request.sender).filter(users=friend_request.receiver).exists()
 		if exist:
 			return Response({'message': 'All ready Exist a channel between Both users'}, status=status.HTTP_200_OK)
 		else:
