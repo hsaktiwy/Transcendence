@@ -204,6 +204,18 @@ def BlockUser(request, _login):
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+def UnBlockUser(request, _login):
+	try:
+		blocked_user = MyUser.objects.get(login=_login)
+		user = request.user
+		list = BlockList.objects.get(user=user)
+		list.block_users.remove(blocked_user)
+		return Response({'message': 'User is  Unblocked!'}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
 def UnFriendUser(request, _login):
 	try:
 		friend = MyUser.objects.get(login=_login)
@@ -216,5 +228,20 @@ def UnFriendUser(request, _login):
 			return Response({'mesasge': 'No friendship was found with '+_login+"!"}, status=status.HTTP_200_OK)
 		if len(f_request) > 0:
 			f_request.first().delete()
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def isBlocked(request, _login):
+	try:
+		user = request.user
+		otheruser = MyUser.objects.get(login=_login)
+		blocklist = BlockList.objects.get(user=user)
+		isblocked = blocklist.block_users.filter(id=otheruser.id).exists()
+		if isblocked:
+			return Response({'status': True}, status=status.HTTP_200_OK)
+		else:
+			return Response({'status': False}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
