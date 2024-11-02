@@ -353,8 +353,25 @@ class Verify2faOTPView(APIView):
             'message' : 'Invalid OTP'
         }, status=400)
 
+@api_view(['POST'])
+def Search(request):
+    try:
+        identifier = request.data.get('search')
+        print(identifier)
+        Users = MyUser.objects.filter(login__icontains=identifier)
+        SerializedUsers = SearchUserSerializer(Users, many=True)
+        return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
+    except:
+        return Response({"error": "wala\n"},status=444)
+
 @api_view(['GET'])
-def Search(request, identifier):
-    Users = MyUser.objects.filter(login__icontains=identifier)
-    SerializedUsers = SearchUserSerializer(Users, many=True)
-    return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
+@permission_classes([AllowAny])
+def LogoutView(request):
+    try:
+        resp =  Response({'message' : 'user logged out successfully'}, status=status.HTTP_200_OK)
+        resp.set_cookie(key='access_token',value='',httponly=True,samesite='Lax',expires=0)
+        resp.set_cookie(key='refresh_token',value='',httponly=True,samesite='Lax',expires=0)
+        resp.set_cookie(key='csrftoken',value='',httponly=False,samesite='Lax',expires=0)
+        return resp
+    except:
+        return Response({"error": "error occured"},status=400)

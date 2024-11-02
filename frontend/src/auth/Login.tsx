@@ -129,10 +129,10 @@ const Login = () => {
                     url: '/api/LoginWithOAuth42/',
                     method: 'POST',
                     data: { code }
-
+                    
                 }
                 const resp = await mailman(req)
-
+                
                 if (resp.status === 200) {
                     // setLoading(false)
                     location.reload();

@@ -4,6 +4,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { CgLogOut } from "react-icons/cg";
 import { UserContext } from "./UserContext";
 import { Link } from "react-router-dom";
+import { AuthContext } from "./AuhtenticationContext";
 interface prop {
     display: boolean
 }
@@ -11,7 +12,8 @@ interface prop {
 const NavBarDrop = (info: prop) =>{
 
     const userContextConsumer  = useContext(UserContext)
-    if (!userContextConsumer)
+    const authContextConsumer  = useContext(AuthContext)
+    if (!userContextConsumer || !authContextConsumer)
         throw new Error('error')
 
     return (
@@ -32,12 +34,14 @@ const NavBarDrop = (info: prop) =>{
                     <p className="font-medium text-lg w-[115px]"> Settings</p>
     
             </Link>
-            <Link to='/' className="w-full flex justify-between text-2xl opacity-50 hover:opacity-100 duration-75">
+            <div  className="w-full flex justify-between text-2xl opacity-50 hover:opacity-100 duration-75 text-red-500" onClick={()=>{
+                authContextConsumer.setLoggedIn(false)
+            }}>
                 <span className="text-3xl">
                     <CgLogOut/>
                 </span>
                 <p className="font-medium text-lg w-[115px]"> Log out</p>
-            </Link>
+            </div>
         </div>
     )
 }

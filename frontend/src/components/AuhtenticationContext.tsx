@@ -2,6 +2,8 @@ import React, { useState, createContext, useEffect } from "react";
 import mailman from "@/utils/AxiosFetcher";
 import { AxiosError } from "axios";
 import { useLocation } from "react-router-dom";
+import { error, log } from "console";
+import { toast } from "sonner";
 export interface LoginDataInterface{
     login: string,
     password: string
@@ -21,6 +23,7 @@ interface AuthContextInterface{
     setLoggedIn : React.Dispatch<React.SetStateAction<boolean | undefined> >,
     LoginAction : (data: LoginDataInterface) => Promise<LoginResp | LoginError>,
     checkLoggedInUser : () => void
+    logout : () => void
 
 }
 
@@ -52,30 +55,54 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
             return loginError
         }
     }
-    const checkLoggedInUser = async () => {
-        try{
-            const req = {
-                url: '/api/user/check/',
-                method: 'GET',
-                withCredentials: true,
+    const logout =  async () =>{
+        if (loggedIn !== undefined){
+            try{
+                const request = {
+                    url: '/api/user/logout/',
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(request)
+                // if (loggedIn !== undefined && loggedIn === true){
+                //     setLoggedIn(false)
+                //     toast.info('User Logged out')
+                // }
+                
+                
             }
-            const resp = await mailman(req)
-     
-            if(resp.data['message'] && resp.data['message'] === 'user already logged in')
-                setLoggedIn(true)
-            else
+            catch (error){
+                toast.error('error occured')
+            }
+        }
+    }
+    const checkLoggedInUser = async () => {
+            try{
+                const req = {
+                    url: '/api/user/check/',
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req)
+                if(resp.data['message'] && resp.data['message'] === 'user already logged in' ){
+                    console.log('awweeeee:    ', loggedIn)
+                    setLoggedIn(true)
+                }
+                else
+                    setLoggedIn(false)
+            }
+            catch(error){
+                console.log(error)
                 setLoggedIn(false)
-
-
-        }
-        catch(error){
-            setLoggedIn(false)
-        }
+            }
+  
     }
     useEffect (() =>{
         checkLoggedInUser()
-    },[location])
-    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, checkLoggedInUser}}>
+        if (location.pathname !== '/login' && loggedIn === false)
+            logout()
+    },[location, loggedIn])
+    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, checkLoggedInUser, logout}}>
         {children}
     </AuthContext.Provider>
 }

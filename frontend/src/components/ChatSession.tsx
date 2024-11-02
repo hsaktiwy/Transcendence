@@ -16,13 +16,16 @@ import Conversations from "./Conversations";
 import ChatModal from "./ChatModal";
 import { WebSocketContext } from "../utils/WSContext";
 import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Constants";
+import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
+import { UserContext } from "./UserContext";
 
 export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
 function ChatSession(){
     
     const chatContext =useContext(ChatSectionContext)
-    if (!chatContext)
+    const userContext = useContext(UserContext)
+    if (!chatContext || !userContext)
      throw new Error('error')
     const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
@@ -40,6 +43,30 @@ function ChatSession(){
     const testref = useRef<any>(null);// amine 
     const [loading, setLoading] = useState<boolean>(false)
     const [openDrop, setOpenDrop] = useState<boolean>(false)// amine 
+    const [Status, setStatus] = useState<string>("Block")
+
+    const BlockStatusCheck = async ()=>
+    {
+        try{
+            const req = {
+                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.login,
+                method: 'GET',
+                withCredentials:true,
+            }
+            const resp = await mailman(req)
+            const  responce:boolean = resp.data['status']
+            setStatus((responce) ? 'UnBlock' : 'Block')
+            console.log(resp)
+        }
+        catch(err)
+        {
+            console.log("Block status ", err)
+        }
+    }
+
+    // useEffect(()=>{
+    //     BlockStatusCheck()
+    // },[])
     //amine
     useEffect(() => {
         // Scroll to the bottom whenever the messages array changes
@@ -94,6 +121,8 @@ function ChatSession(){
             }
           
         }
+        if (openDrop)
+            BlockStatusCheck()
         window.addEventListener('click', (e) => handleCloseMenu(e))
         return () =>{
             window.removeEventListener('click', handleCloseMenu)
@@ -123,7 +152,7 @@ function ChatSession(){
                 socket.current.send(holder)
                 holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
                 socket.current.send(holder)
-                console.log(holder);
+                console.log(holder)
                 setMessage('')
             }
             else
@@ -281,11 +310,13 @@ function ChatSession(){
                                             () => {
                                                 chatContext.setOpenModal(true)
                                                 chatContext.setModalMessage("block this user")
+                                                const action:Action = {type: (Status=='Block' ? ActionType.BLOCK : ActionType.UNBLOCK), Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                                                userContext?.setAction(action)
                                             }
                                         }>
                                                 <span className="inline-block text-xl"><MdOutlineBlock/></span>
                                             <p>
-                                                Block
+                                                {Status}
                                             </p>
                                         </li>
                                         <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer "  onClick={
