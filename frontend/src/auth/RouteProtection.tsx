@@ -76,7 +76,7 @@ function RouteProtection(children: childrenInterface)
     //         AuthContextConsummer?.checkLoggedInUser()
     //     }
     // },[AuthContextConsummer?.loggedIn])
-   return AuthContextConsummer.loggedIn !== undefined ? AuthContextConsummer.loggedIn ? (<>{children.children}</>) : (<><Navigate to='/login'/></>) : <LoadingIndecator/>
+   return  AuthContextConsummer.loggedIn === true ? (<>{children.children}</>) : (<><Navigate to='/login'/></>) 
 
 }
 

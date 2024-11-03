@@ -110,7 +110,7 @@ const Login = () => {
             toast.success(resp.message)
             console.log(resp)
             AuthContextConsummer.setLoggedIn(true)
-            Navigate('/')
+            // Navigate('/')
         }
     }
 
@@ -148,48 +148,49 @@ const Login = () => {
         }
     }
     useEffect(() => {
-        const searchParams = new URLSearchParams(window.location.search);
-        const code = searchParams.get('code');
-        console.log(`1234   ${code}`)
-
-        // if (code) {
-
-        //     try {
-        //         const req = {
-        //             url : '/api/LoginWithOAuth42/',
-        //             method : 'POST',
-
-        //         }
-        //         const resp = 
-        //     }
-        //     catch{
-
-        //     }
-
-        //     const
-
-        //     fetch('http://localhost:8000/api/LoginWithOAuth42/', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({ code }),
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         if (data) {
-        //             console.log('data', data);
-        //         }
-        //         window.history.replaceState({}, document.title, window.location.pathname);
-        //     })
-        //     .catch(error => console.error('Error:', error));
-        // }
-        loginwith42(code)
+      
+            const searchParams = new URLSearchParams(window.location.search);
+            const code = searchParams.get('code');
+            console.log(`1234   ${code}`)
+    
+            // if (code) {
+    
+            //     try {
+            //         const req = {
+            //             url : '/api/LoginWithOAuth42/',
+            //             method : 'POST',
+    
+            //         }
+            //         const resp = 
+            //     }
+            //     catch{
+    
+            //     }
+    
+            //     const
+    
+            //     fetch('http://localhost:8000/api/LoginWithOAuth42/', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //         },
+            //         body: JSON.stringify({ code }),
+            //     })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         if (data) {
+            //             console.log('data', data);
+            //         }
+            //         window.history.replaceState({}, document.title, window.location.pathname);
+            //     })
+            //     .catch(error => console.error('Error:', error));
+            // }
+            loginwith42(code)
     }, [AuthContextConsummer.loggedIn]);
     const [hide, setHide] = useState<boolean>(true)
 
     return (
-        AuthContextConsummer.loggedIn != undefined ?
+       
             <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white">
                 <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-full max-w-sm">
                     <div className='form-header text-center text-5xl font-semibold text-white/70 tracking-wider mb-10'>
@@ -235,8 +236,7 @@ const Login = () => {
                 </form>
                 {/* <form onSubmit={handleSubmitWith42}>
                 </form> */}
-            </div> :
-            <LoadingIndecator />
+            </div> 
 
     );
 };
