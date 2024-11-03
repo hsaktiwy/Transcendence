@@ -5,6 +5,7 @@ import { CgLogOut } from "react-icons/cg";
 import { UserContext } from "./UserContext";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./AuhtenticationContext";
+import { toast } from "sonner";
 interface prop {
     display: boolean
 }
@@ -36,6 +37,8 @@ const NavBarDrop = (info: prop) =>{
             </Link>
             <div  className="w-full flex justify-between text-2xl opacity-50 hover:opacity-100 duration-75 text-red-500" onClick={()=>{
                 authContextConsumer.setLoggedIn(false)
+                toast.info('User Logged Out')
+
             }}>
                 <span className="text-3xl">
                     <CgLogOut/>

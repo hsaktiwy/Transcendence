@@ -1,7 +1,7 @@
 import React, { useState, createContext, useEffect } from "react";
 import mailman from "@/utils/AxiosFetcher";
 import { AxiosError } from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { error, log } from "console";
 import { toast } from "sonner";
 export interface LoginDataInterface{
@@ -32,6 +32,7 @@ export const AuthContext = createContext<AuthContextInterface | undefined>(undef
 const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     const location = useLocation()
     const [loggedIn, setLoggedIn] = useState<boolean | undefined>(undefined)
+    const Navigate = useNavigate();
     const LoginAction = async (data: LoginDataInterface): Promise<LoginResp | LoginError> =>{
         try{
             const request = {
@@ -84,24 +85,29 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
-                if(resp.data['message'] && resp.data['message'] === 'user already logged in' ){
-                    console.log('awweeeee:    ', loggedIn)
+                if(resp.data['message'] && resp.data['message'] === 'user already logged in' && loggedIn === undefined)
                     setLoggedIn(true)
-                }
-                else
+
+                else if (resp.data['message'] && resp.data['message'] === 'User logged in successfuly' && loggedIn === undefined)
+                    setLoggedIn(true)
+
+                else if (resp.data['message'] && resp.data['message'] === 'Anonymous user' && loggedIn === true)
                     setLoggedIn(false)
+
             }
             catch(error){
-                console.log(error)
-                setLoggedIn(false)
+                if (loggedIn === true)
+                    setLoggedIn(false)
             }
   
     }
+    useEffect(()=>{
+        if (loggedIn === false)
+            logout()
+    }, [loggedIn])
     useEffect (() =>{
         checkLoggedInUser()
-        if (location.pathname !== '/login' && loggedIn === false)
-            logout()
-    },[location, loggedIn])
+    },[location])
     return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, checkLoggedInUser, logout}}>
         {children}
     </AuthContext.Provider>
