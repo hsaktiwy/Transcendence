@@ -155,9 +155,9 @@ return(
                                             <p className="text-gray-300 text-sm 2xl:text-base"><span className={`${currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login ? 'inline-block' :'hidden'} mr-3`}>You : </span>{currentConvData.lastMessage?.content.length >= 20 ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : currentConvData?.lastMessage.content}</p>
                                             
                                         </div>
-                                        <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
+                                        {/* <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
 
-                                        </div>
+                                        </div> */}
                                         
                                     </div>
                             )
