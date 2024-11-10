@@ -71,12 +71,14 @@ function RouteProtection(children: childrenInterface)
         throw new Error("invalid scope");
 
     // useEffect(() =>{
-    //     if (!AuthContextConsummer?.loggedIn){
-    //         console.log("ZZZZZKNAXAHIOHACOH")
-    //         AuthContextConsummer?.checkLoggedInUser()
-    //     }
-    // },[AuthContextConsummer?.loggedIn])
-   return  AuthContextConsummer.loggedIn === true ? (<>{children.children}</>) : (<><Navigate to='/login'/></>) 
+    //     if(AuthContextConsummer.loggedIn === undefined)
+    //         AuthContextConsummer.checkLoggedInUser()
+    //     // if (!AuthContextConsummer?.loggedIn){
+    //     //     console.log("ZZZZZKNAXAHIOHACOH")
+    //     //     AuthContextConsummer?.checkLoggedInUser()
+    //     // }
+    // },[])
+   return  AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : AuthContextConsummer.loggedIn === true ? (<>{children.children}</>) : (<><Navigate to='/login'/></>) 
 
 }
 
