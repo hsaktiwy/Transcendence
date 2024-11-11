@@ -91,7 +91,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                 else if (resp.data['message'] && resp.data['message'] === 'User logged in successfuly' && loggedIn === undefined)
                     setLoggedIn(true)
 
-                else if (resp.data['message'] && resp.data['message'] === 'Anonymous user' && loggedIn === true)
+                else if (resp.data['message'] && resp.data['message'] === 'Anonymous user' && (loggedIn === true || loggedIn === undefined))
                     setLoggedIn(false)
 
             }
