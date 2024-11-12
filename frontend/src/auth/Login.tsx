@@ -190,53 +190,55 @@ const Login = () => {
     const [hide, setHide] = useState<boolean>(true)
 
     return (
-       
-            <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white">
-                <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-full max-w-sm">
-                    <div className='form-header text-center text-5xl font-semibold text-white/70 tracking-wider mb-10'>
-                        <h1>LOGIN</h1>
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
-                        <input
-                            autoComplete='off'
-                            type="username"
-                            id="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                            className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
-                        />
-                    </div>
-                    <div className="mb-6 relative ">
-                        <label htmlFor="password" className="block text-white font-bold mb-2">Password:</label>
-                        <input
-                            type={hide  ? 'password' : 'text'}
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
-                        />
-                        <div className='p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75' onClick={() =>{
-                            setHide(!hide)
-                        }}>
-                            {hide ? <LuEyeOff/> : <LuEye/>}
+            AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
+                <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white">
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-full max-w-sm">
+                        <div className='form-header text-center text-5xl font-semibold text-white/70 tracking-wider mb-10'>
+                            <h1>LOGIN</h1>
                         </div>
-                    </div>
-                    <div className='flex flex-col gap-6 mt-9'>
+                        <div className="mb-4">
+                            <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
+                            <input
+                                autoComplete='off'
+                                type="username"
+                                id="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                                className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
+                            />
+                        </div>
+                        <div className="mb-6 relative ">
+                            <label htmlFor="password" className="block text-white font-bold mb-2">Password:</label>
+                            <input
+                                type={hide  ? 'password' : 'text'}
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
+                            />
+                            <div className='p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75' onClick={() =>{
+                                setHide(!hide)
+                            }}>
+                                {hide ? <LuEyeOff/> : <LuEye/>}
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-6 mt-9'>
 
-                        <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  opacity-70 hover:opacity-100  duration-75">
-                            Login
-                        </button>
-                        <button type="submit" className="w-full  bg-[#131313] text-white font-bold py-2 px-4 rounded opacity-70 hover:opacity-100  duration-75" onClick={handleSubmitWith42}>
-                        {!loading ? <p >Login with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
-                        </button>
-                    </div>
-                </form>
-                {/* <form onSubmit={handleSubmitWith42}>
-                </form> */}
-            </div> 
+                            <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  opacity-70 hover:opacity-100  duration-75">
+                                Login
+                            </button>
+                            <button type="submit" className="w-full  bg-[#131313] text-white font-bold py-2 px-4 rounded opacity-70 hover:opacity-100  duration-75" onClick={handleSubmitWith42}>
+                            {!loading ? <p >Login with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
+                            </button>
+                        </div>
+                    </form>
+                    {/* <form onSubmit={handleSubmitWith42}>
+                    </form> */}
+                </div> 
+
+            
 
     );
 };
