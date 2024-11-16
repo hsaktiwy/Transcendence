@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useRef } from "react";
-import { UserDataInterface } from "../utils/UserDataInterface";
+import { UserDataInterface,ProfileDataInterface } from "../utils/UserDataInterface";
 import { useContext, useState } from "react";
 import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
@@ -46,6 +46,13 @@ interface UserContextInterface{
     action: Action | undefined;
     setAction:  React.Dispatch<React.SetStateAction<Action |  undefined> >;
 }
+interface FriendRequestInterface {
+    id:number;
+    sender:ProfileDataInterface;
+    receiver:ProfileDataInterface;
+    status:string;
+    created_at:string
+}
 
 export const UserContext = createContext<UserContextInterface | undefined>(undefined)
 
@@ -57,6 +64,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     // const [id, setUserId] = useState<number | undefined>(undefined);
     const [userData, setUserData] = useState<UserDataInterface | undefined>(undefined);
     const [profilePicChanged, setProfilePicChanged] = useState<boolean>(false);
+    const [friendRequestSent, setFriendRequestSent] = useState<FriendRequestInterface[]>([])
+    const [friendRequestReceived, setFriendRequestReceived] = useState<FriendRequestInterface[]>([])
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
@@ -113,6 +122,45 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             console.error("dddddd======????",err)
         }
 
+    }
+    const fetchSentFriendRequest = async () =>{
+
+        try{
+            const req = {
+                url: `/friendship/friend_requests_sent/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req)
+            if (resp.data.length > 0){
+                const data : FriendRequestInterface[] = resp.data
+                console.log("sent friend req ",resp.data)
+                setFriendRequestSent(data)
+            }
+            
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
+    }
+    const fetchReceivedFriendRequest = async () =>{
+
+        try{
+            const req = {
+                url: `/friendship/friend_requests_received/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req)
+            if (resp.data.length > 0){
+                const data : FriendRequestInterface[] = resp.data
+                console.log("received friend req ",resp.data)
+                setFriendRequestReceived(data)
+            }
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
     }
     const getNotificationData = (notifications: NotificationPropreties[]) =>{
         for(const notif of notifications){
@@ -176,7 +224,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
         }
-
+        
     }, [])
     useEffect(() => {
         if (AuthContextConsummer?.loggedIn){
@@ -186,6 +234,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     useEffect(() =>{
         if (AuthContextConsummer?.loggedIn){
             fetchUserData()
+            fetchReceivedFriendRequest()
+            fetchSentFriendRequest()
         }
     }, [AuthContextConsummer?.loggedIn, profilePicChanged])
     return(

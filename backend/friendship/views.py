@@ -250,7 +250,12 @@ class FriendRequestSentList(generics.ListAPIView):
     serializer_class = FriendRequestSerializer
     def get_queryset(self):
         user=self.request.user
-        return FriendRequest.objects.filter(sender=user, )
+        return FriendRequest.objects.filter(sender=user, status='pending')
+class FriendRequestReceivedList(generics.ListAPIView):
+    serializer_class = FriendRequestSerializer
+    def get_queryset(self):
+        user=self.request.user
+        return FriendRequest.objects.filter(receiver=user, status='pending')
 	
     
     
