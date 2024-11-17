@@ -71,8 +71,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
     const notificationHandler = (data: NotificationPropreties) => {
-        // notificationData.sort((a, b)=> b.id - a.id)
-        console.log(data)
+
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
     }
@@ -188,7 +187,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             //     toast.dismiss(toastId);
             // }, 5000);
             let notificationData : NotificationPropreties[] = resp.data
-            console.log('waaaaaaa')
             notificationData = getNotificationData(notificationData)
             console.log(notificationData)
             setnotifications(notificationData.sort((a, b)=> b.id - a.id))

@@ -58,7 +58,7 @@ def LoginWithOAuth42(request):
     code = request.data.get('code')
     
     client_id = 'u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041'
-    client_secret = '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'
+    client_secret = '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'
     redirect_uri = 'https://localhost/login/'
 
     token_url = 'https://api.intra.42.fr/oauth/token'

@@ -191,10 +191,11 @@ const Login = () => {
 
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
-                <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white">
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-full max-w-sm">
-                        <div className='form-header text-center text-5xl font-semibold text-white/70 tracking-wider mb-10'>
-                            <h1>LOGIN</h1>
+                <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white ">
+                    <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-[90%] sm:w-[450px] ">
+                        <div className='form-header  text-4xl font-semibold text-white/70 tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
+                            <h1 >Welcome Back !</h1>
+                            <p className='text-lg font-normal '>Please Enter your details</p>
                         </div>
                         <div className="mb-4">
                             <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
@@ -224,7 +225,8 @@ const Login = () => {
                                 {hide ? <LuEyeOff/> : <LuEye/>}
                             </div>
                         </div>
-                        <div className='flex flex-col gap-6 mt-9'>
+
+                        <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
 
                             <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  opacity-70 hover:opacity-100  duration-75">
                                 Login
@@ -232,6 +234,10 @@ const Login = () => {
                             <button type="submit" className="w-full  bg-[#131313] text-white font-bold py-2 px-4 rounded opacity-70 hover:opacity-100  duration-75" onClick={handleSubmitWith42}>
                             {!loading ? <p >Login with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
                             </button>
+                            <div className='h-[80px] flex flex-col gap-4 justify-center items-center'>
+                                <p>Don't have an account ? <span className='text-[#5E97A9] inline-block ml-2 opacity-50 hover:opacity-100 duration-100 cursor-pointer'>Sign Up</span></p>
+                                <p>Forget Password ? <span className='text-[#5E97A9] inline-block ml-2 opacity-50 hover:opacity-100 duration-100 cursor-pointer'>Click here</span></p>
+                            </div>
                         </div>
                     </form>
                     {/* <form onSubmit={handleSubmitWith42}>
