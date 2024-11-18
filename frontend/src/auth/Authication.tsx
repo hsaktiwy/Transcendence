@@ -22,7 +22,7 @@ function Auth(children:childrenInterface)
                     }}/>
                     <Routes>
                         <Route path="/*" element={<RouteProtection>{children.children}</RouteProtection>}/>
-                        <Route path="/login" element={<LandingPage2/>}/>
+                        <Route path="/login" element={<Login/>}/>
                         <Route path="/signup" element={<RegistrationForm/>}/>
                         {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
                     </Routes>

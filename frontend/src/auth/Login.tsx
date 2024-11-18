@@ -191,7 +191,7 @@ const Login = () => {
 
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
-                <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white ">
+                <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white bg-gradient-to-b from-[#070320] to-[#1a3340]">
                     <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-[90%] sm:w-[450px] ">
                         <div className='form-header  text-4xl font-semibold text-white/70 tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                             <h1 >Welcome Back !</h1>
