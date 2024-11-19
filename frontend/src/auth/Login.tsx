@@ -12,7 +12,8 @@ import LoadingIndecator from '@/components/Loading';
 import { resolve } from 'path';
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
-
+import { motion } from 'framer-motion';
+import background from '../../public/bg-login.jpg'
 const Loading__ = () => {
     return (
         <div className="flex justify-center items-center h-full w-full ">
@@ -188,11 +189,35 @@ const Login = () => {
             loginwith42(code)
     }, [AuthContextConsummer.loggedIn]);
     const [hide, setHide] = useState<boolean>(true)
-
+    const FormFade = () => {
+        return (
+            {
+                formInitial: {
+                    opacity: 0,
+                    x: -100, 
+                },
+                formAnimate :{
+                    opacity: 1,
+                    x: 0,
+                    transition : {
+                        duration: 0.5,
+                        ease: "easeInOut",
+                        type: "spring",
+                        stiffness: 100
+                    } 
+                }
+            }
+        )
+    }
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
-                <div className="flex flex-col items-center justify-center min-h-screen font-poppins text-white bg-gradient-to-b from-[#070320] to-[#1a3340]">
-                    <form onSubmit={handleSubmit} className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-[90%] sm:w-[450px] ">
+                <div className={`flex flex-col items-center justify-center min-h-screen font-poppins text-white bg-[url('bg-login.jpg')] bg-cover bg-center`}>
+                    <motion.form 
+                        variants={FormFade()}
+                        initial="formInitial"
+                        animate="formAnimate"
+                        onSubmit={handleSubmit}
+                        className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-[90%] sm:w-[450px] ">
                         <div className='form-header  text-4xl font-semibold text-white/70 tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                             <h1 >Welcome Back !</h1>
                             <p className='text-lg font-normal '>Please Enter your details</p>
@@ -239,7 +264,7 @@ const Login = () => {
                                 <p>Forget Password ? <span className='text-[#5E97A9] inline-block ml-2 opacity-50 hover:opacity-100 duration-100 cursor-pointer'>Click here</span></p>
                             </div>
                         </div>
-                    </form>
+                    </motion.form>
                     {/* <form onSubmit={handleSubmitWith42}>
                     </form> */}
                 </div> 
