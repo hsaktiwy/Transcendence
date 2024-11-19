@@ -1,5 +1,6 @@
 import React from "react";
 import Switch from '../../../public/Switch.png'
+import Paddle from '../../../public/landingHero.gif'
 import { FaArrowRight } from "react-icons/fa6";
 import { motion } from "framer-motion";
 
@@ -44,7 +45,7 @@ const ImageFade = () => {
 const HeroSection = () =>{
     
     return (
-        <div className="min-h-[650px] grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-16 z-20">
+        <div className="min-h-[650px] grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-16    rounded-xl">
             <div className="flex flex-col justify-center gap-8">
                 <div>
                     <motion.h1 
@@ -62,7 +63,7 @@ const HeroSection = () =>{
                     variants={FadeIn(0.7)}
                     initial="initial"
                     animate="animate"
-                    className="text-lg font-medium text-slate-200 w-full md:w-[70%]">Ready for a challenge? Whether you want to test your reflexes with fast-paced Ping Pong or sharpen your strategy with Chess, our platform has it all. Compete with players worldwide, climb the leaderboards, and become a master of both speed and strategy. With real-time matches and global tournaments, every game is a chance to prove your skills.
+                    className="text-lg font-medium text-slate-200 ">Ready for a challenge? Whether you want to test your reflexes with fast-paced Ping Pong or sharpen your strategy with Chess, our platform has it all. Compete with players worldwide, climb the leaderboards, and become a master of both speed and strategy. With real-time matches and global tournaments, every game is a chance to prove your skills.
                 </motion.p>
                 <motion.div
                     variants={FadeIn(0.8)}
@@ -78,7 +79,7 @@ const HeroSection = () =>{
                 initial="imgInitial"
                 animate="imgAnimate"
                 className=" flex justify-end items-center">
-                <img src={Switch} alt="Switch-Image" className=" " />
+                <img src={Paddle} alt="Switch-Image" className=" " />
             </motion.div>
         </div>
     )

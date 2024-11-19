@@ -12,6 +12,7 @@ import { Toaster, toast } from 'sonner'
 import LandingPage from '@/components/LandingPage';
 import LandingPage2 from '@/components/Landing/LandingPage2';
 import LoadingIndecator from '@/components/Loading';
+import RedirectRoute from './RedirectRoute';
 function Auth(children:childrenInterface)
 {
     
@@ -24,6 +25,7 @@ function Auth(children:childrenInterface)
                         <Route path="/*" element={<RouteProtection>{children.children}</RouteProtection>}/>
                         <Route path="/login" element={<Login/>}/>
                         <Route path="/signup" element={<RegistrationForm/>}/>
+                        <Route path="/home" element={<LandingPage2/>}/>
                         {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
                     </Routes>
                 </>
