@@ -103,7 +103,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 two_factor_auth,
 
             } = resp.data
-            console.log("sss ====???? ",resp.data)
             setUserData({
                 login,
                 email,
