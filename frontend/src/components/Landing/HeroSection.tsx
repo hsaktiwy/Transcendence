@@ -3,7 +3,7 @@ import Switch from '../../../public/Switch.png'
 import Paddle from '../../../public/landingHero.gif'
 import { FaArrowRight } from "react-icons/fa6";
 import { motion } from "framer-motion";
-
+import { Link } from "react-router-dom";
 export const FadeIn = (delay: number) =>{
     return({
         initial: {
@@ -69,8 +69,9 @@ const HeroSection = () =>{
                     variants={FadeIn(0.8)}
                     initial="initial"
                     animate="animate"
+                    whileHover={{scale:1.1}}
                     className="bg-[#5E97A9] rounded-2xl py-4 px-3 w-[165px] flex justify-between items-center hover:scale-105 duration-100 cursor-pointer">
-                    <p className=" text-lg font-medium">Get Started</p>
+                    <Link to='/login' className=" text-lg font-medium">Get Started</Link>
                     <FaArrowRight/>
                 </motion.div>
             </div>
