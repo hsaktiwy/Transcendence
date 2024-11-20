@@ -6,7 +6,7 @@ import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
 import { toast } from 'sonner'
 import { UserContext } from '../components/UserContext';
-import { AuthContext, LoginDataInterface, LoginError, LoginResp } from '@/components/AuhtenticationContext';
+import { AuthContext, LoginDataInterface, LoginError, LoginResp, signUpDataInterface } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
 import { resolve } from 'path';
 import { LuEye } from "react-icons/lu";
@@ -14,6 +14,9 @@ import { LuEyeOff } from "react-icons/lu";
 import { motion } from 'framer-motion';
 import background from 'astro-bg.png';
 import { Loading__ } from './Login';
+import { Link } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { userNameError, emailError, passError } from './signUpError';
 const RegisterForm = () =>{
     const AuthContextConsummer = useContext(AuthContext)
     if (!AuthContextConsummer)
@@ -25,7 +28,8 @@ const RegisterForm = () =>{
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [password2, setPassword2] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false);
+    const [registred, setRegistred] = useState<boolean>(false);
 
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
@@ -35,45 +39,61 @@ const RegisterForm = () =>{
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data: LoginDataInterface = {
+ 
+        const signUpData : signUpDataInterface = {
+            firstName: firstName,
+            lastName: lastName,
             login: username,
-            password: password
+            email: email,
+            password: password,
+            password2: password2
         }
-        // const data: SignUpInterface = {
-        //     login: username,
-        //     password: password
-        // }
-        console.log(data)
-        const resp = await AuthContextConsummer.LoginAction(data)
-        if ('errorType' in resp) {
-            interface tmp {
-                non_field_errors: string[]
+        try{
+            const request = {
+                url: '/api/user/register/',
+                method: 'POST',
+                withCredentials: true,
+                data: signUpData
             }
-            const tmpError = resp.errorType as tmp
-            if(tmpError['non_field_errors'] !== undefined)
-                toast.error(tmpError['non_field_errors'][0])
-            console.log(resp.errorType)
+            const resp = await mailman(request)
+            toast.success(resp.data.message)
+            setRegistred(true)
         }
-        else {
-            toast.success(resp.message)
-            console.log(resp)
-            AuthContextConsummer.setLoggedIn(true)
-            // Navigate('/')
+        catch (err) {
+            interface signupError {
+                firstName: string[]
+                lastName: string[],
+                login: string[],
+                email: string[],
+                password: string[],
+                password2: string[]
+            }
+            const axiosError = err as AxiosError
+            const axiosErrorMessage = axiosError.response?.data as signupError
+            if (axiosErrorMessage.login)
+                toast.error(userNameError)
+            if (axiosErrorMessage.email)
+                toast.error(emailError)
+            if (axiosErrorMessage.password || axiosErrorMessage.password2)
+                toast.error(passError)
         }
+
     }
 
     const [hide, setHide] = useState<boolean>(true)
-    const [passFoucs, setPassFocus] = useState<boolean>(false)
+    const [passFocus, setPassFocus] = useState<boolean>(false)
+    const [hide2, setHide2] = useState<boolean>(true)
+    const [passFocus2, setPassFocus2] = useState<boolean>(false)
     const FormFade = () => {
         return (
             {
                 formInitial: {
                     opacity: 0,
-                    x: 100, 
+                    y: 100, 
                 },
                 formAnimate :{
                     opacity: 1,
-                    x: 0,
+                    y: 0,
                     transition : {
                         duration: 0.5,
                         ease: "easeInOut",
@@ -84,6 +104,15 @@ const RegisterForm = () =>{
             }
         )
     }
+    useEffect(() => {
+        if (AuthContextConsummer.loggedIn === true)
+            Navigate('/')
+    }, [AuthContextConsummer.loggedIn, Navigate])
+
+    useEffect(() => {
+        if (registred)
+            Navigate('/login')
+    }, [registred])
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
                 <div className={`flex flex-col items-center 2xl:items-end justify-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
@@ -95,7 +124,7 @@ const RegisterForm = () =>{
                         className=" p-6 rounded-lg shadow-lg max-w-screen-sm lg:w-[600px]  ">
                         <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                             <h1 >Hey! Happy to see you here</h1>
-                            <p className='text-lg font-normal '>Create you account now</p>
+                            <p className='text-lg font-normal '>Create your account now</p>
                         </div>
                         <div className="mb-4 flex items-center  justify-center gap-11 w-full">
                             <div className='w-[46%]'>
@@ -104,8 +133,8 @@ const RegisterForm = () =>{
                                     autoComplete='off'
                                     type="firstName"
                                     id="firstName"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
                                     required
                                     className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                                     />
@@ -116,8 +145,8 @@ const RegisterForm = () =>{
                                     autoComplete='off'
                                     type="lastName"
                                     id="lastName"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    value={lastName}
+                                    onChange={(e) => setLasttName(e.target.value)}
                                     required
                                     className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                                     />
@@ -128,7 +157,7 @@ const RegisterForm = () =>{
                             <input
                                 autoComplete='off'
                                 type='username'
-                                id="email"
+                                id="username"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
@@ -141,8 +170,8 @@ const RegisterForm = () =>{
                                 autoComplete='off'
                                 type='email'
                                 id="email"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                                 className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
                             />
@@ -164,7 +193,7 @@ const RegisterForm = () =>{
 
                                 }}
                             />
-                            <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFoucs ? 'text-black' : 'text-white' }`} onClick={() =>{
+                            <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFocus ? 'text-black' : 'text-white' }`} onClick={() =>{
                                 setHide(!hide)
                             }}>
                                 {hide ? <LuEyeOff/> : <LuEye/>}
@@ -173,24 +202,24 @@ const RegisterForm = () =>{
                         <div className="mb-6 relative ">
                             <label htmlFor="confirmPassword" className="block text-white font-bold mb-2">Confirm Your Password:</label>
                             <input
-                                type={hide  ? 'password' : 'text'}
+                                type={hide2  ? 'password' : 'text'}
                                 id="confirmPassword"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={password2}
+                                onChange={(e) => setPassword2(e.target.value)}
                                 required
                                 className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
                                 onFocus={()=>{
-                                    setPassFocus(true)
+                                    setPassFocus2(true)
                                 }}
                                 onBlur={() =>{
-                                    setPassFocus(false)
+                                    setPassFocus2(false)
 
                                 }}
                             />
-                            <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFoucs ? 'text-black' : 'text-white' }`} onClick={() =>{
-                                setHide(!hide)
+                            <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFocus2 ? 'text-black' : 'text-white' }`} onClick={() =>{
+                                setHide2(!hide2)
                             }}>
-                                {hide ? <LuEyeOff/> : <LuEye/>}
+                                {hide2 ? <LuEyeOff/> : <LuEye/>}
                             </div>
                         </div>
 
@@ -208,7 +237,7 @@ const RegisterForm = () =>{
                             {!loading ? <p >Sign up with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
                             </button>
                             <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
-                                <p>You have an account ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign in</span></p>
+                                <p>You have an account ? <Link to='/login' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign in</Link></p>
                             </div>
                         </div>
                     </motion.form>
