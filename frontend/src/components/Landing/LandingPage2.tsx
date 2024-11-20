@@ -36,7 +36,8 @@ const LandingPage2 = () =>{
         throw new Error("invalid scope");
     return(
         AuthContextConsummer.loggedIn === true ? <Navigate to='/'/> : 
-        <main className="bg-[#020510] font-poppins min-h-[100vh] overflow-x-hidden">
+        <main className="  font-poppins min-h-[100vh] overflow-x-hidden  relative">
+            
             <section className="p-10 mx-auto max-w-screen-xl text-white flex flex-col gap-16 relative">
                 <NavBar/>
                 <HeroSection/>

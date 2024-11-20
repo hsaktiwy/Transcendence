@@ -13,8 +13,8 @@ import { resolve } from 'path';
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
 import { motion } from 'framer-motion';
-import background from '../../public/bg-login.jpg'
-const Loading__ = () => {
+import background from 'astro-bg.png'
+export const Loading__ = () => {
     return (
         <div className="flex justify-center items-center h-full w-full ">
             <div className="w-[40px] h-[40px] border-4 border-[#5E97A9] border-solid border-t-transparent rounded-full animate-spin"></div>
@@ -189,12 +189,13 @@ const Login = () => {
             loginwith42(code)
     }, [AuthContextConsummer.loggedIn]);
     const [hide, setHide] = useState<boolean>(true)
+    const [passFoucs, setPassFocus] = useState<boolean>(false)
     const FormFade = () => {
         return (
             {
                 formInitial: {
                     opacity: 0,
-                    x: -100, 
+                    x: 100, 
                 },
                 formAnimate :{
                     opacity: 1,
@@ -211,14 +212,14 @@ const Login = () => {
     }
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
-                <div className={`flex flex-col items-center justify-center min-h-screen font-poppins text-white bg-[url('bg-login.jpg')] bg-cover bg-center`}>
+                <div className={`flex flex-col items-center 2xl:items-end justify-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
                     <motion.form 
                         variants={FormFade()}
                         initial="formInitial"
                         animate="formAnimate"
                         onSubmit={handleSubmit}
-                        className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] p-6 rounded-lg shadow-lg w-[90%] sm:w-[450px] ">
-                        <div className='form-header  text-4xl font-semibold text-white/70 tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
+                        className=" p-6 rounded-lg shadow-lg max-w-screen-sm lg:w-[500px]  ">
+                        <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                             <h1 >Welcome Back !</h1>
                             <p className='text-lg font-normal '>Please Enter your details</p>
                         </div>
@@ -231,7 +232,7 @@ const Login = () => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
-                                className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
+                                className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                             />
                         </div>
                         <div className="mb-6 relative ">
@@ -242,9 +243,16 @@ const Login = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="bg-[#131313]/50 w-full px-3 py-2   outline-none rounded-2xl  duration-75 border border-[#131313]/50 focus:border-[#5E97A9]"
+                                className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
+                                onFocus={()=>{
+                                    setPassFocus(true)
+                                }}
+                                onBlur={() =>{
+                                    setPassFocus(false)
+
+                                }}
                             />
-                            <div className='p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75' onClick={() =>{
+                            <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFoucs ? 'text-black' : 'text-white' }`} onClick={() =>{
                                 setHide(!hide)
                             }}>
                                 {hide ? <LuEyeOff/> : <LuEye/>}
@@ -253,20 +261,23 @@ const Login = () => {
 
                         <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
 
-                            <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  opacity-70 hover:opacity-100  duration-75">
-                                Login
+                            <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  hover:scale-105  duration-150">
+                                Sign in
                             </button>
-                            <button type="submit" className="w-full  bg-[#131313] text-white font-bold py-2 px-4 rounded opacity-70 hover:opacity-100  duration-75" onClick={handleSubmitWith42}>
-                            {!loading ? <p >Login with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
+                            <div className='h-[30px] flex items-center justify-evenly w-full'>
+                                <div className=' w-[45%] bg-white h-[1px]'></div>
+                                <p className='w-[5%] text-white'> or </p>
+                                <div className=' w-[45%] bg-white h-[1px]'></div>
+                            </div>
+                            <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:scale-105 duration-150" onClick={handleSubmitWith42}>
+                            {!loading ? <p >Sign in with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
                             </button>
-                            <div className='h-[80px] flex flex-col gap-4 justify-center items-center'>
-                                <p>Don't have an account ? <span className='text-[#5E97A9] inline-block ml-2 opacity-50 hover:opacity-100 duration-100 cursor-pointer'>Sign Up</span></p>
-                                <p>Forget Password ? <span className='text-[#5E97A9] inline-block ml-2 opacity-50 hover:opacity-100 duration-100 cursor-pointer'>Click here</span></p>
+                            <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
+                                <p>Don't have an account ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign Up</span></p>
+                                <p>Forget Password ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Click here</span></p>
                             </div>
                         </div>
                     </motion.form>
-                    {/* <form onSubmit={handleSubmitWith42}>
-                    </form> */}
                 </div> 
 
             
