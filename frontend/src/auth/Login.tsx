@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
 import { cookies } from './Cookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
 import { toast } from 'sonner'
@@ -14,6 +14,7 @@ import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
 import { motion } from 'framer-motion';
 import background from 'astro-bg.png'
+
 export const Loading__ = () => {
     return (
         <div className="flex justify-center items-center h-full w-full ">
@@ -118,8 +119,6 @@ const Login = () => {
     useEffect(() => {
         if (AuthContextConsummer.loggedIn === true)
             Navigate('/')
-        // else
-        //     AuthContextConsummer.checkLoggedInUser()
     }, [AuthContextConsummer.loggedIn, Navigate])
 
     const loginwith42 = async (code: string | null) => {
@@ -273,7 +272,7 @@ const Login = () => {
                             {!loading ? <p >Sign in with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
                             </button>
                             <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
-                                <p>Don't have an account ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign Up</span></p>
+                                <p>Don't have an account ? <Link to='/signup' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign up</Link></p>
                                 <p>Forget Password ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Click here</span></p>
                             </div>
                         </div>

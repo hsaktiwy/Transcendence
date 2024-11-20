@@ -64,9 +64,9 @@ const LandingPage2 = () =>{
                 </motion.div>
                 <div className="card-container flex flex-col items-center sm:items-start gap-10">
                    {
-                        cards.map((card) =>{
+                        cards.map((card,index) =>{
                             return(
-                                <Card {...card}/>
+                                <Card {...card} key={index}/>
                             )
                         })
                    }

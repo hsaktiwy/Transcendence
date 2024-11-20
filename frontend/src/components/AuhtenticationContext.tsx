@@ -8,6 +8,14 @@ export interface LoginDataInterface{
     login: string,
     password: string
 }
+export interface signUpDataInterface{
+    firstName: string,
+    lastName: string,
+    login: string,
+    email: string,
+    password: string,
+    password2: string,
+}
 
 export interface LoginResp{
     message: string
