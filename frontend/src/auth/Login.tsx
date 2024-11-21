@@ -14,6 +14,9 @@ import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
 import { motion } from 'framer-motion';
 import background from 'astro-bg.png'
+import TfaVerification from './TfaVerification';
+import ThreeScene from '@/components/ThreeScene';
+
 
 export const Loading__ = () => {
     return (
@@ -211,7 +214,9 @@ const Login = () => {
     }
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
-                <div className={`flex flex-col items-center 2xl:items-end justify-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
+
+                <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
+                    <ThreeScene/>
                     <motion.form 
                         variants={FormFade()}
                         initial="formInitial"
@@ -277,8 +282,10 @@ const Login = () => {
                             </div>
                         </div>
                     </motion.form>
-                </div> 
+                    {/* <TfaVerification/> */}
 
+                </div> 
+                // <ThreeScene/>
             
 
     );
