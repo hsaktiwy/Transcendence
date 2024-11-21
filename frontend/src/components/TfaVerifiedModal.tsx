@@ -6,31 +6,29 @@ import { motion } from "framer-motion";
 interface prop {
     dispatch: React.Dispatch<React.SetStateAction<boolean>>;
 }
+export const ModalFade = () => {
+    return (
+        {
+            modalInitial: {
+                opacity: 0,
+                y: 50, 
+            },
+            modalAnimate :{
+                opacity: 1,
+                y: 0,
+                transition : {
+                    duration: 0.3,
+                    ease: "easeInOut",
+                } 
+            }
+        }
+    )
+}
 
 const TfaVerifiedModal:React.FC<prop> = ({dispatch}) =>{
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
-    const ModalFade = () => {
-        return (
-            {
-                modalInitial: {
-                    opacity: 0,
-                    y: 100, 
-                },
-                modalAnimate :{
-                    opacity: 1,
-                    y: 0,
-                    transition : {
-                        duration: 0.5,
-                        ease: "easeInOut",
-                        type: "spring",
-                        stiffness: 100
-                    } 
-                }
-            }
-        )
-    }
     return(
         <div
 
