@@ -74,7 +74,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
         }
     }
     useEffect (() =>{
-        checkLoggedInUser()
+            checkLoggedInUser()
     },[location])
     return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, checkLoggedInUser}}>
         {children}
