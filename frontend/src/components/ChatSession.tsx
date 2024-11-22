@@ -96,7 +96,7 @@ function ChatSession(){
             setUpdate(true)
             console.log(chatContext.active);
         }
-    }, [scrollPosition, messageArray, chatContext.active, chatContext.setActive, chatContext.setConvs]);
+    }, [scrollPosition, messageArray, chatContext,chatContext.active, chatContext.setActive, chatContext.setConvs]);
 
 
     useEffect(() => {
