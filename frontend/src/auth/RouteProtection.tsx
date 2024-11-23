@@ -2,12 +2,12 @@ import { useContext, useRef, useState } from 'react';
 import {Navigate} from 'react-router-dom';
 import { useEffect } from 'react';
 import { BACKEND, SESSION_CHECKPATH } from '../utils/Constants';
-import { childrenInterface } from '../utils/interfaces';
 import React from 'react'
 import mailman from '../utils/AxiosFetcher';
 import { UserContext } from '../components/UserContext';
 import { AuthContext } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
+import { childrenInterface } from '../utils/interfaces';
 // const [Auth, setAuth] = useState<number>(-1);
 
 
@@ -71,12 +71,14 @@ function RouteProtection(children: childrenInterface)
         throw new Error("invalid scope");
 
     // useEffect(() =>{
-    //     if (!AuthContextConsummer?.loggedIn){
-    //         console.log("ZZZZZKNAXAHIOHACOH")
-    //         AuthContextConsummer?.checkLoggedInUser()
-    //     }
-    // },[AuthContextConsummer?.loggedIn])
-   return AuthContextConsummer.loggedIn !== undefined ? AuthContextConsummer.loggedIn ? (<>{children.children}</>) : (<><Navigate to='/login'/></>) : <LoadingIndecator/>
+    //     if(AuthContextConsummer.loggedIn === undefined)
+    //         AuthContextConsummer.checkLoggedInUser()
+    //     // if (!AuthContextConsummer?.loggedIn){
+    //     //     console.log("ZZZZZKNAXAHIOHACOH")
+    //     //     AuthContextConsummer?.checkLoggedInUser()
+    //     // }
+    // },[])
+   return  AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : AuthContextConsummer.loggedIn === true ? (<>{children.children}</>) : (<><Navigate to='/home'/></>) 
 
 }
 

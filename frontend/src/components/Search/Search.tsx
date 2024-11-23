@@ -34,9 +34,10 @@ function Search(info:props) {
                 // i think we will need a parsing for this
                 console.log('searching ... ')
                 const request = {
-                    url: '/api/users/search/'+info.search_for,
-                    method: 'GET',
+                    url: '/api/user/search/',
+                    method: 'POST',
                     withCredentials: true,
+                    data : {search:info.search_for}
                 }
                 const resp = await mailman(request)
                 const sd : searched_data = resp.data as searched_data

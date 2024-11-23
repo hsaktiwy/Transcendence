@@ -1,4 +1,25 @@
 import { CallbackType } from "./types";
+
+export enum ActionType{
+    UNFRIEND,
+    UNBLOCK,
+    BLOCK,
+    NONE
+}
+
+export interface Action{
+    type : ActionType;
+    Target_User_Login: string | undefined;
+    ConversationChannel: number | undefined;
+}
+
+export interface MiniNotification{
+    type: string,
+    content: string,
+    notification: string,
+}
+
+
 export interface childrenInterface{
     children: React.ReactNode
 }

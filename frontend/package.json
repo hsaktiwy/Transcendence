@@ -33,6 +33,7 @@
     "swiper": "^11.1.12",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.170.0",
     "universal-cookie": "^4.0.4",
     "ws": "^8.18.0"
   },
