@@ -8,6 +8,10 @@ export interface LoginDataInterface{
     login: string,
     password: string
 }
+export interface VerifyTFAInterface{
+    user: string,
+    otp_code: string
+}
 export interface signUpDataInterface{
     firstName: string,
     lastName: string,
@@ -20,6 +24,10 @@ export interface signUpDataInterface{
 export interface LoginResp{
     message: string
 }
+export interface LoginTFAResponse{
+    message: string,
+    user: string
+}
 
 export interface LoginError{
     message: string,
@@ -29,7 +37,8 @@ export interface LoginError{
 interface AuthContextInterface{
     loggedIn: boolean | undefined,
     setLoggedIn : React.Dispatch<React.SetStateAction<boolean | undefined> >,
-    LoginAction : (data: LoginDataInterface) => Promise<LoginResp | LoginError>,
+    LoginAction : (data: LoginDataInterface) => Promise<LoginResp | LoginTFAResponse | LoginError>,
+    VerifyTFA : (data: VerifyTFAInterface) => Promise<LoginResp >,
     checkLoggedInUser : () => void
     logout : () => void
 
@@ -41,10 +50,35 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     const location = useLocation()
     const [loggedIn, setLoggedIn] = useState<boolean | undefined>(undefined)
     const Navigate = useNavigate();
-    const LoginAction = async (data: LoginDataInterface): Promise<LoginResp | LoginError> =>{
+    const LoginAction = async (data: LoginDataInterface): Promise<LoginResp  | LoginTFAResponse | LoginError> =>{
         try{
             const request = {
                 url: '/api/user/login/',
+                method: 'POST',
+                withCredentials: true,
+                data: data
+            }
+            const resp = await mailman(request)
+            if (resp.data.user)
+                return resp.data as LoginTFAResponse
+            if (!loggedIn)
+                setLoggedIn(true)
+            return resp.data
+        }
+        catch (error){
+            const axiosError = error as AxiosError
+            const loginError: LoginError = {
+                message: 'Login failed',
+                errorType: axiosError.response ? axiosError.response?.data : axiosError.message,
+                status: axiosError.response ? axiosError.response.status : 400
+            }
+            return loginError
+        }
+    }
+    const VerifyTFA = async (data: VerifyTFAInterface): Promise<LoginResp> =>{
+        try{
+            const request = {
+                url: '/api/user/verify2fa/',
                 method: 'POST',
                 withCredentials: true,
                 data: data
@@ -56,14 +90,10 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
         }
         catch (error){
             const axiosError = error as AxiosError
-            const loginError: LoginError = {
-                message: 'Login failed',
-                errorType: axiosError.response ? axiosError.response?.data : axiosError.message,
-                status: axiosError.response ? axiosError.response.status : 500
-            }
-            return loginError
-        }
+            
+            return {message:axiosError.message}
     }
+}
     const logout =  async () =>{
         if (loggedIn !== undefined){
             try{
@@ -116,7 +146,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     useEffect (() =>{
         checkLoggedInUser()
     },[location])
-    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, checkLoggedInUser, logout}}>
+    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, VerifyTFA,checkLoggedInUser, logout}}>
         {children}
     </AuthContext.Provider>
 }

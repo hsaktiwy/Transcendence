@@ -40,13 +40,14 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
-from .utils import decode_token, generate_tokens_response, generat_qr_code, verify2faCode
+from .utils import decode_token, generate_tokens_response, generat_qr_code, verify2faCode, generate_TFA_verification_response
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
 import json
 from io import BytesIO
 from django.core.files import File
+from django.http import Http404
 
 
 from django.contrib.auth import login
@@ -195,7 +196,11 @@ class LoginView(APIView):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            resp = generate_tokens_response(user, request)
+            resp = ''
+            if user.two_factor_auth:
+                resp = generate_TFA_verification_response(user)
+            else:
+                resp = generate_tokens_response(user, request)
             return resp
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -342,16 +347,27 @@ class Enable2faView(APIView):
         }, status=400)
         
 class Verify2faOTPView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
-        code = request.data.get('otp_code')
-        user = request.user
-        if verify2faCode(user, code):
+        try:
+            code = request.data.get('otp_code')
+            login = request.data.get('user')
+            user = get_object_or_404(MyUser, login=login)
+            if verify2faCode(user, code):
+                resp = generate_tokens_response(user, request)
+                return resp
             return Response({
-                'message' : 'OTP verified'
-            }, status=200)
-        return Response({
-            'message' : 'Invalid OTP'
-        }, status=400)
+                'message' : 'Invalid OTP'
+            }, status=400)
+        except Http404:
+            return Response({
+                'message' : 'User not Found'
+            }, status=404)
+        except Exception as e:
+            return Response({
+                'message' : str(e)
+            }, status=400)
+            
 
 @api_view(['POST'])
 def Search(request):
