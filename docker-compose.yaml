@@ -6,7 +6,7 @@ services:
     # ports:
     #   - "8000:8000"
     volumes:
-      - ./backend:/app:cached
+      - ./backend:/app
     env_file:
       - .env
     networks:
@@ -20,7 +20,7 @@ services:
     # ports:
     #   - "5173:5173"
     volumes:
-      - ./frontend:/app:cached
+      - ./frontend:/app
     env_file:
       - .env
     networks:

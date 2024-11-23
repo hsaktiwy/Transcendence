@@ -18,6 +18,11 @@ import TopBar from './components//website/mobileVersion/topBar'
 import Game from './game/Game'
 // import Profile from './components/Profile'
 import AuthProvider from './components/AuhtenticationContext'
+import LandingPage2 from './components/Landing/LandingPage2'
+import RedirectRoute from './auth/RedirectRoute'
+import RegisterForm from './auth/RegisterForm';
+
+import ThreeScene from './components/ThreeScene'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -45,6 +50,7 @@ const App = () =>
         </Auth>
       </AuthProvider>
     </BrowserRouter>
+    // <ThreeScene/>
   )
 }
 

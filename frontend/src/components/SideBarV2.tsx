@@ -2,12 +2,16 @@ import React, { useContext, useState } from "react";
 import { Link } from 'react-router-dom'
 import { UserContext } from "./UserContext";
 import { GiSettingsKnobs } from "react-icons/gi";
+import { AuthContext } from "./AuhtenticationContext";
+import { toast } from "sonner";
+import { CgLogOut } from "react-icons/cg";
 
 function SideBarV2(){
     const [showSideBar, setShowSideBar] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
-    if (!userContextConsumer)
-        throw new Error("userContext must be used within a UserProvider");
+    const authContextConsumer  = useContext(AuthContext)
+    if (!userContextConsumer || !authContextConsumer)
+        throw new Error('error')
     return (
         
         <aside className={`font-poppins w-full lg:h-full lg:w-[120px] shadow-lg mb-7 flex justify-center items-center z-50`}>
@@ -31,13 +35,18 @@ function SideBarV2(){
                         <div className="text-3xl font-bold">
                             <GiSettingsKnobs/>
                         </div>
-                    </Link>
+                </Link>
 
                 
             </div>
-            <div id="log-out" className="mb-16 font-poppins text-center hidden lg:flex flex-col items-center justify-center gap-4 h-[10%]">
-                <embed type="image/svg+xml" src="/assets/svg/Logout.svg" className="w-[30px] h-[30px]"></embed>
-                <h1 className="text-lg font-semibold text-white/40">Log out</h1>
+            <div id="log-out" className=" text-white/40 hover:text-red-500 duration-75 cursor-pointer mb-16 font-poppins text-center hidden lg:flex flex-col items-center justify-center gap-4 h-[10%] " onClick={() =>{
+                authContextConsumer.setLoggedIn(false)
+                toast.info('User Logged Out')
+            }}>
+                <span className="text-3xl">
+                    <CgLogOut/>
+                </span>
+                <h1 className="text-lg font-semibold ">Log out</h1>
             </div>
         </div>    
     </aside>

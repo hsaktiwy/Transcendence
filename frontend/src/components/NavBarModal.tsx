@@ -99,6 +99,22 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
         setdatafetched(true)
 
     }
+
+    const Accept = async (friend_req_id:number)=>{
+        try{
+            const req = {
+                url: `/friendship/request/status/set/accept/${friend_req_id}`,
+                method: 'GET',
+            }
+            const resp = await mailman(req)
+            console.log(resp.data)
+            // we need to rest all thing to get back to what it should be
+        }
+        catch(e){
+            console.log(e)
+        }
+    }
+
     useEffect(() =>{
         fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message'))
     },[])
@@ -134,7 +150,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                                     </h1>
                                     <div className=" font-light flex justify-center">
                                         <div className=" flex gap-3 sm:gap-6 text-sm sm:text-base flex-wrap justify-center sm:justify-start ">
-                                            <button className=" bg-[#5E97A9] text-white rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100  w-[100px] sm:w-[124px] ">
+                                            <button className=" bg-[#5E97A9] text-white rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100  w-[100px] sm:w-[124px] " onClick={()=>{Accept(item.friend_request_id)}}>
                                                 Accept
                                             </button>
                                             <Link to={`/profile/${item.sender}`} onClick={() =>{

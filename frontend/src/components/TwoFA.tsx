@@ -84,7 +84,7 @@ function TwoFA(){
         <div className=" px-10 py-10 sm:py-9 flex justify-center 2xl:justify-between relative flex-col 2xl:flex-row items-center 2xl:items-start gap-8 2xl:gap-0">
             {
                 userContextConsumer.userData?.two_factor_auth &&
-                <div className="absolute top-0 left-0 w-full h-full backdrop-filter backdrop-blur-lg z-40 flex justify-center items-center ">
+                <div className="absolute top-0 left-0 w-full h-full backdrop-filter backdrop-blur-lg z-40 flex justify-center items-center rounded-b-xl">
                     <div className="bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] text-white p-4 sm:p-10 rounded-xl text-center flex flex-col justify-center items-center gap-8 w-[700px]">
                         <h1 className="text-2xl font-semibold ">Two-Factory Authentication is already enabled</h1>
                         <button className=" bg-[#5E97A9]/70 px-4 py-2 rounded-xl  opacity-85 hover:opacity-100 hover:scale-105 duration-75" type="button" onClick={() =>{
