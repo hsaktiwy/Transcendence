@@ -20,7 +20,9 @@ class JWTAuthentication(BaseAuthentication):
         if not access_token:
             return None
         payload = decode_token(access_token)
-        
+        if payload == 0 or payload == -1:
+            if request.path == '/api/user/login/' or request.path == '/api/user/register/' or request.path == '/api/user/logout/' or request.path == '/api/user/check/':
+                return None
         if payload == 0:
             raise AuthenticationFailed('Expired token')
         elif payload == -1:
@@ -38,4 +40,3 @@ class JWTAuthentication(BaseAuthentication):
             raise AuthenticationFailed('User not found')
         
         return (user, None)
-

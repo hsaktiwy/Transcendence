@@ -20,6 +20,7 @@ urlpatterns = [
     path('users/<identifier>/', views.getPublicUser.as_view(), name="Access_User"),
     path('user/', views.getAuthenticatedUser.as_view()),
     path('user/search/',views.Search, name="Search"),
+    path('user/logout/',views.LogoutView, name="Logout"),
     path('user/login/', views.LoginView.as_view()),
     path('user/register/', views.RegisterView.as_view()),
     path('user/refresh_token/', views.RefreshToken.as_view()),

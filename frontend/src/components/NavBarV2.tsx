@@ -5,9 +5,9 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { TbMessage } from "react-icons/tb";
 import NavBarModal from "./NavBarModal";
 import {axiosPath} from "../utils/Constants"
-import { FiUser } from "react-icons/fi";
-import { IoSettingsOutline } from "react-icons/io5";
+import NavBarDrop from "./NavbarDrop.tsx";
 import Search from "./Search/Search.tsx";
+ 
 
 
 function NavBarV2(){
@@ -17,7 +17,8 @@ function NavBarV2(){
     const [focus, setFocus] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
     const searchRef = useRef<HTMLDivElement>(null);
-
+    const [drop, setDrop] = useState<boolean>(false)
+    const dropContainerRef = useRef<HTMLDivElement>(null)
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>)=>
     {
         if (searchRef.current && !searchRef.current.contains(event.relatedTarget))
@@ -29,9 +30,10 @@ function NavBarV2(){
         throw new Error("userContext must be used within a UserProvider");
     useEffect(() => {
         const handleClickInside = (event: MouseEvent) => {
-          if (searchRef.current && searchRef.current.contains(event.target as Node)) {
-            setFocus(false); // Close the search results on click inside the container
-          }
+            if (searchRef.current && searchRef.current.contains(event.target as Node)) {
+                setFocus(false); // Close the search results on click inside the container
+            }
+   
         };
     
         document.addEventListener("click", handleClickInside);
@@ -39,6 +41,20 @@ function NavBarV2(){
           document.removeEventListener("click", handleClickInside);
         };
       }, []);
+    useEffect(() => {
+        const handleClickOutDrop = (event: MouseEvent) => {
+            if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node)) {
+                if (drop)
+                    setDrop(false)
+            }
+   
+        };
+    
+        document.addEventListener("click", handleClickOutDrop);
+        return () => {
+          document.removeEventListener("click", handleClickOutDrop);
+        };
+      }, [drop]);
     return(
         <>
         {
@@ -91,29 +107,9 @@ function NavBarV2(){
                                     <TbMessage/>
                                 </span>
                             </div>
-                            <div className="w-[30px] h-[30px] cursor-pointer relative">
+                            <div ref={dropContainerRef} className="w-[30px] h-[30px] cursor-pointer relative " onClick={()=> setDrop(!drop)} >
                                 <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full rounded-full object-fill" />
-                                <div className="hidden absolute -right-4  top-[40px] h-[220px] w-[200px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm  rounded-xl z-50 text-white font-poppins overflow-visible  flex-col r items-center py-4 px-6 justify-center gap-8">
-                                    <div className="w-full flex justify-between text-2xl opacity-80 hover:opacity-100 duration-75">
-                                        <span className="text-2xl">
-                                            <FiUser/>
-                                        </span>
-                                        <p className="font-medium text-lg w-[115px]"> View Profile</p>
-                                    </div>
-                                    <div className="w-full flex justify-between text-2xl opacity-80 hover:opacity-100 duration-75">
-                                        <span className="text-2xl">
-                                            <IoSettingsOutline/>
-                                        </span>
-                                        <p className="font-medium text-lg w-[115px]"> Settings</p>
-                                    </div>
-                                    <div className="w-full flex justify-between text-2xl opacity-80 hover:opacity-100 duration-75">
-                                        <span className="text-2xl">
-                                            <FiUser/>
-                                        </span>
-                                        <p className="font-medium text-lg w-[115px]"> View Profile</p>
-                                    </div>
-
-                                </div>
+                                <NavBarDrop display={drop}/>
                             </div>
                     
                         </div>

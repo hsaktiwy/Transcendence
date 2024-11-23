@@ -3,6 +3,7 @@ import { ws_url } from './Constants'
 import {channelType, WebSocketContextType, childrenInterface, defaultContextValue} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
+import { AuthContext } from '@/components/AuhtenticationContext'
 
 let inc: number = 222222 // desable the id that amine use later else we will use this 
 // type CallbackType = (message: any) => void
@@ -13,6 +14,9 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     const socket = useRef<WebSocket>()
     const connected = useRef<boolean>(false)
     const [inc, setInc] = useState(200000);
+    const authContextConsumer =  useContext(AuthContext)
+    if (!authContextConsumer)
+      throw new Error('error occured')
 
     /// ??
     // const chatContext = useContext(ChatSectionContext);
@@ -20,7 +24,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     /// ??
 
     const AddChannel= (channelName: string, callback: CallbackType) => {
-      channels.current[channelName] = callback
+        channels.current[channelName] = callback
     }
 
     const RemoveChannel = (channelName: string, ) =>
@@ -36,14 +40,20 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         socket.current = new WebSocket(url)
       console.log ('------------>' + connected.current)
   
+      if (!socket.current)
+        return;
+    
       socket.current.onopen = () => {
         connected.current = true
       }
       
-      socket.current.onclose = () => {
+      socket.current.onclose = () => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
         console.log('Connection closed')
         connected.current = false
-        ReconnectSocket()
+        // if (authContextConsumer.loggedIn === true){ // we need a logic to handle reconnection maybe with status of backend ws response
+        //   console.log('from ws context',authContextConsumer.loggedIn)
+        //   ReconnectSocket()
+        // }
       }
       
       socket.current.onmessage = (message)=>
@@ -110,14 +120,19 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     }
   
     useEffect(() => {
-      ConnectSocket()
+
+      if (authContextConsumer.loggedIn === true)
+        ConnectSocket()
+      else if (connected.current === true){
+          socket.current?.close()
+      }
       return () => {
         // Close the WebSocket connection when the component is unmounted
         if (socket.current) {
           socket.current.close()
         }
       }
-    }, [connected])
+    }, [connected, authContextConsumer.loggedIn])
 
     return (<WebSocketContext.Provider value={{AddChannel, RemoveChannel, socket}}>
             {children}

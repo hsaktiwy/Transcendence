@@ -10,6 +10,7 @@ import { Outlet } from 'react-router-dom';
 import { UserContext } from "./components/UserContext";
 import NotificationToast from './components/NotificationToast';
 import { AuthContext } from './components/AuhtenticationContext';
+import LandingPage2 from './components/Landing/LandingPage2';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -37,7 +38,8 @@ const Layout = () => {
             {/* <NotificationToast items={userContextConsumer.notifications}/> */}
             <Outlet/>
           {/* {children} */}
-          </>
+          </> 
+  
   );
 };
 

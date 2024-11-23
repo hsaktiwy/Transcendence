@@ -4,7 +4,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import FriendShip, FriendRequest, RelationShipStatus, BlockList
-from .serializers import FriendshipSerializer
+from .serializers import FriendshipSerializer, FriendRequestSerializer
 from users.models import MyUser
 from conversations.models import Message
 
@@ -245,3 +245,23 @@ def isBlocked(request, _login):
 			return Response({'status': False}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+class FriendRequestSentList(generics.ListAPIView):
+    serializer_class = FriendRequestSerializer
+    def get_queryset(self):
+        user=self.request.user
+        return FriendRequest.objects.filter(sender=user, status='pending')
+class FriendRequestReceivedList(generics.ListAPIView):
+    serializer_class = FriendRequestSerializer
+    def get_queryset(self):
+        user=self.request.user
+        return FriendRequest.objects.filter(receiver=user, status='pending')
+	
+    
+    
+	# try:
+	# 	user = request.user
+	# 	FriendRequests = FriendRequest.objects.filter(sender=user)
+
+	# except:
+	# 	return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
