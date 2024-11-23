@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useRef } from "react";
-import { UserDataInterface } from "../utils/UserDataInterface";
+import { UserDataInterface,ProfileDataInterface } from "../utils/UserDataInterface";
 import { useContext, useState } from "react";
 import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
@@ -46,6 +46,13 @@ interface UserContextInterface{
     action: Action | undefined;
     setAction:  React.Dispatch<React.SetStateAction<Action |  undefined> >;
 }
+interface FriendRequestInterface {
+    id:number;
+    sender:ProfileDataInterface;
+    receiver:ProfileDataInterface;
+    status:string;
+    created_at:string
+}
 
 export const UserContext = createContext<UserContextInterface | undefined>(undefined)
 
@@ -57,13 +64,14 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     // const [id, setUserId] = useState<number | undefined>(undefined);
     const [userData, setUserData] = useState<UserDataInterface | undefined>(undefined);
     const [profilePicChanged, setProfilePicChanged] = useState<boolean>(false);
+    const [friendRequestSent, setFriendRequestSent] = useState<FriendRequestInterface[]>([])
+    const [friendRequestReceived, setFriendRequestReceived] = useState<FriendRequestInterface[]>([])
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
     const notificationHandler = (data: NotificationPropreties) => {
-        // notificationData.sort((a, b)=> b.id - a.id)
-        console.log(data)
+
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
     }
@@ -83,12 +91,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-            // toast.success('Welcome!', {
-            //     id: toastId, // Use the same toast ID to update the existing toast
-            // });
-            // setTimeout(() => {
-            //     toast.dismiss(toastId);
-            // }, 5000);
+
             const {
                 login,
                 email,
@@ -100,7 +103,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 two_factor_auth,
 
             } = resp.data
-            console.log("sss ====???? ",resp.data)
             setUserData({
                 login,
                 email,
@@ -118,6 +120,45 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             console.error("dddddd======????",err)
         }
 
+    }
+    const fetchSentFriendRequest = async () =>{
+
+        try{
+            const req = {
+                url: `/friendship/friend_requests_sent/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req)
+            if (resp.data.length > 0){
+                const data : FriendRequestInterface[] = resp.data
+                console.log("sent friend req ",resp.data)
+                setFriendRequestSent(data)
+            }
+            
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
+    }
+    const fetchReceivedFriendRequest = async () =>{
+
+        try{
+            const req = {
+                url: `/friendship/friend_requests_received/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req)
+            if (resp.data.length > 0){
+                const data : FriendRequestInterface[] = resp.data
+                console.log("received friend req ",resp.data)
+                setFriendRequestReceived(data)
+            }
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
     }
     const getNotificationData = (notifications: NotificationPropreties[]) =>{
         for(const notif of notifications){
@@ -145,7 +186,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             //     toast.dismiss(toastId);
             // }, 5000);
             let notificationData : NotificationPropreties[] = resp.data
-            console.log('waaaaaaa')
             notificationData = getNotificationData(notificationData)
             console.log(notificationData)
             setnotifications(notificationData.sort((a, b)=> b.id - a.id))
@@ -175,19 +215,13 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     
     }
     useEffect(() =>{
-        // if (id === undefined){
-        //     const savedId = localStorage.getItem("id")
-        //     if (savedId !== null)
-        //         setUserId(Number(savedId))
-        // }
-
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION', PureNotification)
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
         }
-
+        
     }, [])
     useEffect(() => {
         if (AuthContextConsummer?.loggedIn){
@@ -197,7 +231,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     useEffect(() =>{
         if (AuthContextConsummer?.loggedIn){
             fetchUserData()
-            // fetchFriendRequests()
+            fetchReceivedFriendRequest()
+            fetchSentFriendRequest()
         }
     }, [AuthContextConsummer?.loggedIn, profilePicChanged])
     return(

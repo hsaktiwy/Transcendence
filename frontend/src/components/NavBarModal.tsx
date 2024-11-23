@@ -113,7 +113,6 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
         catch(e){
             console.log(e)
         }
-
     }
 
     useEffect(() =>{

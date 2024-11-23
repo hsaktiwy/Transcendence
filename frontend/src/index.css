@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import './game/ThreeScene.css';
 
 /* Scrollbar container */
 ::-webkit-scrollbar {
@@ -26,13 +27,17 @@
 
 
   body{
-    background-color: #1d1717;
+    background-image: url('../public/astro-bg.png');
+    background-color: #160430;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     position: relative;
     min-height: 100vh;
 
   }
  
-  /* #overlay {
+  #overlay {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -40,11 +45,12 @@
     top: 0;
     left: 0;
     z-index: -1;
-    background: linear-gradient(to top right, #121415, #2B2F32);
+    background-color: rgb(2 5 16 / 0.8);
+    /* background: linear-gradient(to top right, #121415, #2B2F32);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
-} */
+    background-position: center; */
+}
   
 /* background: url('https://tailwindcss.com/_next/static/media/docs-dark@tinypng.1bbe175e.png'); */
 /* background: radial-gradient(circle, #5e98a9, #527386, #445160, #30333a, #181818); */
