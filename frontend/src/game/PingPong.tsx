@@ -7,10 +7,10 @@ import gsap from 'gsap';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import stats from 'stats.js'
-import { ws_url } from 'src/utils/Constants'
-import {channelType} from 'src/utils/interfaces'
-import {CallbackType} from 'src/utils/types'
-import { UserContext } from "src/components/UserContext";
+import { ws_url } from '../utils/Constants'
+import {channelType} from '../utils/interfaces'
+import {CallbackType} from '../utils/types'
+import { UserContext } from "../components/UserContext";
 // import './ThreeScene.css'
 
 // stats.js  cannon lil-gui three gsap
@@ -80,6 +80,8 @@ const PingPong = () => {
         }
     }
 
+
+
     const WebSocketEtablishing = ()=>
     {
         const url:string = ws_url + '/ws/game/'
@@ -95,11 +97,6 @@ const PingPong = () => {
             connected.current = true
             AddChannel('READY', ReadyAction)
             AddChannel('START', StartAction)
-            if (action_list.current['READY'])
-            {
-                console.log("initial READY")
-                action_list.current['READY']()
-            }
         }
         
         socket.current.onclose = () => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
@@ -113,23 +110,45 @@ const PingPong = () => {
         
         socket.current.onmessage = (message)=>
         {
-            const { type, ...data } = JSON.parse(message.data);
-            if (type=="READY")
+            const {type,action, ...data } = JSON.parse(message.data);
+            console.log("Socket data message : " + type)
+            if (action === "READY")
             {
+                console.log("Socket data received : " + action + " " +  data.sender)
                 if (data.sender != userContextConsumer.userData?.login)
-                    opponent.current = data.sender
-                if (action_list.current['START'])
                 {
-                    console.log("start")
-                    action_list.current['START']()
+                    opponent.current = data.sender
+                    if (action_list.current['START'])
+                    {
+                        console.log("start")
+                        action_list.current['START']()
+                    }
                 }
-            }
-            if (type == "START")
-            {
-                if (data.sender != userContextConsumer.userData?.login)
-                    start.current += 1
                 else
+                    console.log("This is my Own message[READY action]\n")
+            }
+            if (action === "START")
+            {
+                console.log("Socket data received : " + action + " " +  data.sender)
+                if (data.sender != userContextConsumer.userData?.login)
+                {
+                    start.current += 1
                     console.log("opponent want to start")
+                }
+                else
+                    console.log("This is my Own message[START action]\n")
+            }
+            if (type === "debuging")
+            {
+                console.log("debuging : " + JSON.stringify(data))
+                if (data.username == userContextConsumer.userData?.login)
+                {
+                    if (action_list.current['READY'])
+                    {
+                        console.log("initial READY")
+                        action_list.current['READY']()
+                    }
+                }
             }
         }
     }
@@ -140,7 +159,16 @@ const PingPong = () => {
     //#######################################
     
     useEffect(() => {
+        //############################
+        //########[HAMZA]#############
+        //############################
         
+        if (connected.current==false)
+            WebSocketEtablishing()
+        //############################
+        //###########[end]############
+        //############################
+
         const stat = new stats()
     stat.showPanel(0)
     document.body.appendChild(stat.dom)
