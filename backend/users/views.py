@@ -101,8 +101,11 @@ def LoginWithOAuth42(request):
         profile_pic = None
     try:
         user = MyUser.objects.get(login=login_42)
-       
-        resp = generate_tokens_response(user, request)
+        resp = ''
+        if user.two_factor_auth:
+            resp = generate_TFA_verification_response(user)
+        else:
+            resp = generate_tokens_response(user, request)
         return resp
     except MyUser.DoesNotExist:
 

@@ -90,8 +90,8 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
         }
         catch (error){
             const axiosError = error as AxiosError
-            
-            return {message:axiosError.message}
+            const errorMessage =  axiosError.response?.data as LoginResp
+            return {message:errorMessage.message}
     }
 }
     const logout =  async () =>{

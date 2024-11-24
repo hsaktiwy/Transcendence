@@ -143,10 +143,11 @@ const Login = () => {
                     
                 }
                 const resp = await mailman(req)
-                
                 if (resp.status === 200) {
-                    // setLoading(false)
-                    location.reload();
+                    if (resp.data.user)
+                        setTfaUser(resp.data.user)
+                    else
+                        location.reload();
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
                 // Navigate('/')

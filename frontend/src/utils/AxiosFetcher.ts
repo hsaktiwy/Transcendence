@@ -42,6 +42,7 @@ mailman.interceptors.response.use(
                 return mailman(originalRequest);
             }
             catch (refresh_token_error){
+                console.log(refresh_token_error)
                 return Promise.reject(refresh_token_error)
 
             }
