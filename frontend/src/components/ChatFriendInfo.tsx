@@ -25,6 +25,7 @@ function ChatFriendInfo(){
     if (!chatContext || !userContext)
      throw new Error('error')
     const user2_level:number = (Math.random() * 10)
+    
     const BlockStatusCheck = async ()=>
     {
         try{
@@ -45,7 +46,8 @@ function ChatFriendInfo(){
     }
     useEffect(()=>{
         BlockStatusCheck()
-    },[])
+    },[userContext.action])
+
     return(
         <div className={`  rounded-l-xl lg:rounded-l-none rounded-r-xl border-r-0 lg:border-l-[1px] border-white/50 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}

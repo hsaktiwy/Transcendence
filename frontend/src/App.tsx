@@ -23,6 +23,7 @@ import RedirectRoute from './auth/RedirectRoute'
 import RegisterForm from './auth/RegisterForm';
 
 import ThreeScene from './components/ThreeScene'
+import Profile from './components/website/profile/profile'
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -37,7 +38,7 @@ const App = () =>
             <UserProvider>
                 <Routes>
                       <Route path='/'  element={ <Layout/>}>
-                        <Route path='/profile/:username' element={ <TopBar/>}/>
+                        <Route path='/profile/:username' element={ <ProfileTest/>}/>
                         <Route index element={ <Dashboard/>}/>
                         <Route path='/chat' element={ <ChatSection/>}/>
                         <Route path='/settings' element={ <Settings/>}/>

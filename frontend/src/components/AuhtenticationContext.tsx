@@ -144,7 +144,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
             logout()
     }, [loggedIn])
     useEffect (() =>{
-        checkLoggedInUser()
+            checkLoggedInUser()
     },[location])
     return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, VerifyTFA,checkLoggedInUser, logout}}>
         {children}
