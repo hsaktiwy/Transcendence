@@ -48,13 +48,14 @@ function ChatSection(){
                 id: data.message_id,
                 sender: data.user,
                 content: data.message,
+                isread: false
             };
             // Assuming chatContext.setConvs is a state update function
             const channelId = data.channel;
             setConvs((prevConvs: Conversation[]) => {
                 const updatedConvs = prevConvs.map(conv =>
                     conv.channelId === channelId
-                        ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received] }
+                        ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received], new_message: 1 }
                         : conv
                 );
                 updatedConvs.sort((a, b)=>{
