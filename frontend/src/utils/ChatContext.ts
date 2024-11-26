@@ -7,11 +7,14 @@ export interface User{
     login: string;
     profile_pic: string;
 }
+
 export interface Message{
     id: number;
-    sender: User;
+    sender: User | undefined;
     content: string;
+    isread:boolean;
 }
+
 export interface Conversation {
     channelId: number;
     user1: User;
@@ -23,6 +26,9 @@ export interface Conversation {
     is_next_packet: boolean
     scrollTop: number
     scrollLeft: number
+    status: 0 | 1
+    new_message: 0|1
+    packet_max_size: Number
 }
 
 export interface ContextType {
