@@ -6,21 +6,28 @@ import { UserContext } from "./UserContext";
 import { ActionType } from "@/utils/interfaces";
 import mailman from "@/utils/AxiosFetcher";
 function ChatModal(){
-    const chatContext =useContext(ChatSectionContext)
-    const userContext =  useContext(UserContext)
+    const chatContext = useContext(ChatSectionContext)
+    const userContext = useContext(UserContext)
     if (!chatContext || ! userContext)
      throw new Error('error')
     const DoAction = async ()=>
     {
         try{
-            const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": "unfriend")
-            const req = {
-                url: "friendship/"+action+"/"+userContext?.action?.Target_User_Login,
-                method: "GET",
-                withCredentials: true,
+            if ( userContext?.action?.type != ActionType.NONE)
+            {
+                const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": "unfriend")
+                const req = {
+                    url: "friendship/"+action+"/"+userContext?.action?.Target_User_Login,
+                    method: "GET",
+                    withCredentials: true,
+                }
+                const resp = await mailman(req)
+                console.log(resp)
+                userContext.setAction({type:ActionType.NONE, Target_User_Login:undefined,ConversationChannel:undefined})
+                chatContext.setOpenModal(false)
             }
-            const resp = await mailman(req)
-            console.log(resp)
+            else
+                console.log('action None')
         }
         catch(err)
         {
@@ -37,9 +44,7 @@ function ChatModal(){
                     </svg>
                     <p className="text-lg font-medium">{`Are you sure you want to ${chatContext.modalMessage}?`}</p>
                     <div className="flex gap-4 flex-wrap items-center justify-center ">
-                        <Link to='/'>
-                            <button className="hover:opacity-70 cursor-pointer duration-150 transition-all bg-[#5E97A9] rounded-md text-white px-6 py-4 text-lg font-medium" onClick={DoAction}>Yes, I'm sure</button>
-                        </Link>
+                        <button className="hover:opacity-70 cursor-pointer duration-150 transition-all bg-[#5E97A9] rounded-md text-white px-6 py-4 text-lg font-medium" onClick={DoAction}>Yes, I'm sure</button>
                         <button className="hover:opacity-70 cursor-pointer duration-150 transition-all text-black bg-[#ffffff] border-[1px] border-black/10 rounded-md  px-6 py-4 text-lg font-medium" onClick={() =>{
                             chatContext.setOpenModal(false)
                         }}>

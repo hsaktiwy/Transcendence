@@ -11,6 +11,7 @@ class Message(models.Model):
     sender = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     id_channel_fk = models.ForeignKey('channel', on_delete=models.CASCADE)
     content = models.TextField()
+    isread=models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     # def clean(self):

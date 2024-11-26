@@ -5,6 +5,7 @@ RUN apt-get update \
        gcc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+ENV DJANGO_LOG_LEVEL=INFO
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app

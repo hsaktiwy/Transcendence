@@ -104,7 +104,12 @@ function Conversations(){
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
         throw new Error('error')
-
+    const NoneMessage: Message = {
+        id: 0,
+        sender: undefined, 
+        content: "No messages available",
+        isread: true,
+        };
 return(
 <div className={`  border-r-0 lg:border-r-[1px] border-white/75   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-xl rounded-r-xl lg:rounded-r-none`}>
             <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-gradient-to-l from-[#5e98a9c9] via-[#5e98a9ba] to-[#5e98a995] py-4">
@@ -135,29 +140,31 @@ return(
                                 lastMessage: Message;
                                 picture: string;
                                 friendName: string;
+                                new_message: number;
                             }
                             const currentConvData: convData = {
-                                lastMessage: conv.messages[conv.messages.length - 1],
+                                lastMessage: (conv.messages && conv.messages.length != 0)  ? conv.messages[conv.messages.length - 1] : NoneMessage,
                                 picture: conv.user2.profile_pic,
-                                friendName: conv.user2.firstName +  " " +conv.user2.lastName
+                                friendName: conv.user2.firstName +  " " +conv.user2.lastName,
+                                new_message:  conv.new_message
                             }
                             return(
                                 
                                 <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? "relative bg-black/25 border-l-2 border-[#5E97A9]  " : ""} relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
-                                    console.error(conv.channelId)
-                                    chatContext.setActive(conv)
-                                    chatContext.setActiveSection('chat')
+                                        console.error(conv.channelId)
+                                        chatContext.setActive(conv)
+                                        chatContext.setActiveSection('chat')
                                 }}>
                                         <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]" />
                                         <div className="self-center ">
                                             <h1 className="text-base 2xl:text-lg font-semibold">{currentConvData.friendName}</h1>
                                             
-                                            <p className="text-gray-300 text-sm 2xl:text-base"><span className={`${currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login ? 'inline-block' :'hidden'} mr-3`}>You : </span>{currentConvData.lastMessage?.content.length >= 20 ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : currentConvData?.lastMessage.content}</p>
+                                            <p className="text-gray-300 text-sm 2xl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
                                             
                                         </div>
-                                        {/* <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
+                                        {currentConvData.new_message==1 &&  <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
 
-                                        </div> */}
+                                        </div> }
                                         
                                     </div>
                             )

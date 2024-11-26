@@ -5,6 +5,7 @@ from .serializers import Game, GameSerializer
 from .models import GameEnumStatus
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 # Create your views here.
 
 class ListGames(generics.ListAPIView):
@@ -12,10 +13,18 @@ class ListGames(generics.ListAPIView):
     queryset = Game.objects.all()
     serializer_class = GameSerializer
 
-class CreateGame(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Game.objects.all()
-    serializer_class = GameSerializer
+# class CreateGame(generics.ListCreateAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Game.objects.all()
+#     serializer_class = GameSerializer
+@api_view(['GET'])
+def CreateGame(request):
+    try:
+        obj = Game.objects.create()
+        return Response({'Game is created': 'Game id is :' + str(obj.id)}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'Error': 'Something went wrong('+str(e)+')?'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class DestroyGame(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]

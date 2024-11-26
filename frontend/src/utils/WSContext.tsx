@@ -24,7 +24,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     /// ??
 
     const AddChannel= (channelName: string, callback: CallbackType) => {
-      channels.current[channelName] = callback
+        channels.current[channelName] = callback
     }
 
     const RemoveChannel = (channelName: string, ) =>
@@ -36,10 +36,13 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     {
       const url:string = ws_url + '/ws/chat/'
       console.log(url)
-      console.log ('------------>' + connected)
       if (!connected.current)//
         socket.current = new WebSocket(url)
+      console.log ('------------>' + connected.current)
   
+      if (!socket.current)
+        return;
+    
       socket.current.onopen = () => {
         connected.current = true
       }

@@ -90,17 +90,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return (UserSerializer(user))
         except:
             return None
+
     def get_SerializedNotification(self, notification):
         try:
             print(NotificationSerializer(notification).data)
             return (NotificationSerializer(notification).data)
         except:
             return None
+
     def get_sender(self, user):
         try:
             return (UserSerializer(user).data)
         except:
+
             return None
+
+    def set_messages_isread_to_true(self , user, channel_id, start_id):
+        try:
+            if start_id > 0:
+                # 20 is the message range that i use to paginate the messages in the chat
+                print(start_id, channel_id, user)
+                Message.objects.filter(Q(id__gte=start_id) & Q(id_channel_fk=channel_id) & ~Q(sender=user)).update(isread=True)
+        except Exception as e:
+            print(f'Error while trying to create a Message : {e}')
 
     async def add_groups(self, channels, user):
         async for channel in channels:
@@ -154,9 +166,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.user_id = user.id
                 self.notification_group_name = f'notification_user_{user}'
                 await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
-                # channels = await sync_to_async(self.get_user_channels)(user.id)
+                channels = await sync_to_async(self.get_user_channels)(user.id)
                 self.rooms = set()
-                # await self.add_groups(channels, user)
+                await self.add_groups(channels, user)
                 await self.accept()
             except Exception as e:
                 print(f"Error while connecting to channels: {e}")
@@ -176,6 +188,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             user = self.scope['user']
             message_json = json.loads(text_data)
+
             if message_json['type'] == 'MESSAGE':
                 message = message_json['message']
                 room = message_json['channel']
@@ -261,7 +274,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender['login']
                     }
                 )
-
+            if message_json['type']=="READ":
+                first_index = int(message_json['first_index'])
+                channel_id = int(message_json['channel'])
+                # update the message status in the range
+                await sync_to_async(self.set_messages_isread_to_true)(user, channel_id, first_index)
+            # game session, games [,]
                 
         except Exception as e:
             print(f"Error while receiving/sending message: {e}")

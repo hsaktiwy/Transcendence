@@ -19,6 +19,7 @@ import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Co
 import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
+import { channel } from "diagnostics_channel";
 
 export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
 function ChatSession(){
@@ -96,7 +97,7 @@ function ChatSession(){
             setUpdate(true)
             console.log(chatContext.active);
         }
-    }, [scrollPosition, messageArray, chatContext.active, chatContext.setActive, chatContext.setConvs]);
+    }, [scrollPosition, messageArray, chatContext,chatContext.active, chatContext.setActive, chatContext.setConvs]);
 
 
     useEffect(() => {
@@ -111,15 +112,11 @@ function ChatSession(){
     //amine
     useEffect(() =>{
         const handleCloseMenu = (e:any) =>{
-            // if ()
-            //     console.log("d",e.target.parentElement.className)
-            
-            if(e.target  && e.target.parentElement && e.target.parentElement.className.split(' ')[0] !== 'drop')
+            if(e.target && e.target.parentElement && e.target.parentElement.className.split(' ')[0] !== 'drop')
             {
                 if (openDrop)
                     setOpenDrop(false)
             }
-          
         }
         if (openDrop)
             BlockStatusCheck()
@@ -171,6 +168,7 @@ function ChatSession(){
                 console.log('Updated in process ...')
                 chatContext.setActive((prevActive) => ({
                     ...prevActive,
+                    new_message: 1,
                     messages: [...prevActive.messages, message_received]
                 }));
                 console.log('Updated success')
@@ -186,13 +184,42 @@ function ChatSession(){
         }
     },[init, chatContext.active])
 
+    // when we rerender the page
+    const SendWebSocketToDefine = ()=>
+    {
+        try
+        {
+            const req = {
+                type: "READ",
+                channel: chatContext.active?.channelId,
+                first_index: (chatContext.active?.messages && chatContext.active?.messages.length) ? chatContext.active?.messages[0].id: -1
+            }
+            console.log(JSON.stringify(req))
+            SocketContext.socket?.current.send(JSON.stringify(req))
+            chatContext.active?.new_message==0
+            chatContext.setConvs((prevConvs) => {
+                return prevConvs?.map((conv) =>
+                    conv.channelId === chatContext.active?.channelId
+                        ? { ...conv, new_message:0 }
+                        : conv
+                );
+            });
+        }
+        catch (e)
+        {
+            console.log("Error in the ready message sheck : "+e)
+        }
+    }
+
     useEffect(()=>
     {
         console.log('Update Current chat : ' + chatContext.active?.channelId);
         console.log(chatContext.active)
         setMessageArray(chatContext.active?.messages)
+        // check if message where readed
+        if (chatContext.active?.new_message == 1)
+            SendWebSocketToDefine()
     }, [chatContext.active])
-    
     // this function will update our conv list and add packet of old messages to it
     // const 
     const FecthOldMessages = async ()=>
