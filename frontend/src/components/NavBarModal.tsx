@@ -11,6 +11,8 @@ import { NotificationPropreties } from "./UserContext";
 import { axiosPath, BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { PiMaskSadLight } from "react-icons/pi";
+import { Loading__ } from "@/auth/Login";
+
 
 
 
@@ -71,6 +73,7 @@ interface ModalPropInterface{
 }
 const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
     const [dataFetched, setdatafetched] = useState<boolean>(false)
+    const LOGO = 'https://static.vecteezy.com/system/resources/previews/013/959/227/non_2x/table-tennis-fire-logosilhouette-ping-pong-club-line-art-logos-or-icons-illustration-vector.jpg'
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
@@ -87,7 +90,6 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                         console.log(resp)
                         const userData: senderInterface = resp.data
                         usersDataArr.current.push(userData)
-                        console.log("wewewe ====???? ",usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic)
                     }
                     catch (err){
                         console.error(err)
@@ -116,7 +118,8 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
     }
 
     useEffect(() =>{
-        fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message'))
+        console.log(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
+        fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
     },[])
     return(
         <div className="   h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 ">
@@ -130,18 +133,21 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                     <IoCloseOutline/>
                 </span>
             </div>
-            <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm ">
+            <div className={`max-h-[60vh] ${dataFetched ? 'h-auto' : 'h-[50vh]'} overflow-y-auto overflow-x-hidden  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm `}>
 
             {
                 userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 
+                dataFetched === true ? 
                 (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item, index) =>{
                     return(
                         <div key={item.id} className={`font-poppins ${index < userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length - 1 &&`border-b-[1px] border-[#5E97A9]/85`} min-h-[100px]`}>
                             <div className="px-2 sm:px-4 py-4 flex gap-8 items-center  justify-center sm:justify-between flex-wrap ">
                                 <div className="  w-[60px] h-[60px] relative ">
-                                    <img src={`${axiosPath}${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="test" className=" rounded-full border-[1px] border-white/25 h-full w-full object-cover"/>
+                                    <img src={item.type==='friendship' ? axiosPath + usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic : LOGO} alt="test" className=" rounded-full border-[1px] border-white/25 h-full w-full object-cover"/>
                                     <span className=" absolute text-sm bg-[#5E97A9] p-[2px] sm:p-[4px] text-white rounded-full bottom-0 right-0">
-                                        {notifType.friendship}
+                                        {
+                                            item.type === 'system' ? notifType.system : item.type === 'friendship' ? notifType.friendship : item.type === 'gameInvitation' ? notifType.gameInvitation : notifType.tournament
+                                        }
                                     </span>
                                 </div>
                                 <div className="flex flex-col gap-4 items-center sm:items-start overflow-visible">
@@ -149,7 +155,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                                         {item.content}
                                     </h1>
                                     <div className=" font-light flex justify-center">
-                                        <div className=" flex gap-3 sm:gap-6 text-sm sm:text-base flex-wrap justify-center sm:justify-start ">
+                                        <div className= {`${item.type === 'friendship' ? 'flex' : 'hidden'} gap-3 sm:gap-6 text-sm sm:text-base flex-wrap justify-center sm:justify-start`} >
                                             <button className=" bg-[#5E97A9] text-white rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100  w-[100px] sm:w-[124px] " onClick={()=>{Accept(item.friend_request_id)}}>
                                                 Accept
                                             </button>
@@ -171,7 +177,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                             </div>
                         </div>
                         )
-                    })) : <div className="h-[50vh] flex justify-center items-center">
+                    })) : <Loading__/> : <div className="h-[50vh] flex justify-center items-center">
                                 <h1 className=" text-white/85 font-semibold text-3xl">No Notifications yet !</h1>
                             </div>
                 }
