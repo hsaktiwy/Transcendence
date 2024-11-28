@@ -69,62 +69,34 @@ function ChatSession(){
     //     BlockStatusCheck()
     // },[])
     //amine
-    useEffect(() => {
-        // Scroll to the bottom whenever the messages array changes
-        console.log('initial scroll');
-        if (containerRef.current && chatContext.active?.scrollLeft === -1 && chatContext.active?.scrollTop === -1) {
-            console.log('ola' + containerRef.current?.scrollLeft + ' ' + containerRef.current?.scrollHeight);
-
-            //containerRef.current.scrollTop = containerRef.current.scrollHeight;
-
-            const newScrollTop = containerRef.current.scrollHeight;
-            const newScrollLeft = containerRef.current.scrollLeft;
-
-            // Updating the active conversation's scroll properties
-            chatContext.setActive((prevConv) => ({
-                ...prevConv,
-                scrollTop: newScrollTop,
-                scrollLeft: newScrollLeft,
-            }));
-
-            chatContext.setConvs((prevConvs) => {
-                return prevConvs.map((conv) =>
-                    conv.channelId === chatContext.active?.channelId
-                        ? { ...conv, scrollTop: newScrollTop, scrollLeft: newScrollLeft }
-                        : conv
-                );
-            });
-            setUpdate(true)
-            console.log(chatContext.active);
-        }
-    }, [scrollPosition, messageArray, chatContext,chatContext.active, chatContext.setActive, chatContext.setConvs]);
-
-
+    
+    
     useEffect(() => {
         // Scroll to the bottom whenever the messages array changes
         console.log('hahahaha --->')
         if (containerRef.current) {
-          containerRef.current.scrollTop = containerRef.current.scrollHeight;
-          setUpdate(false)
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
+            setUpdate(false)
         }
-
+        
     }, [update]);
     //amine
     useEffect(() =>{
-        const handleCloseMenu = (e:any) =>{
+        const handleCloseMenu = (e:any) =>
+        {
             if(e.target && e.target.parentElement && e.target.parentElement.className.split(' ')[0] !== 'drop')
-            {
-                if (openDrop)
-                    setOpenDrop(false)
+                {
+                    if (openDrop)
+                        setOpenDrop(false)
+                }
             }
+            if (openDrop)
+                BlockStatusCheck()
+            window.addEventListener('click', (e) => handleCloseMenu(e))
+            return () =>{
+                window.removeEventListener('click', handleCloseMenu)
         }
-        if (openDrop)
-            BlockStatusCheck()
-        window.addEventListener('click', (e) => handleCloseMenu(e))
-        return () =>{
-            window.removeEventListener('click', handleCloseMenu)
-        }
-
+        
     },[openDrop])
     // hamza
     const sendMessage = () =>
@@ -133,7 +105,7 @@ function ChatSession(){
         {
             const holder:string = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
             console.log(holder);
-            socket.current.send(holder)
+            socket?.current.send(holder)
             setMessage('')
         }
     }
@@ -142,17 +114,17 @@ function ChatSession(){
         //console.log('event.key ' + event.key + ' message ' + message)
         if (event.key === 'Enter' && message.length > 0)
         {
-            console.log((socket.current && socket.current.readyState === WebSocket.OPEN))
-            if (socket.current && socket.current.readyState === WebSocket.OPEN)
-            {
-                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.login}` , message : message, channel_id: chatContext.active?.channelId})
-                socket.current.send(holder)
-                holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
-                socket.current.send(holder)
-                console.log(holder)
-                setMessage('')
-            }
-            else
+            console.log((socket?.current && socket?.current.readyState === WebSocket.OPEN))
+            if (socket?.current && socket?.current.readyState === WebSocket.OPEN)
+                {
+                    let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.login}` , message : message, channel_id: chatContext.active?.channelId})
+                    socket?.current.send(holder)
+                    holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
+                    socket?.current.send(holder)
+                    console.log(holder)
+                    setMessage('')
+                }
+                else
                 console.error('WebSocket connection is not open')
         }
     }
@@ -164,9 +136,9 @@ function ChatSession(){
         {
             console.log('target tryin g to update it self ... '+ __channelId +' '+ chatContext.active?.channelId)
             if (__channelId == chatContext.active?.channelId)
-            {
-                console.log('Updated in process ...')
-                chatContext.setActive((prevActive) => ({
+                {
+                    console.log('Updated in process ...')
+                chatContext.setActive((prevActive) => (prevActive && {
                     ...prevActive,
                     new_message: 1,
                     messages: [...prevActive.messages, message_received]
@@ -179,11 +151,11 @@ function ChatSession(){
         AddChannel('CHATROOM', UpdateCurrentConvs)
         setInit(true)
         return () => {
-        // Remove the CHATROOM call back function when we exist the chat section
+            // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
         }
     },[init, chatContext.active])
-
+                                
     // when we rerender the page
     const SendWebSocketToDefine = ()=>
     {
@@ -198,10 +170,10 @@ function ChatSession(){
             SocketContext.socket?.current.send(JSON.stringify(req))
             chatContext.active?.new_message==0
             chatContext.setConvs((prevConvs) => {
-                return prevConvs?.map((conv) =>
+            return prevConvs?.map((conv) =>
                     conv.channelId === chatContext.active?.channelId
-                        ? { ...conv, new_message:0 }
-                        : conv
+                ? { ...conv, new_message:0 }
+                : conv
                 );
             });
         }
@@ -211,10 +183,38 @@ function ChatSession(){
         }
     }
 
+    useEffect(() => {
+        // Scroll to the bottom whenever the messages array changes (but in our case we are interested only in
+        // one the first render where chatContext.active.scrollLeft = -1 &&  chatContext.active.scrollTop = -1)
+        if (chatContext.active?.status == 0 && containerRef.current && chatContext.active.scrollLeft == -1 &&  chatContext.active.scrollTop == -1) {
+
+            //containerRef.current.scrollTop = containerRef.current.scrollHeight;
+            const newScrollTop = containerRef.current.scrollHeight;
+            const newScrollLeft = containerRef.current.scrollLeft;
+            // Updating the active conversation's scroll properties
+            chatContext.setActive((prevConv) => (prevConv && {
+                ...prevConv,
+                scrollTop: newScrollTop,
+                scrollLeft: newScrollLeft,
+            }));
+
+            chatContext.setConvs((prevConvs) => {
+                return prevConvs?.map((conv) =>
+                    conv.channelId === chatContext.active?.channelId
+                        ? { ...conv, scrollTop: newScrollTop, scrollLeft: newScrollLeft }
+                        : conv
+                );
+            });
+            setUpdate(true)
+            console.log(chatContext.active);
+        }
+    }, []);
+
+
     useEffect(()=>
     {
-        console.log('Update Current chat : ' + chatContext.active?.channelId);
-        console.log(chatContext.active)
+        // console.log('Update Current chat : ' + chatContext.active?.channelId);
+        // console.log(chatContext.active)
         setMessageArray(chatContext.active?.messages)
         // check if message where readed
         if (chatContext.active?.new_message == 1)
@@ -223,30 +223,32 @@ function ChatSession(){
     // this function will update our conv list and add packet of old messages to it
     // const 
     const FecthOldMessages = async ()=>
-    {
-        try
         {
-            const extracting = 'update/' + chatContext.active?.channelId + '/' + MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
-            const url = CONVERSATION + extracting
-            console.log(url)
-            const request = {
-                url: url,
-                method: 'GET',
-                // withCredentials: true
-            }
-            const response = await mailman(request)
-            interface conversation_type {
+            try
+            {
+                const extracting = 'update/' + chatContext.active?.channelId + '/' + MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
+                const url = CONVERSATION + extracting
+                console.log(url)
+                const request = {
+                    url: url,
+                    method: 'GET',
+                    // withCredentials: true
+                }
+                const response = await mailman(request)
+                interface conversation_type {
                 messages : Message[]
                 next_packet_number : number
                 is_next_packet: number
             }
             const old_messages:conversation_type  = response.data as conversation_type
-            if (chatContext.active?.last_packet < old_messages.next_packet_number)
+            if ( chatContext.active && old_messages && old_messages.is_next_packet && chatContext.active?.last_packet < old_messages.next_packet_number)
             {
                 console.log('wtf')
                 console.log(old_messages)
                 console.log(chatContext.active)
-                chatContext.setActive((prevConv) => ({
+                if (containerRef.current)
+                    containerRef.current.scrollTop = chatContext.active.scrollTop;
+                chatContext.setActive((prevConv) => (prevConv && {
                     ...prevConv,
                     last_packet: prevConv?.next_packet_number,
                     next_packet_number: old_messages.next_packet_number,
@@ -276,7 +278,7 @@ function ChatSession(){
     useEffect(()=>
     {
         const {scrollTop} =  scrollPosition
-        if (scrollTop == 0 && chatContext.active?.is_next_packet)
+        if (chatContext.active?.status == 0 && scrollTop == 0 && chatContext.active?.is_next_packet)
         {
             FecthOldMessages()
         }
@@ -369,13 +371,13 @@ function ChatSession(){
                     {
                         messageArray?.map((msg, index): React.ReactNode => {
                             return(
-                                <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                                <img src={`${backendPath + msg.sender.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] rounded-full cursor-pointer" onClick={()=>{
+                                <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender?.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
+                                <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] rounded-full cursor-pointer" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}/>
-                                <div id='message' className={`${msg.sender.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg`}>
-                                    <p >{msg.content}</p>
+                                <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg`}>
+                                    <p >{msg?.content}</p>
                                 </div>
                             </div>
                             )

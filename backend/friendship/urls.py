@@ -8,5 +8,5 @@ urlpatterns = [
    path("unfriend/<str:_login>", UnFriendUser ,name="Unfriend"),
    path("is/BLOCKED/<str:_login>", isBlocked, name='isBlocked'),
    path("friend_requests_sent/", FriendRequestSentList.as_view(), name="friend_requests_sent"),
-   path("friend_requests_received/", FriendRequestReceivedList.as_view(), name="friend_requests_sent")
+   path("friend_requests_received/", FriendRequestReceivedList, name="friend_requests_received")
 ]

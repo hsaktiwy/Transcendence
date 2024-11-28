@@ -5,6 +5,8 @@ import { Navigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { ActionType } from "@/utils/interfaces";
 import mailman from "@/utils/AxiosFetcher";
+
+import { MESSAGES_PACKET_SIZE } from "@/utils/Constants";
 function ChatModal(){
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
@@ -15,7 +17,7 @@ function ChatModal(){
         try{
             if ( userContext?.action?.type != ActionType.NONE)
             {
-                const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": "unfriend")
+                const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": (userContext?.action?.type == ActionType.UNFRIEND ? "unfriend" :'none'))
                 const req = {
                     url: "friendship/"+action+"/"+userContext?.action?.Target_User_Login,
                     method: "GET",
@@ -25,6 +27,43 @@ function ChatModal(){
                 console.log(resp)
                 userContext.setAction({type:ActionType.NONE, Target_User_Login:undefined,ConversationChannel:undefined})
                 chatContext.setOpenModal(false)
+                // LOOP OVER ALL THE USERS and get the user that hold our messages and then change the status to like 1
+                if (action == 'block')
+                {
+                    // update the active 
+                    chatContext.setActive((prevActive) => (prevActive && ({
+                        ...prevActive,
+                        status: 1,
+                        messages: []
+                    })))
+                    // update the main one
+                    chatContext.setConvs((prevConvs) =>{
+                        return (prevConvs && prevConvs?.map((conv)=>(conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel ? {...conv, messages:[], status:1} : conv))))
+                    })
+                }
+                else if (action == 'unblock')
+                {
+                    console.log('action : ' + action)
+                    // get the old messages
+                    try{
+                        const req = {
+                            url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+MESSAGES_PACKET_SIZE+'/',
+                            method: "GET",
+                            withCredentials: true,
+                        }
+                        const rep  = await mailman(req)
+                        const fetched_conv:Conversation =  rep.data.conv as Conversation
+                        console.log(fetched_conv)
+                        chatContext.setActive(fetched_conv)
+                        chatContext.setConvs((prevConvs) =>{
+                            return (prevConvs && prevConvs?.map((conv)=>(conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel ? fetched_conv : conv))))
+                        })
+                    }
+                    catch(e){
+                        console.log('Error : in ChatModel get {'+ 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+MESSAGES_PACKET_SIZE+'/' +'} :\n')
+                        console.log(e)
+                    }
+                }
             }
             else
                 console.log('action None')
