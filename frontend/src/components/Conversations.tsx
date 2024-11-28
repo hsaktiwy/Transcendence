@@ -144,8 +144,8 @@ return(
                             }
                             const currentConvData: convData = {
                                 lastMessage: (conv.messages && conv.messages.length != 0)  ? conv.messages[conv.messages.length - 1] : NoneMessage,
-                                picture: conv.user2.profile_pic,
-                                friendName: conv.user2.firstName +  " " +conv.user2.lastName,
+                                picture: conv.user2?.profile_pic,
+                                friendName: conv.user2?.firstName +  " " +conv.user2?.lastName,
                                 new_message:  conv.new_message
                             }
                             return(

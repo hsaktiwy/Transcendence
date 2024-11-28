@@ -1,7 +1,7 @@
+@import './game/ThreeScene.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import './game/ThreeScene.css';
 
 /* Scrollbar container */
 ::-webkit-scrollbar {

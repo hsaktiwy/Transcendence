@@ -251,14 +251,21 @@ class FriendRequestSentList(generics.ListAPIView):
     def get_queryset(self):
         user=self.request.user
         return FriendRequest.objects.filter(sender=user, status='pending')
-class FriendRequestReceivedList(generics.ListAPIView):
-    serializer_class = FriendRequestSerializer
-    def get_queryset(self):
-        user=self.request.user
-        return FriendRequest.objects.filter(receiver=user, status='pending')
-	
-    
-    
+
+# class FriendRequestReceivedList(generics.ListAPIView):
+#     serializer_class = FriendRequestSerializer
+#     def get_queryset(self):
+#         user=self.request.user
+#         return FriendRequest.objects.filter(receiver=user, status='pending')
+@api_view(['GET'])
+def FriendRequestReceivedList(request):
+	try:
+		user=request.user
+		list = FriendRequest.objects.filter(sender=user, status='pending')
+		serialized_data = FriendRequestSerializer(list, many=True)
+		return Response(serialized_data.data, status=status.HTTP_200_OK)
+	except Exception as e:
+		return Response({'Error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
 	# try:
 	# 	user = request.user
 	# 	FriendRequests = FriendRequest.objects.filter(sender=user)
