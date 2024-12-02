@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-
     'rest_framework',
     'users.apps.UsersConfig',
     'conversations.apps.ConversationsConfig',
@@ -56,6 +55,7 @@ INSTALLED_APPS = [
     'friendship.apps.FriendshipConfig',
     'game.apps.GameConfig',
     'invitation.apps.InvitationConfig',
+    'silk',# THIS IS FOR SILK TESTING PURPOSE
 ]
 AUTH_USER_MODEL = "users.MyUser"
 
@@ -77,6 +77,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # 'api.utils.JWTAuthHTTPMiddlware',
+    'silk.middleware.SilkyMiddleware',# THIS IS FOR SILK TESTING PURPOSE
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
     

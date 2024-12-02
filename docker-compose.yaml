@@ -46,6 +46,7 @@ services:
       - "443:443"
     networks:
       - transendence
+
 networks:
   transendence:
     name: transendence

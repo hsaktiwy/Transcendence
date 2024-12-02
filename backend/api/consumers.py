@@ -14,6 +14,7 @@ from status.serializers import NotificationSerializer
 from django.db.models import Q
 from friendship.models import BlockList, FriendShip
 
+
 class ChatConsumer(AsyncWebsocketConsumer):
 
 

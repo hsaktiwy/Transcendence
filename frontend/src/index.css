@@ -1,7 +1,7 @@
+@import './game/ThreeScene.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import './game/ThreeScene.css';
 
 /* Scrollbar container */
 ::-webkit-scrollbar {
@@ -27,7 +27,7 @@
 
 
   body{
-    background-image: url('../public/astro-bg.png');
+    background-image: url('/astro-bg.png');
     background-color: #160430;
     background-position: center;
     background-size: cover;
@@ -45,7 +45,7 @@
     top: 0;
     left: 0;
     z-index: -1;
-    background-color: rgb(2 5 16 / 0.8);
+    background-color:rgb(2 5 16 / 0.8);
     /* background: linear-gradient(to top right, #121415, #2B2F32);
     background-size: cover;
     background-repeat: no-repeat;

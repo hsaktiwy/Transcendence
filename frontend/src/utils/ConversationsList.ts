@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Conversations from "../components/Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "./ChatContext"
 import {BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE} from './Constants'
 import mailman from "./AxiosFetcher";
