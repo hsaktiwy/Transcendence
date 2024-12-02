@@ -2,10 +2,10 @@ import React from "react";
 import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
 import CardBorder from "../../../public/cardBorder.png"
-import TargetImage from "../../../public/target-front-color.png"
-import ChatImage from "../../../public/chaticon.png"
-import TropheyImage from "../../../public/img.png"
-import MedalImage from "../../../public/medal-front-color.png"
+import TargetImage from "/target-front-color.png"
+import ChatImage from "/chaticon.png"
+import TropheyImage from "/img.png"
+import MedalImage from "/medal-front-color.png"
 import Card from "./Card";
 import { localGamePlayDesc, remoteGamePlayDesc, tournamentDesc, chatDesc } from "./description";
 import { motion } from "framer-motion";

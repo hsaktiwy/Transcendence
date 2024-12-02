@@ -225,7 +225,7 @@ const Login = () => {
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
 
                 <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
-                    <ThreeScene/>
+                    {/* <ThreeScene/> */}
                     
                         {tfaUser === undefined ? 
                             <motion.form 

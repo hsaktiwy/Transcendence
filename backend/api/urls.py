@@ -37,5 +37,6 @@ urlpatterns = [
     # #Game
     path('game/', include('game.urls')),
     # #Game Invitation
-    path('invitation/', include('invitation.urls'))
+    path('invitation/', include('invitation.urls')),# THIS IS FOR SILK TESTING PURPOSE
+    path('silk/', include('silk.urls', namespace='silk')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

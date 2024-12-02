@@ -1,6 +1,6 @@
 import React from "react";
-import Switch from '../../../public/Switch.png'
-import Paddle from '../../../public/landingHero.gif'
+// import Switch from '/Switch.png'
+import Paddle from '/landingHero.gif'
 import { FaArrowRight } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
