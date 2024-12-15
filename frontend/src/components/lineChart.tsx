@@ -41,8 +41,8 @@ export function LineCharFile() {
         <CardTitle>Line Chart - Linear</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent className="p-4 flex items-center justify-center w-full h-full h-[90%]">
-        <ChartContainer className="w-full h-full" config={chartConfig}>
+      <CardContent className="p-4 flex items-center justify-center w-full h-[90%] ">
+        <ChartContainer className="w-full md:h-full" config={chartConfig}>
           <LineChart
             accessibilityLayer
             data={chartData}

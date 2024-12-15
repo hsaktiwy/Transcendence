@@ -29,7 +29,7 @@ const chartConfig = {
 export function ChartFile() {
   return (
   <>
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+    <ChartContainer config={chartConfig} className="w-full">
       <BarChart accessibilityLayer data={chartData}>
         <Bar dataKey="desktop" fill="var(--color-desktop)" radius={7} />
         <XAxis
