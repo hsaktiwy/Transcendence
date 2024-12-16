@@ -49,6 +49,8 @@ interface UserContextInterface{
     setFriendRequestSent: React.Dispatch<React.SetStateAction<FriendRequestInterface[]> >;
     friendRequestReceived: FriendRequestInterface[];
     setFriendRequestReceived: React.Dispatch<React.SetStateAction<FriendRequestInterface[]> >;
+    fetchNotification : () => void
+
     
 }
 interface FriendRequestInterface {
@@ -75,11 +77,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
-    const notificationHandler = (data: NotificationPropreties) => {
 
-        setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
-        setNewNotification(prev => [...prev, data])
-    }
     const PureNotification = (data:MiniNotification) =>
     {
         if (data.notification == 'Error')
@@ -184,12 +182,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-            // toast.success('Welcome!', {
-            //     id: toastId, // Use the same toast ID to update the existing toast
-            // });
-            // setTimeout(() => {
-            //     toast.dismiss(toastId);
-            // }, 5000);
+
             let notificationData : NotificationPropreties[] = resp.data
             notificationData = getNotificationData(notificationData)
             console.log(notificationData)
@@ -197,7 +190,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
         }
 
     }
@@ -219,8 +212,21 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             }
     
     }
+    const notificationHandler = (data: NotificationPropreties) => {
+
+        setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
+        setNewNotification(prev => [...prev, data])
+        if (data.type === 'friendship')
+        {
+            fetchReceivedFriendRequest()
+            fetchSentFriendRequest()
+
+        }
+            
+    }
     useEffect(() =>{
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
+        SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION', PureNotification)
         return () => {
@@ -241,7 +247,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }, [AuthContextConsummer?.loggedIn, profilePicChanged])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {userData ? children : <LoadingIndecator/>}
         </UserContext.Provider>

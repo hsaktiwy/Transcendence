@@ -96,7 +96,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     }, [items])
     return(
 
-        <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4 w-[90%] sm:w-[500px]">
+        <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4 w-[90%] sm:w-[500px] ">
   
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
