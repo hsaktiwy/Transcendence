@@ -76,7 +76,7 @@ const ProfileTest  = () =>{
                                 to : username
                             }
                             const message = JSON.stringify(notification)
-                            SocketContext.socket.current?.send(message)
+                            SocketContext.socket?.current?.send(message)
                         }}>
                             Add friend
                         </button>
