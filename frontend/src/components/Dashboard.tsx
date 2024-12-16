@@ -14,6 +14,7 @@ import { LineCharFile } from "./lineChart.tsx";
 import { RadarChartFile } from "./RadarChartFile.tsx";
 import { RadarChart } from "recharts";
 import RankFile from "./rankfile.tsx";
+import { axiosPath ,BACKEND } from "../utils/Constants";
 import OnlineFriends from "./OnlineFriends.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Achievements from "./Achievements.tsx";
@@ -79,7 +80,7 @@ function Dashboard(){
         ]
       });
     return(
-        <div className="font-poppins  h-[1200px] dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4 ">
+        <div className="font-poppins pb-20 dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4 ">
           <div className=" row-span-1 flex justify-center items-center  md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6 ">
               <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                   <div className=" text-white  w-full ">
@@ -87,8 +88,8 @@ function Dashboard(){
                                                           <div className="w-full h-full  grid grid-rows-2 ">
                                                               <div className=" bg-[#1D1E22] px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
                                                                   <div className=" h-20  flex items-center 2xl:items-end ">
-                                                                          <div className=" w-40  2xl:w-auto bg-[#5E97A9] rounded-2xl flex justify-center items-center text-center">
-                                                                            <div className="text-xl font-semibold 2xl:text-lg ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
+                                                                          <div className="h-10 w-40 2xl:h-14 2xl:w-48 bg-[#5E97A9] rounded-2xl flex justify-center items-center">
+                                                                          <div className="text-xl font-semibold 2xl:text-2xl ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
                                                                           </div>
                                                                       </div>
                                                                       <div className=" flex flex-col justify-center  items-center mb-7">
@@ -104,13 +105,28 @@ function Dashboard(){
                                           </div>
               </div>
           </div>
-        <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
-                 <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] h-full p-7 ">
-                 <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
-                        <h1 className=" font-medium"> User Activities</h1>
-                        <div className=" p-5 w-[105%] flex justify-center items-center ">
-                               <ChartFile/>
-                        </div>
+         <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
+                 <div className="  rounded-2xl bg-gradient-to-tr from-[#2B2F32] to-[#2B2F32] h-full p-7 ">
+                  {/* Match  histroy */} 
+                 <div className="text-2xl h-full  rounded-2xl bg-gradient-to-b from-[#292d30] to-[#1D1E22] shadow-lg  font-semibold flex flex-col justify-center items-center p-7">
+                    <div className="p-3  w-full h-full grid grid-rows-6">
+                      <div className="row-span-2 px-6 flex items-center justify-between w-full">
+                          <div className="flex items-center justify-center flex-col gap-3">
+                              <img className="size-18   2xl:size-20 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                              <div className="text-xl font-medium 2xl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
+                           </div>
+                          <div className="">
+                            <h1 className="text-3xl" >4 - 6</h1>
+                          </div>
+                          <div className="flex items-center justify-center flex-col gap-3">
+                              <img className="size-18   2xl:size-20 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                              <div className="text-xl font-medium  2xl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
+                           </div>
+                      </div>
+                      <div className="row-span-4 "></div>
+                    </div>
+
+                               {/* <ChartFile/> */}
                  </div>
              </div>
         </div>
@@ -132,7 +148,7 @@ function Dashboard(){
                    <RadarChartFile/>
         </div>
         </div>
-        <div className="pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
+        <div className="xl:pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
             <div className="  rounded-2xl bg-gradient-to-tr from-[#2c353a] to-[#2B2F32] h-full p-4 ">
                     <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
                             <h1 className=" font-medium"> User Activities</h1>
