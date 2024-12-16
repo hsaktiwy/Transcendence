@@ -14,6 +14,7 @@ import { LineCharFile } from "./lineChart.tsx";
 import { RadarChartFile } from "./RadarChartFile.tsx";
 import { RadarChart } from "recharts";
 import RankFile from "./rankfile.tsx";
+import { axiosPath ,BACKEND } from "../utils/Constants";
 import OnlineFriends from "./OnlineFriends.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Achievements from "./Achievements.tsx";
@@ -105,12 +106,27 @@ function Dashboard(){
               </div>
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
-                 <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] h-full p-7 ">
-                 <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
-                        <h1 className=" font-medium"> User Activities</h1>
-                        <div className=" p-5 w-[105%] flex justify-center items-center ">
-                               <ChartFile/>
-                        </div>
+                 <div className="  rounded-2xl bg-gradient-to-tr from-[#2B2F32] to-[#2B2F32] h-full p-7 ">
+                  {/* Match  histroy */} 
+                 <div className="text-2xl h-full  rounded-2xl bg-gradient-to-b from-[#292d30] to-[#1D1E22] shadow-lg  font-semibold flex flex-col justify-center items-center p-7">
+                    <div className="p-3  w-full h-full grid grid-rows-6">
+                      <div className="row-span-2 px-6 flex items-center justify-between w-full">
+                          <div className="flex items-center justify-center flex-col gap-3">
+                              <img className="size-18   2xl:size-20 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                              <div className="text-xl font-medium 2xl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
+                           </div>
+                          <div className="">
+                            <h1 className="text-3xl" >4 - 6</h1>
+                          </div>
+                          <div className="flex items-center justify-center flex-col gap-3">
+                              <img className="size-18   2xl:size-20 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                              <div className="text-xl font-medium  2xl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
+                           </div>
+                      </div>
+                      <div className="row-span-4 "></div>
+                    </div>
+
+                               {/* <ChartFile/> */}
                  </div>
              </div>
         </div>
