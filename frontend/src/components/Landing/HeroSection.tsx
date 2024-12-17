@@ -1,6 +1,6 @@
 import React from "react";
-import Switch from '../../../public/Switch.png'
-import Paddle from '../../../public/landingHero.gif'
+// import Switch from '/Switch.png'
+import Paddle from '/landingHero.gif'
 import { FaArrowRight } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -69,10 +69,12 @@ const HeroSection = () =>{
                     variants={FadeIn(0.8)}
                     initial="initial"
                     animate="animate"
-                    whileHover={{scale:1.1}}
-                    className="bg-[#5E97A9] rounded-2xl py-4 px-3 w-[165px] flex justify-between items-center hover:scale-105 duration-100 cursor-pointer">
-                    <Link to='/login' className=" text-lg font-medium">Get Started</Link>
-                    <FaArrowRight/>
+                    // whileHover={{scale:1.1}}
+                    className="">
+                    <Link to='/login' className=" text-lg font-medium bg-[#5E97A9] rounded-2xl py-4 px-3 w-[165px] flex justify-between items-center  duration-100 cursor-pointer hover:bg-white hover:text-[#5E97A9]">
+                        <span>Get Started</span>
+                        <FaArrowRight/>
+                    </Link>
                 </motion.div>
             </div>
             <motion.div 

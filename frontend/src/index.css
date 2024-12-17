@@ -27,7 +27,7 @@
 
 
   body{
-    background-image: url('../public/astro-bg.png');
+    background-image: url('/astro-bg.png');
     background-color: #160430;
     background-position: center;
     background-size: cover;

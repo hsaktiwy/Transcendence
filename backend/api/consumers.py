@@ -24,7 +24,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             receiver = MyUser.objects.filter(login=_receiver).first()
             existing_rev_request = FriendRequest.objects.filter(sender=receiver, receiver=_sender).first()
             if existing_rev_request:
-                return 0, None, None, None
+                if existing_rev_request.status == 'accepted':
+                    not_content = f'{_sender} accepted your friend request'
+                    print(not_content)
+                else:
+                    return 0, None, None, None
             friendreq = FriendRequest.objects.create(sender=_sender, receiver=receiver)
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='friendship', friend_request_id=friendreq.id)
             return 1, notification, receiver.id, friendreq.id
@@ -251,13 +255,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     }
                 )
             if message_json['type'] == 'NOTIFICATION_ADD_FRIEND':
-                print(text_data)
                 receiver = message_json['to']
                 success,notification, receiver_id, friend_request_id = await sync_to_async(self.create_add_friend_notification)(receiver, user)
                 group_name = f'notification_user_{receiver}'
                 if (success == 0):
                     return 
-                print(group_name)
                 notificationSerialized = await sync_to_async(self.get_SerializedNotification)(notification)
                 SerializedSender = await sync_to_async(self.get_sender)(user)
                 print(f"id: {notificationSerialized['id']}")

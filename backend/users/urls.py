@@ -28,6 +28,7 @@ urlpatterns = [
     path('user/check/', views.CheckAuth.as_view()),
     path('user/getqrcode/', views.GenerateQRCodeView.as_view(), name="generate_qr_code"),
     path('user/enable2fa/', views.Enable2faView.as_view(), name="enable_2fa"),
+    path('user/verify2fa/', views.Verify2faOTPView.as_view(), name="verify_2fa"),
     path('user/upload_pic/', views.UploadProfilePicture.as_view(), name="upload_profile"),
     path('LoginWithOAuth42/', views.LoginWithOAuth42, name="LoginWithOAuth42"),
     # path('login/', views.LoginView.as_view())

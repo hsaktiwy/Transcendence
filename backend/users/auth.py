@@ -21,7 +21,7 @@ class JWTAuthentication(BaseAuthentication):
             return None
         payload = decode_token(access_token)
         if payload == -1:
-            if request.path == '/api/user/login/' or request.path == '/api/user/register/' or request.path == '/api/user/logout/' or request.path == '/api/user/check/':
+            if request.path == '/api/user/login/' or request.path == '/api/user/register/' or request.path == '/api/user/logout/' or request.path == '/api/user/check/' or request.path == '/api/user/verify2fa/':
                 return None
         if payload == 0:
             raise AuthenticationFailed('Expired token')
@@ -29,6 +29,9 @@ class JWTAuthentication(BaseAuthentication):
             raise AuthenticationFailed('Invalid token')
         
         # if request.method != 'get':
+        if not csrf_cookie or not csrf_token:
+            raise AuthenticationFailed('csrf_token missed')
+            
         if csrf_token != csrf_cookie and request.path != '/api/user/login/' and request.path != '/api/user/register/' :
                 raise AuthenticationFailed('csrf_token mismatch')
         # elif not csrf_token and not csrf_cookie:

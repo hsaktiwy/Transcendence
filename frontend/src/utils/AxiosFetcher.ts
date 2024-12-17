@@ -31,17 +31,21 @@ mailman.interceptors.response.use(
         return response
     },
     async (error) =>{
+        console.log(error)
         const originalRequest = error.config
-        if (error.response && error.response.status == 401 && error.response.data['detail'] && error.response.data['detail'] == 'Expired token' && !originalRequest._retry){
+        if ((error.response.config.responseType==='blob' || (error.response  && error.response.data['detail'] && error.response.data['detail'] == 'Expired token')) && (error.response.status == 401 && !originalRequest._retry)){
             originalRequest._retry = true
+                
             try{
+                console.log("access token haa9 mcha")
                 const req:string = axiosPath+"/api/user/refresh_token/"
                 const refreshToken = await axios.get(req, {
-                    withCredentials: true
+                    withCredentials: true,
                 })
                 return mailman(originalRequest);
             }
             catch (refresh_token_error){
+                console.log(refresh_token_error)
                 return Promise.reject(refresh_token_error)
 
             }
