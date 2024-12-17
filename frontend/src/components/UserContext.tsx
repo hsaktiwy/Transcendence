@@ -45,6 +45,11 @@ interface UserContextInterface{
     setNotificationReaded: React.Dispatch<React.SetStateAction<boolean> >;
     action: Action | undefined;
     setAction:  React.Dispatch<React.SetStateAction<Action |  undefined> >;
+    friendRequestSent: FriendRequestInterface[];
+    setFriendRequestSent: React.Dispatch<React.SetStateAction<FriendRequestInterface[]> >;
+    friendRequestReceived: FriendRequestInterface[];
+    setFriendRequestReceived: React.Dispatch<React.SetStateAction<FriendRequestInterface[]> >;
+    
 }
 interface FriendRequestInterface {
     id:number;
@@ -236,7 +241,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }, [AuthContextConsummer?.loggedIn, profilePicChanged])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {userData ? children : <LoadingIndecator/>}
         </UserContext.Provider>

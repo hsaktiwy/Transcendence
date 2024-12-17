@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
+import { VerifyTFAInterface } from "@/components/AuhtenticationContext";
+import { AuthContext } from "@/components/AuhtenticationContext";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+interface TfaProp {
+    user:string
+}
 const TfaVerificationFade = () => {
     return (
         {
             TfaVerificationInitial: {
                 opacity: 0,
-                x: -100, 
+                y: -100, 
             },
             TfaVerificationAnimate :{
                 opacity: 1,
-                x: 0,
+                y: 0,
                 transition : {
                     duration: 0.5,
                     ease: "easeInOut",
@@ -20,7 +27,72 @@ const TfaVerificationFade = () => {
         }
     )
 }
-const TfaVerification = () =>{
+const TfaVerification:React.FC<TfaProp> = ({user}) =>{
+    const Navigate = useNavigate();
+    const AuthContextConsummer = useContext(AuthContext)
+    if (!AuthContextConsummer)
+        throw new Error("invalid scope");
+    const [otp, setOtp] = useState<string>('')
+    const inputOnChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) =>{
+        console.log("A")
+        const target = e.target
+        let targetValue = target.value
+        const re = new RegExp(/^\d+$/)
+        const isDigit = re.test(targetValue)
+        if (!isDigit && targetValue !== '')
+            return;
+        targetValue = isDigit ? targetValue : ''
+        const newValue = otp.substring(0, index) + targetValue + otp.substring(index+1)
+        setOtp(newValue)
+        if (!isDigit)
+            return;
+        const nextInput = target.nextElementSibling as HTMLInputElement | null
+        if (nextInput)
+            nextInput.focus()
+    }
+    const inputOnKeyDown= (e: React.KeyboardEvent<HTMLInputElement>, index:number) =>{
+        const target = e.target as HTMLInputElement
+        const key = e.key
+        target.setSelectionRange(0,1)
+        const previousInput = target.previousElementSibling as HTMLInputElement | null
+        const nextInput = target.nextElementSibling as HTMLInputElement | null
+        if ((previousInput && key === 'ArrowLeft')){
+            previousInput.focus()
+        }
+        else if ((nextInput && key === 'ArrowRight'))
+            nextInput.focus( )
+        else if ((previousInput && key !== 'Backspace') || target.value !== '')
+            return;
+        if (previousInput && key === 'Backspace')
+            previousInput.focus()
+
+        
+    }
+    const inputOnFocus = (e: React.FocusEvent<HTMLInputElement>) =>{
+        const target = e.target
+
+        target.setSelectionRange(0,1)
+    }
+    const handleSubmit = async () => {
+
+        const data: VerifyTFAInterface = {
+            user: user,
+            otp_code: otp
+        }
+        const resp = await AuthContextConsummer.VerifyTFA(data)
+        if (resp.message === 'User logged in successfuly' ) {
+            toast.success(resp.message)
+            AuthContextConsummer.setLoggedIn(true)
+            // Navigate('/')
+        }
+        else
+            toast.error(resp.message)
+
+    }
+    useEffect(() => {
+        if (AuthContextConsummer.loggedIn === true)
+            Navigate('/')
+    }, [AuthContextConsummer.loggedIn])
     return(
         <motion.div
             variants={TfaVerificationFade()}
@@ -37,14 +109,28 @@ const TfaVerification = () =>{
                     [1,2,3,4,5,6].map((item, index) => {
                         return (
                             <input
+                                value={otp.split('')[index] ? otp.split('')[index] : ''}
                                 type="text"
                                 inputMode="numeric"
                                 pattern="\d{1}"
                                 key={index}
-                                className="h-[40px] w-[40px] bg-transparent outline-none border-white border rounded-md text-center"/>
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => inputOnChange(e, index)}
+                                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>)=>{
+                                    inputOnKeyDown(e, index)
+                                }}
+                                onFocus={(e: React.FocusEvent<HTMLInputElement>)=> inputOnFocus(e)}
+                                className="h-[40px] w-[40px] bg-transparent outline-none border-white border rounded-md text-center focus:border-[#5E97A9]"/>
+
                         )
                     })
                 }
+            </div>
+            <div className="min-h-20 flex justify-center items-center ">
+                <button className="rounded bg-[#5E97A9] text-white py-2 px-4 hover:bg-white cursor-pointer hover:text-[#5E97A9] duration-100 text-lg font-medium" onClick={() =>{
+                    handleSubmit()
+                }}>
+                    Confirm
+                </button>
             </div>
         </motion.div>
     )

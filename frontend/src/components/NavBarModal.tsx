@@ -11,10 +11,31 @@ import { NotificationPropreties } from "./UserContext";
 import { axiosPath, BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { PiMaskSadLight } from "react-icons/pi";
+import { Loading__ } from "@/auth/Login";
+import FriendRequestNotification from "./Notification/FriendRequestNotification";
 
 
 
-function formatDate(date: Date | string): string {
+export const Accept = async (friend_req_id:number)=>{
+    try{
+        const req = {
+            url: `/friendship/request/status/set/accept/${friend_req_id}`,
+            method: 'GET',
+        }
+        const resp = await mailman(req)
+        console.log(resp.data)
+        const notification = {
+            type: 'NOTIFICATION_ADD_FRIEND',
+            to : sender
+        }
+        const message = JSON.stringify(notification)
+        SocketConsumer.socket?.current?.send(message)
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+export function formatDate(date: Date | string): string {
     const now = new Date();
     const inputDate = new Date(date);
     const diffMs = now.getTime() - inputDate.getTime();
@@ -40,13 +61,15 @@ function formatDate(date: Date | string): string {
     }
 }
 
-interface senderInterface {
+export interface senderInterface {
     login: string;
     firstName: string;
     lastName: string;
     profile_pic: string;
     email: string;
-    birthDay: string;
+    state: string;
+    last_visit: string;
+   
 
 }
 interface typeInterface{
@@ -57,7 +80,7 @@ interface typeInterface{
     'message': JSX.Element,
 }
 
-const notifType: typeInterface = {
+export const notifType: typeInterface = {
     'system': <RiNotification2Line/>,
     'friendship': <IoPersonAddOutline/>,
     'gameInvitation': <RiGamepadLine/>,
@@ -71,12 +94,23 @@ interface ModalPropInterface{
 }
 const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
     const [dataFetched, setdatafetched] = useState<boolean>(false)
+    const LOGO = 'https://static.vecteezy.com/system/resources/previews/013/959/227/non_2x/table-tennis-fire-logosilhouette-ping-pong-club-line-art-logos-or-icons-illustration-vector.jpg'
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     let usersDataArr= useRef<senderInterface[]>([])
+    interface friendReqState {
+        accepted: boolean | undefined
+    }
+    const [friendReqAccepted, setFriendReqAccepted] = useState<friendReqState[]>([])
+    let receivedReqStatus: friendReqState[] = []
     const fetchRequestSenderData =  async (items:  NotificationPropreties[]) =>{
             for(const item of items){
+                if (item.friend_request_id !== -1 && userContextConsumer.friendRequestReceived.filter(req=>req.sender.login === item.sender && req.status === 'pending').length)
+                    receivedReqStatus.push({accepted: false})
+                else
+                    receivedReqStatus.push({accepted: undefined})
+                    
                 if (!usersDataArr.current.find(user => item.sender === user.login)){
                     try{
                         const req = {
@@ -87,7 +121,6 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                         console.log(resp)
                         const userData: senderInterface = resp.data
                         usersDataArr.current.push(userData)
-                        console.log("wewewe ====???? ",usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic)
                     }
                     catch (err){
                         console.error(err)
@@ -97,26 +130,14 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
             }
 
         setdatafetched(true)
-
+        setFriendReqAccepted(receivedReqStatus)
     }
 
-    const Accept = async (friend_req_id:number)=>{
-        try{
-            const req = {
-                url: `/friendship/request/status/set/accept/${friend_req_id}`,
-                method: 'GET',
-            }
-            const resp = await mailman(req)
-            console.log(resp.data)
-            // we need to rest all thing to get back to what it should be
-        }
-        catch(e){
-            console.log(e)
-        }
-    }
+
 
     useEffect(() =>{
-        fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message'))
+        console.log(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
+        fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
     },[])
     return(
         <div className="   h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 ">
@@ -130,48 +151,52 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                     <IoCloseOutline/>
                 </span>
             </div>
-            <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm ">
+            <div className={`max-h-[60vh] ${dataFetched ? 'h-auto' : 'h-[50vh]'} overflow-y-auto overflow-x-hidden  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm `}>
 
             {
                 userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 
-                (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item, index) =>{
+                dataFetched === true ? 
+                (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'friendship').map((item, index) =>{
                     return(
-                        <div key={item.id} className={`font-poppins ${index < userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length - 1 &&`border-b-[1px] border-[#5E97A9]/85`} min-h-[100px]`}>
-                            <div className="px-2 sm:px-4 py-4 flex gap-8 items-center  justify-center sm:justify-between flex-wrap ">
-                                <div className="  w-[60px] h-[60px] relative ">
-                                    <img src={`${axiosPath}${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="test" className=" rounded-full border-[1px] border-white/25 h-full w-full object-cover"/>
-                                    <span className=" absolute text-sm bg-[#5E97A9] p-[2px] sm:p-[4px] text-white rounded-full bottom-0 right-0">
-                                        {notifType.friendship}
-                                    </span>
-                                </div>
-                                <div className="flex flex-col gap-4 items-center sm:items-start overflow-visible">
-                                    <h1 className="text-sm sm:text-base font-medium text-center sm:text-start w-[250px] sm:w-[300px] text-white tracking-wide">
-                                        {item.content}
-                                    </h1>
-                                    <div className=" font-light flex justify-center">
-                                        <div className=" flex gap-3 sm:gap-6 text-sm sm:text-base flex-wrap justify-center sm:justify-start ">
-                                            <button className=" bg-[#5E97A9] text-white rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100  w-[100px] sm:w-[124px] " onClick={()=>{Accept(item.friend_request_id)}}>
-                                                Accept
-                                            </button>
-                                            <Link to={`/profile/${item.sender}`} onClick={() =>{
-                                                setOpenModal(false)
-                                            }}>
-                                                <button className="text-white/70 rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100 bg-[#2B2F32]/50 border-[1px] border-[#5E97A9]/80 w-[100px] sm:w-[124px]">
-                                                    View Profile
-                                                </button>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="hidden sm:block text-sm  text-white w-[80px] text-center" >
-                                    <p >
-                                        {formatDate(item.created)}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        // <div key={item.id} className={`font-poppins ${index < userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length - 1 &&`border-b-[1px] border-[#5E97A9]/85`} min-h-[100px]`}>
+                        //     <div className="px-2 sm:px-4 py-4 flex gap-8 items-center  justify-center sm:justify-between flex-wrap ">
+                        //         <div className="  w-[60px] h-[60px] relative ">
+                        //             <img src={item.type==='friendship' ? axiosPath + usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic : LOGO} alt="test" className=" rounded-full border-[1px] border-white/25 h-full w-full object-cover"/>
+                        //             <span className=" absolute text-sm bg-[#5E97A9] p-[2px] sm:p-[4px] text-white rounded-full bottom-0 right-0">
+                        //                 {
+                        //                     item.type === 'system' ? notifType.system : item.type === 'friendship' ? notifType.friendship : item.type === 'gameInvitation' ? notifType.gameInvitation : notifType.tournament
+                        //                 }
+                        //             </span>
+                        //         </div>
+                        //         <div className="flex flex-col gap-4 items-center sm:items-start overflow-visible">
+                        //             <h1 className="text-sm sm:text-base font-medium text-center sm:text-start w-[250px] sm:w-[300px] text-white tracking-wide">
+                        //                 {item.content}
+                        //             </h1>
+                        //             <div className=" font-light flex justify-center">
+                        //                 <div className= {`${item.type === 'friendship' ? 'flex' : 'hidden'} gap-3 sm:gap-6 text-sm sm:text-base flex-wrap justify-center sm:justify-start`} >
+                        //                     <button className=" bg-[#5E97A9] text-white rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100  w-[100px] sm:w-[124px] " onClick={()=>{Accept(item.friend_request_id)}}>
+                        //                         Accept
+                        //                     </button>
+                        //                     <Link to={`/profile/${item.sender}`} onClick={() =>{
+                        //                         setOpenModal(false)
+                        //                     }}>
+                        //                         <button className="text-white/70 rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100 bg-[#2B2F32]/50 border-[1px] border-[#5E97A9]/80 w-[100px] sm:w-[124px]">
+                        //                             View Profile
+                        //                         </button>
+                        //                     </Link>
+                        //                 </div>
+                        //             </div>
+                        //         </div>
+                        //         <div className="hidden sm:block text-sm  text-white w-[80px] text-center" >
+                        //             <p >
+                        //                 {formatDate(item.created)}
+                        //             </p>
+                        //         </div>
+                        //     </div>
+                        // </div>
+                            <FriendRequestNotification index={index} notifications={userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'friendship')} item={item}  sender={usersDataArr.current.find(user=>item.sender === user.login)} setOpenModal={setOpenModal}/>
                         )
-                    })) : <div className="h-[50vh] flex justify-center items-center">
+                    })) : <Loading__/> : <div className="h-[50vh] flex justify-center items-center">
                                 <h1 className=" text-white/85 font-semibold text-3xl">No Notifications yet !</h1>
                             </div>
                 }

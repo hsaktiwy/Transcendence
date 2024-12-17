@@ -60,6 +60,13 @@ def my_exception_handler(exc, context):
        )
     return response
 
+def generate_TFA_verification_response(user):
+    resp = Response({
+        'message': 'tfa needed',
+        'user': user.login
+    }, status=status.HTTP_200_OK)
+    return resp
+    
 def generate_tokens_response(user, request):
     csrf_token = get_token(request)
     access_token = generate_access_token(user)
@@ -99,6 +106,7 @@ def generat_qr_code(user):
     return HttpResponse(tmp_stream, content_type="image/png")
 
 def verify2faCode(user, code):
+    
     totp = pyotp.TOTP(user.two_factor_auth_code)
     if totp.verify(code):
             return True
