@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext, NotificationPropreties } from "../UserContext";
-import { senderInterface, notifType, formatDate, Accept } from "../NavBarModal";
+import { senderInterface, notifType, formatDate } from "../NavBarModal";
 import { axiosPath } from "@/utils/Constants";
 import { Link } from "react-router-dom";
 import { WebSocketContext } from "@/utils/WSContext";
@@ -13,23 +13,26 @@ interface NotificationProps{
     sender: senderInterface | undefined;
     setOpenModal: React.Dispatch<React.SetStateAction<boolean> >
 }
+const  mark_notification_as_readed = (index:number)=>{
+
+}
 const FriendRequestNotification:React.FC<NotificationProps> = ({index, notifications, item, sender, setOpenModal})=>{
     const userContextConsumer = useContext(UserContext)
     const SocketConsumer = useContext(WebSocketContext)
     if (!userContextConsumer || !SocketConsumer)
         throw new Error('out of scope')
     const [accepted, setAccepted] = useState<boolean | undefined>(undefined)
+
     const Accept = async (friend_req_id:number)=>{
         try{
             const req = {
                 url: `/friendship/request/status/set/accept/${friend_req_id}`,
                 method: 'GET',
             }
-            const resp = await mailman(req)
-            console.log(resp.data)
+            await mailman(req)
             const notification = {
-                type: 'NOTIFICATION_ADD_FRIEND',
-                to : sender
+                type: 'NOTIFICATION_ACCEPT_FRIEND',
+                to : sender?.login
             }
             const message = JSON.stringify(notification)
             SocketConsumer.socket?.current?.send(message)
@@ -39,6 +42,7 @@ const FriendRequestNotification:React.FC<NotificationProps> = ({index, notificat
         }
     }
     useEffect(()=>{
+        console.log(sender)
         if(item.friend_request_id !== -1 && userContextConsumer.friendRequestReceived.find(fq=>fq.id === item.friend_request_id && fq.status === 'pending'))
             setAccepted(false)
 },[])
@@ -66,6 +70,7 @@ const FriendRequestNotification:React.FC<NotificationProps> = ({index, notificat
                                                 Accept
                                             </button>
                                             <Link to={`/profile/${item.sender}`} onClick={() =>{
+
                                                 setOpenModal(false)
                                             }}>
                                                 <button className="text-white/70 rounded-lg px-2 sm:px-4 py-[1px] sm:py-2 opacity-100  hover:opacity-70 duration-100 bg-[#2B2F32]/50 border-[1px] border-[#5E97A9]/80 w-[100px] sm:w-[124px]">
