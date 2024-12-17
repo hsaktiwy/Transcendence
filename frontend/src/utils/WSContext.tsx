@@ -83,12 +83,19 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
               }
             }
             if (type === 'friendship'){
-              if(channels.current['NOTIFICATION_ADD_FRIEND'])
+              if(channels.current['NOTIFICATION_ADD_FRIEND'] || channels.current['NOTIFICATION_ACCEPT_FRIEND'])
               {
-                const notifData =  JSON.parse(message.data); 
-                channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
+
+                const notifData =  JSON.parse(message.data);
+                if (notifData['friend_req_status' ] === 'pending')
+                  channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
+                else{
+                  console.log(message.data)
+                  channels.current['NOTIFICATION_ACCEPT_FRIEND'](notifData)
+                }
 
               }
+              
             }
             if (type === 'message'){
               if(channels.current['NOTIFICATION_MESSAGE'])

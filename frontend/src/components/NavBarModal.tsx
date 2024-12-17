@@ -16,25 +16,7 @@ import FriendRequestNotification from "./Notification/FriendRequestNotification"
 
 
 
-export const Accept = async (friend_req_id:number)=>{
-    try{
-        const req = {
-            url: `/friendship/request/status/set/accept/${friend_req_id}`,
-            method: 'GET',
-        }
-        const resp = await mailman(req)
-        console.log(resp.data)
-        const notification = {
-            type: 'NOTIFICATION_ADD_FRIEND',
-            to : sender
-        }
-        const message = JSON.stringify(notification)
-        SocketConsumer.socket?.current?.send(message)
-    }
-    catch(e){
-        console.log(e)
-    }
-}
+
 export function formatDate(date: Date | string): string {
     const now = new Date();
     const inputDate = new Date(date);
@@ -147,6 +129,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                 <h1 className="text-2xl sm:text-3xl font-semibold font-poppins">{`Notifications (${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length})`}</h1>
                 <span className="text-xl sm:text-4xl  opacity-60 hover:opacity-100 hover:scale-110 duration-100 cursor-pointer" onClick={() =>{
                     setOpenModal(false)
+                    
                 }}>
                     <IoCloseOutline/>
                 </span>
@@ -194,7 +177,7 @@ const NavBarModal : React.FC<ModalPropInterface> = ({type, setOpenModal}) =>{
                         //         </div>
                         //     </div>
                         // </div>
-                            <FriendRequestNotification index={index} notifications={userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'friendship')} item={item}  sender={usersDataArr.current.find(user=>item.sender === user.login)} setOpenModal={setOpenModal}/>
+                            <FriendRequestNotification key={index} index={index} notifications={userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'friendship')} item={item}  sender={usersDataArr.current.find(user=>item.sender === user.login)} setOpenModal={setOpenModal}/>
                         )
                     })) : <Loading__/> : <div className="h-[50vh] flex justify-center items-center">
                                 <h1 className=" text-white/85 font-semibold text-3xl">No Notifications yet !</h1>

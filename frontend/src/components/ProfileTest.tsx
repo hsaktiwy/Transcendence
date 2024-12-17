@@ -29,6 +29,7 @@ const ProfileTest  = () =>{
     if (!SocketContext)
         throw new Error('error')
    const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
+   const [loading, setLoading] = useState<boolean>(true)
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
@@ -74,6 +75,7 @@ const ProfileTest  = () =>{
     else{
         setProfileData(userContextConsumer?.userData)
     }
+    setLoading(false)
    },[username])
 
     return(
@@ -100,41 +102,61 @@ const ProfileTest  = () =>{
                                             <div className=" text-xl font-semibold 2xl:text-2xl ">{`Hello  ${profileData?.firstName}`}</div>
                                         </div>
                                     </div>
-                                    <div className=" flex flex-col justify-center  items-center mb-7">
-                                        <h1 className="text-2xl font-semibold 2xl:text-3xl">7.5 Level</h1>
-                                        <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
-                                            <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <Achievements/>
-                            </div>    
+                                    {userContextConsumer?.userData?.login !== username && <ConnectButton/>}
+                                    
                         </div>
-                   </div>
-                </div>
-                <div className=" md:hidden 2xl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-6">
-                    <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] h-full p-4 ">
-                        {/* <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7"> */}
-                                <MatchHistory/>
+               </div>
+               {/* <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 xxl:col-span-10">
+                            <div className="flex items-center  justify-center w-full p-4  sm:h-full  2xl:p-10 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
+                                <div className="w-full h-full  grid grid-rows-2 ">
+                                    <div className=" bg-[#1D1E22]  px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
+                                        <div className=" h-20 hidden sm:flex items-center 2xl:items-end ">
+                                            <div className="   h-10 w-40 2xl:h-14 2xl:w-48 bg-[#5E97A9] rounded-2xl sm:flex justify-center items-center">
+                                                <div className=" text-xl font-semibold 2xl:text-2xl ">{`Hello  ${profileData?.firstName}`}</div>
+                                            </div>
+                                        </div>
+                                        <div className=" flex flex-col justify-center  items-center mb-7">
+                                            <h1 className="text-2xl font-semibold 2xl:text-3xl">7.5 Level</h1>
+                                            <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
+                                                <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
+                                            </div>
+                                        </div>
+                                        <Achievements/>
+                                    </div>    
+                                </div>
+                        </div>
+                        </div>
+                        <div className=" md:hidden 2xl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-6">
+                            <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] h-full p-4 ">
+                                        <MatchHistory/>
 
-                        {/* </div> */}
+                            </div>
+                    </div>
+                </div> */}
+            <div className=" md:hidden 2xl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-6">
+                <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] h-full p-4 ">
+                    <div className="text-2xl h-full  rounded-2xl bg-[#1D1E22]  font-semibold flex flex-col justify-center items-center p-7">
+                        <h1 className=" font-medium">User Activities</h1>
+                        <div className=" p-5 w-[105%] flex justify-center items-center ">
+                            <ChartFile/>
+                        </div>
                     </div>
                 </div>
-                 <div className=" p-4 rounded-2xl 2xl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:hidden xxl:block 2xl:row-span-6 xl:p-3 2xl:p-10 flex justify-center items-center bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]">
-                    <PieChartFile/>
+            </div>
+             <div className=" p-4 rounded-2xl 2xl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:hidden xxl:block 2xl:row-span-6 xl:p-3 2xl:p-10 flex justify-center items-center bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]">
+                <PieChartFile/>
+            </div>
+            <div className="row-span-4 md:col-span-12  md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:col-span-8 xl:row-span-4 2xl:col-span-8 2xl:row-span-6 xxl:col-span-6">
+                <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+                   <LineCharFile />
                 </div>
-                <div className="row-span-4 md:col-span-12  md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:col-span-8 xl:row-span-4 2xl:col-span-8 2xl:row-span-6 xxl:col-span-6">
-                    <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
-                       <LineCharFile />
-                    </div>
-                </div>
-                <div className="row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
-                    <RankFile/>
-                </div>
-                <div className="row-span-2 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
-                    <div className="  rounded-lg bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  h-full w-full  flex items-center   justify-center p-4">
-                        <RadarChartFile/>
-                    </div>
+            </div>
+            <div className="row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
+                <RankFile/>
+            </div>
+            <div className="row-span-2 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
+                <div className="  rounded-lg bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  h-full w-full  flex items-center   justify-center p-4">
+                    <RadarChartFile/>
                 </div>
                 <div className=" row-span-2 hidden sm:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
                 <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  h-full p-4 ">
@@ -143,11 +165,13 @@ const ProfileTest  = () =>{
                     </div>
                     </div>
                 </div>
-                <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 bg-[#2B2F32] rounded-2xl p-4 xl:hidden">
-                                <PieChartFile/>
                 </div>
             </div>
-        </>
-    )
+            <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 bg-[#2B2F32] rounded-2xl p-4 xl:hidden">
+                            <PieChartFile/>
+            </div>
+        </div>
+        
+        </>)
 }
 export default ProfileTest
