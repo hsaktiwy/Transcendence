@@ -85,9 +85,9 @@ function Dashboard(){
           <div className=" row-span-1 flex justify-center items-center  md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6 ">
               <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                   <div className=" text-white  w-full ">
-                          <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10  bg-gradient-to-tr from-[#313538] to-[#232628]  shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
+                          <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]   shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
                                                           <div className="w-full h-full  grid grid-rows-2 ">
-                                                              <div className=" bg-[#1D1E22] px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
+                                                              <div className=" bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
                                                                   <div className=" h-20  flex items-center 2xl:items-end ">
                                                                           <div className=" px-4 h-10 min-w-40  2xl:h-14 2xl:min-w-48 bg-[#5E97A9] rounded-2xl flex justify-center items-center">
                                                                           <div className="text-xl font-semibold 2xl:text-2xl ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
@@ -107,7 +107,7 @@ function Dashboard(){
               </div>
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
-                 <div className="  rounded-2xl bg-gradient-to-tr from-[#2B2F32] to-[#2B2F32] h-full p-7 ">
+                 <div className="  rounded-2xl bg-gradient-to-br from-[#283137] to-[#242729]  h-full p-7 ">
                       <MatchHistory/>
                   </div>
         </div>

@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 // )
  
 function RankFile() {
+    React.useEffect(()=>{}, [])    
   return (
     <div className=" 2xl:col-span-2 rounded-2xl  bg-[#2B2F32]   text-center text-xl text-white h-96 sm:h-full  ">
                         <div className=" flex justify-center items-center p-4  2xl:col-span-2 rounded-2xl  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl  shadow-3xl shadow-[#22333869] rounded-text-center text-xl text-white h-full  ">
@@ -16,7 +17,7 @@ function RankFile() {
                                                                 <h1 className="font-semibold text-left mb-2 md:text-2xl">Rank</h1>
                                                                 <div className="border-rank  w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
-                                <div className="h-full w-full   rounded-md ">
+                                <ScrollArea className="h-full w-full overflow-y-auto   rounded-md ">
                                                         <div className=" w-full  m-1">
                                                             <div className="h-16 gap-3  md:px-5 flex  items-center">
                                                                 <h1 className="  text-xl md:text-base font-medium">#1</h1>
@@ -112,7 +113,7 @@ function RankFile() {
                                                             </div>
                                                             <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
-                            </div>
+                            </ScrollArea>
                                                     </div>
                                                 </div>
                         </div>

@@ -92,12 +92,12 @@ const ProfileTest  = () =>{
                             </div>
                    </div>
                    <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 xxl:col-span-10">
-                        <div className="flex items-center  justify-center w-full p-4  sm:h-full  2xl:p-10 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
+                        <div className="flex items-center  justify-center w-full p-4  sm:h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                             <div className="w-full h-full  grid grid-rows-2 ">
-                                <div className=" bg-[#1D1E22]  px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
+                                <div className=" bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
                                     <div className=" h-20 hidden sm:flex items-center 2xl:items-end ">
-                                        <div className="   h-10 w-40 2xl:h-14 2xl:w-48 bg-[#5E97A9] rounded-2xl sm:flex justify-center items-center">
-                                            <div className=" text-xl font-semibold 2xl:text-2xl ">{`Hello  ${profileData?.firstName}`}</div>
+                                        <div className="   h-10 min-w-40 2xl:h-14 2xl:min-w-48 bg-[#5E97A9] rounded-2xl sm:flex justify-center items-center">
+                                            <div className=" text-xl font-semibold 2xl:text-xl ">{`${profileData?.login}`}</div>
                                         </div>
                                     </div>
                                     <div className=" flex flex-col justify-center  items-center mb-7">
