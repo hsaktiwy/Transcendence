@@ -90,6 +90,35 @@ export function MatchHistory() {
                                         </div>
                                       </div>
                                   </div>
+                                  <div className="  w-full  border-t border-[#5E97A9] rounded-full my-3"></div>
+                                  
+                                  <div className="w-full  flex items-center  bg-gradient-to-b from-[#2B2F32] gap-4 to-[#1D1E22] shadow-lg rounded-lg py-4 ">
+                                      <div className=" bg-gradient-to-b from-[#E45959] via-[#875252] to-[#392C2C]  w-1 h-16 rounded-r-lg ">
+                                      </div>
+                                      <div className="  w-full mr-4">
+                                        <div className=" flex  items-center">
+                                              <div className="min-w-32 w-[100%] h-full  flex items-center">
+                                                  <img className="w-11 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                                                      <div className="mx-3">
+                                                        <h1 className="font-medium text-xs">Hamza Chahboune</h1>
+                                                        <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
+                                                      </div>
+                                              </div>
+                                              <div>4</div>
+                                        </div>
+                                        <div className="  w-full  border-t border-[#5E97A9] rounded-full my-4"></div>
+                                        <div className="flex  items-center">
+                                              <div className="min-w-32 w-[100%] h-full  flex items-center">
+                                                  <img className="w-11 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                                                      <div className="mx-3">
+                                                        <h1 className="font-medium text-xs">Hamza Chahboune</h1>
+                                                        <h1 className="font-normal opacity-80 text-xs text-left">@hachahbo</h1>
+                                                      </div>
+                                              </div>
+                                              <div>6</div>
+                                        </div>
+                                      </div>
+                                  </div>
                                 </div>
 
                           </div>
