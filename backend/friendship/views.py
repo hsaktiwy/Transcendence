@@ -228,6 +228,7 @@ def UnFriendUser(request, _login):
 			return Response({'mesasge': 'No friendship was found with '+_login+"!"}, status=status.HTTP_200_OK)
 		if len(f_request) > 0:
 			f_request.first().delete()
+		return Response({'mesasge': 'Done'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -272,6 +273,16 @@ def FriendRequestStatus(request, _login):
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def CancelFriendRequest(request, id):
+	try:
+		myuser = request.user
+		friendrequest = FriendRequest.objects.filter(id=id)
+		if len(friendrequest) > 0:
+			friendrequest.first().delete()
+		return Response({'status': 'Done'}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 # class FriendRequestSentList(generics.ListAPIView):
 #     serializer_class = FriendRequestSerializer
 #     def get_queryset(self):
