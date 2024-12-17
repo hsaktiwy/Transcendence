@@ -16,7 +16,7 @@ function RankFile() {
                                                                 <h1 className="font-semibold text-left mb-2 md:text-2xl">Rank</h1>
                                                                 <div className="border-rank  w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
-                                <ScrollArea className="h-full w-full rounded-md ">
+                                <div className="h-full w-full   rounded-md ">
                                                         <div className=" w-full  m-1">
                                                             <div className="h-16 gap-3  md:px-5 flex  items-center">
                                                                 <h1 className="  text-xl md:text-base font-medium">#1</h1>
@@ -112,7 +112,7 @@ function RankFile() {
                                                             </div>
                                                             <div className="border-rank my-1 w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
-                            </ScrollArea>
+                            </div>
                                                     </div>
                                                 </div>
                         </div>
