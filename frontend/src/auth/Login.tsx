@@ -284,7 +284,7 @@ const Login = () => {
                                         <p className='w-[5%] text-white'> or </p>
                                         <div className=' w-[45%] bg-white h-[1px]'></div>
                                     </div>
-                                    <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:scale-105 duration-150" onClick={handleSubmitWith42}>
+                                    <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:border-slate-200 hover:scale-105 duration-150" onClick={handleSubmitWith42}>
                                     {!loading ? <p >Sign in with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
                                     </button>
                                     <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>

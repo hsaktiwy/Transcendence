@@ -10,7 +10,7 @@ from .utils import decode_token
 User = get_user_model()
 
 
-    
+
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
         csrf_token  = request.headers.get('X-CSRFToken')

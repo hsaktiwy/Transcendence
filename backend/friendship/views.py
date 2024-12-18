@@ -228,6 +228,7 @@ def UnFriendUser(request, _login):
 			return Response({'mesasge': 'No friendship was found with '+_login+"!"}, status=status.HTTP_200_OK)
 		if len(f_request) > 0:
 			f_request.first().delete()
+		return Response({'mesasge': 'Done'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -246,6 +247,42 @@ def isBlocked(request, _login):
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def isFriend(request, _login):
+	try:
+		user = request.user
+		otheruser = MyUser.objects.get(login=_login)
+		friendship_exists = FriendShip.objects.filter(Q(user=user, friend=otheruser) | Q(user=otheruser, friend=user)).exists()
+		if friendship_exists:
+			return Response({'status': True}, status=status.HTTP_200_OK)
+		else:
+			return Response({'status': False}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def FriendRequestStatus(request, _login):
+	try:
+		myuser = request.user
+		friend = MyUser.objects.get(login=_login)
+		friendrequest = FriendRequest.objects.filter((Q(sender=myuser) & Q(receiver=friend)) | (Q(sender=friend) & Q(receiver=myuser)))
+		if len(friendrequest) > 0:
+			return Response({'status': friendrequest.first().status, 'sender' : friendrequest.first().sender == myuser, 'friend_req_id' : friendrequest.first().id}, status=status.HTTP_200_OK)
+		else:
+			return Response({'status': 'None'}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def CancelFriendRequest(request, id):
+	try:
+		myuser = request.user
+		friendrequest = FriendRequest.objects.filter(id=id)
+		if len(friendrequest) > 0:
+			friendrequest.first().delete()
+		return Response({'status': 'Done'}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 # class FriendRequestSentList(generics.ListAPIView):
 #     serializer_class = FriendRequestSerializer
 #     def get_queryset(self):
@@ -266,6 +303,7 @@ def FriendRequestReceivedList(request):
 		return Response(serialized_data.data, status=status.HTTP_200_OK)
 	except Exception as e:
 		return Response({'Error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 def FriendRequestSentList(request):
 	try:

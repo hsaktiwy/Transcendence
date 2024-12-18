@@ -33,6 +33,7 @@ const ProfileTest  = () =>{
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
+
    const fetchUserData = async () =>{
     try{
         const req = {
@@ -88,7 +89,9 @@ const ProfileTest  = () =>{
                                             <h1 className=" sm:text-[100%] text-center font-bold 2xl:text-[120%]">{profileData?.firstName} {profileData?.lastName}</h1>
                                             <h1 className="sm:text-[80%] text-center font-normal text-gray-300">{profileData?.login}</h1>
                                         </div>
-                                        <ConnectButton/>
+                                        
+                                            {userContextConsumer?.userData?.login != username && <ConnectButton/>}
+                                        
                             </div>
                    </div>
                    <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 xxl:col-span-10">
