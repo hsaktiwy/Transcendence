@@ -21,9 +21,10 @@ import AuthProvider from './components/AuhtenticationContext'
 import LandingPage2 from './components/Landing/LandingPage2'
 import RedirectRoute from './auth/RedirectRoute'
 import RegisterForm from './auth/RegisterForm';
-
 import ThreeScene from './components/ThreeScene'
 import Profile from './components/website/profile/profile'
+import GameCenter from './game/GameUi'
+
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -42,7 +43,7 @@ const App = () =>
                         <Route index element={ <Dashboard/>}/>
                         <Route path='/chat' element={ <ChatSection/>}/>
                         <Route path='/settings' element={ <Settings/>}/>
-                        <Route path='/Game' element={<Game />}/>
+                        <Route path='/Game' element={<GameCenter />}/>
                       </Route>
                       <Route path='*' element={<LoadingIndecator/>}/>
                 </Routes>
