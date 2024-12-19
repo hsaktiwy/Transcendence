@@ -89,8 +89,8 @@ function Dashboard(){
                                                           <div className="w-full h-full  grid grid-rows-2 ">
                                                               <div className=" bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
                                                                   <div className=" h-20  flex items-center 2xl:items-end ">
-                                                                          <div className=" px-4 h-10 min-w-40  2xl:h-14 2xl:min-w-48 bg-[#5E97A9] rounded-2xl flex justify-center items-center">
-                                                                          <div className="text-xl font-semibold 2xl:text-2xl ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
+                                                                          <div className=" px-4 h-10 min-w-40  2xl:h-14 2xl:min-w-48 border border-[#5E97A9] rounded-3lsxl flex justify-center items-center">
+                                                                          <div className="text-xl text-[#5E97A9] font-semibold 2xl:text-2xl ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
                                                                           </div>
                                                                       </div>
                                                                       <div className=" flex flex-col justify-center  items-center mb-7">
