@@ -62,7 +62,7 @@ export function RadarChartFile() {
           </RadarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="hidden 2xl:block flex-col  gap-2 text-sm">
+      <CardFooter className="hidden xxl:block flex-col  gap-2 text-sm">
         <div className="flex items-center gap-2 justify-center font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>

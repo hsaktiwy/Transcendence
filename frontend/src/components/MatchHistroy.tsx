@@ -13,25 +13,25 @@ export function MatchHistory() {
         throw new Error("userContext must be used within a UserProvider");
   return (
   <>
-                          <div className="text-2xl h-full w-full  rounded-2xl bg-gradient-to-b from-[#292d30] to-[#1D1E22] shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
+                          <div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-b from-[#292d30] to-[#1D1E22] shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
                     <div className="p-3  w-full h-full grid grid-rows-6 ">
                       <div className="row-span-2  px-6 flex items-center justify-between w-full">
                           <div className="flex items-center justify-center flex-col gap-3">
-                              <img className="size-14 lg;size-18  2xl:size-24 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
-                              <div className="text-base font-medium 2xl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
+                              <img className="size-14 lg;size-18  xxl:size-24 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                              <div className="text-base font-medium xxl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
                            </div>
                           <div className="">
-                            <h1 className="text-xl  2xl:text-3xl" >4 - 6</h1>
+                            <h1 className="text-xl  xxl:text-3xl" >4 - 6</h1>
                           </div>
                           <div className="flex items-center justify-center flex-col gap-3">
-                              <img className="size-14   2xl:size-24 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
-                              <div className="text-base font-medium  2xl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
+                              <img className="size-14   xxl:size-24 rounded-full" src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-image" />
+                              <div className="text-base font-medium  xxl:text-base ">{` ${userContextConsumer.userData?.firstName}`}</div>
                            </div>
                       </div>
-                      <div className="row-span-4   pt-2 ">
+                      <div className="  row-span-4  pt-2 ">
                           <h1 className="text-base   text-gray-400 font-medium   "> Last 5 matches</h1>
                           <div className="  w-full  border-t border-[#5E97A9] rounded-full my-3 mt-1"></div>
-                          <div className="h-40 2xl:h-60 overflow-y-auto px-5">
+                          <div className="h-40 xxl:h-60 overflow-y-auto px-5">
                             
                                   <div className="w-full mb-4 flex items-center  bg-gradient-to-b from-[#2B2F32] gap-4 to-[#1D1E22] shadow-lg rounded-lg py-4 ">
                                       <div className=" bg-gradient-to-b  from-[#84D679] via-[#598752] to-[#2D392C]  w-1 h-16 rounded-r-lg ">

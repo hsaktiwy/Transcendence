@@ -67,7 +67,7 @@ export function PieChartFile() {
       <CardContent className="flex-1  pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[300px]"
+          className="mx-auto aspect-square max-h-[250px] xxl:max-h-[350px]"
         >
           <PieChart>
             <ChartTooltip
@@ -117,7 +117,7 @@ export function PieChartFile() {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
+      <CardFooter className="hidden xxl:block flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>

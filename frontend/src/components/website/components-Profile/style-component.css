@@ -672,7 +672,7 @@
 
   .cardv
   {
-    @apply rounded-xl bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md p-3  mt-6 h-32 w-32 2xl:h-48 2xl:w-48
+    @apply rounded-xl bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md p-3  mt-6 h-32 w-32 xxl:h-48 xxl:w-48
   }
 
 
