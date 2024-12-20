@@ -1,4 +1,15 @@
 services:
+  postgres-db:
+    image: postgres:13
+    container_name: postgresql
+    env_file:
+      - .env
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - transendence
   backend:
     build: backend/.
     container_name: backend
@@ -33,6 +44,8 @@ services:
       - "6379:6379"  # Redis default port
     networks:
       - transendence
+    depends_on:
+      - postgres-db
   nginx:
     build: nginx/.
     container_name: nginx

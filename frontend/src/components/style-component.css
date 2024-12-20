@@ -473,8 +473,9 @@
     height: 70%;
     /* border: solid; */
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     flex-direction: column;
+    
 
 }
 .each-user
@@ -484,6 +485,7 @@
     /* border: solid; */
     display: flex;
     justify-content: center;
+    align-items: center;
 
 }
 .is-online

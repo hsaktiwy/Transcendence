@@ -95,7 +95,7 @@ const ProfileTest  = () =>{
                    <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 2xl:col-span-10">
                         <div className="flex  items-center justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                             <div className="w-full  h-full  grid grid-rows-2 ">
-                                <div className=" bg-[url('https://cdn.discordapp.com/attachments/1251640745857908810/1319402539225186355/BiosBG.jpeg?ex=67667d9e&is=67652c1e&hm=e976c233b3242160f7a1eaf87f10953955f8684488ea36be117a6bb746ced696&')] bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
+                                <div className=" bg-[url('6205261.jpg')] bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
                                     <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
                                         <div className="   h-10 min-w-40 xxl:h-14 xxl:min-w-48 border border-white rounded-2xl sm:flex justify-center items-center">
                                             <div className=" text-xl text-white font-semibold xxl:text-xl ">{`${profileData?.login}`}</div>

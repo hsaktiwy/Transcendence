@@ -57,6 +57,13 @@ import { UserContext } from "./UserContext";
 import mailman from '@/utils/AxiosFetcher';
 import { WebSocketContext } from '@/utils/WSContext';
 import { Loading__ } from "@/auth/Login";
+import { IoPersonRemoveOutline } from "react-icons/io5";
+import { TbMessage2 } from "react-icons/tb";
+import { MdBlock } from "react-icons/md";
+import { IoPersonAddOutline } from "react-icons/io5";
+
+
+
 
 
 const itemVariants: Variants = {
@@ -155,6 +162,7 @@ function ConnectButton() {
           method: 'GET',
           withCredentials:true,
         }
+        
         const resp2 = await mailman(req2)
         const  st:string = resp2.data['status']
         const  sender:boolean = resp2.data['sender']
@@ -210,7 +218,13 @@ function ConnectButton() {
               method: 'GET',
             }
             const resp = await mailman(req)
-            console.log(resp.data)
+            userContextConsumer?.fetchFriends()
+            const notification = {
+              type: 'NOTIFICATION_ACCEPT_FRIEND',
+              to : username
+          }
+          const message = JSON.stringify(notification)
+          SocketContext?.socket?.current?.send(message)
             setFriendRequest("")
             setIsfriend("UNFRIEND")
           }
@@ -256,6 +270,7 @@ function ConnectButton() {
           }
           const resp = await mailman(req)
           console.log(resp.data)
+          userContextConsumer?.fetchFriends()
           setFriendRequest("")
           setIsfriend("CONNECT")
         }
@@ -281,32 +296,40 @@ function ConnectButton() {
               { isfriend === "UNFRIEND" &&
                 <>
                   <motion.button
-                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px]"
+                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl border border-white/30 w-[180px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
                     whileTap={{ scale: 0.97 }}
-
                     onClick={unfriend_request}
                   >
-                    UnFriend
+                    <div className='text-xl '>
+                      <IoPersonRemoveOutline/>
+                    </div>
+                    <p>UnFriend</p>
+                    
                   </motion.button>
                   <motion.button
-                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px]"
+                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px] flex gap-3 items-center justify-center"
                     whileTap={{ scale: 0.97 }}
 
                     onClick={handleAcceptClick}
                   >
-                    Message
+                    <div className='text-xl '>
+                      <TbMessage2/>
+                    </div>
+                    <p>Message</p>
                   </motion.button>
                 </>
               }
               { isfriend === "CONNECT" && FriendRequest === "" &&
                 <>
                   <motion.button
-                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px]"
+                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px] flex gap-3 items-center justify-center"
                     whileTap={{ scale: 0.97 }}
-
                     onClick={send_friend_request}
                   >
-                    Connect
+                    <div className='text-xl '>
+                      <IoPersonAddOutline/>
+                    </div>
+                    <p>Connect</p>
                   </motion.button>
                 </>
               }
@@ -330,12 +353,16 @@ function ConnectButton() {
                   </motion.button>
                 </>
               }
-              <button
-                className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px]  outline-none hover:outline-none"
+              <motion.button
+                className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px] flex gap-3 items-center justify-center"
                 onClick={BlockActionCheck}
               >
-               {btn_block}
-              </button>
+                    <div className='text-xl'>
+                      <MdBlock/>
+                    </div>
+                    <p>{btn_block}</p>
+                    
+              </motion.button>
 
           </motion.nav>
         }

@@ -47,8 +47,8 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         connected.current = true
       }
       
-      socket.current.onclose = () => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
-        console.log('Connection closed')
+      socket.current.onclose = (event) => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
+        console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
         connected.current = false
         // if (authContextConsumer.loggedIn === true){ // we need a logic to handle reconnection maybe with status of backend ws response
         //   console.log('from ws context',authContextConsumer.loggedIn)
@@ -69,7 +69,6 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                       content: data.message,
                   };
                   const channelId = data.channel;
-                  console.log("wa zbi "+ channelId)
                   if (channels.current['CHAT'])
                   {
                     console.log("in :  channels.current['CHAT']")
