@@ -11,6 +11,7 @@ from conversations.models import Message
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view
 from conversations.models  import Channel
+from users.serializers import PublicUserSerializer
 # # Create your views here.
 
 class FriendRequestList(generics.ListAPIView):
@@ -310,6 +311,22 @@ def FriendRequestSentList(request):
 		user=request.user
 		list = FriendRequest.objects.filter(sender=user, status='pending')
 		serialized_data = FriendRequestSerializer(list, many=True)
+		return Response(serialized_data.data, status=status.HTTP_200_OK)
+	except Exception as e:
+		return Response({'Error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+def FriendsList(request):
+	try:
+		user=request.user
+		# list = FriendRequest.objects.filter(Q(sender=user, status='accepted'))
+		list_s = FriendRequest.objects.filter(Q(sender=user, status='accepted'))
+		array = []
+		for s in list_s:
+			array.append(s.receiver)
+		list_r = FriendRequest.objects.filter(Q(receiver=user, status='accepted'))
+		for s in list_r:
+			array.append(s.sender)
+		serialized_data = PublicUserSerializer(array, many=True)
 		return Response(serialized_data.data, status=status.HTTP_200_OK)
 	except Exception as e:
 		return Response({'Error':str(e)}, status=status.HTTP_400_BAD_REQUEST)

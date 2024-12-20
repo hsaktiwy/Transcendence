@@ -181,6 +181,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             try:
                 self.user_id = user.id
                 self.notification_group_name = f'notification_user_{user}'
+                print(self.notification_group_name)
                 await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
                 channels = await sync_to_async(self.get_user_channels)(user.id)
                 self.rooms = set()
@@ -249,6 +250,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 channel_id = message_json["channel_id"]
                 notification, receiver_id = await sync_to_async(self.create_message_notification)(receiver, user, message_json['message'])
                 group_name = f'notification_user_{receiver}'
+                print(">>>->",group_name)
                 notificationSerialized = await sync_to_async(self.get_SerializedNotification)(notification)
                 SerializedSender = await sync_to_async(self.get_sender)(user)
                 await self.channel_layer.group_send(

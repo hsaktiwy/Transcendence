@@ -49,7 +49,11 @@ interface UserContextInterface{
     setFriendRequestSent: React.Dispatch<React.SetStateAction<FriendRequestInterface[]> >;
     friendRequestReceived: FriendRequestInterface[];
     setFriendRequestReceived: React.Dispatch<React.SetStateAction<FriendRequestInterface[]> >;
-    fetchNotification : () => void
+    fetchNotification : () => void;
+    friends: ProfileDataInterface[];
+    setFriends: React.Dispatch<React.SetStateAction<ProfileDataInterface[]> >;
+    fetchFriends : () => void;
+
 
     
 }
@@ -77,6 +81,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
+    const [friends, setFriends] = useState<ProfileDataInterface[]>([])
 
     const PureNotification = (data:MiniNotification) =>
     {
@@ -194,18 +199,17 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
 
     }
-    const fetchFriendRequests = async () =>{
+    const fetchFriends = async () =>{
  
             try{
                 const req = {
-                    url: `/friendship/request/listFriends/`,
+                    url: `/friendship/friend_list/`,
                     method: 'GET',
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
-                console.log("friend_req")
-                console.log(resp.data)
-                
+                const friendsList: ProfileDataInterface[] = resp.data
+                setFriends(friendsList)
             }
             catch (err){
                 console.error("dddddd======????",err)
@@ -220,6 +224,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         {
             fetchReceivedFriendRequest()
             fetchSentFriendRequest()
+            fetchFriends()
 
         }
             
@@ -242,12 +247,13 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     useEffect(() =>{
         if (AuthContextConsummer?.loggedIn){
             fetchUserData()
+            fetchFriends()
             fetchReceivedFriendRequest()
             fetchSentFriendRequest()
         }
     }, [AuthContextConsummer?.loggedIn, profilePicChanged])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {userData ? children : <LoadingIndecator/>}
         </UserContext.Provider>

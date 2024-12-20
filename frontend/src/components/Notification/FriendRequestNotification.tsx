@@ -19,10 +19,6 @@ const  mark_notification_as_readed = (index:number)=>{
 const FriendRequestNotification:React.FC<NotificationProps> = ({index, notifications, item, sender, setOpenModal})=>{
     const userContextConsumer = useContext(UserContext)
     const SocketConsumer = useContext(WebSocketContext)
-    if (!userContextConsumer || !SocketConsumer)
-        throw new Error('out of scope')
-    const [accepted, setAccepted] = useState<boolean | undefined>(undefined)
-
     const Accept = async (friend_req_id:number)=>{
         try{
             const req = {
@@ -35,12 +31,16 @@ const FriendRequestNotification:React.FC<NotificationProps> = ({index, notificat
                 to : sender?.login
             }
             const message = JSON.stringify(notification)
-            SocketConsumer.socket?.current?.send(message)
+            SocketConsumer?.socket?.current?.send(message)
         }
         catch(e){
             console.log(e)
         }
     }
+    if (!userContextConsumer || !SocketConsumer)
+        throw new Error('out of scope')
+    const [accepted, setAccepted] = useState<boolean | undefined>(undefined)
+
     useEffect(()=>{
         console.log(sender)
         if(item.friend_request_id !== -1 && userContextConsumer.friendRequestReceived.find(fq=>fq.id === item.friend_request_id && fq.status === 'pending'))
