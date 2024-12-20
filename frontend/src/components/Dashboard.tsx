@@ -87,11 +87,16 @@ function Dashboard(){
                   <div className=" text-white  w-full ">
                           <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]   shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
                                                           <div className="w-full h-full  grid grid-rows-2 ">
-                                                              <div className=" bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-2 ">
+                                                          <div className="relative bg-[url('https://cdn.discordapp.com/attachments/1251640745857908810/1319402539225186355/BiosBG.jpeg?ex=67667d9e&is=67652c1e&hm=e976c233b3242160f7a1eaf87f10953955f8684488ea36be117a6bb746ced696&')] bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2">
+                                                                        <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                                                   <div className=" h-20  flex items-center 2xl:items-end ">
-                                                                          <div className=" px-4 h-10 min-w-40  2xl:h-14 2xl:min-w-48 border border-[#5E97A9] rounded-3lsxl flex justify-center items-center">
-                                                                          <div className="text-xl text-[#5E97A9] font-semibold 2xl:text-2xl ">{`Hello  ${userContextConsumer.userData?.firstName}`}</div>
-                                                                          </div>
+                                                                          <div className="relative px-4 h-10 min-w-40 2xl:h-14 2xl:min-w-48  rounded-2xl flex justify-center items-center">
+                                                                              <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-2xl"></div>
+                                                                              <div className="relative text-xl text-white font-medium">
+                                                                                {`Hello ${userContextConsumer.userData?.firstName}`}
+                                                                              </div>
+                                                                            </div>
+
                                                                       </div>
                                                                       <div className=" flex flex-col justify-center  items-center mb-7">
                                                                           <h1 className="text-2xl font-medium 2xl:font-semibold 2xl:text-3xl">7.5 Level</h1>
