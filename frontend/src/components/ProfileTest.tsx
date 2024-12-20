@@ -9,9 +9,8 @@ import Achievements from "@/components/Achievements.tsx";
 import { ChartFile } from "@/components/Chartfile.tsx";
 import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
-import RankFile from "@/components/rankfile.tsx";
+import RankFile from "./rankFile.tsx";
 import { axiosPath ,BACKEND } from "../utils/Constants";
-
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
 
 import { UserDataInterface, ProfileDataInterface } from "../utils/UserDataInterface";

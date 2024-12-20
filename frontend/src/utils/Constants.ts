@@ -1,6 +1,6 @@
 // export const BACKEND:string = "http://127.0.0.1:8000/"
-export const BACKEND:string = "https://localhost:443/api/"
-export const axiosPath:string = "https://localhost:443/api" 
+export const BACKEND:string = "https://localhost:4444/api/"
+export const axiosPath:string = "https://localhost:4444/api" 
 export const LOGIN_PATH:string = 'login/'
 export const SESSION_CHECKPATH:string = 'api/session/'
 export const INIT_CSRFTOKEN_PATH:string = "csrftoken/"
@@ -9,7 +9,7 @@ export const CONVERSATION:string = "/chat/conversations/"
 export const MULTIFORMDATA_BOUNDARY_HASH:number =  20 // this will be the random string size (for more info search for Multi Format Data related to POST methode), that will be added to our boundary
 export const ws_scheame = 'wss'
 export const ws_host = 'localhost'
-export const ws_port = '443'
+export const ws_port = '4444'
 export const ws_url = ws_scheame + '://' + ws_host + ':' + ws_port + "/api";
 export let user_id:number;
 export const MESSAGES_PACKET_SIZE = 20;
