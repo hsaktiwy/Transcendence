@@ -13,7 +13,7 @@ import { ChartFile } from "./Chartfile.tsx";
 import { LineCharFile } from "./lineChart.tsx";
 import { RadarChartFile } from "./RadarChartFile.tsx";
 import { RadarChart } from "recharts";
-import RankFile from "./rankfile.tsx";
+import RankFile from "./rankFile.tsx";
 import { axiosPath ,BACKEND } from "../utils/Constants";
 import OnlineFriends from "./OnlineFriends.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area"
