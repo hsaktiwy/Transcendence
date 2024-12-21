@@ -80,7 +80,7 @@ const ProfileTest  = () =>{
 
     <>
         <div className="lg:mb-0 pb-20 font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]   dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
-                <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-4 2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
+                <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-4  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                    <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
                             <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl ">
                                 <img className="size-28  sm:size-28 md:size-32 xl:size-38  xxl:size-42 rounded-full" src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
@@ -94,12 +94,13 @@ const ProfileTest  = () =>{
                    <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 2xl:col-span-10">
                         <div className="flex  items-center justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                             <div className="w-full  h-full  grid grid-rows-2 ">
-                                <div className=" bg-[url('6205261.jpg')] bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
-                                    <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
-                                        <div className="   h-10 min-w-40 xxl:h-14 xxl:min-w-48 border border-white rounded-2xl sm:flex justify-center items-center">
-                                            <div className=" text-xl text-white font-semibold xxl:text-xl ">{`${profileData?.login}`}</div>
+                                    <div className="raltive bg-[url('https://cdn.discordapp.com/attachments/1251640745857908810/1319402539225186355/BiosBG.jpeg?ex=6767cf1e&is=67667d9e&hm=550dd34ea7779924ec7374874326d9c5e18df8831f44219ead1515fb82ed06ba&')] bg-cover bg-centershadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
+                                    <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
+                                        <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
+                                            <div className="   h-10 min-w-40 xxl:h-14 xxl:min-w-48 border rounded-2xl sm:flex justify-center items-center">
+                                                <div className=" text-xl text-white font-semibold xxl:text-xl ">{`${profileData?.login}`}</div>
+                                            </div>
                                         </div>
-                                    </div>
                                     <div className=" flex flex-col justify-center  items-center mb-7">
                                         <h1 className="text-2xl font-semibold xxl:text-3xl">7.5 Level</h1>
                                         <div className="h-3 w-[100%]  bg-[#444444] rounded-full">
