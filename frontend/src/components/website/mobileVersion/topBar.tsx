@@ -15,7 +15,7 @@ import Achievements from "@/components/Achievements.tsx";
 import { ChartFile } from "@/components/Chartfile.tsx";
 import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
-import RankFile from "@/components/rankfile.tsx";
+import RankFile from "./components/rankfile.tsx";
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
 import { UserContext } from "@/components/UserContext.tsx";
 import { axiosPath } from "@/utils/Constants.ts";
