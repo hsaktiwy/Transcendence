@@ -20,6 +20,7 @@ import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
 import { formatDate2 } from "./NavBarModal";
 
+
 export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
 function ChatSession(){
     
@@ -127,8 +128,9 @@ function ChatSession(){
         }
     }
     // hamza
-    const UpdateCurrentConvs = useCallback((message_received, __channelId: number) => {
+    const UpdateCurrentConvs = useCallback((message_received: Message , __channelId: number) => {
             if (__channelId === chatContext.active?.channelId) {
+                console.log('messagr received:  ', message_received)
                 chatContext.setActive((prevActive) => prevActive && ({
                 ...prevActive,
                 new_message: 1,

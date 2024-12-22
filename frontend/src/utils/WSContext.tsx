@@ -67,6 +67,9 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                       id: data.message_id,
                       sender: data.user,
                       content: data.message,
+                      timestamp: data.timestamp,
+                      isread: data.is_read
+
                   };
                   const channelId = data.channel;
                   if (channels.current['CHAT'])

@@ -7,6 +7,7 @@ import NavBarModal from "./NavBarModal";
 import {axiosPath} from "../utils/Constants"
 import NavBarDrop from "./NavbarDrop.tsx";
 import Search from "./Search/Search.tsx";
+import NotificationDropDown from "./Notification/NotificationDropDown.tsx";
  
 
 
@@ -18,7 +19,9 @@ function NavBarV2(){
     const userContextConsumer = useContext(UserContext)
     const searchRef = useRef<HTMLDivElement>(null);
     const [drop, setDrop] = useState<boolean>(false)
+    const [notificationDrop, setNotificationDrop] = useState<boolean>(false)
     const dropContainerRef = useRef<HTMLDivElement>(null)
+    const notificationContainerRef = useRef<HTMLDivElement>(null)
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>)=>
     {
         if (searchRef.current && !searchRef.current.contains(event.relatedTarget))
@@ -43,10 +46,12 @@ function NavBarV2(){
       }, []);
     useEffect(() => {
         const handleClickOutDrop = (event: MouseEvent) => {
-            if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node)) {
-                if (drop)
-                    setDrop(false)
-            }
+         
+        if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node) && drop)
+            setDrop(false)
+        else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
+            setNotificationDrop(false)
+            
    
         };
     
@@ -54,7 +59,7 @@ function NavBarV2(){
         return () => {
           document.removeEventListener("click", handleClickOutDrop);
         };
-      }, [drop]);
+      }, [drop, notificationDrop]);
     return(
         <>
         {
@@ -92,15 +97,16 @@ function NavBarV2(){
                         </div>
                     </div>
                     <div className={`  gap-0 xl:w-44  px-4 bg-gradient-to-bl mt-1 from-[#1D1E22] to-[#1f2123] rounded-2xl lg:gap-6  xl:mr-9 text-white/60  w-[70%] sm:w-[45%] md:w-[40%] lg:w-auto justify-between items-center  self-start p-2 ${isSearchBarActive ? 'hidden' : 'flex'} lg:flex`}>
-                        <div className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
-                                setOpenModal(true)
+                        <div ref={notificationContainerRef} className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
+                                setNotificationDrop(!notificationDrop)
                             }}>
-                                <div className={` ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length ? 'block' : 'hidden'} text-sm font-poppins font-semibold flex justify-center absolute rounded-full h-[18px] w-[18px] bg-red-600 text-white  bottom-0 right-0`}>
+                                <div className={` ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length ? 'block' : 'hidden'} text-sm font-poppins font-semibold flex justify-center  rounded-full h-[18px] w-[18px] bg-red-600 text-white  top-[50%] right-0 absolute`}>
                                     {userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length }
                                 </div>
                                 <span className="text-3xl">
                                     <IoNotificationsOutline/>
                                 </span>
+                                <NotificationDropDown display={notificationDrop}/>
                             </div>
                             <div className="cursor-pointer hover:text-white duration-100 transition-all">
                                 <span className="text-3xl">
