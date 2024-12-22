@@ -34,6 +34,7 @@ export const init_conv = (setLoading:React.Dispatch<React.SetStateAction<boolean
         withCredentials: true,
       }
       const response = await mailman(request)
+      console.log(response.data)
       const  holder:Conversation[] =  response.data as Conversation[]
       convs = holder.conversations
       received = true

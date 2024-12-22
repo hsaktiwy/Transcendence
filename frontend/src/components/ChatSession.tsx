@@ -18,7 +18,7 @@ import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Co
 import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
-
+import { formatDate2 } from "./NavBarModal";
 
 export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
 function ChatSession(){
@@ -374,8 +374,9 @@ function ChatSession(){
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}/>
-                                <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg`}>
-                                    <p >{msg?.content}</p>
+                                <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg flex flex-col justify-between min-w-[90px]`}>
+                                    <p>{msg?.content}</p>
+                                    <p className=" text-right text-white/50 text-[13px]">{formatDate2(msg?.timestamp)}</p>
                                 </div>
                             </div>
                             )
