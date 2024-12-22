@@ -48,7 +48,8 @@ function ChatSection(){
                 id: data.message_id,
                 sender: data.user,
                 content: data.message,
-                isread: false
+                isread: false,
+                timestamp: data.timestamp
             };
             // Assuming chatContext.setConvs is a state update function
             const channelId = data.channel;
@@ -82,7 +83,7 @@ function ChatSection(){
         
         <ChatSectionContext.Provider value={{convs, setConvs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile, openModal, setOpenModal, modalMessage, setModalMessage}}>
                 {openModal && <ChatModal/>} 
-                <div className="  bg-black/10 backdrop-filter backdrop-blur-sm  rounded-xl   absolute top-[60px]  left-0 lg:left-[142px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
+                <div className="    bg-black/10 backdrop-filter backdrop-blur-sm  rounded-xl   absolute top-[60px]  left-0 lg:left-[142px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
                     <div className="  h-[calc(100%-60px)] lg:h-[100%] overflow-hidden relative ">
                         {loading ?
                         (<LoadingIndecator/>) :

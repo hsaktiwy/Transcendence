@@ -256,13 +256,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     group_name,
                     {
-                        'type': 'notification',
+                        'type': notificationSerialized['type'],
                         'id': notificationSerialized['id'],
                         'content': notificationSerialized['content'],
                         'created': notificationSerialized['created'],
                         'channel_id' : channel_id,
                         'friend_request_id' : -1,
-                        'notification_type': notificationSerialized['type'],
                         'is_readed': notificationSerialized['is_readed'],
                         'sender': SerializedSender['login']
                     }
@@ -279,14 +278,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     group_name,
                     {
-                        'type': 'notification',
+                        'type': notificationSerialized['type'],
                         'id': notificationSerialized['id'],
                         'content': notificationSerialized['content'],
                         'created': notificationSerialized['created'],
                         'channel_id' : -1,
                         'friend_request_id' : friend_request_id,
                         'friend_req_status' : 'pending',
-                        'notification_type': notificationSerialized['type'],
                         'is_readed': notificationSerialized['is_readed'],
                         'sender': SerializedSender['login']
                     }
@@ -303,14 +301,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     group_name,
                     {
-                        'type': 'notification',
+                        'type': notificationSerialized['type'],
                         'id': notificationSerialized['id'],
                         'content': notificationSerialized['content'],
                         'created': notificationSerialized['created'],
                         'channel_id' : -1,
                         'friend_request_id' : friend_request_id,
                         'friend_req_status' : 'accepted',
-                        'notification_type': notificationSerialized['type'],
                         'is_readed': notificationSerialized['is_readed'],
                         'sender': SerializedSender['login']
                     }
@@ -320,6 +317,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 channel_id = int(message_json['channel'])
                 # update the message status in the range
                 await sync_to_async(self.set_messages_isread_to_true)(user, channel_id, first_index)
+            else:
+                print(f"Unknown message type: {message_json['type']}")
             # game session, games [,]
                 
         except Exception as e:
@@ -330,9 +329,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         print(f"Sending packet: {message}")
         await self.send(text_data=message)
 
-    async def notification(self, event):
-
-        event['type'] = event['notification_type']
-        del event['notification_type']
+    async def friendship(self, event):
+        message = json.dumps(event)
+        await self.send(text_data=message)
+        
+    async def message(self, event):
         message = json.dumps(event)
         await self.send(text_data=message)

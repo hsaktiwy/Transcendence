@@ -13,6 +13,7 @@ export interface Message{
     sender: User | undefined;
     content: string;
     isread:boolean;
+    timestamp:string
 }
 
 export interface Conversation {
