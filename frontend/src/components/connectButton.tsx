@@ -322,7 +322,7 @@ function ConnectButton() {
               { isfriend === "CONNECT" && FriendRequest === "" &&
                 <>
                   <motion.button
-                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px] flex gap-3 items-center justify-center"
+                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px] flex gap-3 items-center justify-center cursor-pointer"
                     whileTap={{ scale: 0.97 }}
                     onClick={send_friend_request}
                   >

@@ -96,7 +96,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message_obj = Message.objects.create(sender=user, id_channel_fk=channel, content=message)
             updated_channel = Channel.objects.get(id=room_id)
             
-            return message_obj.id, updated_channel.last_update
+            return message_obj.id, updated_channel.last_update, message_obj.timestamp, message_obj.isread
         except Exception as e:
             print(f'Error while trying to create a Message : {e}')
             return
@@ -222,9 +222,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 valide, Error = await sync_to_async(self.check_if_valide_message)(user,room_id)
                 print(valide)
                 if valide:
-                    message_id, lastUpdate= await sync_to_async(self.creatMessage)(user,room_id, message, message_id, lastUpdate)
+                    message_id, lastUpdate, message_timestamp, message_isread= await sync_to_async(self.creatMessage)(user,room_id, message, message_id, lastUpdate)
                     SerializedUser = await sync_to_async(self.get_SerializedUser)(user)
                     lastUpdate = format(lastUpdate, 'Y-m-d H:i:s')
+                    
                     await self.channel_layer.group_send(
                         room,
                         {
@@ -234,7 +235,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             'LastUpdate' : lastUpdate,
                             'ConversationType' : 'Message',
                             'user' : SerializedUser.data,
-                            'message' : message
+                            'message' : message,
+                            'timestamp': message_timestamp.isoformat(),
+                            'isread': message_isread
                         }
                     )
                 else:
@@ -309,7 +312,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'friend_request_id' : friend_request_id,
                         'friend_req_status' : 'accepted',
                         'is_readed': notificationSerialized['is_readed'],
-                        'sender': SerializedSender['login']
+                        'sender': SerializedSender['login'],
                     }
                 )
             if message_json['type']=="READ":
