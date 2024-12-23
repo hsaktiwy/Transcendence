@@ -20,7 +20,7 @@ export interface NotificationPropreties{
     channel_id: number;
     friend_request_id: number;
     is_readed: boolean;
-    sender: string
+    sender: ProfileDataInterface
 }
 
 
@@ -168,12 +168,32 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             console.error("dddddd======????",err)
         }
     }
-    const getNotificationData = (notifications: NotificationPropreties[]) =>{
+    const getNotificationData = async (notifications: NotificationPropreties[]) =>{
+        const tmp_senders: ProfileDataInterface[] = [];
         for(const notif of notifications){
             const str: string = " "
             if (notif.type === 'message' || notif.type === 'friendship' || notif.type === 'gameInvitation'){
                 const index = notif.content.indexOf(str)
-                notif.sender = notif.content.slice(0 , index)
+                const sender = notif.content.slice(0 , index)
+                const sender_occurence = tmp_senders.filter((item)=>item.login === sender)
+                if (sender_occurence.length === 0)
+                {
+                    try{
+                        const req = {
+                            url: `/api/users/${sender}/`,
+                            method: 'GET',
+                        }
+                        const resp = await mailman(req)
+                        notif.sender = resp.data
+                        tmp_senders.push(notif.sender)
+                    }
+                    catch (err){
+                        console.error("error while fetching sender data ======????",err)
+                    }
+                }
+                else
+                    notif.sender = sender_occurence[0]
+
             }
         }
         return notifications
@@ -189,7 +209,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             const resp = await mailman(req)
 
             let notificationData : NotificationPropreties[] = resp.data
-            notificationData = getNotificationData(notificationData)
+            notificationData = await getNotificationData(notificationData)
             console.log(notificationData)
             setnotifications(notificationData.sort((a, b)=> b.id - a.id))
             
