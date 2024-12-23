@@ -83,7 +83,7 @@ const ProfileTest  = () =>{
                 <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-5  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                    <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
                             <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">
-                                <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 rounded-full" src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                         <div className=" flex  mt-5 flex-col justify-center ">
                                             <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{profileData?.firstName} {profileData?.lastName}</h1>
                                             <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
@@ -118,11 +118,11 @@ const ProfileTest  = () =>{
                         <MatchHistory/>
                     </div>
                 </div>
-                 <div className=" p-4 rounded-2xl xxl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3  xl:border-white  2xl:border-orange-600 xxl:border-lime-950 xxl:row-span-6 xl:p-3 xxl:p-10 flex justify-center items-center bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]">
+                 <div className=" p-4 rounded-2xl xxl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3  xxl:row-span-6 xl:p-3 xxl:p-10 flex justify-center items-center  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869]">
                     <PieChartFile/>
                 </div>
                 <div className="row-span-4 md:col-span-12  md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:col-span-8 xl:row-span-4 2xl:col-span-9 xxl:row-span-6 xxl:col-span-6">
-                    <div className="w-full h-full bg-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+                    <div className="w-full h-full bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
                        <LineCharFile />
                     </div>
                 </div>
@@ -139,7 +139,7 @@ const ProfileTest  = () =>{
                                 <MatchHistory/>
                     </div>
                 </div>
-                <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 bg-[#2B2F32] rounded-2xl p-4 xl:hidden">
+                <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
                                 <PieChartFile/>
                 </div>
             </div>
