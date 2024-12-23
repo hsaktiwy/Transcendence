@@ -13,6 +13,7 @@ from datetime import datetime
 from status.serializers import NotificationSerializer
 from django.db.models import Q
 from friendship.models import BlockList, FriendShip
+from users.serializers import PublicUserSerializer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -116,7 +117,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     def get_sender(self, user):
         try:
-            return (UserSerializer(user).data)
+            return (PublicUserSerializer(user).data)
         except:
 
             return None
@@ -266,7 +267,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'channel_id' : channel_id,
                         'friend_request_id' : -1,
                         'is_readed': notificationSerialized['is_readed'],
-                        'sender': SerializedSender['login']
+                        'sender': SerializedSender
                     }
                 )
             if message_json['type'] == 'NOTIFICATION_ADD_FRIEND':
@@ -289,7 +290,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'friend_request_id' : friend_request_id,
                         'friend_req_status' : 'pending',
                         'is_readed': notificationSerialized['is_readed'],
-                        'sender': SerializedSender['login']
+                        'sender': SerializedSender
                     }
                 )
             if message_json['type'] == 'NOTIFICATION_ACCEPT_FRIEND':
@@ -312,7 +313,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'friend_request_id' : friend_request_id,
                         'friend_req_status' : 'accepted',
                         'is_readed': notificationSerialized['is_readed'],
-                        'sender': SerializedSender['login'],
+                        'sender': SerializedSender
                     }
                 )
             if message_json['type']=="READ":

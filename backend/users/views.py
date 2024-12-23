@@ -322,6 +322,7 @@ class UserNotification(generics.ListAPIView):
     serializer_class = NotificationSerializer
     def get_queryset(self):
         user=self.request.user
+        Notification.clean_up_notifications(user)
         return Notification.objects.filter(id_user_fk=user).order_by('created')
 
 

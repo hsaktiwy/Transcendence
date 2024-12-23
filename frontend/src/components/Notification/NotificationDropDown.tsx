@@ -12,6 +12,7 @@ import { axiosPath, BACKEND } from "../../utils/Constants";
 import mailman from "../../utils/AxiosFetcher";
 import { PiMaskSadLight } from "react-icons/pi";
 import { Loading__ } from "@/auth/Login";
+import { RiInbox2Line } from "react-icons/ri";
 interface prop {
     display: boolean
 }
@@ -96,64 +97,62 @@ export const notifType: typeInterface = {
     'message': <BiMessageSquareDetail/>,
 }
 const NotificationDropDown = (info: prop) =>{
-    const [dataFetched, setdatafetched] = useState<boolean>(false)
+    // const [dataFetched, setdatafetched] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
-    const LOGO = 'https://static.vecteezy.com/system/resources/previews/013/959/227/non_2x/table-tennis-fire-logosilhouette-ping-pong-club-line-art-logos-or-icons-illustration-vector.jpg'
-    let usersDataArr= useRef<senderInterface[]>([])
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
-    const fetchRequestSenderData =  async (items:  NotificationPropreties[]) =>{
-        for(const item of items){
-            if (!usersDataArr.current.find(user => item.sender === user.login)){
-                try{
-                    const req = {
-                        url: `/api/users/${item.sender}/`,
-                        method: 'GET',
-                    }
-                    const resp = await mailman(req)
-                    console.log(resp)
-                    const userData: senderInterface = resp.data
-                    usersDataArr.current.push(userData)
-                }
-                catch (err){
-                    console.error(err)
-                }
-            }
+    const LOGO = 'https://static.vecteezy.com/system/resources/previews/013/959/227/non_2x/table-tennis-fire-logosilhouette-ping-pong-club-line-art-logos-or-icons-illustration-vector.jpg'
+//     let usersDataArr= useRef<senderInterface[]>([])
+//     const fetchRequestSenderData =  async (items:  NotificationPropreties[]) =>{
+//         for(const item of items){
+//             if (!usersDataArr.current.find(user => item.sender === user.login)){
+//                 try{
+//                     const req = {
+//                         url: `/api/users/${item.sender}/`,
+//                         method: 'GET',
+//                     }
+//                     const resp = await mailman(req)
+//                     console.log(resp)
+//                     const userData: senderInterface = resp.data
+//                     usersDataArr.current.push(userData)
+//                 }
+//                 catch (err){
+//                     console.error(err)
+//                 }
+//             }
 
-        }
+//         }
 
-    setdatafetched(true)
-}
+//     setdatafetched(true)
+// }
 
 
 
-useEffect(() =>{
-    fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
-},[])
+// useEffect(() =>{
+//     fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
+// },[])
     return(
         <ul
-        role="menu"
+      
         data-popover="notifications-menu"
         data-popover-placement="bottom"
-        className={`${info.display ? 'flex' : 'hidden'}  absolute -right-[10rem] md:-right-4  top-[40px] h-[220px] w-[280px] bg-gradient-to-br from-[#eeefef] to-[#e3ecf5] backdrop-filter backdrop-blur-sm  rounded-xl z-50 text-white font-poppins overflow-y-auto overflow-x-hidden  flex-col r items-center py-4 px-6 justify-center gap-8`}
+        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124]   rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
         >
         {
             userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 
-            dataFetched === true ?
-            (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'friendship').map((item, index) =>{
+            (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item, index) =>{
                 return (
                     <li
                     key={index}
-                    role="menuitem"
-                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
                     >
                         <img
-                        alt="tania andrew"
-                        src={item.type==='friendship' ? axiosPath + usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic : LOGO}
+                        alt="notif-sender-pic"
+                        src={item.type==='friendship' ? axiosPath + item.sender.profile_pic : LOGO}
                         className="relative inline-block h-10 w-10 rounded-full object-cover object-center"
                         />
                         <div className="flex flex-col gap-1 ml-4">
-                        <p className="text-slate-800 font-medium">
+                        <p className="text-slate-100 font-medium">
                             {item.content}
                         </p>
                         <p className="text-slate-500 text-sm flex items-center">
@@ -234,9 +233,12 @@ useEffect(() =>{
                 //     </div>
                 // </li> 
                 // </>
-            : <Loading__/> : <ul className="flex justify-center items-center">
-                                <h1 className=" text-slate-800 font-semibold text-lg">No Notifications yet !</h1>
-                            </ul>
+            : <ul className="justify-self-center flex flex-col justify-center items-center text-slate-100 gap-5">
+                <span className="text-4xl">
+                    <RiInbox2Line/>
+                </span>
+                <h1 className=" text-slate-100/80 font-semibold text-lg">No Notifications yet !</h1>
+             </ul>
             }
         </ul>
     )

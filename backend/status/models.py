@@ -1,6 +1,8 @@
 from django.db import models
 from users.models import MyUser
 from enum import Enum
+from datetime import  timedelta
+from django.utils import timezone
 
 # Create your models here.
 class NotificationType(Enum):
@@ -11,6 +13,20 @@ class NotificationType(Enum):
     message = 'message'
 
 class Notification(models.Model):
+    @classmethod
+    def clean_up_notifications(cls, user): #this is for clean up
+        now = timezone.now()
+        cls.objects.filter(
+            id_user_fk=user,
+            is_readed=True,
+            created__lt=now-timedelta(hours=24)
+        ).delete()
+        cls.objects.filter(
+            id_user_fk=user,
+            is_readed=False,
+            created__lt=now-timedelta(days=30)
+        ).delete()
+    
     id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     content = models.TextField()
     type = models.CharField(

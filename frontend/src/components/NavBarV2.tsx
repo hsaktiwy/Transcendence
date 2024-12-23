@@ -100,7 +100,7 @@ function NavBarV2(){
                         <div ref={notificationContainerRef} className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
                                 setNotificationDrop(!notificationDrop)
                             }}>
-                                <div className={` ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length ? 'block' : 'hidden'} text-sm font-poppins font-semibold flex justify-center  rounded-full h-[18px] w-[18px] bg-red-600 text-white  top-[50%] right-0 absolute`}>
+                                <div className={` ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 'flex' : 'hidden'} text-sm font-poppins font-semibold  justify-center  rounded-full h-[18px] w-[18px] bg-red-600 text-white  top-[50%] right-0 absolute`}>
                                     {userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length }
                                 </div>
                                 <span className="text-3xl">
