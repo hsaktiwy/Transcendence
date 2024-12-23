@@ -79,13 +79,13 @@ const ProfileTest  = () =>{
     return(
 
     <>
-        <div className="lg:mb-0 pb-20 font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]   dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
-                <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-4  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
+        <div className="lg:mb-0 pb-20  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]    dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
+                <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-5  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                    <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
                             <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">
-                                <img className="size-28  sm:size-28 md:size-32 xl:size-38  xxl:size-42 rounded-full" src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 rounded-full" src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                         <div className=" flex  mt-5 flex-col justify-center ">
-                                            <h1 className=" sm:text-[100%] text-center font-bold  xxl:text-[120%]">{profileData?.firstName} {profileData?.lastName}</h1>
+                                            <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{profileData?.firstName} {profileData?.lastName}</h1>
                                             <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
                                         </div>
                                             {userContextConsumer?.userData?.login != username && <ConnectButton/>}
@@ -126,16 +126,16 @@ const ProfileTest  = () =>{
                        <LineCharFile />
                     </div>
                 </div>
-                <div className="row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
+                <div className="row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:h-96 2xl:col-span-4 xxl:h-[548px] xxl:col-span-3">
                     <RankFile/>
                 </div>
-                <div className="row-span-2 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
-                    <div className="  rounded-lg bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] 2xl:h-96  h-full w-full  flex items-center   justify-center p-4">
+                <div className="row-span-2  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
+                    <div className="  rounded-lg bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] xl:h-96  h-full w-full  flex items-center   justify-center p-4">
                         <RadarChartFile/>
                     </div>
                 </div>
                 <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
-                <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  2xl:h-96 h-full p-4 ">
+                <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
                                 <MatchHistory/>
                     </div>
                 </div>

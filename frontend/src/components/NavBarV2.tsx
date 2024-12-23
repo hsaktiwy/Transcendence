@@ -114,7 +114,7 @@ function NavBarV2(){
                                 </span>
                             </div>
                             <div ref={dropContainerRef} className="w-[30px] h-[30px] cursor-pointer relative " onClick={()=> setDrop(!drop)} >
-                                <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full rounded-full object-fill" />
+                                <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full aspect-square rounded-full object-cover " />
                                 <NavBarDrop display={drop}/>
                             </div>
                     

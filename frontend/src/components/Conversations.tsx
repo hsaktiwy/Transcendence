@@ -113,7 +113,7 @@ function Conversations(){
         };
 return(
 <div className={`  border-r-0 lg:border-r-[1px] border-white/75   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-xl rounded-r-xl lg:rounded-r-none`}>
-            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-gradient-to-l from-[#5e98a9c9] via-[#5e98a9ba] to-[#5e98a995] py-4">
+            <div className="messages-header-container  text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-gradient-to-l from-[#5e98a9c9] via-[#5e98a9ba] to-[#5e98a995] py-4">
                 <h1 className="self-start ml-4">All Chats</h1>
                 {/* <div className="bg-white w-[100%] h-[1px] lg:mt-5 rounded-full"></div> */}
             </div>
@@ -156,7 +156,7 @@ return(
                                         chatContext.setActive(conv)
                                         chatContext.setActiveSection('chat')
                                 }}>
-                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]" />
+                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full aspect-square rounded-full object-cover  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]" />
                                         <div className="self-center flex-1">
                                             <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
                                             <div className="flex justify-between items-center w-full ">
