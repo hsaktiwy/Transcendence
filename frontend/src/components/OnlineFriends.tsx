@@ -48,8 +48,8 @@ function OnlineFriends() {
                         {
                             userContext?.friends.map((friend, index)=>{
                                 return(
-                                <Link to={`/profile/${friend.login}`} key={index} className="each-user">
-                                    <img className="w-14 h-14 rounded-full" src={`${axiosPath}${friend.profile_pic}`} />
+                                <Link to={`/profile/${friend.login}`} key={index} className="each-user rounded-xl hover:bg-[#1D1E22] hover:rounded-2xl hover:shadow-md transition-all duration-200 ease-in-out">
+                                    <img className="w-14 h-14 aspect-square rounded-full object-cover" src={`${axiosPath}${friend.profile_pic}`} />
                                     <div className=" mx-3  flex flex-col items-start justify-center  w-72 ">
                                         <h1 className="font-medium text-base">{`${friend.firstName} ${friend.lastName}`}</h1>
                                         <h1 className="font-normal opacity-80 text-xs text-left">{friend.login}</h1>
