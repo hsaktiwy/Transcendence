@@ -387,9 +387,9 @@ function ChatSession(){
                     }
                 </div>
                 <div id="conversation-footer-container" className="p-4 flex justify-between items-center gap-1 sm:gap-4 ">
-                    <span className="bg-[#5E97A9] text-white rounded-full hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
+                    {/* <span className="bg-[#5E97A9] text-white rounded-full hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <HiPlus/>
-                    </span>
+                    </span> */}
                     <input type="text" placeholder="Message" className=" rounded-full border-1 border-white focus:outline-none text-white bg-[#1D1E22]  text-sm sm:text-md pl-2 py-2 focus:text-black focus:bg-slate-200  focus:border-black duration-300 basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
                     <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <RiSendPlaneFill />

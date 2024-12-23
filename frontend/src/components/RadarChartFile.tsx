@@ -38,7 +38,7 @@ const chartConfig = {
 
 export function RadarChartFile() {
   return (
-    <Card className="border-none bg-[#1D1E22] w-full   h-full">
+    <Card className="border-none bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] w-full   h-full">
       <CardHeader className="items-center pb-4">
         <CardTitle>Radar Chart</CardTitle>
         <CardDescription>
