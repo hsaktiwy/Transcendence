@@ -124,8 +124,8 @@ function Dashboard(){
                  
         </div>
     
-        <div className=" row-span-4 md:col-span-12  md:row-span-4 rounded-2xl p-4 shadow-3xl shadow-[#22333869] bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]   xl:col-span-8 xl:row-span-3 2xl:col-span-5 2xl:row-span-6 xxl:col-span-6">
-            <div className="w-full h-full bg-gradient-to-br from-[#212225] to-[#1D1E22] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+        <div className=" row-span-4 md:col-span-12  md:row-span-4 rounded-2xl p-4 shadow-3xl  shadow-[#22333869] bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]   xl:col-span-8 xl:row-span-3 2xl:col-span-5 2xl:row-span-6 xxl:col-span-6">
+            <div className="w-full h-full  bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
                 <LineCharFile />
             </div>
         </div>
@@ -142,7 +142,7 @@ function Dashboard(){
                         <MatchHistory/>
             </div>
         </div>
-        <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 bg-[#2B2F32] rounded-2xl p-4 xl:hidden">
+        <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
             <PieChartFile/>
         </div>
     </div>
