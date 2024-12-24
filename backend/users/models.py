@@ -61,7 +61,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
 
     def isDefaultImage(self):
-        return self.profile_pic.name == 'default.jpg'
+        return self.profile_pic.name == 'default.jpeg'
 
     USERNAME_FIELD = "login"
     REQUIRED_FIELDS = ["email", "firstName", "lastName"]
