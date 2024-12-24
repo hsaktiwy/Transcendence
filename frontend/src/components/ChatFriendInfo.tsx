@@ -13,7 +13,7 @@ import { Action, ActionType} from "@/utils/interfaces";
 import { UserContext } from '../components/UserContext';
 import mailman from "@/utils/AxiosFetcher";
 import { RadarChartFile } from "./RadarChartFile";
-
+import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
 
 
 
@@ -64,7 +64,7 @@ function ChatFriendInfo(){
                 </div>
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-[28px] rounded-full"></div> */}
             </div>
-            <div id="friend-info" className=" m-4 bg-gradient-to-br from-[#283137] to-[#242729] rounded-lg flex flex-col justify-center ">
+            <div id="friend-info" className=" m-4 mt-8 bg-gradient-to-br from-[#283137] to-[#242729] rounded-lg flex flex-col justify-center ">
                 <div className=" p-4 profile-info-header flex flex-col justify-center items-center">
                     <img src={chatContext.active && backendPath + chatContext.active.user2.profile_pic} alt="" className="aspect-square rounded-full object-cover w-28 h-28"  />
                     <h1 className=" mt-4 font-semibold text-xl">{chatContext.active && chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</h1>
@@ -82,12 +82,16 @@ function ChatFriendInfo(){
                                 const action:Action = {type: ActionType.UNFRIEND, Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
                                 userContext?.setAction(action)
                         }}>
-                            <span className="text-xl"><IoPersonRemoveOutline/></span>
-                            <p className="text-white/70 text-sm">Unfriend</p>
+                            <span className="text-xl flex items-center gap-1">
+                                <IoPersonRemoveOutline />
+                                <span className="text-white/70 text-sm">Profile</span>
+                            </span>
                         </div>
                         <div className="cursor-pointer  hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center">
-                            <span className="text-2xl"><VscGame/></span>
-                            <p className="text-white/70 text-sm">Challenge</p>
+                        <span className="text-xl flex items-center gap-1">
+                                <VscGame/>
+                                <p className="text-white/70 text-sm">Challenge</p>
+                            </span>
                         </div>
                         {/* <div className="cursor-pointer  hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center" onClick={() =>{
                             chatContext.setOpenModal(true)
@@ -102,54 +106,54 @@ function ChatFriendInfo(){
                     </div>
                 </div>
             </div>
-            <div className=" p-5 ">
-                <div className=" bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl p-5">
-
-                        <RadarChartFile/>
-                </div>
-            </div>
-            {/* <div id='friend-achievement-games' className=" animate-fade-right m-4 bg-black/25 rounded-lg p-4 over">
-                <div className="h-[90px] relative m-2  rounded p-2">
-                    <span className="block text-6xl text-[#5E97A9] absolute  right-0 top-1/2 -translate-y-1/2">
-                        <PiPingPongFill/>
-                    </span>
-                    <div className="w-1/2 absolute top-0 left-0 bg-[#444444]/50 p-2 rounded-lg">
-                        <p className="font-extrabold text-3xl text-[#5E97A9]">50</p>
-                        <p className="text-xl font-semibold pl-4">
-                            GAMES
-                        </p>
+            <div className="">
+                <div className="px-5">
+                    <ScrollArea className="p-5 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl w-[434px] overflow-x-auto gap-4 flex">
+                    <div className=" rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md p-3  h-32 w-32  xxl:h-48 xxl:w-48 ">
+                <div className="h-3/5 ">
+                    <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
+                    <h1 className="text-3xl xxl:text-5xl font-medium text-[#5E97A9]">42</h1>
+                    <h1 className="text-lg 2xltext-xl font-medium">Wins</h1>
                     </div>
-
                 </div>
-            </div>
-            <div id='friend-achievement-wins' className=" animate-fade-right m-4 bg-black/25 rounded-lg p-4">
-                <div className="h-[90px] relative m-2  rounded p-2">
-                    <span className="block text-6xl text-[#5E97A9] absolute  right-0 top-1/2 -translate-y-1/2">
-                        <BsTrophy/>
-                    </span>
-                    <div className="w-1/2 absolute top-0 left-0 bg-[#444444]/50 p-2 rounded-lg">
-                        <p className="font-extrabold text-3xl text-[#5E97A9]">30</p>
-                        <p className="text-xl font-semibold pl-4">
-                            WINS
-                        </p>
+                <div className="h-2/5 flex justify-center items-center">
+                    <div className="w-[65%] h-[100%] flex gap-3 flex-col justify-center items-center">
+                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
+                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
+                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
                     </div>
-
-                </div>
-            </div>
-            <div id='friend-achievement-ratio' className=" animate-fade-right m-4 bg-black/25 rounded-lg p-4">
-                <div className="h-[90px] relative m-2  rounded p-2">
-                    <span className="block text-6xl text-[#5E97A9] absolute  right-0 top-1/2 -translate-y-1/2">
-                        <IoMdStats/>
-                    </span>
-                    <div className=" w-1/2 absolute top-0 left-0 bg-[#444444]/50 p-2 rounded-lg">
-                        <p className="font-extrabold text-3xl text-[#5E97A9]">60%</p>
-                        <p className="text-xl font-semibold pl-4">
-                            RATIO
-                        </p>
+                    <div className="w-[35%] h-[100%] flex justify-center items-center">
+                    <img src="../images/emoji_trophy.svg" />
                     </div>
-
                 </div>
-            </div> */}
+                </div>
+                <div className="  rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md p-3  h-32 w-32  xxl:h-48 xxl:w-48 ">
+                <div className="h-3/5 ">
+                    <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
+                    <h1 className="text-3xl xxl:text-5xl font-medium text-[#5E97A9]">42</h1>
+                    <h1 className="text-lg 2xltext-xl font-medium">Wins</h1>
+                    </div>
+                </div>
+                <div className="h-2/5 flex justify-center items-center">
+                    <div className="w-[65%] h-[100%] flex gap-3 flex-col justify-center items-center">
+                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
+                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
+                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
+                    </div>
+                    <div className="w-[35%] h-[100%] flex justify-center items-center">
+                    <img src="../images/emoji_trophy.svg" />
+                    </div>
+                </div>
+                </div>
+                    </ScrollArea>
+                </div>
+
+                <div className=" p-5 ">
+                    <div className=" bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl p-5">
+                            <RadarChartFile/>
+                    </div>
+                </div>  
+            </div>
         </div>
     )
 }

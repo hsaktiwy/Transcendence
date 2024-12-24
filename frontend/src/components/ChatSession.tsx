@@ -293,11 +293,11 @@ function ChatSession(){
     },[rcount])
     //
     return(
-            <div  className={`   rounded-xl lg:rounded-none     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] lg:rounded-r-xl`}  h-full transition-all duration-800
+            <div  className={` rounded-xl lg:rounded-none     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] lg:rounded-r-xl`}  h-full transition-all duration-800
             `}>
                 <div id="conversation-header-container" className="bg-black/35">
                     <div id="conversation-header" className="text-white grid grid-cols-4 px-4 py-[2px]">
-                            <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center cursor-pointer">
+                            <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-4 items-center cursor-pointer">
                                 <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
                                     setOpenDrop(false)
                                     chatContext.setActiveSection('conversations')
@@ -305,10 +305,10 @@ function ChatSession(){
                                 }}>
                                 <IoArrowBackOutline />
                                 </span>
-                                <img src={`${chatContext.active &&  `${backendPath +  chatContext.active.user2.profile_pic}`}`} alt="user-pic" className="w-[40px] h-[40px] aspect-square rounded-full object-cover rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${chatContext.active &&  `${backendPath +  chatContext.active.user2.profile_pic}`}`} alt="user-pic" className=" w-[40px] h-[40px] aspect-square rounded-full object-cover rounded-full cursor-pointer" onClick={()=>{
                                     chatContext.setShowProfile(true)
                                 }}/>
-                                <div className="cursor-pointer" onClick={()=>{
+                                <div className="cursor-pointer " onClick={()=>{
                                     chatContext.setShowProfile(true)
                                 }}>
                                     <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>

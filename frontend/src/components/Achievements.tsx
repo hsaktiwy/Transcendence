@@ -14,7 +14,7 @@ function Achievements() {
         <ScrollArea className="w-full verflow-x-scroll   whitespace-nowrap rounded-md">
           <div className="flex  gap-4 justify-center">
 
-            <div className="  rounded-xl bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md p-3  mt-6 h-32 w-32  xxl:h-48 xxl:w-48 ">
+            <div className="rounded-xl bg-gradient-to-r from-[#292d30] to-[#1D1E22] shadow-md p-3  mt-6 h-32 w-32  xxl:h-48 xxl:w-48 ">
               <div className="h-3/5 ">
                 <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
                   <h1 className="text-3xl xxl:text-5xl font-medium text-[#5E97A9]">42</h1>
