@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { axiosPath } from "@/utils/Constants"
 import { UserContext } from "./UserContext"
 import { Link } from "react-router-dom"
@@ -7,6 +7,46 @@ function OnlineFriends() {
     const userContext = useContext(UserContext)
     if (!useContext)
         throw new Error('invalid scope')
+    const friends = userContext?.friends
+    
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredFriends, setFilteredFriends] = useState([]);
+    
+    // const friends = [
+    //     {
+    //         login: "user1",
+    //         firstName: "user",
+    //         lastName: "nickname",
+    //         profile_pic: "/media/user2/geto.jpg",
+    //     },
+    //     {
+    //         login: "user2",
+    //         firstName: "user2",
+    //         lastName: "nickname2",
+    //         profile_pic: "/media/user3/5bc9f3ef6549c64e76cf66bc0bbebf8e.jpg",
+    //     },
+    //     {
+    //         login: "hachahbo",
+    //         firstName: "hamza",
+    //         lastName: "chahboune",
+    //         profile_pic: "/media/user2/geto.jpg",
+    //     },
+    // ];
+
+    const handleSearch = (e) => {
+        const value = e.target.value.toLowerCase();
+        setSearchTerm(value);
+
+        // Filter friends based on login, firstName, or lastName
+        const results = friends.filter((friend) =>
+            friend.login.toLowerCase().includes(value) ||
+            friend.firstName.toLowerCase().includes(value) ||
+            friend.lastName.toLowerCase().includes(value)
+        );
+
+        setFilteredFriends(results);
+    };
+    console.log('here-->', userContext?.friends)
   return (
     <>
         <div className='onlineFriends-div  pt-5 h-full '>
@@ -36,7 +76,38 @@ function OnlineFriends() {
                                 </>
                         }
                         <div className='bar-search-freinds z-50'>
-                            <input className='search-bar-div-friends'  placeholder='Search' />
+                        <div className="relative h-9">
+                            <input
+                                className="search-bar-div-friends h-full px-3 py-2 border rounded-lg w-full"
+                                placeholder="Search"
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                            {/* Dropdown only appears if searchTerm exists */}
+                            {searchTerm && filteredFriends.length > 0 && (
+                                <div className="absolute mt-2 w-full bg-white bg-gradient-to-tr py-2 from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] rounded-lg shadow-lg max-h-40 overflow-y-auto"
+                                style={{ boxSizing: 'border-box', paddingRight: '1rem' }}>
+                                    {filteredFriends.map((friend) => (
+                                        <div
+                                            key={friend.login}
+                                            className="flex items-center gap-3 px-4 py-2 hover:bg-gray-800 cursor-pointer"
+                                        >
+                                            <img
+                                                src={`${axiosPath}${friend.profile_pic}`}
+                                                alt={`${friend.firstName} ${friend.lastName}`}
+                                                className="w-10 h-10 aspect-square rounded-full object-cover"
+                                            />
+                                            <div>
+                                                <p className="text-sm font-medium">{friend.firstName} {friend.lastName}</p>
+                                                <p className="text-xs text-gray-500">@{friend.login}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        
                             <img style={{width: '15px', marginRight: '10px'}} className="size-image" src="/images/profileVector.svg" />
                             <img style={{width: '23px'}} className="size-image" src="/images/Settings.svg" />
                         </div>

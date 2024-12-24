@@ -51,7 +51,7 @@ function NavBarV2(){
             setDrop(false)
         else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
             setNotificationDrop(false)
-            
+            ax
    
         };
     
@@ -75,10 +75,10 @@ function NavBarV2(){
                         <div>
 
                         </div>
-                        <div >
+                        <div className="" >
                             <input type="text" 
                                     placeholder="Search"
-                                    className={`text-white rounded-full mx-10  ${isSearchBarActive ? '  w-[calc(70%)] px-4 py-1' : 'w-0'} bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] h-10 lg:w-[50%]  lg:px-4 lg:py-1  focus:lg:w-[460px] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `}
+                                    className={`text-white rounded-full mx-10   ${isSearchBarActive ? '  w-[calc(70%)] px-4 py-1' : 'w-0'} bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] h-10 lg:w-[50%]  lg:px-4 lg:py-1  focus:lg:w-[460px] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `}
                                     onChange={(event_object)=> setSearch(event_object.target.value)}
                                     onBlur={handleBlur}
                                     onFocus={()=>{
@@ -91,8 +91,7 @@ function NavBarV2(){
                                 ref={searchRef} 
                                 className={`${search && search.length > 0  ? 'block' : 'hidden'} absolute w-[70%] lg:w-[460px] top-[15px] left-[10%] lg:left-[10%] z-50 rounded-2xl  max-h-[400px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] overflow-auto mx-10`}
                             >
-                            {/* <input type="text" placeholder="Search" className="mx-12 h-10 w-96 px-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl border-none "/> */}
-                                { search!=="" && focus &&   <Search search_for={search}/>}
+                            { search!=="" && focus &&   <Search search_for={search}/>}
                             </div>
                         </div>
                     </div>
