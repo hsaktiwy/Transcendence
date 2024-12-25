@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { error, log } from "console";
 import { toast } from "sonner";
 export interface LoginDataInterface{
-    login: string,
+    email: string,
     password: string
 }
 export interface VerifyTFAInterface{

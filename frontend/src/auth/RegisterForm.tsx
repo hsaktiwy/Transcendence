@@ -190,7 +190,6 @@ const RegisterForm = () =>{
                                 }}
                                 onBlur={() =>{
                                     setPassFocus(false)
-
                                 }}
                             />
                             <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFocus ? 'text-black' : 'text-white' }`} onClick={() =>{
