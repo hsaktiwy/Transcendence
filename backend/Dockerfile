@@ -3,10 +3,13 @@ RUN apt-get update \
     && apt-get install -y \
        libpq-dev \
        gcc \
+       iputils-ping \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 ENV DJANGO_LOG_LEVEL=INFO
 COPY requirements.txt .
+COPY ./utils/script.sh .
+RUN chmod +x script.sh
 RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app
-CMD python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+CMD /bin/bash -c /script.sh

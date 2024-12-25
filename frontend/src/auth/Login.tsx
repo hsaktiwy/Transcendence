@@ -31,7 +31,7 @@ const Login = () => {
     if (!AuthContextConsummer)
         throw new Error("invalid scope");
     const Navigate = useNavigate();
-    const [username, setUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
@@ -98,7 +98,7 @@ const Login = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data: LoginDataInterface = {
-            login: username,
+            email: email,
             password: password
         }
         console.log(data)
@@ -239,13 +239,13 @@ const Login = () => {
                                     <p className='text-lg font-normal '>Please Enter your details</p>
                                 </div>
                                 <div className="mb-4">
-                                    <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
+                                    <label htmlFor="email" className="block text-white font-bold mb-2">Email:</label>
                                     <input
                                         autoComplete='off'
-                                        type="username"
+                                        type="email"
                                         id="username"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                         className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                                     />
