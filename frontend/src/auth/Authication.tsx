@@ -15,6 +15,7 @@ import LandingPage2 from '@/components/Landing/LandingPage2';
 import LoadingIndecator from '@/components/Loading';
 import RedirectRoute from './RedirectRoute';
 import RegisterForm from './RegisterForm';
+import { ToastContainer } from 'react-toastify';
 function Auth(children:childrenInterface)
 {
     
@@ -23,6 +24,18 @@ function Auth(children:childrenInterface)
                     <Toaster position="top-right" richColors expand={true}  closeButton={true} toastOptions={{
                         className: "bg-black/50 backdrop-filter backdrop-blur-sm text-white "
                     }}/>
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick={false}
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
                     <Routes>
                         <Route path="/*" element={<RouteProtection>{children.children}</RouteProtection>}/>
                         <Route path="/login" element={<Login/>}/>

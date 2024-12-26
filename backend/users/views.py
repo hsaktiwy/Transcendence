@@ -40,7 +40,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
-from .utils import decode_token, generate_tokens_response, generat_qr_code, verify2faCode, generate_TFA_verification_response
+from .utils import decode_token, generate_tokens_response, generat_qr_code, verify2faCode, generate_TFA_verification_response, generate_set_username_response
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
@@ -200,7 +200,9 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             resp = ''
-            if user.two_factor_auth:
+            if user.login is None or user.login == "":
+                resp = generate_set_username_response(user)
+            elif user.two_factor_auth:
                 resp = generate_TFA_verification_response(user)
             else:
                 resp = generate_tokens_response(user, request)
@@ -382,7 +384,7 @@ def Search(request):
         SerializedUsers = SearchUserSerializer(Users, many=True)
         return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
     except:
-        return Response({"error": "wala\n"},status=444)
+        return Response({"error": "wala\n"},status=400)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -395,3 +397,25 @@ def LogoutView(request):
         return resp
     except:
         return Response({"error": "error occured"},status=400)
+
+@api_view(['PATCH'])
+@permission_classes([AllowAny])
+def SetUsername(request):
+        try:
+            print(request.data)
+            email = request.data.get('email')
+            user = MyUser.objects.get(email=email)
+            if user.login != "":
+                return Response({"message" : "login already setted"}, status=status.HTTP_200_OK)
+            del request.data['email']
+            print(request.data)
+            serializer = UserSerializer(instance=user, data=request.data)
+            if serializer.is_valid():
+                user = serializer.update(instance=user, validated_data=serializer.validated_data)
+                return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        except MyUser.DoesNotExist as e:
+            return Response({"error": "user not found"} , status=404)
+        except Exception as e:
+            return Response({"error": str(e)} , status=400)
+            

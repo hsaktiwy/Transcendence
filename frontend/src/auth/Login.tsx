@@ -16,6 +16,7 @@ import { motion } from 'framer-motion';
 import background from 'astro-bg.png'
 import TfaVerification from './TfaVerification';
 import ThreeScene from '@/components/ThreeScene';
+import Username from './Username';
 
 
 export const Loading__ = () => {
@@ -35,60 +36,7 @@ const Login = () => {
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
-    // // const userContextConsumer = useContext(UserContext)
-    // // if (!userContextConsumer)
-    // //     throw new Error("useUser must be used within a UserProvider");
-    // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault();
-    //     const url:string = BACKEND + LOGIN_PATH
-    //     const credential  :string = `username=${username}&password=${password}` 
-    //     let csrfToken:string = cookies.get('csrftoken');
-    //     console.log("ola : " + csrfToken)
-    //     // this code part will check if we have csrftoken in cookies else we demand new one from the backend 
-    //     if (!csrfToken || csrfToken.length == 0)
-    //     {
-    //         try {
-    //             const url = BACKEND + INIT_CSRFTOKEN_PATH;
-    //             const request = {
-    //                     url: url,
-    //                     method: 'GET',
-    //                     withCredentials: true
-    //             }
-    //             const response = await mailman(request)
-    //             const data = response.data;
-    //             csrfToken = data.csrfToken;
-    //             console.log('CSRF Token:', csrfToken);
-    //         } catch (error) {
-    //             console.error('Error fetching CSRF token:', error);
-    //         }
-    //     }
-    //     if (csrfToken.length > 0)
-    //     {
-    //         try{
-    //             console.log("csrft : " + csrfToken + " " + credential)
-    //             const request = {
-    //                 url: url,
-    //                 method: 'POST',
-    //                 headers:
-    //                 {
-    //                     "Content-Type": "application/x-www-form-urlencoded",
-    //                     'X-CSRFToken' : csrfToken,
-    //                 },
-    //                 data: credential,
-    //                 withCredentials: true,
-    //             }
-    //             const response = await mailman(request)
-    //             // userContextConsumer?.setUserId(response.data['user_id'])
-    //             console
-    //             localStorage.setItem("id", response.data['user_id'])
-    //             Navigate('/')
-    //         }
-    //         catch (err)
-    //         {   
-    //             console.error("Error : \n" + err)
-    //         }
-    //     }
-    // }
+    const [needLogin, setNeedLogin] = useState<boolean>(false)
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         window.location.href =
@@ -113,7 +61,8 @@ const Login = () => {
             console.log(resp.errorType)
         }
         else {
-            
+            if (resp.message === 'username needed')
+                setNeedLogin(true)
             if (resp.message === 'tfa needed'){
                 const tfaResp = resp as LoginTFAResponse
                 setTfaUser(tfaResp.user)
@@ -292,7 +241,7 @@ const Login = () => {
                                         <p>Forget Password ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Click here</span></p>
                                     </div>
                                 </div>
-                            </motion.form> : <TfaVerification user={tfaUser}/>}
+                            </motion.form> : needLogin ? <Username/> : <TfaVerification user={tfaUser}/>}
                     
 
                 </div> 

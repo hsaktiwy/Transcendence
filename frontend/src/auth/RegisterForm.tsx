@@ -4,7 +4,7 @@ import { cookies } from './Cookie';
 import { useNavigate } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
-import { toast } from 'sonner'
+// import { toast } from 'sonner'
 import { UserContext } from '../components/UserContext';
 import { AuthContext, LoginDataInterface, LoginError, LoginResp, signUpDataInterface } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { userNameError, emailError, passError } from './signUpError';
 import FormInput from './Registration/RegisterInput';
+import { ToastContainer, toast } from 'react-toastify';
 
 export interface inputsDataInterface{
     firstName: string,
@@ -45,23 +46,26 @@ const RegisterForm = () =>{
         label: string,
         pattern: string,
         required: boolean,
+        inputsData: inputsDataInterface
     }
     const inputs: inputInterface[] = [
         {
           name: "firstName",
           type: "text",
-          errorMessage: "First name should be 3-16 characters and shouldn't include any special character or number!",
-          label: "First N ame",
-          pattern: "^[A-Za-z]{3,16}$",
+          errorMessage: "First name should be 3-50 characters",
+          label: "First Name",
+          pattern: "^.{3,50}$",
           required: true,
+          inputsData: inputsData
         },
         {
           name: "lastName",
           type: "text",
-          errorMessage: "Last name should be 3-16 characters and shouldn't include any special character or number!",
+          errorMessage: "Last name should be 3-50 characters",
           label: "Last Name",
-          pattern: "^[A-Za-z]{3,16}$",
+          pattern: "^.{3,50}$",
           required: true,
+          inputsData: inputsData
         },
         {
             name: "email",
@@ -70,6 +74,7 @@ const RegisterForm = () =>{
             label: "Email",
             pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" ,
             required: true,
+          inputsData: inputsData
         },
         {
           name: "password",
@@ -78,6 +83,7 @@ const RegisterForm = () =>{
           label: "Password",
           pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
           required: true,
+          inputsData: inputsData
         },
         {
           name: "password2",
@@ -86,6 +92,7 @@ const RegisterForm = () =>{
           label: "Confirm Password",
           pattern: inputsData.password,
           required: true,
+          inputsData: inputsData
         },
       ];
     
@@ -106,7 +113,7 @@ const RegisterForm = () =>{
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
- 
+        console.log("blalvavlav")
         const signUpData : signUpDataInterface = {
             firstName: firstName,
             lastName: lastName,
@@ -120,7 +127,7 @@ const RegisterForm = () =>{
                 url: '/api/user/register/',
                 method: 'POST',
                 withCredentials: true,
-                data: signUpData
+                data: inputsData
             }
             const resp = await mailman(request)
             toast.success(resp.data.message)
@@ -178,10 +185,15 @@ const RegisterForm = () =>{
 
     useEffect(() => {
         if (registred)
-            Navigate('/login')
+            Navigate('/setusername')
     }, [registred])
+    useEffect(()=>{
+        console.log(inputsData)
+    },[inputsData])
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
         setInputsData({ ...inputsData, [e.target.name]: e.target.value });
+        console.log(inputsData)
       };
     const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
         if (e.target.name === 'password')
@@ -208,8 +220,8 @@ const RegisterForm = () =>{
                             <h1 >Hey! Happy to see you here</h1>
                             <p className='text-lg font-normal '>Create your account now</p>
                         </div>
-                        <div className="mb-4 flex items-center  justify-center gap-11 w-full">
-                            <div className='w-[46%]'>
+                        {/* <div className="mb-4 flex items-center  justify-center gap-11 w-full"> */}
+                            {/* <div className='w-[46%]'>
                                 <label htmlFor="firstName" className="block text-white font-bold mb-2">First Name:</label>
                                 <input
                                     autoComplete='off'
@@ -232,23 +244,23 @@ const RegisterForm = () =>{
                                     required
                                     className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                                     />
-                            </div>
+                            </div> */}
                             {/* {
-                                inputs.filter((input)=>{input.name === 'firstName' || input.name === 'lastName'}).map((input, index)=> {
+                                inputs.filter((input)=>input.name === 'firstName' || input.name === 'lastName').map((input, index)=> {
                                     return(
                                         <FormInput key={index + 1} {...input} value={inputsData[input.name]} onChange={onChange}/>
                                     )
                                 })
                             } */}
-                        </div>
-                        {/* {
-                                inputs.filter((input)=>{input.name !== 'firstName' || input.name !== 'lastName'}).map((input, index)=> {
+                        {/* </div> */}
+                        {
+                                inputs.map((input, index)=> {
                                     return(
-                                        <FormInput key={index + 1} {...input} value={inputsData[input.name]} onChange={onChange}/>
+                                        <FormInput key={index + 1} {...input} value={inputsData[input.name]} setInputsData={setInputsData}/>
                                     )
                                 })
-                        } */}
-                        <div className="mb-6 relative ">
+                        }
+                        {/* <div className="mb-6 relative ">
                             <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
                             <input
                                 autoComplete='off'
@@ -316,11 +328,14 @@ const RegisterForm = () =>{
                             }}>
                                 {hide2 ? <LuEyeOff/> : <LuEye/>}
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
 
-                            <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  hover:scale-105  duration-150">
+                            <button type="submit"  className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  hover:scale-105  duration-150" onMouseOver={(e: React.MouseEvent<HTMLButtonElement>)=>{
+                                const button = e.target as HTMLButtonElement
+                                console.log(e.target as HTMLButtonElement)
+                            }} >
                                 Sign up
                             </button>
                             <div className='h-[30px] flex items-center justify-evenly w-full'>
@@ -333,6 +348,9 @@ const RegisterForm = () =>{
                             </button>
                             <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
                                 <p>You have an account ? <Link to='/login' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign in</Link></p>
+                            </div>
+                            <div>
+
                             </div>
                         </div>
                     </motion.form>

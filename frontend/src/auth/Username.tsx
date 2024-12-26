@@ -17,16 +17,11 @@ import background from 'astro-bg.png'
 import TfaVerification from './TfaVerification';
 import ThreeScene from '@/components/ThreeScene';
 import { FaArrowRight } from "react-icons/fa6";
-
-
-export const Loading__ = () => {
-    return (
-        <div className="flex justify-center items-center h-full w-full ">
-            <div className="w-[40px] h-[40px] border-4 border-[#5E97A9] border-solid border-t-transparent rounded-full animate-spin"></div>
-        </div>
-    )
+interface SetUsernameProps{
+    email: string,
+    password: string,
+    setNeedLogin: React.Dispatch<React.SetStateAction<boolean> >
 }
-
 const Username = () => {
     const AuthContextConsummer = useContext(AuthContext)
     if (!AuthContextConsummer)
@@ -36,11 +31,6 @@ const Username = () => {
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
-    const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
-        window.location.href =
-            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=https%3A%2F%2Flocalhost%3A4444%2Flogin%2F&response_type=code";
-    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -79,40 +69,6 @@ const Username = () => {
             Navigate('/')
     }, [AuthContextConsummer.loggedIn, Navigate])
 
-    const loginwith42 = async (code: string | null) => {
-        if (code) {
-            setLoading(true)
-            try {
-                const req = {
-                    url: '/api/LoginWithOAuth42/',
-                    method: 'POST',
-                    data: { code }
-                    
-                }
-                const resp = await mailman(req)
-                if (resp.status === 200) {
-                    if (resp.data.user)
-                        setTfaUser(resp.data.user)
-                    else
-                        location.reload();
-                }
-                window.history.replaceState({}, document.title, window.location.pathname);
-                // Navigate('/')
-
-            }
-            catch (error) {
-                // setLoading(false);
-                console.error('Error:', error)
-            }
-        }
-    }
-    useEffect(() => {
-      
-            const searchParams = new URLSearchParams(window.location.search);
-            const code = searchParams.get('code');
-            loginwith42(code)
-    }, [AuthContextConsummer.loggedIn]);
-
     const [hide, setHide] = useState<boolean>(true)
     const [passFoucs, setPassFocus] = useState<boolean>(false)
     const FormFade = () => {
@@ -141,7 +97,7 @@ const Username = () => {
                 <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
                     {/* <ThreeScene/> */}
                     
-                        {tfaUser === undefined ? 
+                     
                             <motion.form 
                                 variants={FormFade()}
                                 initial="formInitial"
@@ -156,7 +112,7 @@ const Username = () => {
                                     <label htmlFor="Username" className="block text-white font-bold mb-2">Username:</label>
                                     <input
                                         autoComplete='off'
-                                        type="username"
+                                        type="text"
                                         id="username"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -174,20 +130,8 @@ const Username = () => {
                                         </div>
                                         
                                     </button>
-                                    <div className='h-[30px] flex items-center justify-evenly w-full'>
-                                        <div className=' w-[45%] bg-white h-[1px]'></div>
-                                        <p className='w-[5%] text-white'> or </p>
-                                        <div className=' w-[45%] bg-white h-[1px]'></div>
-                                    </div>
-                                    <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:border-slate-200 hover:scale-105 duration-150" onClick={handleSubmitWith42}>
-                                    {!loading ? <p >Sign in with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
-                                    </button>
-                                    <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
-                                        <p>Don't have an account ? <Link to='/signup' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign up</Link></p>
-                                        <p>Forget Password ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Click here</span></p>
-                                    </div>
                                 </div>
-                            </motion.form> : <TfaVerification user={tfaUser}/>}
+                            </motion.form>
                     
 
                 </div> 

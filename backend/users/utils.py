@@ -66,6 +66,12 @@ def generate_TFA_verification_response(user):
         'user': user.login
     }, status=status.HTTP_200_OK)
     return resp
+
+def generate_set_username_response(user):
+    resp = Response({
+        'message': 'username needed',
+    }, status=status.HTTP_200_OK)
+    return resp
     
 def generate_tokens_response(user, request):
     csrf_token = get_token(request)
