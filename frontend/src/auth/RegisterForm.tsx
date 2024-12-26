@@ -17,11 +17,78 @@ import { Loading__ } from './Login';
 import { Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { userNameError, emailError, passError } from './signUpError';
+import FormInput from './Registration/RegisterInput';
+
+export interface inputsDataInterface{
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    password2: string
+}
 const RegisterForm = () =>{
     const AuthContextConsummer = useContext(AuthContext)
     if (!AuthContextConsummer)
         throw new Error("invalid scope");
     const Navigate = useNavigate();
+    const [inputsData, setInputsData] = useState<inputsDataInterface>({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        password2: ""
+    })
+    interface inputInterface{
+        name: keyof inputsDataInterface,
+        type: string,
+        errorMessage:string,
+        label: string,
+        pattern: string,
+        required: boolean,
+    }
+    const inputs: inputInterface[] = [
+        {
+          name: "firstName",
+          type: "text",
+          errorMessage: "First name should be 3-16 characters and shouldn't include any special character or number!",
+          label: "First N ame",
+          pattern: "^[A-Za-z]{3,16}$",
+          required: true,
+        },
+        {
+          name: "lastName",
+          type: "text",
+          errorMessage: "Last name should be 3-16 characters and shouldn't include any special character or number!",
+          label: "Last Name",
+          pattern: "^[A-Za-z]{3,16}$",
+          required: true,
+        },
+        {
+            name: "email",
+            type: "email",
+            errorMessage: "It should be a valid email address!",
+            label: "Email",
+            pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" ,
+            required: true,
+        },
+        {
+          name: "password",
+          type: "password",
+          errorMessage: "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
+          label: "Password",
+          pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+          required: true,
+        },
+        {
+          name: "password2",
+          type: "password",
+          errorMessage: "Passwords don't match!",
+          label: "Confirm Password",
+          pattern: inputsData.password,
+          required: true,
+        },
+      ];
+    
     const [username, setUsername] = useState<string>('');
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLasttName] = useState<string>('');
@@ -113,6 +180,21 @@ const RegisterForm = () =>{
         if (registred)
             Navigate('/login')
     }, [registred])
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputsData({ ...inputsData, [e.target.name]: e.target.value });
+      };
+    const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        if (e.target.name === 'password')
+            setPassFocus(true)
+        else if (e.target.name === 'password2')
+            setPassFocus2(true)
+      };
+    const onBlur = (e:React.FocusEvent<HTMLInputElement>) => {
+        if (e.target.name === 'password')
+            setPassFocus(false)
+        else if (e.target.name === 'password2')
+            setPassFocus2(false)
+      };
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
                 <div className={`flex flex-col items-center 2xl:items-end justify-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
@@ -138,8 +220,8 @@ const RegisterForm = () =>{
                                     required
                                     className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                                     />
-                            </div>
-                            <div className='w-[46%]'>
+                            </div> 
+                             <div className='w-[46%]'>
                                 <label htmlFor="lastName" className="block text-white font-bold mb-2">Last Name:</label>
                                 <input
                                     autoComplete='off'
@@ -151,7 +233,21 @@ const RegisterForm = () =>{
                                     className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                                     />
                             </div>
+                            {/* {
+                                inputs.filter((input)=>{input.name === 'firstName' || input.name === 'lastName'}).map((input, index)=> {
+                                    return(
+                                        <FormInput key={index + 1} {...input} value={inputsData[input.name]} onChange={onChange}/>
+                                    )
+                                })
+                            } */}
                         </div>
+                        {/* {
+                                inputs.filter((input)=>{input.name !== 'firstName' || input.name !== 'lastName'}).map((input, index)=> {
+                                    return(
+                                        <FormInput key={index + 1} {...input} value={inputsData[input.name]} onChange={onChange}/>
+                                    )
+                                })
+                        } */}
                         <div className="mb-6 relative ">
                             <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
                             <input
