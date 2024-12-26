@@ -3,7 +3,7 @@ RUN apt-get update \
     && apt-get install -y \
        libpq-dev \
        gcc \
-       iputils-ping \
+       netcat-openbsd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 ENV DJANGO_LOG_LEVEL=INFO
