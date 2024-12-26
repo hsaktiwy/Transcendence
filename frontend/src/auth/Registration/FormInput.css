@@ -2,6 +2,13 @@ input:invalid.focused{
     border: 1px solid red;
 }
 
+#errorMessageSpan{
+    font-size: 12px;
+    padding: 3px;
+    color: red;
+    display: none;
+}
+
 input:invalid.focused ~ span{
     display: block;
 }
