@@ -20,6 +20,7 @@ function Settings() {
     interface UserDataInterface {
         login: string;
         firstName: string;
+        CoverProfile: string;
         lastName: string;
         profile_pic: string;
         email: string;
@@ -30,20 +31,21 @@ function Settings() {
     }
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
-    // useEffect(() =>{
-    //     fetchUserData()
-
-    // }, [userContextConsumer.id, userContextConsumer.profilePicChanged])
     const handleProfilChanged = async (e: ChangeEvent<HTMLInputElement>) =>{
         e.preventDefault()
-        if (e.target.files &&e.target.files[0]){
+
+        if (e.target.files && e.target.files[0]){
+            let uploadUrl=  `/api/user/upload_pic/`
+            if(e.target.id === 'CoverProfile')
+                uploadUrl = `/api/user/CoverProfile/`
+            const imageId = e.target.id
             const formData = new FormData();
-            formData.append('profile_pic', e.target.files[0]);
+            formData.append(e.target.id, e.target.files[0]);
             try{
                 
 
                 const req = {
-                    url: `/api/user/upload_pic/`,
+                    url: uploadUrl,
                     method: 'PATCH',
                     data : formData,
                     withCredentials: true,
@@ -57,8 +59,15 @@ function Settings() {
                 {
                     const newProfilePictureUrl = response.data
                     console.log(newProfilePictureUrl)
-                    toast.success('Profile picture changed succesfully')
-                    userContextConsumer.setProfilePicChanged(true)
+                    if (e.target.id !== 'CoverProfile'){
+                        toast.success('Profile picture changed succesfully')
+                        userContextConsumer.setProfilePicChanged(true)
+                    }
+                    else{
+                        toast.success('Cover picture changed succesfully')
+                        userContextConsumer.setCoverPicChanged(true)
+                    }
+
                 }
             }
             catch (err){
@@ -71,14 +80,24 @@ function Settings() {
     return(
 
         <div className="  min-h-[calc(100vh-100px)] font-poppins absolute overflow-hidden top-[60px]  left-0 lg:left-[142px]  w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%] text-white bg-gradient-to-l from-[#2a3236] to-[#1e2124] rounded-xl ">
-                <div className="banner relative bg-[url('https://cdn.intra.42.fr/coalition/cover/73/BiosBG.jpg')] bg-cover bg-center h-[300px] m-4 rounded-xl">
+                <div className={`banner relative  h-[300px] m-4 rounded-xl`}>
+                    <div className="top-0 left-0  group absolute rounded-xl  h-full w-full cursor-pointer  z-10 after:content-[''] after:absolute after:h-full after:w-full    after:top-0 after:left-0   after:rounded-xl after:bg-transparent after:hover:bg-black/45">
+                        <div className="absolute text-xl right-[3%] top-[10%]  z-40 hidden group-hover:block">
+                            <FiEdit2/>
+                        </div>
+                        <img src={`${axiosPath}${userContextConsumer.userData?.CoverProfile}`} alt="user-pic" className="rounded-xl object-cover h-full w-full"/>
+                        <input id='CoverProfile' type="file" accept='image/*' onClick={(e: any)=>{
+                            console.log(typeof(e.target.id))
+                        }} onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50 border-[1px] border-black w-full h-full rounded-xl" />
+
+                    </div>
                 <div className="relative h-[300px] bg-black/25 rounded-xl left-0 top-0 bg-"></div>
-                    <div className=" group user-pic cursor-pointer h-[160px] w-[160px] absolute top-[200px]  left-[50%] -translate-x-[50%] rounded-full  after:content-[''] after:absolute after:h-[160px] after:w-[160px] after:rounded-full   after:top-0 after:left-[50%] after:-translate-x-[50%] after:border-[5px] after:border-white after:bg-transparent after:hover:bg-black/45 ">
+                    <div className=" z-20 group user-pic cursor-pointer h-[160px] w-[160px] absolute top-[200px]  left-[50%] -translate-x-[50%] rounded-full  after:content-[''] after:absolute after:h-[160px] after:w-[160px] after:rounded-full   after:top-0 after:left-[50%] after:-translate-x-[50%] after:border-[5px] after:border-white after:bg-transparent after:hover:bg-black/45 ">
                         <div className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-40 hidden group-hover:block">
                             <FiEdit2/>
                         </div>
                         <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
-                        <input type="file" accept='image/*' className=" absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50 border-[1px] border-black w-[160px] h-[160px] rounded-full" onChange={handleProfilChanged}/>
+                        <input id='profile_pic' type="file" accept='image/*' onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50 border-[1px] border-black w-[160px] h-[160px] rounded-full" />
                     </div>
                 </div>
                 <div className="settings-container flex flex-col  my-20">

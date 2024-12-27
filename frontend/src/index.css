@@ -30,13 +30,12 @@
     /* background-image: url('/astro-bg.png'); */
     /* background-color: #292d30; */
     background: linear-gradient(to bottom  left, #242b30, #18191a);
-
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
     min-height: 100vh;
-
+    
   }
  
   #overlay {
