@@ -22,6 +22,10 @@ import { NotificationPropreties } from "./UserContext";
 import { WebSocketContext } from "../utils/WSContext";
 import ConnectButton from "./connectButton.tsx";
 import { MatchHistory } from "./MatchHistroy.tsx";
+import { SkeletonTheme } from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
@@ -79,13 +83,19 @@ const ProfileTest  = () =>{
     return(
 
     <>
+        
         <div className="lg:mb-0 pb-20  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]    dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
                 <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-5  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                    <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
-                            <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">
+                            <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
                                 <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                        
+                            {/* <p>
+
+      <Skeleton className=" w-[100px]" count={2} />
+    </p> */}
                                         <div className=" flex  mt-5 flex-col justify-center ">
-                                            <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{profileData?.firstName} {profileData?.lastName}</h1>
+                                            <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{profileData?.firstName} </h1>
                                             <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
                                         </div>
                                             {userContextConsumer?.userData?.login != username && <ConnectButton/>}
@@ -98,7 +108,7 @@ const ProfileTest  = () =>{
                                     <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                         <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
                                             <div className="   h-10 min-w-40 xxl:h-14 xxl:min-w-48 border rounded-2xl sm:flex justify-center items-center">
-                                                <div className=" text-xl text-white font-semibold xxl:text-xl ">{`${profileData?.login}`}</div>
+                                                <div className=" text-xl text-white font-semibold xxl:text-xl ">{profileData?.login}</div>
                                             </div>
                                         </div>
                                     <div className=" flex flex-col justify-center  items-center mb-7">

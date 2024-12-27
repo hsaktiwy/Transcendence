@@ -30,6 +30,7 @@ urlpatterns = [
     path('user/enable2fa/', views.Enable2faView.as_view(), name="enable_2fa"),
     path('user/verify2fa/', views.Verify2faOTPView.as_view(), name="verify_2fa"),
     path('user/upload_pic/', views.UploadProfilePicture.as_view(), name="upload_profile"),
+    path('user/CoverProfile/', views.UploadCoverProfile, name="cover_profile"),
     path('LoginWithOAuth42/', views.LoginWithOAuth42, name="LoginWithOAuth42"),
     # path('login/', views.LoginView.as_view())
 ]

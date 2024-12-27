@@ -49,6 +49,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     two_factor_auth = models.BooleanField(default=False)
     two_factor_auth_code = models.CharField(max_length=32, default=pyotp.random_base32)
     profile_pic = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpeg', validators=[validateImage])
+    CoverProfile = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpeg')
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=OFFLINE)
     last_visit = models.DateTimeField(null=True, blank=True)
@@ -62,6 +63,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def isDefaultImage(self):
         return self.profile_pic.name == 'default.jpeg'
+        
+    def isDefaultCoverImage(self):
+        return self.CoverProfile.name == 'default.jpeg'
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["login", "firstName", "lastName"]

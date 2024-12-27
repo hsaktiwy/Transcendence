@@ -6,7 +6,8 @@ export interface UserDataInterface {
     state:string;
     last_visit:string | null;
     profile_pic:string;
-    two_factor_auth: boolean
+    two_factor_auth: boolean;
+    CoverProfile: string;
 }
 export interface ProfileDataInterface {
     login:string;
@@ -16,6 +17,7 @@ export interface ProfileDataInterface {
     state:string;
     last_visit:string | null;
     profile_pic:string;
+    CoverProfile: string;
 }
 
 

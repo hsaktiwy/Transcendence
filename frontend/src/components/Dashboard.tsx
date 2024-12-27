@@ -85,6 +85,7 @@ function Dashboard(){
       
     return(
         <div className="font-poppins pb-20 dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-11 2xl:grid-cols-12 2xl:grid-rows-12 gap-4 ">
+          
           <div className=" row-span-1 flex justify-center items-center  md:col-span-12  md:row-span-4 xl:col-span-8 xl:row-span-4 2xl:col-span-9  2xl:row-span-6 xxl:col-span-6 ">
               <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                   <div className=" text-white  w-full ">
@@ -96,7 +97,8 @@ function Dashboard(){
                                                                           <div className="relative px-4 h-10 min-w-40 2xl:h-14 2xl:min-w-48  rounded-2xl flex justify-center items-center">
                                                                               <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-2xl"></div>
                                                                               <div className="relative text-xl text-white font-medium">
-                                                                                {`Hello ${userContextConsumer.userData?.firstName}`}
+                                                                                {`Hello ${userContextConsumer.userData?.firstName}`} 
+                                                                                
                                                                               </div>
                                                                             </div>
 

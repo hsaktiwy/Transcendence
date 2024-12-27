@@ -3,6 +3,10 @@ import { useContext, useState } from "react"
 import { axiosPath } from "@/utils/Constants"
 import { UserContext } from "./UserContext"
 import { Link } from "react-router-dom"
+import { SkeletonTheme } from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 function OnlineFriends() {
     const userContext = useContext(UserContext)
     if (!useContext)
@@ -78,7 +82,7 @@ function OnlineFriends() {
                         <div className='bar-search-freinds  z-50'>
                         <div className="relative h-9 w-full ">
                             <input
-                                className="search-bar-div-friends  h-8 w-4/5 px-3 py-5  rounded-lg border"
+                                className="search-bar-div-friends  h-8 w-4/5 px-3 py-5  rounded-lg "
                                 placeholder="Search"
                                 value={searchTerm}
                                 onChange={handleSearch}
@@ -114,6 +118,7 @@ function OnlineFriends() {
                             userContext?.friends.length && 
                                     <h3 className="font-semibold m-4 w-20 2xl:mx-7">Friends</h3>
                         }
+
                         <div className='online-users  px-4'>
                         {
                             userContext?.friends.map((friend, index)=>{
@@ -121,7 +126,7 @@ function OnlineFriends() {
                                 <Link to={`/profile/${friend.login}`} key={index} className="each-user hover:rounded-2xl hover:shadow-md transition-all duration-200 ease-in-out rounded-xl hover:bg-[#1D1E22]">
                                     <img className="w-14 h-14 aspect-square rounded-full object-cover" src={`${axiosPath}${friend.profile_pic}`} />
                                     <div className=" mx-3  flex flex-col items-start justify-center  w-72 ">
-                                        <h1 className="font-medium text-base">{`${friend.firstName} ${friend.lastName}`}</h1>
+                                        <h1 className="font-medium text-base">{`${friend.firstName} ${friend.lastName} `}</h1>
                                         <h1 className="font-normal opacity-80 text-xs text-left">{friend.login}</h1>
                                     </div>
                                     <div className='is-online '>

@@ -317,6 +317,22 @@ class UploadProfilePicture(APIView):
         except Exception as e:
             return Response({"error": str(e)} , status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PATCH'])
+def UploadCoverProfile(request):
+    try:
+        user = get_object_or_404(MyUser, login=request.user)
+        serializer = UserSerializer(instance=user, data=request.data)
+        if serializer.is_valid():
+            if not user.isDefaultCoverImage():
+                os.remove('media/' + user.CoverProfile.name)  
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        return Response({"error": str(e)} , status=status.HTTP_400_BAD_REQUEST)
+
 class UserNotification(generics.ListAPIView):
     serializer_class = NotificationSerializer
     def get_queryset(self):

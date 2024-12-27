@@ -36,6 +36,8 @@ interface UserContextInterface{
     setUserData: React.Dispatch<React.SetStateAction<UserDataInterface | undefined> >;
     profilePicChanged: boolean;
     setProfilePicChanged: React.Dispatch<React.SetStateAction<boolean> >;
+    coverPicChanged: boolean;
+    setCoverPicChanged: React.Dispatch<React.SetStateAction<boolean> >;
     notifications: NotificationPropreties[];
     setnotifications: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >;
     newNotification: NotificationPropreties[];
@@ -75,6 +77,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     // const [id, setUserId] = useState<number | undefined>(undefined);
     const [userData, setUserData] = useState<UserDataInterface | undefined>(undefined);
     const [profilePicChanged, setProfilePicChanged] = useState<boolean>(false);
+    const [coverPicChanged, setCoverPicChanged] = useState<boolean>(false);
     const [friendRequestSent, setFriendRequestSent] = useState<FriendRequestInterface[]>([])
     const [friendRequestReceived, setFriendRequestReceived] = useState<FriendRequestInterface[]>([])
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
@@ -108,6 +111,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 state,
                 last_visit,
                 profile_pic,
+                CoverProfile,
                 two_factor_auth,
 
             } = resp.data
@@ -119,8 +123,10 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 state,
                 last_visit,
                 profile_pic,
+                CoverProfile,
                 two_factor_auth
             })
+            console.log('hana->>',resp.data)
             setProfilePicChanged(false)
             
         }
@@ -271,9 +277,9 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             fetchReceivedFriendRequest()
             fetchSentFriendRequest()
         }
-    }, [AuthContextConsummer?.loggedIn, profilePicChanged])
+    }, [AuthContextConsummer?.loggedIn, profilePicChanged, coverPicChanged])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {userData ? children : <LoadingIndecator/>}
         </UserContext.Provider>

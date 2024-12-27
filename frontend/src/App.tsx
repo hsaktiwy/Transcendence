@@ -13,6 +13,8 @@ import UserProvider from './components/UserContext'
 import Dashboard from './components/Dashboard'
 import LoadingIndecator from './components/Loading'
 import { SkeletonTheme } from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import ProfileTest from './components/ProfileTest'
 import TopBar from './components//website/mobileVersion/topBar'
 import Game from './game/Game'
@@ -32,6 +34,8 @@ const App = () =>
   //       </Layout>}
 
   return (
+  
+  <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
     <BrowserRouter>
       <AuthProvider>
         <Auth>
@@ -52,6 +56,7 @@ const App = () =>
         </Auth>
       </AuthProvider>
     </BrowserRouter>
+    </SkeletonTheme>
     // <ThreeScene/>
   )
 }
