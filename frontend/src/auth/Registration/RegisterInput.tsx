@@ -4,18 +4,19 @@ import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
 
 interface FormInputPropInterface {
-    name: keyof inputsDataInterface,
+    name?: keyof inputsDataInterface ,
     type: string,
     errorMessage:string,
     label: string,
     pattern: string,
     required: boolean,
-    setInputsData: React.Dispatch<React.SetStateAction<inputsDataInterface> >,
+    setInputsData?: React.Dispatch<React.SetStateAction<inputsDataInterface> >,
+    setInput?: React.Dispatch<React.SetStateAction<string> > ,
     value: string,
-    inputsData: inputsDataInterface
+    inputsData?: inputsDataInterface
 }
 const FormInput = (prop: FormInputPropInterface)=>{
-    const {value,name, type,label, inputsData ,pattern ,setInputsData,errorMessage, ...inputProps} = prop
+    const {value,name, type,label, inputsData ,pattern ,setInputsData, setInput,errorMessage, ...inputProps} = prop
     const [hide, setHide] = useState<boolean>(true)
     const [passFocus, setPassFocus] = useState<boolean>(false)
     const [hide2, setHide2] = useState<boolean>(true)
@@ -36,9 +37,9 @@ const FormInput = (prop: FormInputPropInterface)=>{
                 setError(false)
         }
         else {
-            if(e.target.value !== inputsData['password'] && error === false)
+            if(inputsData && e.target.value !== inputsData['password'] && error === false)
                 setError(true)
-            else if (e.target.value === inputsData['password'] && error === true)
+            else if (inputsData && e.target.value === inputsData['password'] && error === true)
                 setError(false)
         }
     };
@@ -50,7 +51,11 @@ const FormInput = (prop: FormInputPropInterface)=>{
 
       };
     const onChange =(e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputsData({ ...inputsData, [name]: e.target.value.trim() });
+        if (inputsData && setInputsData && name)
+            setInputsData({ ...inputsData, [name]: e.target.value.trim() });
+        else if (setInput)
+            setInput(e.target.value)
+
     }
     return(
         <div className={`mb-6 relative`}>

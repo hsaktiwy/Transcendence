@@ -36,15 +36,13 @@ const Login = () => {
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
-    const [needLogin, setNeedLogin] = useState<boolean>(false)
+    const [needLogin, setNeedLogin] = useState<boolean |  undefined>(undefined)
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         window.location.href =
             "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=https%3A%2F%2Flocalhost%3A4444%2Flogin%2F&response_type=code";
     };
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const tryToLogin = async () =>{
         const data: LoginDataInterface = {
             email: email,
             password: password
@@ -63,7 +61,7 @@ const Login = () => {
         else {
             if (resp.message === 'username needed')
                 setNeedLogin(true)
-            if (resp.message === 'tfa needed'){
+            else if (resp.message === 'tfa needed'){
                 const tfaResp = resp as LoginTFAResponse
                 setTfaUser(tfaResp.user)
             }
@@ -74,6 +72,10 @@ const Login = () => {
             }
             // Navigate('/')
         }
+    }
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        await tryToLogin()
     }
 
     useEffect(() => {
@@ -108,6 +110,11 @@ const Login = () => {
             }
         }
     }
+    useEffect(()=>{
+        console.log("need loin == ",needLogin)
+        if (needLogin! === false)
+            tryToLogin()
+    }, [needLogin])
     useEffect(() => {
       
             const searchParams = new URLSearchParams(window.location.search);
@@ -176,7 +183,7 @@ const Login = () => {
                 <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
                     {/* <ThreeScene/> */}
                     
-                        {tfaUser === undefined ? 
+                        {tfaUser === undefined  && needLogin === undefined ? 
                             <motion.form 
                                 variants={FormFade()}
                                 initial="formInitial"
@@ -241,7 +248,7 @@ const Login = () => {
                                         <p>Forget Password ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Click here</span></p>
                                     </div>
                                 </div>
-                            </motion.form> : needLogin ? <Username/> : <TfaVerification user={tfaUser}/>}
+                            </motion.form> : needLogin === true  || needLogin === false ? <Username email={email} setNeedLogin={setNeedLogin} /> : <TfaVerification user={tfaUser}/>}
                     
 
                 </div> 

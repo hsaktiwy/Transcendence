@@ -20,6 +20,15 @@ import { userNameError, emailError, passError } from './signUpError';
 import FormInput from './Registration/RegisterInput';
 import { ToastContainer, toast } from 'react-toastify';
 
+export interface inputInterface{
+    name?: keyof inputsDataInterface,
+    type: string,
+    errorMessage:string,
+    label: string,
+    pattern: string,
+    required: boolean,
+    inputsData?: inputsDataInterface
+}
 export interface inputsDataInterface{
     firstName: string,
     lastName: string,
@@ -39,15 +48,6 @@ const RegisterForm = () =>{
         password: "",
         password2: ""
     })
-    interface inputInterface{
-        name: keyof inputsDataInterface,
-        type: string,
-        errorMessage:string,
-        label: string,
-        pattern: string,
-        required: boolean,
-        inputsData: inputsDataInterface
-    }
     const inputs: inputInterface[] = [
         {
           name: "firstName",
@@ -95,33 +95,12 @@ const RegisterForm = () =>{
           inputsData: inputsData
         },
       ];
-    
-    const [username, setUsername] = useState<string>('');
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLasttName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [password2, setPassword2] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [registred, setRegistred] = useState<boolean>(false);
-
-    const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
-        window.location.href =
-            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=https%3A%2F%2Flocalhost%2Flogin%2F&response_type=code";
-    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log("blalvavlav")
-        const signUpData : signUpDataInterface = {
-            firstName: firstName,
-            lastName: lastName,
-            login: username,
-            email: email,
-            password: password,
-            password2: password2
-        }
         try{
             const request = {
                 url: '/api/user/register/',
@@ -154,10 +133,7 @@ const RegisterForm = () =>{
 
     }
 
-    const [hide, setHide] = useState<boolean>(true)
-    const [passFocus, setPassFocus] = useState<boolean>(false)
-    const [hide2, setHide2] = useState<boolean>(true)
-    const [passFocus2, setPassFocus2] = useState<boolean>(false)
+
     const FormFade = () => {
         return (
             {
@@ -185,28 +161,9 @@ const RegisterForm = () =>{
 
     useEffect(() => {
         if (registred)
-            Navigate('/setusername')
+            Navigate('/login')
     }, [registred])
-    useEffect(()=>{
-        console.log(inputsData)
-    },[inputsData])
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-        setInputsData({ ...inputsData, [e.target.name]: e.target.value });
-        console.log(inputsData)
-      };
-    const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        if (e.target.name === 'password')
-            setPassFocus(true)
-        else if (e.target.name === 'password2')
-            setPassFocus2(true)
-      };
-    const onBlur = (e:React.FocusEvent<HTMLInputElement>) => {
-        if (e.target.name === 'password')
-            setPassFocus(false)
-        else if (e.target.name === 'password2')
-            setPassFocus2(false)
-      };
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
                 <div className={`flex flex-col items-center 2xl:items-end justify-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
@@ -256,7 +213,7 @@ const RegisterForm = () =>{
                         {
                                 inputs.map((input, index)=> {
                                     return(
-                                        <FormInput key={index + 1} {...input} value={inputsData[input.name]} setInputsData={setInputsData}/>
+                                        <FormInput key={index + 1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData}/>
                                     )
                                 })
                         }
@@ -331,21 +288,17 @@ const RegisterForm = () =>{
                         </div> */}
 
                         <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
-
-                            <button type="submit"  className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  hover:scale-105  duration-150" onMouseOver={(e: React.MouseEvent<HTMLButtonElement>)=>{
-                                const button = e.target as HTMLButtonElement
-                                console.log(e.target as HTMLButtonElement)
-                            }} >
+                            <button  type="submit"  className="w-full   border-none bg-white/95 text-black text-lg font-bold py-2 px-4 rounded-2xl  hover:bg-white transition-all duration-150">
                                 Sign up
                             </button>
-                            <div className='h-[30px] flex items-center justify-evenly w-full'>
+                            {/* <div className='h-[30px] flex items-center justify-evenly w-full'>
                                 <div className=' w-[45%] bg-white h-[1px]'></div>
                                 <p className='w-[5%] text-white'> or </p>
                                 <div className=' w-[45%] bg-white h-[1px]'></div>
                             </div>
                             <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:scale-105 duration-150" onClick={handleSubmitWith42}>
                             {!loading ? <p >Sign up with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
-                            </button>
+                            </button> */}
                             <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
                                 <p>You have an account ? <Link to='/login' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign in</Link></p>
                             </div>

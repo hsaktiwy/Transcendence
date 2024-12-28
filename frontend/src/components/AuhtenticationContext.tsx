@@ -59,7 +59,11 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                 data: data
             }
             const resp = await mailman(request)
-            if (resp.data.user)
+            console.log(resp.data)
+            if (resp.data.message === 'username needed'){
+                return resp.data
+            }
+            else if (resp.data.user)
                 return resp.data as LoginTFAResponse
             if (!loggedIn)
                 setLoggedIn(true)
