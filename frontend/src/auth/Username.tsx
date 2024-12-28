@@ -17,51 +17,48 @@ import background from 'astro-bg.png'
 import TfaVerification from './TfaVerification';
 import ThreeScene from '@/components/ThreeScene';
 import { FaArrowRight } from "react-icons/fa6";
+import { inputInterface } from './RegisterForm';
+import FormInput from './Registration/RegisterInput';
 interface SetUsernameProps{
     email: string,
-    password: string,
-    setNeedLogin: React.Dispatch<React.SetStateAction<boolean> >
+    setNeedLogin: React.Dispatch<React.SetStateAction<boolean | undefined> >
 }
-const Username = () => {
+const Username = (prop: SetUsernameProps) => {
     const AuthContextConsummer = useContext(AuthContext)
     if (!AuthContextConsummer)
         throw new Error("invalid scope");
     const Navigate = useNavigate();
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(false)
-    const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
-
+    const [username, setUsername] = useState<string>('');
+    const {email, setNeedLogin} = prop
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data: LoginDataInterface = {
-            email: email,
-            password: password
-        }
-        console.log(data)
-        const resp = await AuthContextConsummer.LoginAction(data)
-        if ('errorType' in resp) {
-            interface tmp {
-                non_field_errors: string[]
+        try{
+            const data = {
+                email: email,
+                login: username
             }
-            const tmpError = resp.errorType as tmp
-            if(tmpError['non_field_errors'] !== undefined)
-                toast.error(tmpError['non_field_errors'][0])
-            console.log(resp.errorType)
-        }
-        else {
-            
-            if (resp.message === 'tfa needed'){
-                const tfaResp = resp as LoginTFAResponse
-                setTfaUser(tfaResp.user)
+            const req = {
+                url: '/api/setusername/',
+                method: 'PATCH',
+                withCredentials: true,
+                data: data
             }
-            else{
-                toast.success(resp.message)
-                console.log(resp)
-                AuthContextConsummer.setLoggedIn(true)
-            }
-            // Navigate('/')
+            const resp = await mailman(req)
+            console.log(resp)
+            if(resp.status === 200)
+                setNeedLogin(false)
         }
+        catch(error){
+            toast.error("Something went wrong! Try again")
+        }
+
+    }
+    const usernameInput : inputInterface = {
+        type: "text",
+        errorMessage: "Username must be 3-20 characters and can only contain letters, numbers, and underscores.",
+        label: "Username",
+        pattern: "^.{3,50}$",
+        required: true,
     }
 
     useEffect(() => {
@@ -108,18 +105,7 @@ const Username = () => {
                                     <h1 >One more step!</h1>
                                     <p className='text-lg font-normal '>Please Enter a username</p>
                                 </div>
-                                <div className="mb-4">
-                                    <label htmlFor="Username" className="block text-white font-bold mb-2">Username:</label>
-                                    <input
-                                        autoComplete='off'
-                                        type="text"
-                                        id="username"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                        className="bg-transparent w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
-                                    />
-                                </div>
+                                    <FormInput {...usernameInput} value={username} setInput={setUsername}/>
 
                                 <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
 

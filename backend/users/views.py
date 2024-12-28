@@ -201,6 +201,7 @@ class LoginView(APIView):
             user = serializer.validated_data['user']
             resp = ''
             if user.login is None or user.login == "":
+                print(user.login)
                 resp = generate_set_username_response(user)
             elif user.two_factor_auth:
                 resp = generate_TFA_verification_response(user)
@@ -405,7 +406,7 @@ def SetUsername(request):
             print(request.data)
             email = request.data.get('email')
             user = MyUser.objects.get(email=email)
-            if user.login != "":
+            if user.login is not None and user.login != "":
                 return Response({"message" : "login already setted"}, status=status.HTTP_200_OK)
             del request.data['email']
             print(request.data)
