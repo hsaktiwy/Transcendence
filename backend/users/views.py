@@ -33,7 +33,7 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import MyUser
 from .serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer, PublicUserSerializer, SearchUserSerializer
-from .utils import generate_access_token, generate_refresh_token
+from .utils import generate_access_token, generate_refresh_token, isLoginAlreadyUSed
 from rest_framework.permissions import AllowAny , IsAuthenticated
 import datetime
 from django.conf import settings
@@ -80,7 +80,7 @@ def LoginWithOAuth42(request):
         return Response({'error': 'Failed to retrieve access token'}, status=400)
     
     access_token = response.json().get('access_token')
-
+    print(access_token)
     headers = {
         'Authorization': f'Bearer {access_token}',
     }
@@ -102,23 +102,31 @@ def LoginWithOAuth42(request):
     try:
         user = MyUser.objects.get(email=email)
         resp = ''
-        if user.two_factor_auth:
+        if user.login is None or user.login == "":
+            resp = generate_set_username_response(user, True)
+        elif user.two_factor_auth:
             resp = generate_TFA_verification_response(user)
         else:
             resp = generate_tokens_response(user, request)
         return resp
     except MyUser.DoesNotExist:
-        user = MyUser.objects.create_user(
-            login=login_42,
-            email=email,
-            firstName=first_name,
-            lastName=last_name,
-            oauth=True
-        )
+        user_data = {
+            'email': email,
+            'firstName': first_name,
+            'lastName': last_name,
+            'oauth': True
+        }
+        loginUsed = isLoginAlreadyUSed(login_42)
+        if loginUsed == False:
+            user_data['login'] = login_42
+        user = MyUser.objects.create_user(**user_data)
         if profile_pic:
             user.profile_pic.save(f"{login_42}_profile_pic.jpg",profile_pic)
-
-        resp = generate_tokens_response(user, request)
+        resp = ''
+        if loginUsed:
+            resp = generate_set_username_response(user, True)
+        else:
+            resp = generate_tokens_response(user, request)
         return resp
 
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -201,8 +209,7 @@ class LoginView(APIView):
             user = serializer.validated_data['user']
             resp = ''
             if user.login is None or user.login == "":
-                print(user.login)
-                resp = generate_set_username_response(user)
+                resp = generate_set_username_response(user, False)
             elif user.two_factor_auth:
                 resp = generate_TFA_verification_response(user)
             else:

@@ -21,7 +21,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     def create_add_friend_notification(self, _receiver, _sender):
         try:
-            not_content = f'{_sender} sends you a friend request'
+            not_content = f'{_sender.login} sends you a friend request'
             receiver = MyUser.objects.filter(login=_receiver).first()
             print(not_content)
             existing_rev_request = FriendRequest.objects.filter(sender=receiver, receiver=_sender).first()
@@ -35,7 +35,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return 0, None, None, None
     def accept_friend_notification(self, _receiver, _sender):
         try:
-            not_content = f'{_sender} accepted your friend request'
+            not_content = f'{_sender.login} accepted your friend request'
             receiver = MyUser.objects.filter(login=_receiver).first()
             acceptedFriendReq = FriendRequest.objects.filter(sender=receiver, receiver=_sender, status="accepted").first()
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='friendship', friend_request_id=acceptedFriendReq.id)
@@ -49,7 +49,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return 0, None, None, None
     def create_message_notification(self, receiver, sender, message):
         try:
-            not_content = f'{sender} : {message}'
+            not_content = f'{sender.login} : {message}'
             user = MyUser.objects.filter(login=receiver).first()
             notification = Notification.objects.create(id_user_fk=user, content=not_content, type='message')
             return notification, user.id
@@ -181,10 +181,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print(f"User {user} is authenticated, proceeding to get channels.")
             try:
                 self.user_id = user.id
-                self.notification_group_name = f'notification_user_{user}'
+                self.notification_group_name = f'notification_user_{user.login}'
                 print(self.notification_group_name)
                 await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
                 channels = await sync_to_async(self.get_user_channels)(user.id)
+                # print(channels)
                 self.rooms = set()
                 await self.add_groups(channels, user)
                 await self.accept()

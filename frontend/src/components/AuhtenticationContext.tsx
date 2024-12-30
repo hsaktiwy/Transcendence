@@ -22,11 +22,13 @@ export interface signUpDataInterface{
 }
 
 export interface LoginResp{
-    message: string
+    message: string,
+    email?: string,
+    password?: string
 }
 export interface LoginTFAResponse{
     message: string,
-    user: string
+    user: string,
 }
 
 export interface LoginError{

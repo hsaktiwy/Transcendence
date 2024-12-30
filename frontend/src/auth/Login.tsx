@@ -18,7 +18,6 @@ import TfaVerification from './TfaVerification';
 import ThreeScene from '@/components/ThreeScene';
 import Username from './Username';
 
-
 export const Loading__ = () => {
     return (
         <div className="flex justify-center items-center h-full w-full ">
@@ -33,6 +32,8 @@ const Login = () => {
         throw new Error("invalid scope");
     const Navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
+    const [oauth, setOauth] = useState<boolean>(false);
+    const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
@@ -85,17 +86,39 @@ const Login = () => {
 
     const loginwith42 = async (code: string | null) => {
         if (code) {
-            setLoading(true)
+           interface DataInterface{
+            code: string,
+            email?: string
+           }
+            const data: DataInterface = {
+                code: code
+            }
+            if (needLogin === undefined){
+                setOauth(true)
+                setLoading(true)
+            }
+            else
+                data.email = email
+            console.log("data req 42 ====>" , data)
             try {
                 const req = {
                     url: '/api/LoginWithOAuth42/',
                     method: 'POST',
-                    data: { code }
+                    data: data
                     
                 }
                 const resp = await mailman(req)
                 if (resp.status === 200) {
-                    if (resp.data.user)
+                    const respData: LoginResp = resp.data
+                    console.log("respData     ==>    ",respData)
+                    console.log("code     ==>    ",code)
+                    if (respData.message === 'username needed'){
+                        if (respData.email)
+                            setEmail(respData.email)
+                        setNeedLogin(true)
+        
+                    }
+                    else if (resp.data.user)
                         setTfaUser(resp.data.user)
                     else
                         location.reload();
@@ -113,12 +136,17 @@ const Login = () => {
     useEffect(()=>{
         console.log("need loin == ",needLogin)
         if (needLogin! === false)
-            tryToLogin()
+            if (oauth)
+                loginwith42(code)
+            else
+                tryToLogin()
     }, [needLogin])
     useEffect(() => {
       
             const searchParams = new URLSearchParams(window.location.search);
-            const code = searchParams.get('code');
+            const tmpCode = searchParams.get('code');
+            if (tmpCode)
+                setCode(tmpCode)
             console.log(`1234   ${code}`)
     
             // if (code) {
