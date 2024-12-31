@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"
 
 import './style-component.css'
 import SideBar  from'./website/components-Profile/side-bar.tsx'
@@ -52,8 +53,8 @@ const ProfileTest  = () =>{
             state,
             last_visit,
             profile_pic,
+            CoverProfile
         } = resp.data
-        console.log("sss ====???? ",resp.data)
 
         setProfileData({
             login,
@@ -63,6 +64,7 @@ const ProfileTest  = () =>{
             state,
             last_visit,
             profile_pic,
+            CoverProfile,
         })
         
     }
@@ -79,7 +81,7 @@ const ProfileTest  = () =>{
         setProfileData(userContextConsumer?.userData)
     }
    },[username])
-
+    console.log(profileData);
     return(
 
     <>
@@ -95,20 +97,28 @@ const ProfileTest  = () =>{
       <Skeleton className=" w-[100px]" count={2} />
     </p> */}
                                         <div className=" flex  mt-5 flex-col justify-center ">
-                                            <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{profileData?.firstName} </h1>
+                                            <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
                                             <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
                                         </div>
-                                            {userContextConsumer?.userData?.login != username && <ConnectButton/>}
+                                        {userContextConsumer?.userData?.login === username ? (
+                                            <Link to="/settings"> 
+                                                <button className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center">
+                                                Edit profile</button>
+                                            </Link> 
+                                            ) : (
+                                                <ConnectButton /> 
+                                            )}
                             </div>
                    </div>
                    <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 2xl:col-span-10">
                         <div className="flex  items-center justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                             <div className="w-full  h-full  grid grid-rows-2 ">
-                                    <div className="relative bg-[url('https://cdn.intra.42.fr/coalition/cover/73/BiosBG.jpg')] bg-cover bg-centershadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 ">
+                                    <div className="relative bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 "
+                                    style={{ backgroundImage: `url(${axiosPath}${profileData?.CoverProfile})`,}}>
                                     <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                         <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
-                                            <div className="   h-10 min-w-40 xxl:h-14 xxl:min-w-48 border rounded-2xl sm:flex justify-center items-center">
-                                                <div className=" text-xl text-white font-semibold xxl:text-xl ">{profileData?.login}</div>
+                                            <div className="  h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
+                                                <div className=" text-xl text-white font-semibold xxl:text-lg ">{profileData?.login}</div>
                                             </div>
                                         </div>
                                     <div className=" flex flex-col justify-center  items-center mb-7">
@@ -125,7 +135,7 @@ const ProfileTest  = () =>{
                 </div>
                 <div className=" md:hidden xxl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6">
                     <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] h-full p-4 ">
-                        <MatchHistory/>
+                        <MatchHistory profileData={profileData} />
                     </div>
                 </div>
                  <div className=" p-4 rounded-2xl xxl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3  xxl:row-span-6 xl:p-3 xxl:p-10 flex justify-center items-center  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869]">
@@ -146,7 +156,7 @@ const ProfileTest  = () =>{
                 </div>
                 <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
                 <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
-                                <MatchHistory/>
+                                <MatchHistory profileData={profileData}/>
                     </div>
                 </div>
                 <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">

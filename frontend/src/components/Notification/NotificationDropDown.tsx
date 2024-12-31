@@ -147,25 +147,26 @@ const NotificationDropDown = (info: prop) =>{
       
         data-popover="notifications-menu"
         data-popover-placement="bottom"
-        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124]   rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
+        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] transition-all duration-10s animate-fade-down  rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
         >
         {
             userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 
             (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item, index) =>{
-                    linkProfile = getFirstWord(item.content);
-                   
-                        // console.log('hiii---->', item.sender.login ?? 'No value');
+                        
+                        linkProfile = '/';
+                        if(item.type === 'friendship')
+                            linkProfile = `/profile/${item.sender.login}`;
                         return (
                             
                             <>
-                                <Link to={`/profile/${linkProfile}`}
+                                <Link to={`${linkProfile}`}
                                 className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
                                 >
                                     
                                     <img
                                     alt="notif-sender-pic"
                                     src={item.type==='friendship' ? axiosPath + item.sender.profile_pic : LOGO}
-                                    className="relative inline-block h-10 w-10 rounded-full object-cover object-center"
+                                    className="relative inline-block h-10 w-10 aspect-square rounded-full object-cover object-center"
                                     />
                                     <div className="flex flex-col gap-1 ml-4">
                                     <p className="text-slate-100 font-medium">

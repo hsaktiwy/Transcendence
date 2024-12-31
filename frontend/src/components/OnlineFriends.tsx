@@ -54,11 +54,11 @@ function OnlineFriends() {
   return (
     <>
         <div className='onlineFriends-div  pt-5 h-full '>
-                    <div className='divs-online bg-gradient-to-tr from-[#2c353a] to-[#2B2F32] relative '>
+                    <div className='divs-online bg-gradient-to-br from-[#283137] to-[#242729] relative '>
                         {
                             !userContext?.friends.length && 
                                 <>
-                                <div className="absolute h-full w-full bg-gradient-to-tr from-[#2c353a] to-[#2B2F32]rounded-xl  flex flex-col justify-center items-center gap-5 py-7">
+                                <div className="absolute  h-full w-full bg-gradient-to-tr from-[#2c353a] to-[#2B2F32]rounded-xl  flex flex-col justify-center items-center gap-5 py-7">
                                     <div>
                                         <svg width="80" height="80" viewBox="0 0 24 24" fill="white" stroke=""  xmlns="http://www.w3.org/2000/svg">
                                             <path d="M14.25 7.75C14.25 8.99264 13.2426 10 12 10V11.5C14.0711 11.5 15.75 9.82107 15.75 7.75H14.25ZM12 10C10.7574 10 9.75 8.99264 9.75 7.75H8.25C8.25 9.82107 9.92893 11.5 12 11.5V10ZM9.75 7.75C9.75 6.50736 10.7574 5.5 12 5.5V4C9.92893 4 8.25 5.67893 8.25 7.75H9.75ZM12 5.5C13.2426 5.5 14.25 6.50736 14.25 7.75H15.75C15.75 5.67893 14.0711 4 12 4V5.5ZM9 14.5H15V13H9V14.5ZM15 19H9V20.5H15V19ZM9 19C7.75736 19 6.75 17.9926 6.75 16.75H5.25C5.25 18.8211 6.92893 20.5 9 20.5V19ZM17.25 16.75C17.25 17.9926 16.2426 19 15 19V20.5C17.0711 20.5 18.75 18.8211 18.75 16.75H17.25ZM15 14.5C16.2426 14.5 17.25 15.5074 17.25 16.75H18.75C18.75 14.6789 17.0711 13 15 13V14.5ZM9 13C6.92893 13 5.25 14.6789 5.25 16.75H6.75C6.75 15.5074 7.75736 14.5 9 14.5V13Z" fill="ffffff"/>
@@ -79,21 +79,21 @@ function OnlineFriends() {
                                 </div>
                                 </>
                         }
-                        <div className='bar-search-freinds  z-50'>
+                        <div className='bar-search-freinds z-50'>
                         <div className="relative h-9 w-full ">
                             <input
-                                className="search-bar-div-friends  h-8 w-4/5 px-3 py-5  rounded-lg "
+                                className="search-bar-div-friends  h-8 w-4/5 px-3 py-5   rounded-lg "
                                 placeholder="Search"
                                 value={searchTerm}
                                 onChange={handleSearch}
                             />
                             {/* Dropdown only appears if searchTerm exists */}
                             {searchTerm && filteredFriends.length > 0 && (
-                                <div className="absolute mt-2 w-full bg-white bg-gradient-to-tr py-2 px-2 gap-2 from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] flex flex-col items-center justify-center rounded-lg shadow-lg max-h-40 overflow-y-auto">
+                                <div className="mt-1  w-4/5 bg-gradient-to-br from-[#2a3236] to-[#1e2124]  p-2  rounded-lg shadow-lg max-h-40 overflow-y-auto">
                                     {filteredFriends.map((friend) => (
                                         <Link to={`/profile/${friend.login}`}
                                             key={friend.login}
-                                            className="flex items-center gap-3 px-4 py-2  w-full rounded-xl transition-all duration-200 ease-in-out rounded-xl hover:bg-[#1D1E22] cursor-pointer"
+                                            className="flex items-center gap-3 px-4 py-2   w-full rounded-xl transition-all duration-200 ease-in-out rounded-xl hover:bg-[#1D1E22] cursor-pointer"
                                         >
                                             <img
                                                 src={`${axiosPath}${friend.profile_pic}`}
@@ -119,17 +119,23 @@ function OnlineFriends() {
                                     <h3 className="font-semibold m-4 w-20 2xl:mx-7">Friends</h3>
                         }
 
-                        <div className='online-users  px-4'>
+                        <div className='online-users  px-8'>
                         {
                             userContext?.friends.map((friend, index)=>{
                                 return(
-                                <Link to={`/profile/${friend.login}`} key={index} className="each-user hover:rounded-2xl hover:shadow-md transition-all duration-200 ease-in-out rounded-xl hover:bg-[#1D1E22]">
-                                    <img className="w-14 h-14 aspect-square rounded-full object-cover" src={`${axiosPath}${friend.profile_pic}`} />
-                                    <div className=" mx-3  flex flex-col items-start justify-center  w-72 ">
-                                        <h1 className="font-medium text-base">{`${friend.firstName} ${friend.lastName} `}</h1>
-                                        <h1 className="font-normal opacity-80 text-xs text-left">{friend.login}</h1>
+                                    <Link
+                                    to={`/profile/${friend.login}`}
+                                    key={index}
+                                    className="each-user relative px-10  my-2  rounded-xl hover:bg-[#1D1E22] overflow-hidden"
+                                    style={{ backgroundImage: `url(${axiosPath}${friend.CoverProfile})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                                  >
+                                    <div className="absolute inset-0 bg-black/70  rounded-xl pointer-events-none"></div>
+                                    <img className="w-14 h-14 z-10 aspect-square rounded-full object-cover" src={`${axiosPath}${friend.profile_pic}`} />
+                                    <div className=" mx-3 z-10 flex flex-col items-start justify-center  w-72 ">
+                                        <h1 className="font-medium  z-10 text-base">{`${friend.firstName} ${friend.lastName} `}</h1>
+                                        <h1 className="font-normal z-10 opacity-80 text-xs text-left">{`@${friend.login}`}</h1>
                                     </div>
-                                    <div className='is-online '>
+                                    <div className='is-online z-10'>
                                         <div className='green-dot'></div>
                                     </div>
                                     
