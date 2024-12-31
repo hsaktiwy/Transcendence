@@ -296,8 +296,8 @@ function ConnectButton() {
               { isfriend === "UNFRIEND" &&
                 <>
                   <motion.button
-                    className="text-white  m-2 px-4 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl border border-white/30 text-sm xl:text-md min-w-[140px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
-                    whileTap={{ scale: 0.97 }}
+                      className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none"
+                      whileTap={{ scale: 0.97 }}
                     onClick={unfriend_request}
                   >
                     <div className='text-lg xl:text-xl '>
@@ -307,7 +307,7 @@ function ConnectButton() {
                     
                   </motion.button>
                   <motion.button
-                    className="text-white m-2 px-4 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] min-w-[140px] flex gap-3 items-center justify-center"
+                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none   "
                     whileTap={{ scale: 0.97 }}
 
                     onClick={handleAcceptClick}
@@ -322,7 +322,7 @@ function ConnectButton() {
               { isfriend === "CONNECT" && FriendRequest === "" &&
                 <>
                   <motion.button
-                    className="text-white m-1 px-9  py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px] flex gap-3 items-center justify-center cursor-pointer"
+                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none  "
                     whileTap={{ scale: 0.97 }}
                     onClick={send_friend_request}
                   >
@@ -336,7 +336,7 @@ function ConnectButton() {
               {status !== "UNFRIEND" && FriendRequest !== "" &&
                 <>
                   <motion.button
-                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] w-[180px]"
+                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none  "
                     whileTap={{ scale: 0.97 }}
 
                     onClick={()=>{(FriendRequest == "Accept" && accept_friend_request())}}
@@ -344,7 +344,7 @@ function ConnectButton() {
                     {FriendRequest}
                   </motion.button>
                   <motion.button
-                    className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] min-w-[120px]"
+                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none  "
                     whileTap={{ scale: 0.97 }}
 
                     onClick={()=>{Cancel_friend_request()}}
@@ -353,8 +353,8 @@ function ConnectButton() {
                   </motion.button>
                 </>
               }
-              <motion.button
-                className="text-white m-2 px-1 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9] min-w-[140px] flex gap-3 items-center justify-center"
+              {/* <motion.button
+                className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
                 onClick={BlockActionCheck}
               >
                     <div className='text-xl'>
@@ -362,7 +362,7 @@ function ConnectButton() {
                     </div>
                     <p>{btn_block}</p>
                     
-              </motion.button>
+              </motion.button> */}
 
           </motion.nav>
         }

@@ -81,7 +81,6 @@ function Dashboard(){
         ]
       });
 
-
       
     return(
         <div className="font-poppins pb-20 dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] lg:p-10 lg:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-11 2xl:grid-cols-12 2xl:grid-rows-12 gap-4 ">
@@ -91,12 +90,13 @@ function Dashboard(){
                   <div className=" text-white  w-full ">
                           <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]   shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
                                                           <div className="w-full h-full  grid grid-rows-2 ">
-                                                          <div className="relative bg-[url('https://cdn.intra.42.fr/coalition/cover/73/BiosBG.jpg')] bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2">
+                                                          <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
+                                                              style={{ backgroundImage: `url(${axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
                                                           <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                                                   <div className=" h-20  flex items-center 2xl:items-end ">
-                                                                          <div className="relative px-4 h-10 min-w-40 2xl:h-14 2xl:min-w-48  rounded-2xl flex justify-center items-center">
-                                                                              <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-2xl"></div>
-                                                                              <div className="relative text-xl text-white font-medium">
+                                                                          <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
+                                                                              {/* <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-xl"></div> */}
+                                                                              <div className="relative text-lg text-white font-medium">
                                                                                 {`Hello ${userContextConsumer.userData?.firstName}`} 
                                                                                 
                                                                               </div>
@@ -118,7 +118,7 @@ function Dashboard(){
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
                 <div className="  rounded-2xl bg-gradient-to-br from-[#283137] to-[#242729]  h-full p-7 ">
-                      <MatchHistory/>
+                      <MatchHistory profileData={userContextConsumer.userData} />
                   </div>
         </div>
         <div className=" row-span-4 hidden xl:block xl:col-span-4 xl:row-span-7 2xl:col-span-3 2xl:row-span-7">
@@ -141,7 +141,7 @@ function Dashboard(){
         </div>
         <div className="xl:pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
             <div className="  rounded-2xl bg-gradient-to-tr from-[#2c353a] to-[#2B2F32] h-full p-4 ">
-                        <MatchHistory/>
+                        <MatchHistory profileData={userContextConsumer.userData}/>
             </div>
         </div>
         <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">

@@ -5,6 +5,8 @@ import { GiSettingsKnobs } from "react-icons/gi";
 import { AuthContext } from "./AuhtenticationContext";
 import { toast } from "sonner";
 import { CgLogOut } from "react-icons/cg";
+import { FiUser } from "react-icons/fi";
+
 
 function SideBarV2(){
     const [showSideBar, setShowSideBar] = useState<boolean>(false)
@@ -22,7 +24,7 @@ function SideBarV2(){
                 </Link>
                 {/* <embed type="image/svg+xml" src="/assets/svg/Vector.svg" className="w-[30px] h-[30px]"></embed> */}
                 <Link to={`/profile/${userContextConsumer?.userData?.login}`} className=" cursor-pointer w-[30px] h-[30px] ">
-                    <img src="/assets/svg/Vector.svg" alt="Message Icon" className="w-full h-full" />
+                    <FiUser className="w-full h-full text-white/75"/>
                 </Link>
                 <Link to="/chat" className=" cursor-pointer w-[30px] h-[30px] ">
                     <img src="/assets/svg/Message.svg" alt="Message Icon" className="w-full h-full" />

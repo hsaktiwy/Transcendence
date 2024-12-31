@@ -3,11 +3,12 @@ import {ChatSectionContext, Conversation, Message} from "../utils/ChatContext"
 import { IoIosMore } from "react-icons/io";
 import { HiPlus } from "react-icons/hi2";
 
-
+import { IoPersonRemoveOutline } from "react-icons/io5";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { FiUser } from "react-icons/fi";
+
 
 import { MdOutlineBlock } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
@@ -315,24 +316,30 @@ function ChatSession(){
                                     <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.login}`}</p>
                                 </div>
                             </div>
-                            <div id='conv-header-menu ' className="drop relative col-span-1 flex justify-self-end items-center text-[24px]">
+                            <div id='conv-header-menu ' className="drop relative col-span-1  flex justify-self-end items-center text-[24px]">
                                 <span className="  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}>
                                 <IoMdInformationCircleOutline />
                                 </span>
-                                    <span    className="drop  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
+                                    <span    className="drop  m-4 cursor-pointer  hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
                                         setOpenDrop(!openDrop)
                                     }}>
                                      <IoIosMore/>
                                     </span>
-                                <div id='drop-menu' ref={DropMenuRef} className= {` ${!openDrop ? 'hidden': 'block' } rounded-b-lg absolute text-base right-[-10px]  top-[100%] bg-[#1D1E22]  transition-all duration-75 animate-fade-down `}>
+                                <div id='drop-menu' ref={DropMenuRef} className= {` ${!openDrop ? 'hidden': 'block' } rounded-lg  absolute text-base right-[-10px]  top-[100%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-20 animate-fade-down `}>
                                     <ul className="w-80 py-4">
-                                        <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer ">
-                                                <span className="inline-block text-xl"><FiUser/></span>
+                                        <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer " onClick={() =>{
+                                                chatContext.setOpenModal(true)
+                                                chatContext.setModalMessage("unfriend this user")
+                                                const action:Action = {type: ActionType.UNFRIEND, Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                                                userContext?.setAction(action)
+                                                }}>
+                                                <span className="inline-block text-xl"><IoPersonRemoveOutline /></span>
+                                                
                                             <p>
-                                                View Profile
+                                                Unfriend
                                             </p>
                                         </li>
                                         <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer "  onClick={
