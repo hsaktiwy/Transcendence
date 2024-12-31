@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { UserContext } from "./UserContext";
 import mailman from "@/utils/AxiosFetcher";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { ModalFade } from "./TfaVerifiedModal";
 import { motion } from "framer-motion";
 interface prop {

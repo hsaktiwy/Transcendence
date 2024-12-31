@@ -5,7 +5,7 @@ import { CgLogOut } from "react-icons/cg";
 import { UserContext } from "./UserContext";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./AuhtenticationContext";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 interface prop {
     display: boolean
 }

@@ -3,7 +3,7 @@ import mailman from "@/utils/AxiosFetcher";
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { error, log } from "console";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 export interface LoginDataInterface{
     email: string,
     password: string
@@ -22,11 +22,14 @@ export interface signUpDataInterface{
 }
 
 export interface LoginResp{
-    message: string
+    message: string,
+    email?: string,
+    uuid?: string
+
 }
 export interface LoginTFAResponse{
     message: string,
-    user: string
+    user: string,
 }
 
 export interface LoginError{
@@ -59,7 +62,11 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                 data: data
             }
             const resp = await mailman(request)
-            if (resp.data.user)
+            console.log(resp.data)
+            if (resp.data.message === 'username needed'){
+                return resp.data
+            }
+            else if (resp.data.user)
                 return resp.data as LoginTFAResponse
             if (!loggedIn)
                 setLoggedIn(true)

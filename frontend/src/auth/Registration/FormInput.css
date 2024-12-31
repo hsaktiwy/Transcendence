@@ -1,7 +1,0 @@
-input:invalid.focused{
-    border: 1px solid red;
-}
-
-input:invalid.focused ~ span{
-    display: block;
-}
