@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { userNameError, emailError, passError } from './signUpError';
 import FormInput from './Registration/RegisterInput';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export interface inputInterface{
     name?: keyof inputsDataInterface,

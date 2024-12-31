@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { UserContext } from "./UserContext";
 import { GiSettingsKnobs } from "react-icons/gi";
 import { AuthContext } from "./AuhtenticationContext";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { CgLogOut } from "react-icons/cg";
 
 function SideBarV2(){

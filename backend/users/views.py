@@ -56,78 +56,84 @@ import requests
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def LoginWithOAuth42(request):
-    code = request.data.get('code')
-    
-    client_id = 'u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041'
-    client_secret = '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'
-    redirect_uri = 'https://localhost:4444/login/'
-
-    token_url = 'https://api.intra.42.fr/oauth/token'
-    user_info_url = 'https://api.intra.42.fr/v2/me'
-
-    payload = {
-        'grant_type': 'authorization_code',
-        'client_id': client_id,
-        'client_secret': client_secret,
-        'code': code,
-        'redirect_uri': redirect_uri,
-    }
-    print(payload)
-    # Exchange the code for an access token
-    response = requests.post(token_url, data=payload)
-    print(response)
-    if response.status_code != 200:
-        return Response({'error': 'Failed to retrieve access token'}, status=400)
-    
-    access_token = response.json().get('access_token')
-    print(access_token)
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-    }
-    user_info_response = requests.get(user_info_url, headers=headers)
-    if user_info_response.status_code != 200:
-        return Response({'error': 'Failed to retrieve user info'}, status=400)
-
-    user_info = user_info_response.json()
-   
-    login_42 = user_info.get('login')
-    email = user_info.get('email')
-    first_name = user_info.get('first_name')
-    last_name = user_info.get('last_name')
-    responseImage = requests.get(user_info["image"]["versions"]["medium"])
-    if responseImage.status_code == 200:
-        profile_pic = File(BytesIO(responseImage.content), name=f"{login_42}_profile_pic.jpg")
+    uuid = request.data.get('uuid')
+    if uuid:
+        try:
+            user = MyUser.objects.get(unique_id=uuid)
+            return generate_tokens_response(user, request)
+        except MyUser.DoesNotExist:
+            return Response({"error": "user not found"} , status=404)
     else:
-        profile_pic = None
-    try:
-        user = MyUser.objects.get(email=email)
-        resp = ''
-        if user.login is None or user.login == "":
-            resp = generate_set_username_response(user, True)
-        elif user.two_factor_auth:
-            resp = generate_TFA_verification_response(user)
-        else:
-            resp = generate_tokens_response(user, request)
-        return resp
-    except MyUser.DoesNotExist:
-        user_data = {
-            'email': email,
-            'firstName': first_name,
-            'lastName': last_name,
-            'oauth': True
+        code = request.data.get('code')
+        client_id = 'u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041'
+        client_secret = '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'
+        redirect_uri = 'https://localhost:4444/login/'
+
+        token_url = 'https://api.intra.42.fr/oauth/token'
+        user_info_url = 'https://api.intra.42.fr/v2/me'
+
+        payload = {
+            'grant_type': 'authorization_code',
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'code': code,
+            'redirect_uri': redirect_uri,
         }
-        loginUsed = isLoginAlreadyUSed(login_42)
-        if loginUsed == False:
-            user_data['login'] = login_42
-        user = MyUser.objects.create_user(**user_data)
-        if profile_pic:
-            user.profile_pic.save(f"{login_42}_profile_pic.jpg",profile_pic)
-        resp = ''
-        if loginUsed:
-            resp = generate_set_username_response(user, True)
+        # Exchange the code for an access token
+        response = requests.post(token_url, data=payload)
+
+        if response.status_code != 200:
+            return Response({'error': 'Failed to retrieve access token'}, status=400)
+        
+        access_token = response.json().get('access_token')
+        print(access_token)
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+        }
+        user_info_response = requests.get(user_info_url, headers=headers)
+        if user_info_response.status_code != 200:
+            return Response({'error': 'Failed to retrieve user info'}, status=400)
+
+        user_info = user_info_response.json()
+    
+        login_42 = user_info.get('login')
+        email = user_info.get('email')
+        first_name = user_info.get('first_name')
+        last_name = user_info.get('last_name')
+        responseImage = requests.get(user_info["image"]["versions"]["medium"])
+        if responseImage.status_code == 200:
+            profile_pic = File(BytesIO(responseImage.content), name=f"{login_42}_profile_pic.jpg")
         else:
-            resp = generate_tokens_response(user, request)
-        return resp
+            profile_pic = None
+        try:
+            user = MyUser.objects.get(email=email)
+            resp = ''
+            if user.login is None or user.login == "":
+                resp = generate_set_username_response(user, True)
+            elif user.two_factor_auth:
+                resp = generate_TFA_verification_response(user)
+            else:
+                resp = generate_tokens_response(user, request)
+            return resp
+        except MyUser.DoesNotExist:
+            user_data = {
+                'email': email,
+                'firstName': first_name,
+                'lastName': last_name,
+                'oauth': True
+            }
+            loginUsed = isLoginAlreadyUSed(login_42)
+            if loginUsed == False:
+                user_data['login'] = login_42
+            user = MyUser.objects.create_user(**user_data)
+            if profile_pic:
+                user.profile_pic.save(f"{login_42}_profile_pic.jpg",profile_pic)
+            resp = ''
+            if loginUsed:
+                resp = generate_set_username_response(user, True)
+            else:
+                resp = generate_tokens_response(user, request)
+            return resp
 
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
@@ -213,6 +219,7 @@ class LoginView(APIView):
             elif user.two_factor_auth:
                 resp = generate_TFA_verification_response(user)
             else:
+                print(user.unique_id)
                 resp = generate_tokens_response(user, request)
             return resp
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)

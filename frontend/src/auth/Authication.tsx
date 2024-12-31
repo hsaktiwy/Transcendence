@@ -25,7 +25,7 @@ function Auth(children:childrenInterface)
                     }}/>
                     <ToastContainer
                         position="top-center"
-                        autoClose={5000}
+                        autoClose={2000}
                         hideProgressBar={false}
                         newestOnTop={false}
                         closeOnClick={false}
