@@ -4,6 +4,7 @@ from .validators import Validator_birthDay
 from django.core.exceptions import ValidationError
 from PIL import Image
 import pyotp
+import uuid
 
 def user_pic_location(instance, filename):
     return 'user{0}/{1}'.format(instance.id,filename)
@@ -42,6 +43,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         (OFFLINE, 'Offline'),
     ]
 
+    unique_id = models.UUIDField(primary_key=False,default=uuid.uuid4, editable=False, unique=True)
     login = models.CharField(max_length=50, unique=True, blank=True, null=True)
     firstName = models.CharField(max_length=50)
     lastName = models.CharField(max_length=50)

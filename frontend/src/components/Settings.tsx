@@ -7,7 +7,7 @@ import mailman from "../utils/AxiosFetcher";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import { FiEdit2 } from "react-icons/fi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
 import { UserDataInterface } from "../utils/UserDataInterface";
 function Settings() {

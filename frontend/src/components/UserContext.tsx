@@ -5,7 +5,7 @@ import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { Action, ActionType, MiniNotification} from "@/utils/interfaces";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";

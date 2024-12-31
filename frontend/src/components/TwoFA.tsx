@@ -3,7 +3,7 @@ import { BsPhoneFlip } from "react-icons/bs";
 import mailman from "@/utils/AxiosFetcher";
 import { QrCode } from "lucide-react";
 import { AxiosRequestConfig } from 'axios';
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 import TfaVerifiedModal from "./TfaVerifiedModal";
 import { UserContext } from "./UserContext";
 import DisableTFAModal from "./DisableTFAModal";

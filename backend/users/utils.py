@@ -73,6 +73,7 @@ def generate_set_username_response(user: MyUser, oauth):
         'message': 'username needed',
     }
     if oauth == True:
+        respDic['uuid'] = user.unique_id
         respDic['email'] = user.email
     resp = Response(respDic, status=status.HTTP_200_OK)
     return resp

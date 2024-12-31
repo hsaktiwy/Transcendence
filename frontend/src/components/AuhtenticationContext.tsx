@@ -3,7 +3,7 @@ import mailman from "@/utils/AxiosFetcher";
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { error, log } from "console";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 export interface LoginDataInterface{
     email: string,
     password: string
@@ -24,7 +24,8 @@ export interface signUpDataInterface{
 export interface LoginResp{
     message: string,
     email?: string,
-    password?: string
+    uuid?: string
+
 }
 export interface LoginTFAResponse{
     message: string,

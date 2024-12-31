@@ -5,7 +5,7 @@ import { cookies } from './Cookie';
 import { useNavigate, Link } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 import { UserContext } from '../components/UserContext';
 import { AuthContext, LoginDataInterface, LoginError, LoginResp, LoginTFAResponse } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
@@ -32,6 +32,7 @@ const Login = () => {
         throw new Error("invalid scope");
     const Navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
+    const [uuid, setUuid] = useState<string>('');
     const [oauth, setOauth] = useState<boolean>(false);
     const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -87,36 +88,32 @@ const Login = () => {
     const loginwith42 = async (code: string | null) => {
         if (code) {
            interface DataInterface{
-            code: string,
-            email?: string
+            code?: string,
+            uuid?: string,
            }
-            const data: DataInterface = {
-                code: code
-            }
+            const data: DataInterface = {}
             if (needLogin === undefined){
+                data.code = code
                 setOauth(true)
                 setLoading(true)
             }
             else
-                data.email = email
-            console.log("data req 42 ====>" , data)
+                data.uuid = uuid
             try {
                 const req = {
                     url: '/api/LoginWithOAuth42/',
                     method: 'POST',
                     data: data
-                    
                 }
                 const resp = await mailman(req)
                 if (resp.status === 200) {
                     const respData: LoginResp = resp.data
-                    console.log("respData     ==>    ",respData)
-                    console.log("code     ==>    ",code)
                     if (respData.message === 'username needed'){
-                        if (respData.email)
+                        if (respData.uuid)
+                            setUuid(respData.uuid)
+                        if(respData.email)
                             setEmail(respData.email)
                         setNeedLogin(true)
-        
                     }
                     else if (resp.data.user)
                         setTfaUser(resp.data.user)
