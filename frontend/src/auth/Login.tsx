@@ -5,7 +5,7 @@ import { cookies } from './Cookie';
 import { useNavigate, Link } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 import { UserContext } from '../components/UserContext';
 import { AuthContext, LoginDataInterface, LoginError, LoginResp, LoginTFAResponse } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
@@ -16,7 +16,7 @@ import { motion } from 'framer-motion';
 import background from 'astro-bg.png'
 import TfaVerification from './TfaVerification';
 import ThreeScene from '@/components/ThreeScene';
-
+import Username from './Username';
 
 export const Loading__ = () => {
     return (
@@ -32,71 +32,19 @@ const Login = () => {
         throw new Error("invalid scope");
     const Navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
+    const [uuid, setUuid] = useState<string>('');
+    const [oauth, setOauth] = useState<boolean>(false);
+    const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
-    // // const userContextConsumer = useContext(UserContext)
-    // // if (!userContextConsumer)
-    // //     throw new Error("useUser must be used within a UserProvider");
-    // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault();
-    //     const url:string = BACKEND + LOGIN_PATH
-    //     const credential  :string = `username=${username}&password=${password}` 
-    //     let csrfToken:string = cookies.get('csrftoken');
-    //     console.log("ola : " + csrfToken)
-    //     // this code part will check if we have csrftoken in cookies else we demand new one from the backend 
-    //     if (!csrfToken || csrfToken.length == 0)
-    //     {
-    //         try {
-    //             const url = BACKEND + INIT_CSRFTOKEN_PATH;
-    //             const request = {
-    //                     url: url,
-    //                     method: 'GET',
-    //                     withCredentials: true
-    //             }
-    //             const response = await mailman(request)
-    //             const data = response.data;
-    //             csrfToken = data.csrfToken;
-    //             console.log('CSRF Token:', csrfToken);
-    //         } catch (error) {
-    //             console.error('Error fetching CSRF token:', error);
-    //         }
-    //     }
-    //     if (csrfToken.length > 0)
-    //     {
-    //         try{
-    //             console.log("csrft : " + csrfToken + " " + credential)
-    //             const request = {
-    //                 url: url,
-    //                 method: 'POST',
-    //                 headers:
-    //                 {
-    //                     "Content-Type": "application/x-www-form-urlencoded",
-    //                     'X-CSRFToken' : csrfToken,
-    //                 },
-    //                 data: credential,
-    //                 withCredentials: true,
-    //             }
-    //             const response = await mailman(request)
-    //             // userContextConsumer?.setUserId(response.data['user_id'])
-    //             console
-    //             localStorage.setItem("id", response.data['user_id'])
-    //             Navigate('/')
-    //         }
-    //         catch (err)
-    //         {   
-    //             console.error("Error : \n" + err)
-    //         }
-    //     }
-    // }
+    const [needLogin, setNeedLogin] = useState<boolean |  undefined>(undefined)
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         window.location.href =
             "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=https%3A%2F%2Flocalhost%3A4444%2Flogin%2F&response_type=code";
     };
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const tryToLogin = async () =>{
         const data: LoginDataInterface = {
             email: email,
             password: password
@@ -113,8 +61,9 @@ const Login = () => {
             console.log(resp.errorType)
         }
         else {
-            
-            if (resp.message === 'tfa needed'){
+            if (resp.message === 'username needed')
+                setNeedLogin(true)
+            else if (resp.message === 'tfa needed'){
                 const tfaResp = resp as LoginTFAResponse
                 setTfaUser(tfaResp.user)
             }
@@ -126,6 +75,10 @@ const Login = () => {
             // Navigate('/')
         }
     }
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        await tryToLogin()
+    }
 
     useEffect(() => {
         if (AuthContextConsummer.loggedIn === true)
@@ -134,17 +87,35 @@ const Login = () => {
 
     const loginwith42 = async (code: string | null) => {
         if (code) {
-            setLoading(true)
+           interface DataInterface{
+            code?: string,
+            uuid?: string,
+           }
+            const data: DataInterface = {}
+            if (needLogin === undefined){
+                data.code = code
+                setOauth(true)
+                setLoading(true)
+            }
+            else
+                data.uuid = uuid
             try {
                 const req = {
                     url: '/api/LoginWithOAuth42/',
                     method: 'POST',
-                    data: { code }
-                    
+                    data: data
                 }
                 const resp = await mailman(req)
                 if (resp.status === 200) {
-                    if (resp.data.user)
+                    const respData: LoginResp = resp.data
+                    if (respData.message === 'username needed'){
+                        if (respData.uuid)
+                            setUuid(respData.uuid)
+                        if(respData.email)
+                            setEmail(respData.email)
+                        setNeedLogin(true)
+                    }
+                    else if (resp.data.user)
                         setTfaUser(resp.data.user)
                     else
                         location.reload();
@@ -159,10 +130,20 @@ const Login = () => {
             }
         }
     }
+    useEffect(()=>{
+        console.log("need loin == ",needLogin)
+        if (needLogin! === false)
+            if (oauth)
+                loginwith42(code)
+            else
+                tryToLogin()
+    }, [needLogin])
     useEffect(() => {
       
             const searchParams = new URLSearchParams(window.location.search);
-            const code = searchParams.get('code');
+            const tmpCode = searchParams.get('code');
+            if (tmpCode)
+                setCode(tmpCode)
             console.log(`1234   ${code}`)
     
             // if (code) {
@@ -227,7 +208,7 @@ const Login = () => {
                 <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
                     {/* <ThreeScene/> */}
                     
-                        {tfaUser === undefined ? 
+                        {tfaUser === undefined  && needLogin === undefined ? 
                             <motion.form 
                                 variants={FormFade()}
                                 initial="formInitial"
@@ -292,7 +273,7 @@ const Login = () => {
                                         <p>Forget Password ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Click here</span></p>
                                     </div>
                                 </div>
-                            </motion.form> : <TfaVerification user={tfaUser}/>}
+                            </motion.form> : needLogin === true  || needLogin === false ? <Username email={email} setNeedLogin={setNeedLogin} /> : <TfaVerification user={tfaUser}/>}
                     
 
                 </div> 

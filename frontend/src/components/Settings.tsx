@@ -7,7 +7,7 @@ import mailman from "../utils/AxiosFetcher";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import { FiEdit2 } from "react-icons/fi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
 import { UserDataInterface } from "../utils/UserDataInterface";
 function Settings() {
@@ -17,18 +17,6 @@ function Settings() {
     // const [userData, setUserData] = useState<UserDataInterface | null>(null)
     const [activeSettingSection , setActiveSettingsSection] = useState<string>('general')
 
-    interface UserDataInterface {
-        login: string;
-        firstName: string;
-        CoverProfile: string;
-        lastName: string;
-        profile_pic: string;
-        email: string;
-        password: string;
-        birthDay: string;
-        toFA: boolean;
-        toFAPass: string;
-    }
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     const handleProfilChanged = async (e: ChangeEvent<HTMLInputElement>) =>{
@@ -57,16 +45,14 @@ function Settings() {
                 const response =  await mailman(req)
                 if (response.status === 200)
                 {
-                    const newProfilePictureUrl = response.data
-                    console.log(newProfilePictureUrl)
+                    const newUserData = response.data as UserDataInterface
                     if (e.target.id !== 'CoverProfile'){
                         toast.success('Profile picture changed succesfully')
-                        userContextConsumer.setProfilePicChanged(true)
                     }
                     else{
                         toast.success('Cover picture changed succesfully')
-                        userContextConsumer.setCoverPicChanged(true)
                     }
+                    userContextConsumer.setUserData(newUserData!)
 
                 }
             }

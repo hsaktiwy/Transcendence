@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, FormEvent } from "react";
 import { UserContext } from "./UserContext";
 import { FiEdit2 } from "react-icons/fi";
-import { Toaster, toast } from 'sonner'
+import { toast } from 'react-toastify'
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 

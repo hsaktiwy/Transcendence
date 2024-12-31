@@ -5,7 +5,7 @@ import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { Action, ActionType, MiniNotification} from "@/utils/interfaces";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
@@ -271,13 +271,14 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     },[AuthContextConsummer?.loggedIn, notificationReaded])
     useEffect(() =>{
+        console.log('hooo->', coverPicChanged, '   ', AuthContextConsummer?.loggedIn)
         if (AuthContextConsummer?.loggedIn){
             fetchUserData()
             fetchFriends()
             fetchReceivedFriendRequest()
             fetchSentFriendRequest()
         }
-    }, [AuthContextConsummer?.loggedIn, profilePicChanged, coverPicChanged])
+    }, [AuthContextConsummer?.loggedIn])
     return(
         <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}

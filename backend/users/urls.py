@@ -32,5 +32,6 @@ urlpatterns = [
     path('user/upload_pic/', views.UploadProfilePicture.as_view(), name="upload_profile"),
     path('user/CoverProfile/', views.UploadCoverProfile, name="cover_profile"),
     path('LoginWithOAuth42/', views.LoginWithOAuth42, name="LoginWithOAuth42"),
+    path('setusername/', views.SetUsername, name="set_username")
     # path('login/', views.LoginView.as_view())
 ]

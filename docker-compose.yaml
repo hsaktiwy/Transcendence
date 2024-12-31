@@ -5,7 +5,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - ./postgres_volume:/var/lib/postgresql/data
     restart: always
     ports:
       - "5432:5432"
