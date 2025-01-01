@@ -186,7 +186,7 @@ def AcceptFriendRequest(request, id):
 			channel = Channel.objects.create()
 			channel.users.add(friend_request.sender)
 			channel.users.add(friend_request.receiver)
-			message = Message.objects.create(sender=friend_request.sender, id_channel_fk=channel, content=random_quote())
+			# message = Message.objects.create(sender=friend_request.sender, id_channel_fk=channel, content=random_quote())
 		return Response({'message': 'Accept request sent'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)

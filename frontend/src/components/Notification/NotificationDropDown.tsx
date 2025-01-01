@@ -161,6 +161,7 @@ const NotificationDropDown = (info: prop) =>{
                             <>
                                 <Link to={`${linkProfile}`}
                                 className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
+                                key={index + 1}
                                 >
                                     
                                     <img

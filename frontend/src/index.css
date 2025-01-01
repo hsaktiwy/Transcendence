@@ -27,9 +27,9 @@
 
 
   body{
-    /* background-image: url('/astro-bg.png'); */
+    background-image: url('https://cdnb.artstation.com/p/assets/images/images/026/605/687/4k/hardy-fowler-alley.jpg?1589227775');
     /* background-color: #292d30; */
-    background: linear-gradient(to bottom  left, #242b30, #18191a);
+    /* background: linear-gradient(to bottom  left, #242b30, #18191a); */
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -47,6 +47,7 @@
     left: 0;
     z-index: -1;
     background: linear-gradient(to bottom  left, #242b30, #18191a);
+    opacity: 0.9;
     /* background-color:rgb(2 5 16 / 0.8); */
     /* background: linear-gradient(to top right, #121415, #2B2F32);
     background-size: cover;

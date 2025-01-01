@@ -13,7 +13,7 @@ export function MatchHistory({ profileData }: { profileData: any }) {
         throw new Error("userContext must be used within a UserProvider");
     return (
   <>
-                          <div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
+                          <div className="text-2xl  h-full w-full  rounded-2xl bg-white/5  backdrop-filter backdrop-blur-sm  font-semibold flex flex-col justify-center items-center p-4">
                     <div className="p-3  w-full h-full grid grid-rows-6 ">
                       <div className="row-span-2  px-6 flex items-center justify-between w-full">
                           <div className="flex items-center justify-center flex-col gap-3">

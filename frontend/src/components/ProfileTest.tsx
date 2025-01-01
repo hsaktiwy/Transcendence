@@ -88,7 +88,7 @@ const ProfileTest  = () =>{
         
         <div className="lg:mb-0 pb-20  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]    dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
                 <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-5  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
-                   <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
+                   <div className="h-full   col-span-12 sm:col-span-3 bg-white/5  backdrop-filter backdrop-blur-sm rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center ">
                             <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
                                 <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                         
@@ -111,7 +111,7 @@ const ProfileTest  = () =>{
                             </div>
                    </div>
                    <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 2xl:col-span-10">
-                        <div className="flex  items-center justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
+                        <div className="flex  items-center justify-center w-full p-4  sm:h-full  xxl:p-10 bg-white/5  backdrop-filter backdrop-blur-sm rounded-2xl  ">
                             <div className="w-full  h-full  grid grid-rows-2 ">
                                     <div className="relative bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 "
                                     style={{ backgroundImage: `url(${axiosPath}${profileData?.CoverProfile})`,}}>
