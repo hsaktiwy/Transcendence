@@ -84,14 +84,13 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 					packet = paginator.page(1)
 
 					# reverce the packet after recieving it
-					print("--------------->before,", channel.id)
 					packet = list(packet.object_list)[::-1]
 					if len(packet) > 0:
 						for message in packet:
 							if message.sender!=user and message.isread == False:
 								new_messages = True
 								break
-					print("--------------->Wala,", channel.id)
+	
 				MessagesSerialized = MessageSerializer2(packet, many=True) if conversation_status == 0 else None
 				users = channel.users.all()
 				if len(users) < 2:

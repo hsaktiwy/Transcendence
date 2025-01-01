@@ -65,7 +65,7 @@ function Settings() {
     }
     return(
 
-        <div className="  min-h-[calc(100vh-100px)] font-poppins absolute overflow-hidden top-[60px]  left-0 lg:left-[142px]  w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%] text-white bg-gradient-to-l from-[#2a3236] to-[#1e2124] rounded-xl ">
+        <div className=" min-h-[calc(100vh-100px)] font-poppins absolute overflow-hidden top-[60px]  left-0 lg:left-[142px]  w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%] text-white bg-white/5  backdrop-filter backdrop-blur-sm rounded-xl ">
                 <div className={`banner relative  h-[300px] m-4 rounded-xl`}>
                     <div className="top-0 left-0  group absolute rounded-xl  h-full w-full cursor-pointer  z-10 after:content-[''] after:absolute after:h-full after:w-full    after:top-0 after:left-0   after:rounded-xl after:bg-transparent after:hover:bg-black/45">
                         <div className="absolute text-xl right-[3%] top-[10%]  z-40 hidden group-hover:block">

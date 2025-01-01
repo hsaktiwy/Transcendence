@@ -112,9 +112,15 @@ function Conversations(){
         isread: true,
         };
 return(
-<div className={`  border-r-0 lg:border-r-[1px] border-white/75   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-xl rounded-r-xl lg:rounded-r-none`}>
-            <div className="messages-header-container  text-lg font-semibold  text-white flex flex-col items-center  gap-2 bg-gradient-to-l from-[#5e98a9c9] via-[#5e98a9ba] to-[#5e98a995] py-4">
-                <h1 className="self-start ml-4">All Chats</h1>
+<div className={`    border-r-white/20 border-r   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-3xl rounded-r-xl lg:rounded-r-none `}>
+            <div className="messages-header-container   font-semibold  text-white flex flex-col   gap-4 py-4">
+                <h1 className=" ml-8 text-2xl">Messages</h1>
+                <div className="p-4 font-light relative">
+                    <input type="text" placeholder="Search" className=" px-3 py-3 bg-transparent w-full border border-white/20 rounded-full outline-none z-10" />
+                    <div className="absolute  mx-auto left-[50%] -translate-x-[50%] w-[90%] min-h-[100px] rounded-b-3xl z-0">
+                        
+                    </div>
+                </div>
                 {/* <div className="bg-white w-[100%] h-[1px] lg:mt-5 rounded-full"></div> */}
             </div>
 
@@ -151,14 +157,21 @@ return(
                             }
                             return(
                                 
-                                <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? "relative bg-black/25 border-l-2 border-[#5E97A9]  " : ""} relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
+                                <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? " relative bg-black/25 border-l-2 border-[#5E97A9]  " : ""}  h-[100px] relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
                                         console.error(conv.channelId)
                                         chatContext.setActive(conv)
                                         chatContext.setActiveSection('chat')
                                 }}>
+                             
                                         <img src={backendPath + currentConvData.picture} alt="friend-pic" className="aspect-square rounded-full object-cover  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] outline outline-[#5e98a9c9]" />
                                         <div className="self-center flex-1">
-                                            <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
+                                            <div className="flex justify-between items-center">
+                                                <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
+                                                {currentConvData.new_message!==0 &&  
+                                        <div className=" rounded-full  w-[10px] h-[10px] bg-[#5E97A9]    text-sm font-light text-center">
+                                                {/* {currentConvData.new_message} */}
+                                        </div> }
+                                            </div>
                                             <div className="flex justify-between items-center w-full ">
 
                                                 <p className="text-gray-300 text-[12px] xxl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
@@ -166,9 +179,10 @@ return(
                                             </div>
                                             
                                         </div>
-                                        {currentConvData.new_message==1 &&  <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">
-
-                                        </div> }
+                                        {/* {currentConvData.new_message!==0 &&  
+                                        <div className="absolute rounded-full  w-[20px] h-[20px] bg-green-500  right-2 top-[30%] -translate-y-[50%] flex text-sm font-light">
+                                                {currentConvData.new_message}
+                                        </div> } */}
                                         
                                     </div>
                             )
