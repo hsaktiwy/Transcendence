@@ -1,55 +1,3 @@
-
-
-
-// const itemVariants: Variants = {
-//      open: {
-//     opacity: 1,
-//     y: 0,
-//     transition: { type: "spring", stiffness: 300, damping: 24 }
-//   },
-//   closed: {
-//     opacity: 0,
-//     y: 20,
-//     transition: { duration: 0.2 }
-//   }
-// };
-
-// function ConnectButton() {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   return (
-//     <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
-//       <motion.button
-//         className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9]"
-//         whileTap={{ scale: 0.97 }}
-//         onClick={() => setIsOpen(!isOpen)}
-//       >
-//         Accept
-//       </motion.button>
-
-//       {isOpen && (
-//         <motion.div
-//           className="mt-2"
-//           variants={itemVariants}
-//           initial="closed"
-//           animate="open"
-//         >
-//           <motion.button
-//             className="bg-[#1D1E22] text-white px-9 py-2 xl:h-12 xl:px-10 2xl:py-1 font-semibold rounded-2xl"
-//             whileTap={{ scale: 0.97 }}
-//           >
-//             Send Message
-//           </motion.button>
-//         </motion.div>
-//       )}
-//     </motion.nav>
-//   );
-// }
-  
-
-//   export default ConnectButton
-
-
 import { useState, useEffect, useContext } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { useParams } from "react-router-dom";
@@ -63,22 +11,6 @@ import { MdBlock } from "react-icons/md";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 
-
-
-
-
-const itemVariants: Variants = {
-     open: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 300, damping: 24 }
-  },
-  closed: {
-    opacity: 0,
-    y: 20,
-    transition: { duration: 0.2 }
-  }
-};
 
 
 function ConnectButton() {
@@ -97,8 +29,6 @@ function ConnectButton() {
   const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
         throw new Error('error')
-  // const [isOpen, setIsOpen] = useState(false);
-
   const handleAcceptClick = () => {
     setIsOpen(true);
     setStatus("accepted");
