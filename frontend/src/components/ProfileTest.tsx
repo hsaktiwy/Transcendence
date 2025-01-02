@@ -27,7 +27,6 @@ import { SkeletonTheme } from 'react-loading-skeleton'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
@@ -102,7 +101,7 @@ const ProfileTest  = () =>{
                                         </div>
                                         {userContextConsumer?.userData?.login === username ? (
                                             <Link to="/settings"> 
-                                                <button className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center">
+                                                <button className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none">
                                                 Edit profile</button>
                                             </Link> 
                                             ) : (
