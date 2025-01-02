@@ -18,6 +18,7 @@ from users.serializers import PublicUserSerializer
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
+    
 
     def create_add_friend_notification(self, _receiver, _sender):
         try:

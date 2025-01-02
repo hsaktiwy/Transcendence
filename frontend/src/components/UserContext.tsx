@@ -282,7 +282,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     return(
         <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
-            {userData ? children : <LoadingIndecator/>}
+            {/* {userData ? children : <LoadingIndecator/>} */}
+            { children }
         </UserContext.Provider>
     )
 }
