@@ -34,45 +34,52 @@ const ProfileTest  = () =>{
         throw new Error('error')
    const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
    const [isLoading, setLoading] = useState<boolean>(false);
+   const [channel_id, setChannelId] = useState<number | undefined>(undefined);
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
 
+   const getChannelId = async () =>{
+        try{
+            const req = {
+                url: "/chat/conversation/get_channel/"+username+'/',
+                method: 'GET'
+            }
+            const resp = await mailman(req)
+            const id:number = resp.data.channel_id;
+            if (id)
+                setChannelId(id);
+        }
+        catch (error){
+
+
+        }
+   }
    const fetchUserData = async () =>{
     try{
-        setLoading(true);
-        const req = {
-            url: `/api/users/${username}/`,
-            method: 'GET',
-        }
-        setTimeout(async () =>
+        const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
+        console.log('waaaaaaaa    ',user, "waaaaa2 ",  username)
+        if (user.length === 0)
         {
+            setLoading(true);
+            const req = {
+                url: `/api/users/${username}/`,
+                method: 'GET',
+            }
+            
             const resp = await mailman(req)
-            const {
-                login,
-                email,
-                firstName,
-                lastName,
-                state,
-                last_visit,
-                profile_pic,
-                CoverProfile
-            } = resp.data
+            const respData: ProfileDataInterface = resp.data
     
-            setProfileData({
-                login,
-                email,
-                firstName,
-                lastName,
-                state,
-                last_visit,
-                profile_pic,
-                CoverProfile,
-            })
-
+            setProfileData(respData)
             setLoading(false);
-        }, 4000)
+        }
+        else{
+            setProfileData(user[0])
+            await getChannelId()
+        }
+        
+        
     }
     catch (err){
         console.error("dddddd======????",err)
@@ -109,7 +116,7 @@ const ProfileTest  = () =>{
                                                         Edit profile</button>
                                                     </Link> 
                                                     ) : (
-                                                        <ConnectButton /> 
+                                                        <ConnectButton channel_id={channel_id}/> 
                                                     )}
                                     </div>
                         </div>

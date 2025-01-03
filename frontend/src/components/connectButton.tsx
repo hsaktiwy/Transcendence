@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import mailman from '@/utils/AxiosFetcher';
 import { WebSocketContext } from '@/utils/WSContext';
@@ -10,10 +10,13 @@ import { TbMessage2 } from "react-icons/tb";
 import { MdBlock } from "react-icons/md";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
+import { channel } from 'diagnostics_channel';
 
-
-
-function ConnectButton() {
+interface buttonInterface{
+  channel_id?: number 
+}
+function ConnectButton(prop: buttonInterface) {
+  const navigate =  useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState("accept");
   const [isblock, setIsbLock] = useState<boolean>(false);
@@ -297,19 +300,20 @@ function ConnectButton() {
                     <p >UnFriend</p>
                     
                   </motion.button> */}
-                  <motion.button
-                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none   "
-                    whileTap={{ scale: 0.97 }}
+                  <Link to="/chat/" state={{channel_id : prop.channel_id}}>
+                    <motion.button
+                      className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none   "
+                      whileTap={{ scale: 0.97 }}
 
-                    onClick={handleAcceptClick}
-                  >
-  
-                    <div className='text-xl '>
-                      <TbMessage2/>
-                    </div>
-                    <p>Message</p>
-                    
-                  </motion.button>
+                    >
+    
+                      <div className='text-xl '>
+                        <TbMessage2/>
+                      </div>
+                      <p>Message</p>
+                      
+                    </motion.button>
+                  </Link>
                 </>
               }
               { isfriend === "CONNECT" && FriendRequest === "" &&

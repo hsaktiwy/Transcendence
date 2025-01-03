@@ -221,4 +221,21 @@ def get_conversation(request, channelId, packetSize):
 
 		return Response({'conv':conv_data}, status=status.HTTP_200_OK)
 	except Exception as e:
-		return  Response({'Wala' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+		return  Response({'Error' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def Get_channel_id(request, login):
+	try:
+		if len(login) > 0:
+			user = request.user
+			friend = MyUser.objects.get(login=login)
+			channel = Channel.objects.filter(users=user).filter(users=friend).first()
+			return Response({'channel_id': channel.id}, status=200)
+		else:
+			return  Response({'message' : "noting"}, status=status.HTTP_400_BAD_REQUEST)
+	except Channel.DoesNotExist as e:
+		return  Response({'Error' : " Channel doesn't exist!"}, status=404)
+	except MyUser.DoesNotExist as e:
+		return  Response({'Error' : " User doesn't exist!"}, status=404)
+	except Exception as e:
+		return  Response({'Error' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
