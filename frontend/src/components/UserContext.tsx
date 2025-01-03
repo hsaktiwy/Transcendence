@@ -85,6 +85,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
     const [friends, setFriends] = useState<ProfileDataInterface[]>([])
+    const [ready, setReady] = useState<boolean>(false)
 
     const PureNotification = (data:MiniNotification) =>
     {
@@ -270,20 +271,30 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             fetchNotification()
         }
     },[AuthContextConsummer?.loggedIn, notificationReaded])
+
+    const ajami = async() =>
+    {
+        await fetchUserData()
+        await fetchFriends()
+        await fetchReceivedFriendRequest()
+        await fetchSentFriendRequest()
+        setReady(true)
+    }
     useEffect(() =>{
         console.log('hooo->', coverPicChanged, '   ', AuthContextConsummer?.loggedIn)
         if (AuthContextConsummer?.loggedIn){
-            fetchUserData()
-            fetchFriends()
-            fetchReceivedFriendRequest()
-            fetchSentFriendRequest()
+            // fetchUserData()
+            // fetchFriends()
+            // fetchReceivedFriendRequest()
+            // fetchSentFriendRequest()
+            ajami();
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
         <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
-            {/* {userData ? children : <LoadingIndecator/>} */}
-            { children }
+            {ready  ? children : <LoadingIndecator/>}
+            {/* { children } */}
         </UserContext.Provider>
     )
 }

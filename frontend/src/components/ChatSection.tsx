@@ -37,9 +37,12 @@ function ChatSection(){
         {
             const {channel_id} = location.state 
             setChannelId(channel_id)
+            init_conv(setLoading,setActive, setConvs, channel_id);
+            setActiveSection('chat')
         }
+        else
+            init_conv(setLoading,setActive, setConvs, channelId);
         console.log("wala ", channelId)
-        init_conv(setLoading,setActive, setConvs, channelId);
         // create a function that will update the general data
         const UpdateConvs = (data:any)=>
         {
@@ -77,7 +80,7 @@ function ChatSection(){
             AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
             RemoveChannel('CHAT')
         }
-    }, [loading, channelId, location?.state?.channel_id])
+    }, [])
 
     return(
         

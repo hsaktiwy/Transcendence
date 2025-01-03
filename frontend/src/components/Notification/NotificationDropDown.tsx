@@ -158,7 +158,7 @@ const NotificationDropDown = (info: prop) =>{
                             linkProfile = `/profile/${item.sender.login}`;
                         return (
                             
-                            <>
+                         
                                 <Link to={`${linkProfile}`}
                                 className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
                                 key={index + 1}
@@ -175,14 +175,14 @@ const NotificationDropDown = (info: prop) =>{
                                     </p>
                                     <p className="text-slate-500 text-sm flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1 text-slate-400">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd" />
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clipRule="evenodd" />
                                         </svg>
 
                                         {formatDate(item.created)}
                                     </p>
                                     </div>
                                 </Link>     
-                            </>
+                        
         
                         )
                    

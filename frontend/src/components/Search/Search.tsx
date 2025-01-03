@@ -48,6 +48,7 @@ function Search(info:props) {
                         return(
 
                             <SearchDisplay
+                            key={index+1}
                             login={user.login}
                             firstName={user.firstName}
                             lastName={user.lastName}

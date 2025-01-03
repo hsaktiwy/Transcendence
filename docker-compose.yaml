@@ -4,8 +4,6 @@ services:
     container_name: postgresql
     env_file:
       - .env
-    volumes:
-      - ./postgres_volume:/var/lib/postgresql/data
     restart: always
     ports:
       - "5432:5432"
