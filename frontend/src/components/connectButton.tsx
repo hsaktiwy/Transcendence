@@ -1,55 +1,3 @@
-
-
-
-// const itemVariants: Variants = {
-//      open: {
-//     opacity: 1,
-//     y: 0,
-//     transition: { type: "spring", stiffness: 300, damping: 24 }
-//   },
-//   closed: {
-//     opacity: 0,
-//     y: 20,
-//     transition: { duration: 0.2 }
-//   }
-// };
-
-// function ConnectButton() {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   return (
-//     <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
-//       <motion.button
-//         className="text-white m-3 px-9 py-2 xl:h-12 xl:px-14 2xl:py-1 font-semibold rounded-2xl bg-[#5E97A9]"
-//         whileTap={{ scale: 0.97 }}
-//         onClick={() => setIsOpen(!isOpen)}
-//       >
-//         Accept
-//       </motion.button>
-
-//       {isOpen && (
-//         <motion.div
-//           className="mt-2"
-//           variants={itemVariants}
-//           initial="closed"
-//           animate="open"
-//         >
-//           <motion.button
-//             className="bg-[#1D1E22] text-white px-9 py-2 xl:h-12 xl:px-10 2xl:py-1 font-semibold rounded-2xl"
-//             whileTap={{ scale: 0.97 }}
-//           >
-//             Send Message
-//           </motion.button>
-//         </motion.div>
-//       )}
-//     </motion.nav>
-//   );
-// }
-  
-
-//   export default ConnectButton
-
-
 import { useState, useEffect, useContext } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { useParams } from "react-router-dom";
@@ -61,23 +9,8 @@ import { IoPersonRemoveOutline } from "react-icons/io5";
 import { TbMessage2 } from "react-icons/tb";
 import { MdBlock } from "react-icons/md";
 import { IoPersonAddOutline } from "react-icons/io5";
+import { FiUser } from "react-icons/fi";
 
-
-
-
-
-const itemVariants: Variants = {
-     open: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 300, damping: 24 }
-  },
-  closed: {
-    opacity: 0,
-    y: 20,
-    transition: { duration: 0.2 }
-  }
-};
 
 
 function ConnectButton() {
@@ -96,8 +29,6 @@ function ConnectButton() {
   const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
         throw new Error('error')
-  // const [isOpen, setIsOpen] = useState(false);
-
   const handleAcceptClick = () => {
     setIsOpen(true);
     setStatus("accepted");
@@ -281,6 +212,20 @@ function ConnectButton() {
     }
   }
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const unfriendRequest = () => {
+    console.log("Unfriend action triggered");
+  };
+
+  const blockActionCheck = () => {
+    console.log("Block action triggered");
+  };
+
   
   return (
     <>
@@ -295,7 +240,53 @@ function ConnectButton() {
           >
               { isfriend === "UNFRIEND" &&
                 <>
-                  <motion.button
+                  <div className="relative inline-block">
+        <motion.button
+          className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none"
+          whileTap={{ scale: 0.97 }}
+          onClick={toggleMenu}
+        >
+          <div className="text-lg xl:text-xl">
+            <FiUser />
+                </div>
+                <p>Friend</p>
+              </motion.button>
+
+              {/* Dropdown Menu */}
+              {isMenuOpen && (
+                <motion.div
+                  className="absolute rounded-lg   absolute text-base right-[-160px]  top-[15%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-0 animate-pluse-right shadow-lg z-10"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                >
+                  <li
+                    className='m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer   '
+                      // className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none"
+
+                    onClick={unfriend_request}
+                  >
+                    <div className='text-lg xl:text-xl '>
+                      <IoPersonRemoveOutline/>
+                    </div>
+                    <p >Unfriend</p>
+                    
+                  </li>
+                  <li
+                  className='m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer '
+                // className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
+                onClick={BlockActionCheck}
+              >
+                    <div className='text-xl'>
+                      <MdBlock/>
+                    </div>
+                    <p>{btn_block}</p>
+                    
+              </li>
+                </motion.div>
+              )}
+            </div>
+                  {/* <motion.button
                       className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none"
                       whileTap={{ scale: 0.97 }}
                     onClick={unfriend_request}
@@ -305,17 +296,19 @@ function ConnectButton() {
                     </div>
                     <p >UnFriend</p>
                     
-                  </motion.button>
+                  </motion.button> */}
                   <motion.button
                     className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none   "
                     whileTap={{ scale: 0.97 }}
 
                     onClick={handleAcceptClick}
                   >
+  
                     <div className='text-xl '>
                       <TbMessage2/>
                     </div>
                     <p>Message</p>
+                    
                   </motion.button>
                 </>
               }
