@@ -7,6 +7,7 @@ import NavBarModal from "./NavBarModal";
 import {axiosPath} from "../utils/Constants"
 import NavBarDrop from "./NavbarDrop.tsx";
 import Search from "./Search/Search.tsx";
+import NotificationDropDown from "./Notification/NotificationDropDown.tsx";
  
 
 
@@ -18,7 +19,9 @@ function NavBarV2(){
     const userContextConsumer = useContext(UserContext)
     const searchRef = useRef<HTMLDivElement>(null);
     const [drop, setDrop] = useState<boolean>(false)
+    const [notificationDrop, setNotificationDrop] = useState<boolean>(false)
     const dropContainerRef = useRef<HTMLDivElement>(null)
+    const notificationContainerRef = useRef<HTMLDivElement>(null)
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>)=>
     {
         if (searchRef.current && !searchRef.current.contains(event.relatedTarget))
@@ -43,10 +46,12 @@ function NavBarV2(){
       }, []);
     useEffect(() => {
         const handleClickOutDrop = (event: MouseEvent) => {
-            if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node)) {
-                if (drop)
-                    setDrop(false)
-            }
+         
+        if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node) && drop)
+            setDrop(false)
+        else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
+            setNotificationDrop(false)
+            ax
    
         };
     
@@ -54,7 +59,7 @@ function NavBarV2(){
         return () => {
           document.removeEventListener("click", handleClickOutDrop);
         };
-      }, [drop]);
+      }, [drop, notificationDrop]);
     return(
         <>
         {
@@ -70,10 +75,10 @@ function NavBarV2(){
                         <div>
 
                         </div>
-                        <div >
+                        <div className="" >
                             <input type="text" 
                                     placeholder="Search"
-                                    className={`text-white rounded-full mx-10  ${isSearchBarActive ? '  w-[calc(70%)] px-4 py-1' : 'w-0'} bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] h-10 lg:w-[50%]  lg:px-4 lg:py-1  focus:lg:w-[460px] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `}
+                                    className={`text-white rounded-full mx-10   ${isSearchBarActive ? '  w-[calc(70%)] px-4 py-1' : 'w-0'} bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] h-10 lg:w-[50%]  lg:px-4 lg:py-1  focus:lg:w-[460px] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `}
                                     onChange={(event_object)=> setSearch(event_object.target.value)}
                                     onBlur={handleBlur}
                                     onFocus={()=>{
@@ -86,21 +91,21 @@ function NavBarV2(){
                                 ref={searchRef} 
                                 className={`${search && search.length > 0  ? 'block' : 'hidden'} absolute w-[70%] lg:w-[460px] top-[15px] left-[10%] lg:left-[10%] z-50 rounded-2xl  max-h-[400px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] overflow-auto mx-10`}
                             >
-                            {/* <input type="text" placeholder="Search" className="mx-12 h-10 w-96 px-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl border-none "/> */}
-                                { search!=="" && focus &&   <Search search_for={search}/>}
+                            { search!=="" && focus &&   <Search search_for={search}/>}
                             </div>
                         </div>
                     </div>
                     <div className={`  gap-0 xl:w-44  px-4 bg-gradient-to-bl mt-1 from-[#1D1E22] to-[#1f2123] rounded-2xl lg:gap-6  xl:mr-9 text-white/60  w-[70%] sm:w-[45%] md:w-[40%] lg:w-auto justify-between items-center  self-start p-2 ${isSearchBarActive ? 'hidden' : 'flex'} lg:flex`}>
-                        <div className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
-                                setOpenModal(true)
+                        <div ref={notificationContainerRef} className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
+                                setNotificationDrop(!notificationDrop)
                             }}>
-                                <div className={` ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length ? 'block' : 'hidden'} text-sm font-poppins font-semibold flex justify-center absolute rounded-full h-[18px] w-[18px] bg-red-600 text-white  bottom-0 right-0`}>
+                                <div className={` ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 'flex' : 'hidden'} text-sm font-poppins font-semibold  justify-center  rounded-full h-[18px] w-[18px] bg-red-600 text-white  top-[50%] right-0 absolute`}>
                                     {userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length }
                                 </div>
                                 <span className="text-3xl">
                                     <IoNotificationsOutline/>
                                 </span>
+                                <NotificationDropDown display={notificationDrop}/>
                             </div>
                             <div className="cursor-pointer hover:text-white duration-100 transition-all">
                                 <span className="text-3xl">
@@ -108,7 +113,7 @@ function NavBarV2(){
                                 </span>
                             </div>
                             <div ref={dropContainerRef} className="w-[30px] h-[30px] cursor-pointer relative " onClick={()=> setDrop(!drop)} >
-                                <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full rounded-full object-fill" />
+                                <img src={`${axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full aspect-square rounded-full object-cover " />
                                 <NavBarDrop display={drop}/>
                             </div>
                     

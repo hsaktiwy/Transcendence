@@ -53,34 +53,34 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         const newItems = items.filter(item => item.id !== itemId)
         userContextConsumer?.setNewNotification(newItems)
     }
-    let usersDataArr= useRef<senderInterface[]>([])
-    const fetchRequestSenderData =  async (items:  NotificationPropreties[]) =>{
-            for(const item of items){
-                if (!usersDataArr.current.find(user => item.sender === user.login)){
-                    try{
-                        const req = {
-                            url: `/api/users/${item.sender}/`,
-                            method: 'GET',
-                        }
-                        const resp = await mailman(req)
-                        const userData: senderInterface = resp.data
-                        usersDataArr.current.push(userData)
-                        console.log("wewewe ====???? ",usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic)
-                    }
-                    catch (err){
-                        console.error("dddddd======????",err)
-                    }
-                }
+    // let usersDataArr= useRef<senderInterface[]>([])
+    // const fetchRequestSenderData =  async (items:  NotificationPropreties[]) =>{
+    //         for(const item of items){
+    //             if (!usersDataArr.current.find(user => item.sender === user.login)){
+    //                 try{
+    //                     const req = {
+    //                         url: `/api/users/${item.sender}/`,
+    //                         method: 'GET',
+    //                     }
+    //                     const resp = await mailman(req)
+    //                     const userData: senderInterface = resp.data
+    //                     usersDataArr.current.push(userData)
+    //                     console.log("wewewe ====???? ",usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic)
+    //                 }
+    //                 catch (err){
+    //                     console.error("dddddd======????",err)
+    //                 }
+    //             }
 
-            }
+    //         }
 
-        setdatafetched(true)
+    //     setdatafetched(true)
 
-    }
-    useEffect(() =>{
-        const requests = items.filter(item => item.type === 'friendship' || item.type === 'message' )
-        fetchRequestSenderData(requests)
-    },[])
+    // }
+    // useEffect(() =>{
+    //     const requests = items.filter(item => item.type === 'friendship' || item.type === 'message' )
+    //     fetchRequestSenderData(requests)
+    // },[])
     useEffect(() =>{
 
         // const requests = items.filter(item => item.type === 'friendship')
@@ -96,7 +96,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     }, [items])
     return(
 
-        <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4 w-[90%] sm:w-[500px]">
+        <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4 w-[90%] sm:w-[500px] ">
   
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
@@ -119,7 +119,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                                 (item.type === 'friendship' || item.type === 'message') &&
                                                 <div className=" h-[35px] w-[35px] sm:h-[50px] sm:w-[50px]">
                                                     {/* <p>{usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}</p> */}
-                                                    <img src={`${axiosPath}${usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
+                                                    <img src={`${axiosPath}${item.sender.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                                 </div>
                                             }
                                             <p className="text-white/80">

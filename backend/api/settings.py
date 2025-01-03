@@ -12,11 +12,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -25,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-r@#v5v%q!xj3gdyr*y)v69xmzq4n#u+rcn_cjsxzk*v7f&j25h'
 
 JWT_SECRET_KEY = '4484877278439867979ffd7ecc7f5a5e82f53544e22b4d0fdd2211dcae3b4c0e'
-ACCESS_TOKEN_LIFETIME = 1
+ACCESS_TOKEN_LIFETIME = 15
 REFRESH_TOKEN_LIFETIME = 7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -90,6 +91,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://localhost:4444",
     "https://localhost",
 )
 
@@ -97,6 +99,7 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://localhost:4444",
     "https://localhost",
 ]
 
@@ -110,6 +113,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://10.13.4.11:5173",
     "http://10.13.3.3:5173",
     "http://172.21.0.3:5173",
+    "https://localhost:4444",
     "https://localhost",
 ]
 
@@ -158,8 +162,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 

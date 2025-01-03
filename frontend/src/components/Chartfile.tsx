@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 
  
 import { ChartConfig, ChartContainer } from "@/components/ui/chart"
+
  
 const chartData = [
   { week: "Monday", desktop: 186, mobile: 80 },

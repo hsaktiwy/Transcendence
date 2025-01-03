@@ -18,6 +18,7 @@ import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Co
 import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
+import { formatDate2 } from "./NavBarModal";
 
 
 export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
@@ -127,8 +128,9 @@ function ChatSession(){
         }
     }
     // hamza
-    const UpdateCurrentConvs = useCallback((message_received, __channelId: number) => {
+    const UpdateCurrentConvs = useCallback((message_received: Message , __channelId: number) => {
             if (__channelId === chatContext.active?.channelId) {
+                console.log('messagr received:  ', message_received)
                 chatContext.setActive((prevActive) => prevActive && ({
                 ...prevActive,
                 new_message: 1,
@@ -291,11 +293,11 @@ function ChatSession(){
     },[rcount])
     //
     return(
-            <div  className={`   rounded-xl lg:rounded-none     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] lg:rounded-r-xl`}  h-full transition-all duration-800
+            <div  className={` rounded-xl lg:rounded-none     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] lg:rounded-r-xl`}  h-full transition-all duration-800
             `}>
                 <div id="conversation-header-container" className="bg-black/35">
                     <div id="conversation-header" className="text-white grid grid-cols-4 px-4 py-[2px]">
-                            <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-8 items-center cursor-pointer">
+                            <div id="friend-info" className="col-span-3 flex gap-2 sm:gap-4 lg:gap-4 items-center cursor-pointer">
                                 <span className="inline-block lg:hidden text-[24px] mx-2 my-4 sm:m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={() =>{
                                     setOpenDrop(false)
                                     chatContext.setActiveSection('conversations')
@@ -303,10 +305,10 @@ function ChatSession(){
                                 }}>
                                 <IoArrowBackOutline />
                                 </span>
-                                <img src={`${chatContext.active &&  `${backendPath +  chatContext.active.user2.profile_pic}`}`} alt="user-pic" className="w-[40px] h-[40px] rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${chatContext.active &&  `${backendPath +  chatContext.active.user2.profile_pic}`}`} alt="user-pic" className=" w-[40px] h-[40px] aspect-square rounded-full object-cover rounded-full cursor-pointer" onClick={()=>{
                                     chatContext.setShowProfile(true)
                                 }}/>
-                                <div className="cursor-pointer" onClick={()=>{
+                                <div className="cursor-pointer " onClick={()=>{
                                     chatContext.setShowProfile(true)
                                 }}>
                                     <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
@@ -370,12 +372,13 @@ function ChatSession(){
                         chatContext.active?.messages?.map((msg, index): React.ReactNode => {
                             return(
                                 <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender?.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                                <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] aspect-square rounded-full object-cover rounded-full cursor-pointer" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}/>
-                                <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg`}>
-                                    <p >{msg?.content}</p>
+                                <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg flex flex-col justify-between min-w-[90px]`}>
+                                    <p>{msg?.content}</p>
+                                    <p className=" text-right text-white/50 text-[13px]">{formatDate2(msg?.timestamp)}</p>
                                 </div>
                             </div>
                             )
@@ -384,11 +387,11 @@ function ChatSession(){
                     }
                 </div>
                 <div id="conversation-footer-container" className="p-4 flex justify-between items-center gap-1 sm:gap-4 ">
-                    <span className="bg-[#5E97A9] text-white rounded-full hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
+                    {/* <span className="bg-[#5E97A9] text-white rounded-full hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <HiPlus/>
-                    </span>
+                    </span> */}
                     <input type="text" placeholder="Message" className=" rounded-full border-1 border-white focus:outline-none text-white bg-[#1D1E22]  text-sm sm:text-md pl-2 py-2 focus:text-black focus:bg-slate-200  focus:border-black duration-300 basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
-                    <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
+                    <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <RiSendPlaneFill />
                     </span>
                 </div>

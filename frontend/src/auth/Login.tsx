@@ -92,7 +92,7 @@ const Login = () => {
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         window.location.href =
-            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=https%3A%2F%2Flocalhost%2Flogin%2F&response_type=code";
+            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=https%3A%2F%2Flocalhost%3A4444%2Flogin%2F&response_type=code";
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -284,7 +284,7 @@ const Login = () => {
                                         <p className='w-[5%] text-white'> or </p>
                                         <div className=' w-[45%] bg-white h-[1px]'></div>
                                     </div>
-                                    <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:scale-105 duration-150" onClick={handleSubmitWith42}>
+                                    <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:border-slate-200 hover:scale-105 duration-150" onClick={handleSubmitWith42}>
                                     {!loading ? <p >Sign in with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
                                     </button>
                                     <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>

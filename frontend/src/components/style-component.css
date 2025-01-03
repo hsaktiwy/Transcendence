@@ -460,8 +460,6 @@
 .search-bar-div-friends
 {
     border-radius: 12px;
-    width: 80%;
-    height: 80%;
     padding: 0px 15px;
     background-color: #2B2F32;
     font-size: 13px;
@@ -473,8 +471,9 @@
     height: 70%;
     /* border: solid; */
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     flex-direction: column;
+    
 
 }
 .each-user
@@ -484,6 +483,7 @@
     /* border: solid; */
     display: flex;
     justify-content: center;
+    align-items: center;
 
 }
 .is-online

@@ -47,8 +47,8 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         connected.current = true
       }
       
-      socket.current.onclose = () => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
-        console.log('Connection closed')
+      socket.current.onclose = (event) => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
+        console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
         connected.current = false
         // if (authContextConsumer.loggedIn === true){ // we need a logic to handle reconnection maybe with status of backend ws response
         //   console.log('from ws context',authContextConsumer.loggedIn)
@@ -67,9 +67,11 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                       id: data.message_id,
                       sender: data.user,
                       content: data.message,
+                      timestamp: data.timestamp,
+                      isread: data.is_read
+
                   };
                   const channelId = data.channel;
-                  console.log("wa zbi "+ channelId)
                   if (channels.current['CHAT'])
                   {
                     console.log("in :  channels.current['CHAT']")
@@ -83,12 +85,19 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
               }
             }
             if (type === 'friendship'){
-              if(channels.current['NOTIFICATION_ADD_FRIEND'])
+              if(channels.current['NOTIFICATION_ADD_FRIEND'] || channels.current['NOTIFICATION_ACCEPT_FRIEND'])
               {
-                const notifData =  JSON.parse(message.data); 
-                channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
+
+                const notifData =  JSON.parse(message.data);
+                if (notifData['friend_req_status' ] === 'pending')
+                  channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
+                else{
+                  console.log(message.data)
+                  channels.current['NOTIFICATION_ACCEPT_FRIEND'](notifData)
+                }
 
               }
+              
             }
             if (type === 'message'){
               if(channels.current['NOTIFICATION_MESSAGE'])
