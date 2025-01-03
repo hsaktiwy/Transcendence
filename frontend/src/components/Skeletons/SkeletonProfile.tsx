@@ -117,7 +117,7 @@ function SkeletonDashboard() {
       </div>
       </div>
       <div className="p-4 rounded-2xl xxl:px-7 md:hidden xl:block row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 xl:p-3 xxl:p-10 flex justify-center items-center bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869]">
-      <div  className="h-full w-full  flex flex-col gap-3 bg-gradient-to-bl from-[#242b2f] to-[#1b1e1f] rounded-xl justify-center items-center">
+      <div  className="h-full w-full py-6  flex flex-col gap-3 bg-gradient-to-bl from-[#242b2f] to-[#1b1e1f] rounded-xl justify-center items-center">
             <Skeleton circle={true} height={200} width={200} className="rounded-xl w- w-min-[100px] lg:w-[150px] lg:h-[150px]" />
             <Skeleton width={100} height={16} />
             <Skeleton width={150} height={20} />
@@ -125,9 +125,56 @@ function SkeletonDashboard() {
     </div>
     <div className="row-span-4 md:col-span-12 md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] xl:col-span-8 xl:row-span-4 2xl:col-span-9 xxl:row-span-6 xxl:col-span-6">
       <div className="w-full h-full bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
-        <Skeleton height={200} width="100%" />
+        {/* <Skeleton height={200} width="100%" /> */}
+        <div className="border-none h-full w-full rounded-lg shadow-md">
+      <div className="p-2">
+        <Skeleton height={20} width="50%" />
+        <Skeleton height={16} width="30%" style={{ marginTop: "8px" }} />
+      </div>
+      <div className="p-4 flex items-center justify-center w-full h-[90%]">
+        <div className="w-full h-64 md:h-full p-3">
+          <Skeleton height="100%" width="100%" className="h-min-[100px] rounded-xl" />
+        </div>
       </div>
     </div>
+      </div>
+    </div>
+    <div className="row-span-4  md:col-span-6 md:row-span-3 xl:col-span-4 xl:h-96 2xl:col-span-4 xxl:h-[548px] xxl:col-span-3 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl shadow-md p-4">
+      <div className="flex flex-col h-full overflow-y-auto ">
+        {/* Header Skeleton */}
+        <div className="mb-4">
+          <Skeleton height={24} width="60%" />
+        </div>
+
+        {/* Rank List Skeleton */}
+        <div className="flex flex-col gap-4 flex-1  ">
+          {[...Array(6)].map((_, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-4 p-2 bg-gradient-to-bl from-[#242b2f] to-[#1b1e1f] rounded-lg"
+            >
+              <Skeleton circle width={40} height={40} />
+              <div className="flex-1">
+                <Skeleton height={16} width="70%" />
+                <Skeleton height={14} width="50%" style={{ marginTop: "4px" }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+    <div className="row-span-2 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
+      <div className="relative rounded-xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] xl:h-96 h-full w-full flex items-center justify-center p-4">
+        {/* Placeholder for Radar Chart */}
+        <div className="relative flex flex-col bg-gradient-to-bl rounded-xl  from-[#242b2f] to-[#1b1e1f] gap-3 items-center justify-center w-full h-full">
+          <Skeleton   className=" w-72 h-7 rounded-lg"/>
+          <Skeleton   className=" w-28 h-7 rounded-lg"/>
+          <Skeleton   className=" w-72 h-7 rounded-lg"/>
+
+        </div>
+      </div>
+    </div>
+
     </div>
     </div>
     </>
