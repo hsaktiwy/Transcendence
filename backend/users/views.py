@@ -59,8 +59,8 @@ def LoginWithOAuth42(request):
     code = request.data.get('code')
     
     client_id = 'u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041'
-    client_secret = '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'
-    redirect_uri = 'https://localhost/login/'
+    client_secret = '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'
+    redirect_uri = 'https://localhost:4444/login/'
 
     token_url = 'https://api.intra.42.fr/oauth/token'
     user_info_url = 'https://api.intra.42.fr/v2/me'
@@ -322,6 +322,7 @@ class UserNotification(generics.ListAPIView):
     serializer_class = NotificationSerializer
     def get_queryset(self):
         user=self.request.user
+        Notification.clean_up_notifications(user)
         return Notification.objects.filter(id_user_fk=user).order_by('created')
 
 

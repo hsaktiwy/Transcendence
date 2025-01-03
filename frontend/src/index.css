@@ -10,7 +10,7 @@
   
   /* Scrollbar track */
   ::-webkit-scrollbar-track {
-    background: #000;
+    /* background: #000; */
     border-radius: 3px;
   }
   
@@ -27,8 +27,10 @@
 
 
   body{
-    background-image: url('/astro-bg.png');
-    background-color: #160430;
+    /* background-image: url('/astro-bg.png'); */
+    /* background-color: #292d30; */
+    background: linear-gradient(to bottom  left, #242b30, #18191a);
+
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -45,7 +47,8 @@
     top: 0;
     left: 0;
     z-index: -1;
-    background-color:rgb(2 5 16 / 0.8);
+    background: linear-gradient(to bottom  left, #242b30, #18191a);
+    /* background-color:rgb(2 5 16 / 0.8); */
     /* background: linear-gradient(to top right, #121415, #2B2F32);
     background-size: cover;
     background-repeat: no-repeat;

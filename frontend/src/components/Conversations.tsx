@@ -94,6 +94,7 @@ import { WebSocketContext } from "../utils/WSContext";
 import { convs } from "../utils/ConversationsList";
 import { BACKEND } from "../utils/Constants";
 import { UserContext } from "./UserContext";
+import { formatDate2 } from "./NavBarModal";
 
 let inc:number=  22222
 function Conversations(){
@@ -112,7 +113,7 @@ function Conversations(){
         };
 return(
 <div className={`  border-r-0 lg:border-r-[1px] border-white/75   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-xl rounded-r-xl lg:rounded-r-none`}>
-            <div className="messages-header-container text-lg font-semibold  text-white flex flex-col items-center gap-2 bg-gradient-to-l from-[#5e98a9c9] via-[#5e98a9ba] to-[#5e98a995] py-4">
+            <div className="messages-header-container  text-lg font-semibold  text-white flex flex-col items-center  gap-2 bg-gradient-to-l from-[#5e98a9c9] via-[#5e98a9ba] to-[#5e98a995] py-4">
                 <h1 className="self-start ml-4">All Chats</h1>
                 {/* <div className="bg-white w-[100%] h-[1px] lg:mt-5 rounded-full"></div> */}
             </div>
@@ -155,11 +156,14 @@ return(
                                         chatContext.setActive(conv)
                                         chatContext.setActiveSection('chat')
                                 }}>
-                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="rounded-full  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]" />
-                                        <div className="self-center ">
-                                            <h1 className="text-base 2xl:text-lg font-semibold">{currentConvData.friendName}</h1>
-                                            
-                                            <p className="text-gray-300 text-sm 2xl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
+                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="aspect-square rounded-full object-cover  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] outline outline-[#5e98a9c9]" />
+                                        <div className="self-center flex-1">
+                                            <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
+                                            <div className="flex justify-between items-center w-full ">
+
+                                                <p className="text-gray-300 text-[12px] xxl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
+                                                <p className="text-white/50">{formatDate2(currentConvData.lastMessage.timestamp)}</p>
+                                            </div>
                                             
                                         </div>
                                         {currentConvData.new_message==1 &&  <div className="absolute rounded-full h-[10px] w-[10px] bg-blue-600  right-2 top-[50%] -translate-y-[50%]">

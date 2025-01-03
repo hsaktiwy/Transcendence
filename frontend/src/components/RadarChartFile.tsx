@@ -38,7 +38,7 @@ const chartConfig = {
 
 export function RadarChartFile() {
   return (
-    <Card className="border-none bg-[#1D1E22] w-full   h-full">
+    <Card className="border-none bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] w-full   h-full">
       <CardHeader className="items-center pb-4">
         <CardTitle>Radar Chart</CardTitle>
         <CardDescription>
@@ -62,7 +62,7 @@ export function RadarChartFile() {
           </RadarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="hidden 2xl:block flex-col  gap-2 text-sm">
+      <CardFooter className="hidden xxl:block flex-col  gap-2 text-sm">
         <div className="flex items-center gap-2 justify-center font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
