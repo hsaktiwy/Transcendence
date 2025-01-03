@@ -70,9 +70,9 @@ const ProfileTest  = () =>{
                 profile_pic,
                 CoverProfile,
             })
-
             setLoading(false);
-        }, 4000)
+
+        }, 1500)
     }
     catch (err){
         console.error("dddddd======????",err)
@@ -157,11 +157,11 @@ const ProfileTest  = () =>{
                                 <RadarChartFile/>
                             </div>
                         </div>
-````````                        <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
+                        <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
                             <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
                                 <MatchHistory profileData={profileData}/>
                             </div>
-                        </div>````````
+                        </div>
                         <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
                                         <PieChartFile/>
                         </div>
