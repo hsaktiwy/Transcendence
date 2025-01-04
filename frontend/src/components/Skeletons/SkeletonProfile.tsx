@@ -53,7 +53,7 @@ function SkeletonDashboard() {
           </div>
         </div>
       <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6">
-      <div className="rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] h-full p-4">
+      <div className="rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] h-full p-4">
         <div className="flex flex-col space-y-4 h-full">
           <Skeleton width="60%" height={24} className="mb-4" />
           <div className="row-span-2  px-6 flex items-center justify-between w-full">
@@ -123,7 +123,7 @@ function SkeletonDashboard() {
             <Skeleton width={150} height={20} />
       </div>
     </div>
-    <div className="row-span-4 md:col-span-12 md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] xl:col-span-8 xl:row-span-4 2xl:col-span-9 xxl:row-span-6 xxl:col-span-6">
+    <div className="row-span-4  md:col-span-12 md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] xl:col-span-8 xl:row-span-4 2xl:col-span-9 xxl:row-span-6 xxl:col-span-6">
       <div className="w-full h-full bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
         {/* <Skeleton height={200} width="100%" /> */}
         <div className="border-none h-full w-full rounded-lg shadow-md">

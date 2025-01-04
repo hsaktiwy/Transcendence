@@ -10,7 +10,7 @@ import ChatSection from './components/ChatSection'
 import { WebSocketProvider } from './utils/WSContext'
 import Settings from './components/Settings'
 import UserProvider from './components/UserContext'
-// import Dashboard from './components/Dashboard'
+import Dashboard from './components/Dashboard'
 import LoadingIndecator from './components/Loading'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import Skeleton from 'react-loading-skeleton'
@@ -28,9 +28,6 @@ import Profile from './components/website/profile/profile'
 import GameCenter from './game/GameUi'
 
 
-
-const Dashboard = lazy(() => import('./components/Dashboard'));
-const SkeletonDashboard = lazy(() => import('./components/Skeletons/SkeletoneDashboard'));
 
 
 const App = () =>
