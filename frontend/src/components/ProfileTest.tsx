@@ -33,52 +33,60 @@ const ProfileTest  = () =>{
     if (!SocketContext)
         throw new Error('error')
    const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
-   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
 
    const fetchUserData = async () =>{
-    try{
-        setLoading(true);
-        const req = {
-            url: `/api/users/${username}/`,
-            method: 'GET',
-        }
-        setTimeout(async () =>
-        {
-            const resp = await mailman(req)
-            const {
-                login,
-                email,
-                firstName,
-                lastName,
-                state,
-                last_visit,
-                profile_pic,
-                CoverProfile
-            } = resp.data
-    
-            setProfileData({
-                login,
-                email,
-                firstName,
-                lastName,
-                state,
-                last_visit,
-                profile_pic,
-                CoverProfile,
-            })
-            setLoading(false);
+     try {
+      const req = {
+        url: `/api/users/${username}/`,
+        method: 'GET',
+      };
+      const resp = await mailman(req);
+      const {
+        login,
+        email,
+        firstName,
+        lastName,
+        state,
+        last_visit,
+        profile_pic,
+        CoverProfile,
+      } = resp.data;
 
-        }, 1500)
+      setProfileData({
+        login,
+        email,
+        firstName,
+        lastName,
+        state,
+        last_visit,
+        profile_pic,
+        CoverProfile,
+      });
+    } catch (err) {
+      console.error(err);
     }
-    catch (err){
-        console.error("dddddd======????",err)
-    }
+  };
 
-}
+  // useEffect to handle the loading state
+  useEffect(() => {
+    // Fetch the data when the component mounts
+    fetchUserData().finally(() => {
+      // Add a delay of 1.2 seconds before setting isLoading to false
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+
+      // Cleanup timer
+      return () => clearTimeout(timer);
+    });
+  }, [username]); 
+
+
    useEffect(() =>{
     if (userContextConsumer?.userData?.login !== username){
         fetchUserData()
