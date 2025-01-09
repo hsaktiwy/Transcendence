@@ -33,8 +33,8 @@ const ProfileTest  = () =>{
     if (!SocketContext)
         throw new Error('error')
    const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
-   const [isLoading, setLoading] = useState<boolean>(false);
    const [channel_id, setChannelId] = useState<number | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
@@ -62,7 +62,7 @@ const ProfileTest  = () =>{
         console.log('waaaaaaaa    ',user, "waaaaa2 ",  username)
         if (user.length === 0)
         {
-            setLoading(true);
+            setIsLoading(true);
             const req = {
                 url: `/api/users/${username}/`,
                 method: 'GET',
@@ -72,7 +72,7 @@ const ProfileTest  = () =>{
             const respData: ProfileDataInterface = resp.data
     
             setProfileData(respData)
-            setLoading(false);
+            setIsLoading(false);
         }
         else{
             setProfileData(user[0])
@@ -84,8 +84,23 @@ const ProfileTest  = () =>{
     catch (err){
         console.error("dddddd======????",err)
     }
+  };
 
-}
+  // useEffect to handle the loading state
+  useEffect(() => {
+    // Fetch the data when the component mounts
+    fetchUserData().finally(() => {
+      // Add a delay of 1.2 seconds before setting isLoading to false
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+
+      // Cleanup timer
+      return () => clearTimeout(timer);
+    });
+  }, [username]); 
+
+
    useEffect(() =>{
     if (userContextConsumer?.userData?.login !== username){
         fetchUserData()
@@ -165,8 +180,8 @@ const ProfileTest  = () =>{
                             </div>
                         </div>
                         <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
-                        <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
-                                        <MatchHistory profileData={profileData}/>
+                            <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
+                                <MatchHistory profileData={profileData}/>
                             </div>
                         </div>
                         <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
