@@ -26,18 +26,16 @@
   }
 
 
-  body{
+  html, body {
     background-image: url('https://cdnb.artstation.com/p/assets/images/images/026/605/687/4k/hardy-fowler-alley.jpg?1589227775');
-    /* background-color: #292d30; */
-    /* background: linear-gradient(to bottom  left, #242b30, #18191a); */
     background-position: center;
-    background-size: cover;
+    background-size: cover; /* This keeps it covering the viewport */
     background-repeat: no-repeat;
     position: relative;
-    min-height: 100vh;
-    
+    min-height: 100vh; /* Ensures it takes at least full viewport height */
+    overflow-x: hidden; /* Optional: To prevent horizontal scrolling */
   }
- 
+  
   #overlay {
     position: fixed;
     width: 100%;
@@ -45,15 +43,12 @@
     bottom: 0;
     top: 0;
     left: 0;
-    z-index: -1;
-    background: linear-gradient(to bottom  left, #242b30, #18191a);
+    /* z-index: -1; */
+    background: linear-gradient(to bottom left, #242b30, #18191a);
     opacity: 0.9;
-    /* background-color:rgb(2 5 16 / 0.8); */
-    /* background: linear-gradient(to top right, #121415, #2B2F32);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center; */
-}
+  }
+  
+  
   
 /* background: url('https://tailwindcss.com/_next/static/media/docs-dark@tinypng.1bbe175e.png'); */
 /* background: radial-gradient(circle, #5e98a9, #527386, #445160, #30333a, #181818); */

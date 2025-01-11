@@ -8,11 +8,11 @@ interface FormInputPropInterface {
     type: string,
     errorMessage:string,
     label: string,
-    pattern: string,
+    pattern: string ,
     required: boolean,
     setInputsData?: React.Dispatch<React.SetStateAction<inputsDataInterface> >,
     setInput?: React.Dispatch<React.SetStateAction<string> > ,
-    value: string,
+    value: string | undefined,
     inputsData?: inputsDataInterface
 }
 const FormInput = (prop: FormInputPropInterface)=>{
