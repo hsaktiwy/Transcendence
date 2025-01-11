@@ -100,7 +100,6 @@ const RegisterForm = () =>{
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("blalvavlav")
         try{
             const request = {
                 url: '/api/user/register/',
@@ -177,39 +176,6 @@ const RegisterForm = () =>{
                             <h1 >Hey! Happy to see you here</h1>
                             <p className='text-lg font-normal '>Create your account now</p>
                         </div>
-                        {/* <div className="mb-4 flex items-center  justify-center gap-11 w-full"> */}
-                            {/* <div className='w-[46%]'>
-                                <label htmlFor="firstName" className="block text-white font-bold mb-2">First Name:</label>
-                                <input
-                                    autoComplete='off'
-                                    type="firstName"
-                                    id="firstName"
-                                    value={firstName}
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                    required
-                                    className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
-                                    />
-                            </div> 
-                             <div className='w-[46%]'>
-                                <label htmlFor="lastName" className="block text-white font-bold mb-2">Last Name:</label>
-                                <input
-                                    autoComplete='off'
-                                    type="lastName"
-                                    id="lastName"
-                                    value={lastName}
-                                    onChange={(e) => setLasttName(e.target.value)}
-                                    required
-                                    className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
-                                    />
-                            </div> */}
-                            {/* {
-                                inputs.filter((input)=>input.name === 'firstName' || input.name === 'lastName').map((input, index)=> {
-                                    return(
-                                        <FormInput key={index + 1} {...input} value={inputsData[input.name]} onChange={onChange}/>
-                                    )
-                                })
-                            } */}
-                        {/* </div> */}
                         {
                                 inputs.map((input, index)=> {
                                     return(
@@ -217,88 +183,10 @@ const RegisterForm = () =>{
                                     )
                                 })
                         }
-                        {/* <div className="mb-6 relative ">
-                            <label htmlFor="username" className="block text-white font-bold mb-2">Username:</label>
-                            <input
-                                autoComplete='off'
-                                type='username'
-                                id="username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
-                                className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
-                            />
-                        </div>
-                        <div className="mb-6 relative ">
-                            <label htmlFor="email" className="block text-white font-bold mb-2">Email:</label>
-                            <input
-                                autoComplete='off'
-                                type='email'
-                                id="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
-                            />
-                        </div>
-                        <div className="mb-6 relative ">
-                            <label htmlFor="password" className="block text-white font-bold mb-2">Password:</label>
-                            <input
-                                type={hide  ? 'password' : 'text'}
-                                id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
-                                onFocus={()=>{
-                                    setPassFocus(true)
-                                }}
-                                onBlur={() =>{
-                                    setPassFocus(false)
-                                }}
-                            />
-                            <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFocus ? 'text-black' : 'text-white' }`} onClick={() =>{
-                                setHide(!hide)
-                            }}>
-                                {hide ? <LuEyeOff/> : <LuEye/>}
-                            </div>
-                        </div>
-                        <div className="mb-6 relative ">
-                            <label htmlFor="confirmPassword" className="block text-white font-bold mb-2">Confirm Your Password:</label>
-                            <input
-                                type={hide2  ? 'password' : 'text'}
-                                id="confirmPassword"
-                                value={password2}
-                                onChange={(e) => setPassword2(e.target.value)}
-                                required
-                                className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
-                                onFocus={()=>{
-                                    setPassFocus2(true)
-                                }}
-                                onBlur={() =>{
-                                    setPassFocus2(false)
-
-                                }}
-                            />
-                            <div className={`p-4 absolute right-1 -translate-y-[50%] top-[70%] cursor-pointer duration-75 ${passFocus2 ? 'text-black' : 'text-white' }`} onClick={() =>{
-                                setHide2(!hide2)
-                            }}>
-                                {hide2 ? <LuEyeOff/> : <LuEye/>}
-                            </div>
-                        </div> */}
-
                         <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
                             <button  type="submit"  className="w-full   border-none bg-white/95 text-black text-lg font-bold py-2 px-4 rounded-2xl  hover:bg-white transition-all duration-150">
                                 Sign up
                             </button>
-                            {/* <div className='h-[30px] flex items-center justify-evenly w-full'>
-                                <div className=' w-[45%] bg-white h-[1px]'></div>
-                                <p className='w-[5%] text-white'> or </p>
-                                <div className=' w-[45%] bg-white h-[1px]'></div>
-                            </div>
-                            <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:scale-105 duration-150" onClick={handleSubmitWith42}>
-                            {!loading ? <p >Sign up with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
-                            </button> */}
                             <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
                                 <p>You have an account ? <Link to='/login' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign in</Link></p>
                             </div>

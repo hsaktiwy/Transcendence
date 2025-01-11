@@ -99,7 +99,7 @@ function TwoFA(){
             {
                 disable2faModal && <DisableTFAModal dispatch={setdisbale2faModal}/>
             }
-                <h1 className="self-center text-3xl pt-4 text-center sm:text-start">Two-Factor Authentication</h1>
+                <h1 className="self-center text-2xl pt-4 text-center sm:text-start">Two-Factor Authentication</h1>
             <div className="flex gap-6 flex-col-reverse 2xl:flex-row items-center justify-center">
                 <div className="tfa-container flex flex-col gap-6 w-full 2xl:w-[550px]">
                     <p className="text-white/80 text-lg ">Get verification code from Google Authenticator, it works even if your phone is offline. Scan the QR Code.</p>
@@ -111,14 +111,14 @@ function TwoFA(){
                     </div>
                     <div className="  self-center 2xl:self-start flex gap-6 flex-wrap items-center justify-center">
                         <input  ref={verificationInputRef} type='text' placeholder="Enter Verification Code" className={` w-[90%] sm:w-[300px] bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4   outline-none focus:outline-1 focus:outline-[#5E97A9]`} onChange={handle2faInputChange}/>
-                        <button type='button' className=" bg-[#5E97A9]/70 px-4 py-2 rounded-xl  opacity-70 hover:opacity-100 hover:scale-105 duration-75 w-[90%] sm:w-auto" onClick={handleSubmit2fa}>Enable TFA</button>
+                        <button type='button' className=" bg-[#5E97A9]/70 px-4 py-2 rounded-xl  border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75 w-[90%] sm:w-auto" onClick={handleSubmit2fa}>Enable TFA</button>
 
                     </div>
                      <p className={`${invalid ? 'visible' : 'invisible'} ml-0 sm:ml-4 font-light text-red-600 text-center xl:text-justify`} >Invalid Verification Code</p>
                     
                     
                 </div>
-                <div className="w-[200px] h-[200px] p-4 2xl:p-8 border border-white/50 rounded-lg self-center">
+                <div className="w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] p-4 2xl:p-8 border border-white/50 rounded-lg self-center">
                     {
                         QR ? <img src={QR} alt="qr-code" className="w-full h-full object-contain 2xl:object-cover"/> :
                         <div className="flex justify-center items-center h-full w-full ">
