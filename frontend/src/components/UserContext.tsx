@@ -236,6 +236,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 }
                 const resp = await mailman(req)
                 const friendsList: ProfileDataInterface[] = resp.data
+                console.log(friendsList)
                 setFriends(friendsList)
             }
             catch (err){

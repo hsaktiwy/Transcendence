@@ -72,7 +72,7 @@ const ProfileTest  = () =>{
             const respData: ProfileDataInterface = resp.data
     
             setProfileData(respData)
-            setIsLoading(false);
+            // setIsLoading(false);
         }
         else{
             setProfileData(user[0])
@@ -86,27 +86,23 @@ const ProfileTest  = () =>{
     }
   };
 
-  // useEffect to handle the loading state
-  useEffect(() => {
-    // Fetch the data when the component mounts
-    fetchUserData().finally(() => {
-      // Add a delay of 1.2 seconds before setting isLoading to false
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-
-      // Cleanup timer
-      return () => clearTimeout(timer);
-    });
-  }, [username]); 
 
 
    useEffect(() =>{
     if (userContextConsumer?.userData?.login !== username){
-        fetchUserData()
+        fetchUserData().finally(() => {
+            // Add a delay of 1.2 seconds before setting isLoading to false
+            const timer = setTimeout(() => {
+              setIsLoading(false);
+            }, 600);
+      
+            // Cleanup timer
+            return () => clearTimeout(timer);
+          });
     }
     else{
         setProfileData(userContextConsumer?.userData)
+        setIsLoading(false)
     }
    },[username])
     console.log(profileData);
