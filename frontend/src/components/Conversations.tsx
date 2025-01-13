@@ -95,6 +95,7 @@ import { convs } from "../utils/ConversationsList";
 import { BACKEND } from "../utils/Constants";
 import { UserContext } from "./UserContext";
 import { formatDate2 } from "./NavBarModal";
+import EmptyConversationList from "./EmptyConversationList";
 
 let inc:number=  22222
 function Conversations(){
@@ -121,28 +122,11 @@ return(
                         
                     </div>
                 </div>
-                {/* <div className="bg-white w-[100%] h-[1px] lg:mt-5 rounded-full"></div> */}
             </div>
-
-            {/* <div className="online-friends-container">
-                <h1 className="text-white font-semibold mt-4 ml-4">Online Friends</h1>
-                <div className="online-friends my-8 flex gap-2 overflow-y-auto">
-                    {
-                        chatContext.convs.map((conv, index) : React.ReactNode =>{
-                            return(
-                                <div key={index} className="relative">
-                                    <div className="absolute bg-green-500 h-2 w-2 rounded-full bottom-0 right-0"></div>
-                                    <img src={conv.user2.profile_pic} alt="friend-pic" className="w-[40x] h-[40px] rounded-full " />
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-            </div> */}
+            
             <div id="messages-conatiner" className="text-white my-2 flex flex-col gap-2 ">
-                {/* <div className=" mb-4 flex justify-center xl:justify-start gap-6"> */}
                     {
-                        chatContext.convs?.map((conv, index): React.ReactNode => {
+                        chatContext.convs?.filter(conv => conv.messages.length > 0).length ? chatContext.convs?.filter(conv => conv.messages.length > 0 ).map((conv, index): React.ReactNode => {
                             interface convData{
                                 lastMessage: Message;
                                 picture: string;
@@ -186,14 +170,10 @@ return(
                                         
                                     </div>
                             )
-                        })
+                        }) : <EmptyConversationList/>
                     }
-                    {/* <img src="./src/assets/8.jpg" alt="friend-pic" className="rounded-full  object-contain w-12 h-12  lg:w-10 lg:h-10 2xl:w-16 2xl:h-16" />
-                    <div className="self-center hidden lg:block">
-                        <h1 className="text-sm xl:text-md 2xl:text-lg">Lorem ipsum</h1>
-                        <p className="text-gray-300 text-xs lg:text-md">Lorem ipsum dolor sit amet...</p>
-                    </div> */}
-                {/* </div> */}
+   
+
             </div>
     </div>
 )

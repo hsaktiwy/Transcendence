@@ -36,6 +36,13 @@ export interface inputsDataInterface{
     password: string,
     password2: string
 }
+export interface inputsErrorInterface{
+    firstName: boolean,
+    lastName: boolean,
+    email: boolean,
+    password: boolean,
+    password2: boolean
+}
 const RegisterForm = () =>{
     const AuthContextConsummer = useContext(AuthContext)
     if (!AuthContextConsummer)
@@ -47,6 +54,13 @@ const RegisterForm = () =>{
         email: "",
         password: "",
         password2: ""
+    })
+    const [inputsError, setInputError] = useState<inputsErrorInterface>({
+        firstName: true,
+        lastName: true,
+        email: true,
+        password: true,
+        password2: true
     })
     const inputs: inputInterface[] = [
         {
@@ -179,14 +193,37 @@ const RegisterForm = () =>{
                         {
                                 inputs.map((input, index)=> {
                                     return(
-                                        <FormInput key={index + 1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData}/>
+                                        <FormInput key={index + 1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} inputsError={inputsError} setInputError={setInputError}/>
                                     )
                                 })
                         }
                         <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
-                            <button  type="submit"  className="w-full   border-none bg-white/95 text-black text-lg font-bold py-2 px-4 rounded-2xl  hover:bg-white transition-all duration-150">
-                                Sign up
-                            </button>
+                        <button
+                                type="submit"
+                                disabled={Object.values(inputsError).includes(true) ? true : false }
+                                className=" relative w-full group border-none bg-white/95 text-black text-lg font-bold py-2 px-4 rounded-2xl hover:bg-white transition-all duration-150"
+                                >
+                                
+                                <span>Sign Up</span>
+                                <style >{`
+                                    .group:hover::after {
+                                    display: ${Object.values(inputsError).includes(true) ? 'inline-block' : 'none'};
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                    content: 'Please correct or complet the required fields ';
+                                    position: absolute;
+                                    bottom: -90%;
+                                    left: 50%;           /* 50% from the left */
+                                    transform: translateX(-50%);
+                                    color: white;
+                                    background-color: rgb(239 68 68 / 0.75);
+                                    padding: 4px;
+                                    border-radius: 0.75rem;
+                                    width: 300px;
+                                    animation: slideUpFadeIn 0.5s ease-out forwards;
+                                    }
+                                `}</style>
+                                </button>
                             <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
                                 <p>You have an account ? <Link to='/login' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign in</Link></p>
                             </div>
