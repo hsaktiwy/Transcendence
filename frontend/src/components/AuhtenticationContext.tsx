@@ -104,6 +104,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     const logout =  async () =>{
         if (loggedIn !== undefined){
             try{
+                
                 const request = {
                     url: '/api/user/logout/',
                     method: 'GET',

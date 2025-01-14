@@ -22,6 +22,11 @@ export interface NotificationPropreties{
     is_readed: boolean;
     sender: ProfileDataInterface
 }
+export interface NotificationStatePropreties{
+    type: string,
+    sender: ProfileDataInterface,
+    state: string
+}
 
 
 const getProfilePicPath = (str:string) =>{
@@ -257,13 +262,25 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
             
     }
+    const friendStateHandler = (data: NotificationStatePropreties) =>{
+        console.log('3chirk ghayrha')
+        data.sender.state = data.state
+        const friend  = data.sender as ProfileDataInterface
+        friend.state = data.state
+        setFriends(prev => [...prev , friend])
+    }
     useEffect(() =>{
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
+        SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
         SocketContext.AddChannel('NOTIFICATION', PureNotification)
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
+            SocketContext.RemoveChannel('NOTIFICATION_ACCEPT_FRIEND')
+            SocketContext.RemoveChannel('NOTIFICATION_MESSAGE')
+            SocketContext.RemoveChannel('NOTIFICATION_STATE')
+            SocketContext.RemoveChannel('NOTIFICATION')
         }
         
     }, [])
