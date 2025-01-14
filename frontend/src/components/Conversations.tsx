@@ -123,58 +123,55 @@ return(
                     </div>
                 </div>
             </div>
-            
-            <div id="messages-conatiner" className="text-white my-2 flex flex-col gap-2 ">
-                    {
-                        chatContext.convs?.filter(conv => conv.messages.length > 0).length ? chatContext.convs?.filter(conv => conv.messages.length > 0 ).map((conv, index): React.ReactNode => {
-                            interface convData{
-                                lastMessage: Message;
-                                picture: string;
-                                friendName: string;
-                                new_message: number;
-                            }
-                            const currentConvData: convData = {
-                                lastMessage: (conv.messages && conv.messages.length != 0)  ? conv.messages[conv.messages.length - 1] : NoneMessage,
-                                picture: conv.user2?.profile_pic,
-                                friendName: conv.user2?.firstName +  " " +conv.user2?.lastName,
-                                new_message:  conv.new_message
-                            }
-                            return(
-                                
-                                <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? " relative bg-black/25 border-l-2 border-[#5E97A9]  " : ""}  h-[100px] relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
-                                        console.error(conv.channelId)
-                                        chatContext.setActive(conv)
-                                        chatContext.setActiveSection('chat')
-                                }}>
-                             
-                                        <img src={backendPath + currentConvData.picture} alt="friend-pic" className="aspect-square rounded-full object-cover  w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] outline outline-[#5e98a9c9]" />
-                                        <div className="self-center flex-1">
-                                            <div className="flex justify-between items-center">
-                                                <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
-                                                {currentConvData.new_message!==0 &&  
-                                        <div className=" rounded-full  w-[10px] h-[10px] bg-[#5E97A9]    text-sm font-light text-center">
-                                                {/* {currentConvData.new_message} */}
-                                        </div> }
-                                            </div>
-                                            <div className="flex justify-between items-center w-full ">
-
-                                                <p className="text-gray-300 text-[12px] xxl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
-                                                <p className="text-white/50">{formatDate2(currentConvData.lastMessage.timestamp)}</p>
-                                            </div>
-                                            
+            {
+                chatContext.convs?.filter(conv => conv.messages.length > 0).length ?
+                <div id="messages-conatiner" className="text-white my-2 flex flex-col gap-2 ">
+                {
+                    chatContext.convs?.filter(conv => conv.messages.length > 0 ).map((conv, index): React.ReactNode => {
+                        interface convData{
+                            lastMessage: Message;
+                            picture: string;
+                            friendName: string;
+                            new_message: number;
+                        }
+                        const currentConvData: convData = {
+                            lastMessage: (conv.messages && conv.messages.length != 0)  ? conv.messages[conv.messages.length - 1] : NoneMessage,
+                            picture: conv.user2?.profile_pic,
+                            friendName: conv.user2?.firstName +  " " +conv.user2?.lastName,
+                            new_message:  conv.new_message
+                        }
+                        return(
+                            
+                            <div key={index} className={` ${conv.channelId === chatContext.active?.channelId ? " relative bg-black/25 border-l-2 border-[#5E97A9]  " : ""}  h-[100px] relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
+                                    console.error(conv.channelId)
+                                    chatContext.setActive(conv)
+                                    chatContext.setActiveSection('chat')
+                            }}>
+                        
+                            <div className="relative inline-block">
+                                <img src={backendPath + currentConvData.picture} alt="friend-pic" className="aspect-square rounded-full object-cover w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] outline outline-[#5e98a9c9]" />
+                                <div className="absolute bottom-3 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white"></div> 
+                            </div>                                    <div className="self-center flex-1">
+                                        <div className="flex justify-between items-center">
+                                            <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
+                                            {currentConvData.new_message!==0 &&  
+                                    <div className=" rounded-full  w-[10px] h-[10px] bg-[#5E97A9]    text-sm font-light text-center">
+                                            {/* {currentConvData.new_message} */}
+                                    </div> }
                                         </div>
-                                        {/* {currentConvData.new_message!==0 &&  
-                                        <div className="absolute rounded-full  w-[20px] h-[20px] bg-green-500  right-2 top-[30%] -translate-y-[50%] flex text-sm font-light">
-                                                {currentConvData.new_message}
-                                        </div> } */}
+                                        <div className="flex justify-between items-center w-full ">
+                                            <p className="text-gray-300 text-[12px] xxl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
+                                            <p className="text-white/50">{formatDate2(currentConvData.lastMessage.timestamp)}</p>
+                                        </div>
                                         
                                     </div>
-                            )
-                        }) : <EmptyConversationList/>
-                    }
-   
+                                </div>
+                        )
+                    }) 
+                }
+                </div> : <EmptyConversationList/>
 
-            </div>
+            }
     </div>
 )
 
