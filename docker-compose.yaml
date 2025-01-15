@@ -4,11 +4,9 @@ services:
     container_name: postgresql
     env_file:
       - .env
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
     restart: always
-    # ports:
-    #   - "5432:5432"
+    ports:
+      - "5432:5432"
     networks:
       - transendence
   backend:

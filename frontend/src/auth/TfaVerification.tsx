@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { VerifyTFAInterface } from "@/components/AuhtenticationContext";
 import { AuthContext } from "@/components/AuhtenticationContext";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 interface TfaProp {
     user:string

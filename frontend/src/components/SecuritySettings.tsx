@@ -13,9 +13,9 @@ function SecuritySettings(){
         
     }
     return(
-        <div className="  security-settings m-4 sm:m-10 flex-1   bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl flex flex-col gap-10">
+        <div className="   border border-white/20 w-[90%] lg:w-[60%] xl:w-[85%] xxl:w-[60%] mx-auto security-settings my-4 sm:my-2 flex-1   bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl flex flex-col gap-10">
             <div className=" px-4 sm:px-10 py-4 flex justify-center 2xl:justify-between  items-center 2xl:items-start gap-8 2xl:gap-0 relative flex-col 2xl:flex-row ">
-                <h1 className="text-3xl pt-4 text-center sm:text-start">Change Password</h1>
+                <h1 className="text-2xl pt-4 text-center sm:text-start">Change Password</h1>
                 {/* <div className="absolute top-0 left-0 w-full h-full backdrop-filter backdrop-blur-[2px] z-40  flex justify-center items-center">
                     <div className="p-10 bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] text-white text-lg font-semibold rounded-xl w-[700px] text-center">
                         <h1 className="text-2xl font-semibold ">You are using a third-party Authentication you can't change the account passoword</h1>
@@ -25,7 +25,7 @@ function SecuritySettings(){
                 <form action="" className="flex flex-col gap-8  ">
                     <div className="relative w-full 2xl:w-[780px] m-4 sm:m-0">
                         <label htmlFor="oldPassword"></label>
-                        <input disabled type={hide[0]  ? 'password' : 'text'} placeholder="Old Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full outline-none focus:outline-1 focus:outline-[#5E97A9]"/>
+                        <input disabled type={hide[0]  ? 'password' : 'text'} placeholder="Old Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full border border-white/20 outline-none focus:border focus:border-transparent focus:outline-1 focus:outline-[#5E97A9]"/>
                         <div className=" p-4 text-lg duration-100  absolute right-[10%] sm:right-1 text-white top-[50%] -translate-y-[50%] cursor-pointer " onClick={() =>{
                             setHide(prev => {
                                 const newArr = [...prev]
@@ -38,7 +38,7 @@ function SecuritySettings(){
                     </div>
                     <div className="relative w-full 2xl:w-[780px] m-4 sm:m-0">
                         <label htmlFor="newPassword"></label>
-                        <input type={hide[1]  ? 'password' : 'text'} placeholder="New Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full outline-none focus:outline-1 focus:outline-[#5E97A9]"/>
+                        <input type={hide[1]  ? 'password' : 'text'} placeholder="New Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full border border-white/20 outline-none focus:border focus:border-transparent focus:outline-1 focus:outline-[#5E97A9]"/>
                         <div className=" p-4 text-lg duration-100  absolute right-[10%] sm:right-1 text-white top-[50%] -translate-y-[50%] cursor-pointer " onClick={() =>{
                             setHide(prev => {
                                 const newArr = [...prev]
@@ -55,7 +55,7 @@ function SecuritySettings(){
                         </div>
                     <div className="relative w-full 2xl:w-[780px] m-4 sm:m-0">
                         <label htmlFor="confirmNewPassword"></label>
-                        <input type={hide[2]  ? 'password' : 'text'} placeholder="Confirm New Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full outline-none focus:outline-1 focus:outline-[#5E97A9]"/>
+                        <input type={hide[2]  ? 'password' : 'text'} placeholder="Confirm New Password" className="bg-black/35 backdrop-filter backdrop-blur-sm rounded-2xl py-2 px-4  w-[90%] sm:w-full border border-white/20 outline-none focus:border focus:border-transparent focus:outline-1 focus:outline-[#5E97A9]"/>
                         <div className=" p-4 text-lg duration-100  absolute right-[10%] sm:right-1 text-white top-[50%] -translate-y-[50%] cursor-pointer " onClick={() =>{
                             setHide(prev => {
                                 const newArr = [...prev]
@@ -69,8 +69,8 @@ function SecuritySettings(){
 
                     <div className="submit-container self-center 2xl:self-end flex gap-6 flex-wrap items-center justify-center">
 
-                        <button className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl  opacity-70 hover:opacity-100 hover:scale-105 duration-75">Save Changes</button>
-                        <button className="w-[150px]  px-4 py-2 rounded-xl  bg-black/35 opacity-70 hover:opacity-100 hover:scale-105 duration-75">Cancel</button>
+                        <button className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl  border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75">Save Changes</button>
+                        <button className="w-[150px]  px-4 py-2 rounded-xl  bg-black/35 border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75">Cancel</button>
 
                     </div>
                 </form>

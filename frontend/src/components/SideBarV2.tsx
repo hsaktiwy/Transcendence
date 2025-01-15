@@ -3,15 +3,20 @@ import { Link } from 'react-router-dom'
 import { UserContext } from "./UserContext";
 import { GiSettingsKnobs } from "react-icons/gi";
 import { AuthContext } from "./AuhtenticationContext";
-import { toast } from "sonner";
+import { WebSocketContext } from "@/utils/WSContext";
+import { toast } from "react-toastify";
 import { CgLogOut } from "react-icons/cg";
+import { FiUser } from "react-icons/fi";
+
 
 function SideBarV2(){
     const [showSideBar, setShowSideBar] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
     const authContextConsumer  = useContext(AuthContext)
-    if (!userContextConsumer || !authContextConsumer)
+    const WsContextConsumer  = useContext(WebSocketContext)
+    if (!userContextConsumer || !authContextConsumer || !WsContextConsumer)
         throw new Error('error')
+    const {socket} = WsContextConsumer
     return (
         
         <aside className={`font-poppins w-full lg:h-full lg:w-[120px] shadow-lg mb-7 flex justify-center items-center z-50`}>
@@ -22,7 +27,7 @@ function SideBarV2(){
                 </Link>
                 {/* <embed type="image/svg+xml" src="/assets/svg/Vector.svg" className="w-[30px] h-[30px]"></embed> */}
                 <Link to={`/profile/${userContextConsumer?.userData?.login}`} className=" cursor-pointer w-[30px] h-[30px] ">
-                    <img src="/assets/svg/Vector.svg" alt="Message Icon" className="w-full h-full" />
+                    <FiUser className="w-full h-full text-white/75"/>
                 </Link>
                 <Link to="/chat" className=" cursor-pointer w-[30px] h-[30px] ">
                     <img src="/assets/svg/Message.svg" alt="Message Icon" className="w-full h-full" />
@@ -40,6 +45,11 @@ function SideBarV2(){
                 
             </div>
             <div id="log-out" className=" text-white/40 hover:text-red-500 duration-75 cursor-pointer mb-16 font-poppins text-center hidden lg:flex flex-col items-center justify-center gap-4 h-[10%] " onClick={() =>{
+                const stateObj = {
+                    type: "NOTIFICATION_STATE",
+                    state: "offline"
+                }
+                socket?.current.send(JSON.stringify(stateObj))
                 authContextConsumer.setLoggedIn(false)
                 toast.info('User Logged Out')
             }}>

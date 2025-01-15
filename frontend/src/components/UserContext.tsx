@@ -5,7 +5,7 @@ import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import { Action, ActionType, MiniNotification} from "@/utils/interfaces";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
@@ -22,6 +22,11 @@ export interface NotificationPropreties{
     is_readed: boolean;
     sender: ProfileDataInterface
 }
+export interface NotificationStatePropreties{
+    type: string,
+    sender: ProfileDataInterface,
+    state: string
+}
 
 
 const getProfilePicPath = (str:string) =>{
@@ -36,6 +41,8 @@ interface UserContextInterface{
     setUserData: React.Dispatch<React.SetStateAction<UserDataInterface | undefined> >;
     profilePicChanged: boolean;
     setProfilePicChanged: React.Dispatch<React.SetStateAction<boolean> >;
+    coverPicChanged: boolean;
+    setCoverPicChanged: React.Dispatch<React.SetStateAction<boolean> >;
     notifications: NotificationPropreties[];
     setnotifications: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >;
     newNotification: NotificationPropreties[];
@@ -75,6 +82,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     // const [id, setUserId] = useState<number | undefined>(undefined);
     const [userData, setUserData] = useState<UserDataInterface | undefined>(undefined);
     const [profilePicChanged, setProfilePicChanged] = useState<boolean>(false);
+    const [coverPicChanged, setCoverPicChanged] = useState<boolean>(false);
     const [friendRequestSent, setFriendRequestSent] = useState<FriendRequestInterface[]>([])
     const [friendRequestReceived, setFriendRequestReceived] = useState<FriendRequestInterface[]>([])
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
@@ -82,6 +90,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
     const [friends, setFriends] = useState<ProfileDataInterface[]>([])
+    const [ready, setReady] = useState<boolean>(false)
 
     const PureNotification = (data:MiniNotification) =>
     {
@@ -108,6 +117,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 state,
                 last_visit,
                 profile_pic,
+                CoverProfile,
                 two_factor_auth,
 
             } = resp.data
@@ -119,8 +129,10 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 state,
                 last_visit,
                 profile_pic,
+                CoverProfile,
                 two_factor_auth
             })
+            console.log('hana->>',resp.data)
             setProfilePicChanged(false)
             
         }
@@ -229,6 +241,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 }
                 const resp = await mailman(req)
                 const friendsList: ProfileDataInterface[] = resp.data
+                console.log(friendsList)
                 setFriends(friendsList)
             }
             catch (err){
@@ -249,13 +262,25 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
             
     }
+    const friendStateHandler = (data: NotificationStatePropreties) =>{
+        console.log('3chirk ghayrha')
+        data.sender.state = data.state
+        const friend  = data.sender as ProfileDataInterface
+        friend.state = data.state
+        setFriends(prev => [...prev , friend])
+    }
     useEffect(() =>{
         SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
         SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
+        SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
         SocketContext.AddChannel('NOTIFICATION', PureNotification)
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
+            SocketContext.RemoveChannel('NOTIFICATION_ACCEPT_FRIEND')
+            SocketContext.RemoveChannel('NOTIFICATION_MESSAGE')
+            SocketContext.RemoveChannel('NOTIFICATION_STATE')
+            SocketContext.RemoveChannel('NOTIFICATION')
         }
         
     }, [])
@@ -264,18 +289,30 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             fetchNotification()
         }
     },[AuthContextConsummer?.loggedIn, notificationReaded])
+
+    const ajami = async() =>
+    {
+        await fetchUserData()
+        await fetchFriends()
+        await fetchReceivedFriendRequest()
+        await fetchSentFriendRequest()
+        setReady(true)
+    }
     useEffect(() =>{
+        console.log('hooo->', coverPicChanged, '   ', AuthContextConsummer?.loggedIn)
         if (AuthContextConsummer?.loggedIn){
-            fetchUserData()
-            fetchFriends()
-            fetchReceivedFriendRequest()
-            fetchSentFriendRequest()
+            // fetchUserData()
+            // fetchFriends()
+            // fetchReceivedFriendRequest()
+            // fetchSentFriendRequest()
+            ajami();
         }
-    }, [AuthContextConsummer?.loggedIn, profilePicChanged])
+    }, [AuthContextConsummer?.loggedIn])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
-            {userData ? children : <LoadingIndecator/>}
+            {ready  ? children : <LoadingIndecator/>}
+            {/* { children } */}
         </UserContext.Provider>
     )
 }

@@ -131,41 +131,62 @@ const NotificationDropDown = (info: prop) =>{
 // useEffect(() =>{
 //     fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
 // },[])
+    function getFirstWord(inputString:string) {
+        if (typeof inputString !== 'string' || !inputString.trim()) {
+            return 'Invalid input'; // Handle non-string or empty input
+        }
+
+        // Split the string by spaces and return the first non-empty element
+        const words = inputString.trim().split(/\s+/);
+        return words[0];
+    }
+    let linkProfile = ''
+
     return(
         <ul
       
         data-popover="notifications-menu"
         data-popover-placement="bottom"
-        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124]   rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
+        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] transition-all duration-10s animate-fade-down  rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
         >
         {
             userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 
             (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item, index) =>{
-                return (
-                    <li
-                    key={index}
-                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
-                    >
-                        <img
-                        alt="notif-sender-pic"
-                        src={item.type==='friendship' ? axiosPath + item.sender.profile_pic : LOGO}
-                        className="relative inline-block h-10 w-10 rounded-full object-cover object-center"
-                        />
-                        <div className="flex flex-col gap-1 ml-4">
-                        <p className="text-slate-100 font-medium">
-                            {item.content}
-                        </p>
-                        <p className="text-slate-500 text-sm flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1 text-slate-400">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd" />
-                            </svg>
-                    
-                            {formatDate(item.created)}
-                        </p>
-                        </div>
-                    </li>
+                        
+                        linkProfile = '/';
+                        if(item.type === 'friendship')
+                            linkProfile = `/profile/${item.sender.login}`;
+                        return (
+                            
+                         
+                                <Link to={`${linkProfile}`}
+                                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
+                                key={index + 1}
+                                >
+                                    
+                                    <img
+                                    alt="notif-sender-pic"
+                                    src={item.type==='friendship' ? axiosPath + item.sender.profile_pic : LOGO}
+                                    className="relative inline-block h-10 w-10 aspect-square rounded-full object-cover object-center"
+                                    />
+                                    <div className="flex flex-col gap-1 ml-4">
+                                    <p className="text-slate-100 font-medium">
+                                        {item.content}
+                                    </p>
+                                    <p className="text-slate-500 text-sm flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1 text-slate-400">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clipRule="evenodd" />
+                                        </svg>
 
-                )
+                                        {formatDate(item.created)}
+                                    </p>
+                                    </div>
+                                </Link>     
+                        
+        
+                        )
+                   
+
             }))
                 // <>
                 // <li

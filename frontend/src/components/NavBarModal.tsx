@@ -28,7 +28,7 @@ export function formatDate2(dateString: Date | string) {
 
     // If the date is within the last 24 hours
     const diffInHours = diffInMs / (1000 * 60 * 60);
-    if (diffInHours < 24) {
+    if (diffInHours < 12) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
         return `${hours}:${minutes}`;

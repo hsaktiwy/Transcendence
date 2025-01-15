@@ -37,9 +37,12 @@ function ChatSection(){
         {
             const {channel_id} = location.state 
             setChannelId(channel_id)
+            init_conv(setLoading,setActive, setConvs, channel_id);
+            setActiveSection('chat')
         }
+        else
+            init_conv(setLoading,setActive, setConvs, channelId);
         console.log("wala ", channelId)
-        init_conv(setLoading,setActive, setConvs, channelId);
         // create a function that will update the general data
         const UpdateConvs = (data:any)=>
         {
@@ -77,13 +80,13 @@ function ChatSection(){
             AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
             RemoveChannel('CHAT')
         }
-    }, [loading, channelId, location?.state?.channel_id])
+    }, [])
 
     return(
         
         <ChatSectionContext.Provider value={{convs, setConvs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile, openModal, setOpenModal, modalMessage, setModalMessage}}>
                 {openModal && <ChatModal/>} 
-                <div className="    bg-black/10  backdrop-filter backdrop-blur-sm  rounded-xl   absolute top-[60px]  left-0 lg:left-[142px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
+                <div className="    bg-white/5 backdrop-filter backdrop-blur-md border border-white/20  rounded-3xl   absolute top-[60px]  left-0 lg:left-[142px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
                     <div className="  h-[calc(100%-60px)] lg:h-[100%] overflow-hidden relative ">
                         {loading ?
                         (<LoadingIndecator/>) :
