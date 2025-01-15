@@ -12,6 +12,7 @@ import { WebSocketContext, WebSocketProvider } from "../utils/WSContext";
 import { createContext } from "react";
 import { UserContext } from "./UserContext";
 import { useLocation } from "react-router-dom";
+import { ProfileDataInterface } from "@/utils/UserDataInterface";
 
 function ChatSection(){
     const location = useLocation()
@@ -30,7 +31,32 @@ function ChatSection(){
     if (!SocketContext)
         throw new Error('error')
     const {AddChannel,RemoveChannel, socket} = SocketContext
-    
+    useEffect(()=>{
+        if (convs && convs.length){
+            const {friends} = userContextConsumer
+            if (friends.length)
+            {
+                let tmpConvs: Conversation[] = []
+                for(let i = 0; i < convs.length; i++){
+                    let currentConv = convs[i]
+                    const elm = currentConv.user2 as ProfileDataInterface
+                    const friendInList = friends.find(friend => friend.login === elm.login)
+                    if (friendInList)
+                    {
+                        const newFriendState: User = {...friendInList, id: currentConv.user2.id} 
+                        currentConv = {...currentConv, user2: newFriendState}
+                        tmpConvs.push(currentConv)
+                    }
+                    else{
+                        const notFriend = currentConv.user2
+                        notFriend.state = 'none'
+                        tmpConvs.push({...currentConv, user2: notFriend})
+                    }
+                }
+                setConvs(tmpConvs)
+            }
+        }
+    }, userContextConsumer.friends)
     useEffect(()=>
     {
         if (location?.state?.channel_id)

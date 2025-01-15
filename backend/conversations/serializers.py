@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Message, Channel
 from users.models import MyUser
+# from us
 
 class MessageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -37,7 +38,7 @@ class ChannelSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = MyUser
-		fields = ['id','firstName', 'lastName','login',  'profile_pic', 'CoverProfile']
+		fields = ['id','login', 'email', 'firstName', 'lastName', 'state', 'last_visit', 'profile_pic', 'CoverProfile']
 
 class MessageSerializer2(serializers.ModelSerializer):
 	sender = UserSerializer()
