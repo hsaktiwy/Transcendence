@@ -35,9 +35,11 @@ function Search(info:props) {
                 console.log('searching ... ')
                 const request = {
                     url: '/api/user/search/',
-                    method: 'POST',
+                    method: 'GET',
                     withCredentials: true,
-                    data : {search:info.search_for}
+                    params:{
+                        search: info.search_for
+                    }
                 }
                 const resp = await mailman(request)
                 const sd : searched_data = resp.data as searched_data

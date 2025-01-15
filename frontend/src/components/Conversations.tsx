@@ -150,7 +150,7 @@ return(
                         
                             <div className="relative inline-block">
                                 <img src={backendPath + currentConvData.picture} alt="friend-pic" className="aspect-square rounded-full object-cover w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] outline outline-[#5e98a9c9]" />
-                                <div className="absolute bottom-3 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white"></div> 
+                                <div className={`absolute bottom-3 right-0 w-3 h-3 rounded-full ${conv.user2.state ==='online' ? 'bg-green-500' : conv.user2.state ==='offline' && 'bg-red-500'} border-2 border-white`}></div> 
                             </div>                                    <div className="self-center flex-1">
                                         <div className="flex justify-between items-center">
                                             <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
