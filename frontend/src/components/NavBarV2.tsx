@@ -50,9 +50,7 @@ function NavBarV2(){
         if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node) && drop)
             setDrop(false)
         else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
-            setNotificationDrop(false)
-            ax
-   
+            setNotificationDrop(false)   
         };
     
         document.addEventListener("click", handleClickOutDrop);

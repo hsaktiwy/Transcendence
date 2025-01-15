@@ -1,3 +1,5 @@
 .venv/
 test.txt
 postgres_data/
+postgres_volume/
+backend/media/

@@ -4,6 +4,7 @@ from .validators import Validator_birthDay
 from django.core.exceptions import ValidationError
 from PIL import Image
 import pyotp
+import uuid
 
 def user_pic_location(instance, filename):
     return 'user{0}/{1}'.format(instance.id,filename)
@@ -14,21 +15,21 @@ def validateImage(image):
         raise ValidationError(f"Max size of file is {limit_mb} MB")
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, email, login, firstName, lastName, password=None, **extra_fields):
+    def create_user(self, email, firstName, lastName, password=None, **extra_fields):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
-        user = self.model(email=email, login=login, firstName=firstName, lastName=lastName, **extra_fields)
+        user = self.model(email=email, firstName=firstName, lastName=lastName, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, login, firstName, lastName, password=None, **extra_fields):
+    def create_superuser(self, email, firstName, lastName, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
 
-        return self.create_user(email, login, firstName, lastName, password, **extra_fields)
+        return self.create_user(email, firstName, lastName, password, **extra_fields)
 
 # Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
@@ -42,13 +43,15 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         (OFFLINE, 'Offline'),
     ]
 
-    login = models.CharField(max_length=50, unique=True)
+    unique_id = models.UUIDField(primary_key=False,default=uuid.uuid4, editable=False, unique=True)
+    login = models.CharField(max_length=50, unique=True, blank=True, null=True)
     firstName = models.CharField(max_length=50)
     lastName = models.CharField(max_length=50)
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address")
     two_factor_auth = models.BooleanField(default=False)
     two_factor_auth_code = models.CharField(max_length=32, default=pyotp.random_base32)
-    profile_pic = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpg', validators=[validateImage])
+    profile_pic = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpeg', validators=[validateImage])
+    CoverProfile = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpeg')
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=OFFLINE)
     last_visit = models.DateTimeField(null=True, blank=True)
@@ -62,9 +65,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     def isDefaultImage(self):
         return self.profile_pic.name == 'default.jpeg'
+        
+    def isDefaultCoverImage(self):
+        return self.CoverProfile.name == 'default.jpeg'
 
-    USERNAME_FIELD = "login"
-    REQUIRED_FIELDS = ["email", "firstName", "lastName"]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = [ "firstName", "lastName"]
     def has_perm(self, perm, obj=None):
         return self.is_superuser
 
@@ -74,4 +80,4 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
 
     def __str__(self):
-        return self.login
+        return self.email

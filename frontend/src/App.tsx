@@ -1,4 +1,4 @@
-// import { useState } from 'react'
+import  { Suspense, lazy } from 'react'
 // import NavBar from './components/NavBar'
 // import Layout from './Layout'
 // import ChatSection from './components/ChatSection'
@@ -13,6 +13,8 @@ import UserProvider from './components/UserContext'
 import Dashboard from './components/Dashboard'
 import LoadingIndecator from './components/Loading'
 import { SkeletonTheme } from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import ProfileTest from './components/ProfileTest'
 import TopBar from './components//website/mobileVersion/topBar'
 import Game from './game/Game'
@@ -25,6 +27,9 @@ import ThreeScene from './components/ThreeScene'
 import Profile from './components/website/profile/profile'
 import GameCenter from './game/GameUi'
 
+
+
+
 const App = () =>
 {
   // const Components :childrenInterface = {site : <Layout>
@@ -32,6 +37,8 @@ const App = () =>
   //       </Layout>}
 
   return (
+  
+  <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
     <BrowserRouter>
       <AuthProvider>
         <Auth>
@@ -41,7 +48,7 @@ const App = () =>
                       <Route path='/'  element={ <Layout/>}>
                         <Route path='/profile/:username' element={ <ProfileTest/>}/>
                         <Route index element={ <Dashboard/>}/>
-                        <Route path='/chat' element={ <ChatSection/>}/>
+                        <Route path='/chat/:channel_id?' element={ <ChatSection/>}/>
                         <Route path='/settings' element={ <Settings/>}/>
                         <Route path='/Game' element={<GameCenter />}/>
                       </Route>
@@ -52,6 +59,7 @@ const App = () =>
         </Auth>
       </AuthProvider>
     </BrowserRouter>
+    </SkeletonTheme>
     // <ThreeScene/>
   )
 }

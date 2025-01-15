@@ -6,6 +6,7 @@ export interface User{
     lastName: string;
     login: string;
     profile_pic: string;
+    CoverProfile:string;
 }
 
 export interface Message{

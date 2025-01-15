@@ -107,6 +107,10 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
   
               }
             }
+            if (type === 'state'){
+              const notifData =  JSON.parse(message.data);
+              channels.current['NOTIFICATION_STATE'](notifData)
+            }
             if (type == "NOTIFICATION")
             {
               if(channels.current['NOTIFICATION'])

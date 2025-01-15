@@ -11,6 +11,7 @@ import pyotp
 import qrcode
 import io
 from django.http import HttpResponse
+from .models import MyUser
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 ACCESS_TOKEN_EXPIRATION = datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFETIME)
@@ -66,6 +67,16 @@ def generate_TFA_verification_response(user):
         'user': user.login
     }, status=status.HTTP_200_OK)
     return resp
+
+def generate_set_username_response(user: MyUser, oauth):
+    respDic = {
+        'message': 'username needed',
+    }
+    if oauth == True:
+        respDic['uuid'] = user.unique_id
+        respDic['email'] = user.email
+    resp = Response(respDic, status=status.HTTP_200_OK)
+    return resp
     
 def generate_tokens_response(user, request):
     csrf_token = get_token(request)
@@ -111,3 +122,10 @@ def verify2faCode(user, code):
     if totp.verify(code):
             return True
     return False
+
+def isLoginAlreadyUSed(login):
+    try:
+        user = MyUser.objects.get(login=login)
+        return True
+    except MyUser.DoesNotExist:
+        return False
