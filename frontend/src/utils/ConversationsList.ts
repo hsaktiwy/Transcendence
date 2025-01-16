@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import {ChatSectionContext, Conversation, Message, User} from "./ChatContext"
-import {BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE} from './Constants'
+import {Conversation} from "./ChatContext"
 import mailman from "./AxiosFetcher";
 // let initila the data using the http protocol
 
@@ -27,8 +25,9 @@ export const init_conv = async (setLoading:React.Dispatch<React.SetStateAction<b
   const data = async () =>
   {
     console.log("strange")
+    console.log("hmm: ", import.meta.env.VITE_MESSAGES_PACKET_SIZE)
     try {
-      const url:string = CONVERSATION + MESSAGES_PACKET_SIZE + '/'
+      const url:string = import.meta.env.VITE_CONVERSATION + import.meta.env.VITE_MESSAGES_PACKET_SIZE + '/'
       const request = {
         url: url,
         method: 'GET',
@@ -36,18 +35,14 @@ export const init_conv = async (setLoading:React.Dispatch<React.SetStateAction<b
       }
       const response = await mailman(request)
       console.log(response.data)
-      const  holder:Conversation[] =  response.data as Conversation[]
-      convs = holder.conversations
+      const  conversations:Conversation[] =  response.data.conversations as Conversation[]
       received = true
       setLoading(false)
-      setConv(convs)
-      if (channel_id != undefined)
-      {
-        for (const conv of convs) {
-          if (conv.channelId === channel_id) {
-            setActive(conv)
-            break;
-          }
+      setConv(conversations)
+      if (channel_id !== undefined) {
+        const activeConversation = conversations.find(conv => conv.channelId === channel_id)
+        if (activeConversation) {
+          setActive(activeConversation)
         }
       }
     }
@@ -59,8 +54,3 @@ export const init_conv = async (setLoading:React.Dispatch<React.SetStateAction<b
   }
   await data();
 }
-
-// export const UpdateConversation = (request) =>
-// {
-
-// }

@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom'
 
 
 function ChatFriendInfo(){
-    const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
+    const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
     const [Status, setStatus] = useState<string>("Block")

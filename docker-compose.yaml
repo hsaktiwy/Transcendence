@@ -5,6 +5,7 @@ services:
     env_file:
       - .env
     restart: always
+    # WHY THIS PIORTS IS HERE ? (NO NEED FOR IT : HSAKTIWY QUESTION)
     ports:
       - "5432:5432"
     networks:
@@ -27,8 +28,6 @@ services:
     build: frontend/.
     container_name: frontend
     restart: always
-    # ports:
-    #   - "5173:5173"
     volumes:
       - ./frontend:/app
     env_file:
@@ -39,8 +38,6 @@ services:
     image: redis:latest
     container_name: redis
     restart: always
-    # ports:
-    #   - "6379:6379"  # Redis default port
     networks:
       - transendence
     depends_on:

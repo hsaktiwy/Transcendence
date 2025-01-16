@@ -1,19 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
-import { cookies } from './Cookie';
 import { useNavigate } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
-// import { user_id } from '../utils/Constants';
-// import { toast } from 'sonner'
-import { UserContext } from '../components/UserContext';
-import { AuthContext, LoginDataInterface, LoginError, LoginResp, signUpDataInterface } from '@/components/AuhtenticationContext';
+import { AuthContext,} from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
-import { resolve } from 'path';
-import { LuEye } from "react-icons/lu";
-import { LuEyeOff } from "react-icons/lu";
 import { motion } from 'framer-motion';
-import background from 'astro-bg.png';
-import { Loading__ } from './Login';
 import { Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { userNameError, emailError, passError } from './signUpError';
