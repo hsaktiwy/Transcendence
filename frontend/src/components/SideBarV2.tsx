@@ -17,6 +17,13 @@ function SideBarV2(){
     if (!userContextConsumer || !authContextConsumer || !WsContextConsumer)
         throw new Error('error')
     const {socket} = WsContextConsumer
+    const handler = ()=>{
+        const stateObj = {
+            type: "NOTIFICATION_STATE",
+            state: "offline"
+        }
+        socket?.current.send(JSON.stringify(stateObj))
+    }
     return (
         
         <aside className={`font-poppins w-full lg:h-full lg:w-[120px] shadow-lg mb-7 flex justify-center items-center z-50`}>
@@ -44,14 +51,11 @@ function SideBarV2(){
 
                 
             </div>
-            <div id="log-out" className=" text-white/40 hover:text-red-500 duration-75 cursor-pointer mb-16 font-poppins text-center hidden lg:flex flex-col items-center justify-center gap-4 h-[10%] " onClick={() =>{
-                const stateObj = {
-                    type: "NOTIFICATION_STATE",
-                    state: "offline"
-                }
-                socket?.current.send(JSON.stringify(stateObj))
+            <div id="log-out" className=" text-white/40 hover:text-red-500 duration-75 cursor-pointer mb-16 font-poppins text-center hidden lg:flex flex-col items-center justify-center gap-4 h-[10%] " onMouseEnter={handler} onClick={() =>{
+
                 authContextConsumer.setLoggedIn(false)
                 toast.info('User Logged Out')
+                
             }}>
                 <span className="text-3xl">
                     <CgLogOut/>

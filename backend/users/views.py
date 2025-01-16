@@ -406,13 +406,13 @@ class Verify2faOTPView(APIView):
             }, status=400)
             
 
-@api_view(['POST'])
+@api_view(['GET'])
 def Search(request):
     try:
-        identifier = request.data.get('search')
-        print(identifier)
-        Users = MyUser.objects.filter(login__icontains=identifier)
+        identifier = request.GET.get('search')
+        Users = MyUser.objects.filter(login__icontains=identifier)[:10]
         SerializedUsers = SearchUserSerializer(Users, many=True)
+
         return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
     except:
         return Response({"error": "wala\n"},status=400)

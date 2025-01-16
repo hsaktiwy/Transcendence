@@ -28,7 +28,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 friend_group_list.append(group_name)
             list_r = FriendRequest.objects.filter(Q(receiver=user, status='accepted'))
             for s in list_r:
-                group_name = f'notification_user_{s.receiver.login}'
+                group_name = f'notification_user_{s.sender.login}'
                 friend_group_list.append(group_name)
             return friend_group_list
         except Exception as e:
@@ -287,7 +287,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender
                     }
                 )
-            if message_json['type'] == 'NOTIFICATION_ADD_FRIEND':
+            elif message_json['type'] == 'NOTIFICATION_ADD_FRIEND':
                 receiver = message_json['to']
                 success,notification, receiver_id, friend_request_id = await sync_to_async(self.create_add_friend_notification)(receiver, user)
                 group_name = f'notification_user_{receiver}'
@@ -310,7 +310,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender
                     }
                 )
-            if message_json['type'] == 'NOTIFICATION_ACCEPT_FRIEND':
+            elif message_json['type'] == 'NOTIFICATION_ACCEPT_FRIEND':
                 receiver = message_json['to']
                 success,notification, receiver_id, friend_request_id = await sync_to_async(self.accept_friend_notification)(receiver, user)
                 group_name = f'notification_user_{receiver}'
@@ -318,7 +318,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     return 
                 notificationSerialized = await sync_to_async(self.get_SerializedNotification)(notification)
                 SerializedSender = await sync_to_async(self.get_sender)(user)
-                print(f"id: {notificationSerialized['id']}")
                 await self.channel_layer.group_send(
                     group_name,
                     {
@@ -333,15 +332,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender
                     }
                 )
-            if message_json['type'] == 'NOTIFICATION_STATE':
+            elif message_json['type'] == 'NOTIFICATION_STATE':
                 state = message_json['state']
                 friend_groups_list = await sync_to_async(self.get_user_friends_group_names)(user)
+                print( 'weeeeee   ', friend_groups_list)
                 if (friend_groups_list == None):
                     return 
                 SerializedSender = await sync_to_async(self.get_sender)(user)
                 for group_name in friend_groups_list:
                     try:
-                        print(group_name)
+                        print("raaaaaa   ",group_name)
                         await self.channel_layer.group_send(
                             group_name,
                             {
@@ -353,7 +353,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     except Exception as e:
                         print(f"Error sending to group {group_name}: {e}")
 
-            if message_json['type']=="READ":
+            elif message_json['type']=="READ":
                 first_index = int(message_json['first_index'])
                 channel_id = int(message_json['channel'])
                 # update the message status in the range
@@ -380,5 +380,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def state(self, event):
         message = json.dumps(event)
-        print(message)
+        print("saaaa   ",message)
         await self.send(text_data=message)
