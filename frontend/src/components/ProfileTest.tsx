@@ -11,7 +11,7 @@ import { ChartFile } from "@/components/Chartfile.tsx";
 import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
 import RankFile from "./rankFile.tsx";
-import { axiosPath ,BACKEND } from "../utils/Constants";
+// import { import.meta.env.VITE_axiosPath ,BACKEND } from "../utils/Constants";
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
 
 import { UserDataInterface, ProfileDataInterface } from "../utils/UserDataInterface";
@@ -106,6 +106,7 @@ const ProfileTest  = () =>{
     }
    },[username])
     console.log(profileData);
+    console.log(import.meta.env.VITE_axiosPath)
     return(
         <>
             {isLoading ? (
@@ -115,7 +116,7 @@ const ProfileTest  = () =>{
                         <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-5  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                         <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
                                     <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
-                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${import.meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                                 
                                                 <div className=" flex  mt-5 flex-col justify-center ">
                                                     <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
@@ -135,7 +136,7 @@ const ProfileTest  = () =>{
                                 <div className="flex  items-center justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                                     <div className="w-full  h-full  grid grid-rows-2 ">
                                             <div className="relative bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 "
-                                            style={{ backgroundImage: `url(${axiosPath}${profileData?.CoverProfile})`,}}>
+                                            style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})`,}}>
                                             <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                                 <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
                                                     <div className="  h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">

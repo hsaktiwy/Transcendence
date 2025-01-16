@@ -1,21 +1,14 @@
 // Login.tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
-import { cookies } from './Cookie';
 import { useNavigate, Link } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
-// import { user_id } from '../utils/Constants';
 import { toast } from 'react-toastify'
-import { UserContext } from '../components/UserContext';
-import { AuthContext, LoginDataInterface, LoginError, LoginResp, LoginTFAResponse } from '@/components/AuhtenticationContext';
+import { AuthContext, LoginDataInterface, LoginResp, LoginTFAResponse } from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
-import { resolve } from 'path';
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
 import { motion } from 'framer-motion';
-import background from 'astro-bg.png'
 import TfaVerification from './TfaVerification';
-import ThreeScene from '@/components/ThreeScene';
 import Username from './Username';
 
 export const Loading__ = () => {
