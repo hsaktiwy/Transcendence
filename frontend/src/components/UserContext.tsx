@@ -263,18 +263,25 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
-        console.log('3chirk ghayrha')
+        console.log(friends)
         data.sender.state = data.state
         const friend  = data.sender as ProfileDataInterface
-        friend.state = data.state
-        setFriends(prev => [...prev , friend])
+        //friend.state = data.state
+        const tmpFriends = friends.filter(friendElm=> friend.login !== friendElm.login)
+        tmpFriends.push(friend)
+        setFriends(tmpFriends)
     }
     useEffect(() =>{
-        SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
-        SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
-        SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
-        SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
-        SocketContext.AddChannel('NOTIFICATION', PureNotification)
+        console.log(friendStateHandler)
+        if (ready)
+        {       
+            SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
+            SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
+            SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
+            SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
+            console.log(friendStateHandler)
+            SocketContext.AddChannel('NOTIFICATION', PureNotification)
+        }
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
             SocketContext.RemoveChannel('NOTIFICATION_ACCEPT_FRIEND')
@@ -283,7 +290,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             SocketContext.RemoveChannel('NOTIFICATION')
         }
         
-    }, [])
+    }, [ready])
+    
     useEffect(() => {
         if (AuthContextConsummer?.loggedIn){
             fetchNotification()
@@ -299,12 +307,13 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         setReady(true)
     }
     useEffect(() =>{
-        console.log('hooo->', coverPicChanged, '   ', AuthContextConsummer?.loggedIn)
         if (AuthContextConsummer?.loggedIn){
             // fetchUserData()
+     
             // fetchFriends()
             // fetchReceivedFriendRequest()
             // fetchSentFriendRequest()
+            // setReady(true)
             ajami();
         }
     }, [AuthContextConsummer?.loggedIn])

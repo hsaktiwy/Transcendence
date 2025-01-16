@@ -54,6 +54,14 @@ def random_quote():
 def AcceptFriendRequest(request, id):
 	try:
 		friend_request = FriendRequest.objects.get(id=id)
+		list1, create = BlockList.objects.get_or_create(user=friend_request.sender)
+		check1 = list1.block_users.filter(id=friend_request.receiver.id).exists()
+		list2, create = BlockList.objects.get_or_create(user=friend_request.receiver)
+		check2 = list2.block_users.filter(id=friend_request.sender.id).exists()
+
+		if check1 or check2:
+			friend_request.delete()
+			return Response({'message': 'You are Blocked!'}, status=403)
 		if friend_request.status == RelationShipStatus.ACCEPTED.value:
 			return Response({'message': 'All ready Accepted'}, status=status.HTTP_200_OK)
 		friend_request.status = RelationShipStatus.ACCEPTED.value
@@ -99,6 +107,7 @@ def UnBlockUser(request, _login):
 @api_view(['GET'])
 def UnFriendUser(request, _login):
 	try:
+		# intented solution you can postman this even whne you are blocked (my logic my rules contact hsaktiwy )
 		friend = MyUser.objects.get(login=_login)
 		myuser = request.user
 		friendship = FriendShip.objects.filter((Q(user=myuser) & Q(friend=friend)) | (Q(user=friend) & Q(friend=myuser)))
@@ -110,6 +119,8 @@ def UnFriendUser(request, _login):
 		if len(f_request) > 0:
 			f_request.first().delete()
 		return Response({'mesasge': 'Done'}, status=status.HTTP_200_OK)
+	except MyUser.DoesNotExist:
+		return Response({'mesasge': f'{_login} does not exist'}, status=404)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 

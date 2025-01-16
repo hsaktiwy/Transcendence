@@ -2,11 +2,14 @@ import { createContext } from "react";
 
 export interface User{
     id: number;
-    firstName: string;
-    lastName: string;
-    login: string;
-    profile_pic: string;
-    CoverProfile:string;
+    login:string;
+    email:string;
+    firstName:string;
+    lastName:string;
+    state:string;
+    last_visit:string | null;
+    profile_pic:string;
+    CoverProfile: string;
 }
 
 export interface Message{
