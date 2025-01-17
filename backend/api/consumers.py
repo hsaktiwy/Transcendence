@@ -193,6 +193,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # first let get the room name
         user = self.scope['user']
         if user.is_authenticated:
+            state = 'online'
+            try:
+                await self.update_and_broadcast_state(user , state)
+            except Exception as e:
+                print(f"Error updating and broadcasting state: {e}")
             print(f'channel name  = {self.channel_name}')
             print(f"User {user} is authenticated, proceeding to get channels.")
             try:
@@ -213,17 +218,67 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.close()
 
     async def disconnect(self, code):
+        user = self.scope['user']
+        state = 'offline'
+        try:
+            await self.update_and_broadcast_state(user , state)
+        except Exception as e:
+            print(f"Error updating and broadcasting state: {e}")
         for room in self.rooms :
             await self.channel_layer.group_discard(
                 room,
                 self.channel_name
             )
+    @sync_to_async
+    def increment_sessions(self, user):
+        if user.sessions is None:
+            user.sessions = 0
+        user.sessions += 1
+        user.save()
+
+    @sync_to_async
+    def decrement_sessions(self, user):
+        if user.sessions is not None and user.sessions > 0:
+            user.sessions -= 1
+            user.save()
+
+    def has_active_sessions(self, user):
+        return user.sessions > 0 
+
+    def is_online(self, user):
+        return user.state == 'online' or user.state == 'in_game'
     
+    async def update_and_broadcast_state(self, user, state):
+        if state == 'online':
+            await self.increment_sessions(user)
+ 
+        elif state == 'offline':
+            await self.decrement_sessions(user)
+            if self.has_active_sessions(user):
+                return
+        user.state = state
+        await sync_to_async(user.save)() 
+        friend_groups_list = await sync_to_async(self.get_user_friends_group_names)(user)
+        if (friend_groups_list == None):
+            return 
+        SerializedSender = await sync_to_async(self.get_sender)(user)
+        for group_name in friend_groups_list:
+            try:
+                await self.channel_layer.group_send(
+                    group_name,
+                    {
+                        'type': 'state',
+                        'sender': SerializedSender,
+                        'state': state
+                    }
+                )
+            except Exception as e:
+                print(f"Error sending to group {group_name}: {e}")
+
     async def receive(self, text_data):
         try:
             user = self.scope['user']
             message_json = json.loads(text_data)
-
             if message_json['type'] == 'MESSAGE':
                 message = message_json['message']
                 room = message_json['channel']
@@ -271,7 +326,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 channel_id = message_json["channel_id"]
                 notification, receiver_id = await sync_to_async(self.create_message_notification)(receiver, user, message_json['message'])
                 group_name = f'notification_user_{receiver}'
-                print(">>>->",group_name)
                 notificationSerialized = await sync_to_async(self.get_SerializedNotification)(notification)
                 SerializedSender = await sync_to_async(self.get_sender)(user)
                 await self.channel_layer.group_send(
@@ -334,24 +388,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 )
             elif message_json['type'] == 'NOTIFICATION_STATE':
                 state = message_json['state']
-                friend_groups_list = await sync_to_async(self.get_user_friends_group_names)(user)
-                print( 'weeeeee   ', friend_groups_list)
-                if (friend_groups_list == None):
-                    return 
-                SerializedSender = await sync_to_async(self.get_sender)(user)
-                for group_name in friend_groups_list:
+                if state in ['online', 'offline', 'in_game']:
                     try:
-                        print("raaaaaa   ",group_name)
-                        await self.channel_layer.group_send(
-                            group_name,
-                            {
-                                'type': 'state',
-                                'sender': SerializedSender,
-                                'state': state
-                            }
-                        )
+                        await self.update_and_broadcast_state(user , state)
                     except Exception as e:
-                        print(f"Error sending to group {group_name}: {e}")
+                        print(f"Error updating and broadcasting state: {e}")
 
             elif message_json['type']=="READ":
                 first_index = int(message_json['first_index'])
@@ -380,5 +421,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def state(self, event):
         message = json.dumps(event)
-        print("saaaa   ",message)
         await self.send(text_data=message)

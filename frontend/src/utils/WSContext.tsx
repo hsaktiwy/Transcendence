@@ -50,6 +50,8 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
       socket.current.onclose = (event) => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
         console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
         connected.current = false
+        // check axios check user is loging 
+
         // if (authContextConsumer.loggedIn === true){ // we need a logic to handle reconnection maybe with status of backend ws response
         //   console.log('from ws context',authContextConsumer.loggedIn)
         //   ReconnectSocket()

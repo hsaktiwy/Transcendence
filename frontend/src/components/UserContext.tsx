@@ -263,6 +263,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
+        if (data.sender.login === userData?.login && data.state === 'offline')
+            AuthContextConsummer?.setLoggedIn(false)
         console.log(friends)
         data.sender.state = data.state
         const friend  = data.sender as ProfileDataInterface
@@ -272,15 +274,19 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         setFriends(tmpFriends)
     }
     useEffect(() =>{
-        console.log(friendStateHandler)
         if (ready)
         {       
             SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
             SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
             SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
             SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
-            console.log(friendStateHandler)
             SocketContext.AddChannel('NOTIFICATION', PureNotification)
+            // const stateObj = {
+            //     type: "NOTIFICATION_STATE",
+            //     state: "online"
+            // }
+            // SocketContext.socket?.current.send(JSON.stringify(stateObj))
+
         }
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
