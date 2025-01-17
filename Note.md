@@ -150,3 +150,4 @@ guidness :
             ```
             
 
+[ ] recheck for search bare limitation 

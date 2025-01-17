@@ -5,8 +5,6 @@ import { Navigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { ActionType } from "@/utils/interfaces";
 import mailman from "@/utils/AxiosFetcher";
-
-import { MESSAGES_PACKET_SIZE } from "@/utils/Constants";
 function ChatModal(){
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
@@ -47,7 +45,7 @@ function ChatModal(){
                     // get the old messages
                     try{
                         const req = {
-                            url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+MESSAGES_PACKET_SIZE+'/',
+                            url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/',
                             method: "GET",
                             withCredentials: true,
                         }
@@ -60,7 +58,7 @@ function ChatModal(){
                         })
                     }
                     catch(e){
-                        console.log('Error : in ChatModel get {'+ 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+MESSAGES_PACKET_SIZE+'/' +'} :\n')
+                        console.log('Error : in ChatModel get {'+ 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/' +'} :\n')
                         console.log(e)
                     }
                 }

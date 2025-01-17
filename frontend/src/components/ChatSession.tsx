@@ -1,13 +1,11 @@
 import React, { useContext, useRef, useState,useEffect, useCallback } from "react";
 import {ChatSectionContext, Conversation, Message} from "../utils/ChatContext"
 import { IoIosMore } from "react-icons/io";
-import { HiPlus } from "react-icons/hi2";
 
 import { IoPersonRemoveOutline } from "react-icons/io5";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { FiUser } from "react-icons/fi";
 
 
 import { MdOutlineBlock } from "react-icons/md";
@@ -15,14 +13,13 @@ import { IoTrashOutline } from "react-icons/io5";
 
 
 import { WebSocketContext } from "../utils/WSContext";
-import { BACKEND, CONVERSATION, MESSAGES_PACKET_SIZE, ws_url } from "../utils/Constants";
 import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
 import { formatDate2 } from "./NavBarModal";
 
 
-export const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
+export const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
 function ChatSession(){
     
     const chatContext =useContext(ChatSectionContext)
@@ -219,8 +216,8 @@ function ChatSession(){
         {
             try
             {
-                const extracting = 'update/' + chatContext.active?.channelId + '/' + MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
-                const url = CONVERSATION + extracting
+                const extracting = 'update/' + chatContext.active?.channelId + '/' + import.meta.env.VITE_MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
+                const url = import.meta.env.VITE_CONVERSATION + extracting
                 // console.log(url)
                 const request = {
                     url: url,
@@ -247,8 +244,8 @@ function ChatSession(){
                     is_next_packet: old_messages.is_next_packet,
                     messages: [...old_messages.messages, ...prevConv.messages]
                 }));
-                chatContext.setConvs((prevConvs: Conversation[]) => {
-                    const updatedConvs = prevConvs.map((conv)=> conv.channelId == chatContext.active?.channelId ?
+                chatContext.setConvs((prevConvs: Conversation[] | undefined) => {
+                    const updatedConvs = prevConvs?.map((conv)=> conv.channelId == chatContext.active?.channelId ?
                         {...conv, 
                         last_packet: conv?.next_packet_number,
                         next_packet_number: old_messages.next_packet_number,

@@ -7,7 +7,6 @@ import gsap from 'gsap';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import stats from 'stats.js'
-import { ws_url } from '../utils/Constants'
 import {channelType} from '../utils/interfaces'
 import {CallbackType} from '../utils/types'
 import { UserContext } from "../components/UserContext";
@@ -84,7 +83,7 @@ const PingPong = () => {
 
     const WebSocketEtablishing = ()=>
     {
-        const url:string = ws_url + '/ws/game/'
+        const url:string = import.meta.env.VITE_ws_url + '/ws/game/'
         console.log(url)
         if (!connected.current)//
             socket.current = new WebSocket(url)
