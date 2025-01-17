@@ -108,7 +108,7 @@ function Dashboard(){
                           <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]   shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
                                                           <div className="w-full h-full  grid grid-rows-2 ">
                                                           <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
-                                                              style={{ backgroundImage: `url(${axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
+                                                              style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
                                                           <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                                                   <div className=" h-20  flex items-center 2xl:items-end ">
                                                                           <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">

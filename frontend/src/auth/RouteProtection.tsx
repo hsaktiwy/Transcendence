@@ -1,7 +1,7 @@
 import { useContext, useRef, useState } from 'react';
 import {Navigate} from 'react-router-dom';
 import { useEffect } from 'react';
-import { BACKEND, SESSION_CHECKPATH } from '../utils/Constants';
+import { BACKEND } from '../utils/Constants';
 import React from 'react'
 import mailman from '../utils/AxiosFetcher';
 import { UserContext } from '../components/UserContext';

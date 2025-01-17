@@ -8,7 +8,7 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { NotificationPropreties } from "../UserContext";
-import { axiosPath, BACKEND } from "../../utils/Constants";
+// import { import.meta.env.VITE_axiosPath, BACKEND } from "../../utils/Constants";
 import mailman from "../../utils/AxiosFetcher";
 import { PiMaskSadLight } from "react-icons/pi";
 import { Loading__ } from "@/auth/Login";
@@ -166,7 +166,7 @@ const NotificationDropDown = (info: prop) =>{
                                     
                                     <img
                                     alt="notif-sender-pic"
-                                    src={item.type==='friendship' ? axiosPath + item.sender.profile_pic : LOGO}
+                                    src={item.type==='friendship' ? import.meta.env.VITE_axiosPath + item.sender.profile_pic : LOGO}
                                     className="relative inline-block h-10 w-10 aspect-square rounded-full object-cover object-center"
                                     />
                                     <div className="flex flex-col gap-1 ml-4">

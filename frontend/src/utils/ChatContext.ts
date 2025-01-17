@@ -28,7 +28,7 @@ export interface Conversation {
     LastUpdate: string
     last_packet: number
     next_packet_number: number
-    is_next_packet: boolean
+    is_next_packet: number
     scrollTop: number
     scrollLeft: number
     status: 0 | 1
