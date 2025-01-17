@@ -113,6 +113,8 @@ def LoginWithOAuth42(request):
             elif user.two_factor_auth:
                 resp = generate_TFA_verification_response(user)
             else:
+                user.state = 'online'
+                user.save()
                 resp = generate_tokens_response(user, request)
             return resp
         except MyUser.DoesNotExist:
@@ -132,6 +134,8 @@ def LoginWithOAuth42(request):
             if loginUsed:
                 resp = generate_set_username_response(user, True)
             else:
+                user.state = 'online'
+                user.save()
                 resp = generate_tokens_response(user, request)
             return resp
 

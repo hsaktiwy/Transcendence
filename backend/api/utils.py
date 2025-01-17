@@ -7,25 +7,25 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 User = get_user_model()
 
+def get_cookies(scope):
+    cookies_header = dict(
+        (key.decode('utf-8'), value.decode('utf-8')) 
+        for key, value in scope['headers'] 
+        if key == b'cookie'
+    )
+    cookies = {}
+    if cookies_header:
+        # Split the cookie string by semicolons
+        cookie_string = cookies_header.get('cookie')
+        if cookie_string:
+            for cookie in cookie_string.split(';'):
+                key, value = cookie.split('=', 1)
+                cookies[key.strip()] = value.strip()
+    return cookies
 class JWTAuthMiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
-        cookies_header = dict(
-            (key.decode('utf-8'), value.decode('utf-8')) 
-            for key, value in scope['headers'] 
-            if key == b'cookie'
-        )
-        cookies = {}
-        if cookies_header:
-            # Split the cookie string by semicolons
-            cookie_string = cookies_header.get('cookie')
-            if cookie_string:
-                for cookie in cookie_string.split(';'):
-                    key, value = cookie.split('=', 1)
-                    cookies[key.strip()] = value.strip()
-
-        # Debugging output
+        cookies = get_cookies(scope)
         print("Cookies:", cookies)  # Should show all cookies
-
         access_token = cookies.get('access_token') 
         
         try:
