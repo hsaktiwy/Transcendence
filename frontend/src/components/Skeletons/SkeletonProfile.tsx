@@ -2,6 +2,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
+
 function SkeletonDashboard() {
   return (
     <>
