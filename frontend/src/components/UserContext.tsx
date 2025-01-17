@@ -55,6 +55,8 @@ interface UserContextInterface{
     friends: ProfileDataInterface[];
     setFriends: React.Dispatch<React.SetStateAction<ProfileDataInterface[]> >;
     fetchFriends : () => void;
+    blockList: ProfileDataInterface[];
+    setBlockList: React.Dispatch<React.SetStateAction<ProfileDataInterface[]> >;
 
 
     
@@ -85,6 +87,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
     const [friends, setFriends] = useState<ProfileDataInterface[]>([])
+    const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
+
 
     const PureNotification = (data:MiniNotification) =>
     {
@@ -242,6 +246,26 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             }
     
     }
+    const fetchBlockList = async () =>{
+ 
+        try{
+            const req = {
+                url: `/friendship/block_list/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req)
+            const BlockList: ProfileDataInterface[] = resp.data
+            setBlockList(BlockList)
+            console.log('block lis')
+            console.log(resp.data)
+
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
+
+}
     const notificationHandler = (data: NotificationPropreties) => {
 
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
@@ -277,10 +301,11 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             fetchFriends()
             fetchReceivedFriendRequest()
             fetchSentFriendRequest()
+            fetchBlockList()
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {/* {userData ? children : <LoadingIndecator/>} */}
             { children }
