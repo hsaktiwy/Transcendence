@@ -22,6 +22,7 @@ import { PieChartFile } from "./PieChart.tsx";
 import { UserContext } from "./UserContext";
 import { MatchHistory } from "./MatchHistroy.tsx";
 import SkeletonDashboard from "./Skeletons/SkeletoneDashboard.tsx";
+import { WebSocketContext } from "@/utils/WSContext.tsx";
 
 Chart.register(CategoryScale);
 
@@ -61,20 +62,21 @@ const Data = [
 function Dashboard(){
 
   const userContextConsumer = useContext(UserContext);
-
+  const wsConsumer = useContext(WebSocketContext)
   const [isLoading, setIsLoading] = useState(true);
-
+  
   useEffect(() => {
     // Add a delay of 2 seconds before changing isLoading to false
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
-
+    
     // Cleanup the timer to avoid memory leaks
     return () => clearTimeout(timer);
   }, []);
-    if (!userContextConsumer)
-        throw new Error("userContext must be used within a UserProvider");
+  if (!userContextConsumer || !wsConsumer)
+    throw new Error("userContext must be used within a UserProvider");
+
     const [chartData, setChartData] = useState({
         labels: Data.map((data) => data.year), 
         datasets: [

@@ -15,7 +15,10 @@ from django.db.models import Q
 from friendship.models import BlockList, FriendShip
 from users.serializers import PublicUserSerializer
 from django.db.models import Q
+from api.utils import get_cookies
+import redis
 
+redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 class ChatConsumer(AsyncWebsocketConsumer):
 
     
@@ -188,23 +191,41 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': f'ok, I am in channel {room_name}'
             }
         )
+
+
+
+    async def increment_group_member_count(self, group_name):
+        count_key = f"group:{group_name}:count"
+        redis_client.incr(count_key)
+
+    async def decrement_group_member_count(self, group_name):
+        count_key = f"group:{group_name}:count"
+        current_count = redis_client.get(count_key)
+        if current_count and int(current_count) > 0:
+            redis_client.decr(count_key)
+
+    async def get_group_member_count(self, group_name):
+        count_key = f"group:{group_name}:count"
+        count = redis_client.get(count_key)
+        return int(count) if count else 0
+
     async def connect(self):
         
         # first let get the room name
         user = self.scope['user']
         if user.is_authenticated:
-            state = 'online'
-            try:
-                await self.update_and_broadcast_state(user , state)
-            except Exception as e:
-                print(f"Error updating and broadcasting state: {e}")
-            print(f'channel name  = {self.channel_name}')
-            print(f"User {user} is authenticated, proceeding to get channels.")
+            self.cookies = get_cookies(self.scope)
             try:
                 self.user_id = user.id
                 self.notification_group_name = f'notification_user_{user.login}'
-                print(self.notification_group_name)
+                self.session_group_name = f'user_session_{self.cookies.get('csrftoken')}'
                 await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
+                await self.channel_layer.group_add(self.session_group_name, self.channel_name)
+                state = 'online'
+                try:
+                    await self.update_and_broadcast_state(user , state)
+                except Exception as e:
+                    print(f"Error updating and broadcasting state: {e}")
                 channels = await sync_to_async(self.get_user_channels)(user.id)
                 # print(channels)
                 self.rooms = set()
@@ -243,6 +264,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user.save()
 
     def has_active_sessions(self, user):
+        print(f'active_sessions {user.sessions}')
         return user.sessions > 0 
 
     def is_online(self, user):
@@ -250,11 +272,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     async def update_and_broadcast_state(self, user, state):
         if state == 'online':
-            await self.increment_sessions(user)
+            await self.increment_group_member_count(self.session_group_name)
+            same_sessions = await self.get_group_member_count(self.session_group_name)
+            print(same_sessions)
+            if same_sessions == 1: 
+                await self.increment_sessions(user)
  
         elif state == 'offline':
+            await self.decrement_group_member_count(self.session_group_name)
             await self.decrement_sessions(user)
             if self.has_active_sessions(user):
+                if await self.get_group_member_count(self.session_group_name) > 0:
+                    try:
+                        await self.channel_layer.group_send(
+                            self.session_group_name,
+                            {
+                                'type': 'state',
+                                'sender': SerializedSender,
+                                'state': state
+                            }
+                        )
+                    except Exception as e:
+                        print(f"Error sending to group {group_name}: {e}")
                 return
         user.state = state
         await sync_to_async(user.save)() 
@@ -277,6 +316,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         try:
+            print(self.scope.get('session'))
             user = self.scope['user']
             message_json = json.loads(text_data)
             if message_json['type'] == 'MESSAGE':
