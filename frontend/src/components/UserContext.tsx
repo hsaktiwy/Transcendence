@@ -11,6 +11,7 @@ import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
 import LoadingIndecator from "./Loading";
 import { backendPath } from "./ChatSession";
+import { useNavigate } from "react-router-dom";
 
 export interface NotificationPropreties{
     id: number;
@@ -75,6 +76,7 @@ interface FriendRequestInterface {
 export const UserContext = createContext<UserContextInterface | undefined>(undefined)
 
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
+    const Navigate = useNavigate()
     const AuthContextConsummer = useContext(AuthContext)
     const SocketContext = useContext(WebSocketContext)
     if (!SocketContext || !AuthContext)
@@ -263,8 +265,11 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
-        if (data.sender.login === userData?.login && data.state === 'offline')
+        if (data.sender.login === userData?.login && data.state === 'offline'){
             AuthContextConsummer?.setLoggedIn(false)
+            Navigate('/home')
+        }
+
         console.log(friends)
         data.sender.state = data.state
         const friend  = data.sender as ProfileDataInterface
