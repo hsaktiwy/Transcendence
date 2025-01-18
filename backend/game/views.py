@@ -6,6 +6,7 @@ from .models import GameEnumStatus
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
+from django.db.models import Q
 # Create your views here.
 
 class ListGames(generics.ListAPIView):
@@ -64,3 +65,22 @@ class ChangeGameStatus(APIView):
            return Response({'message': 'Invalid status index : ' + str(game_id)}, status=status.HTTP_404_BAD_REQUEST)
         except KeyError as e:
             return Response({'Error': "Something went wrong : " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+@api_view(['GET'])
+def get_match_history(request, type):
+    try:
+        user = request.user
+        # get all games depending on the type and related to our user
+        games = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).filter(type=type).order_by('time')
+        # reverce the ascending order to descending
+        games = games.reverse()
+        last_matches = GameSerializer(games[:5], many=True)
+        return Response({'Game': last_matches.data}, status=200)
+    except:
+        return Response({'erro': 'something went wrong'}, status=400)

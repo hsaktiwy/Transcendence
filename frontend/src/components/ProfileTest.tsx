@@ -70,6 +70,23 @@ const ProfileTest  = () =>{
         profile_pic,
         CoverProfile,
       });
+      {
+        const req = {
+            url: `/game/get_matches/PONG`,
+            method: 'GET',
+          };
+          const resp = await mailman(req);
+          console.log('user data ->>>', resp.data)
+          console.log('first resp ->>', resp)
+      }
+      {
+        const req = {
+            url: `/profile/get_top_rank/`,
+            method: 'GET',
+          };
+          const resp = await mailman(req);
+          console.log('second resp ->>',resp)
+      }
     } catch (err) {
       console.error(err);
     }
