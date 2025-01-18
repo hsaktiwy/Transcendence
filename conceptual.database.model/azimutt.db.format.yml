@@ -30,15 +30,13 @@ ProfileStatus
   total_games int
   wins int
   lostes int
-  rank int
+  level float
 game
   id_game uuid pk
   id_player1_fk fk user.id_user
   id_player2_fk fk user.id_user
   game_status state(waiting, in_progress, ended)
   winner_id fk user.id_user
-  start_time timestamp=now()
-  end_time timestamp
 gameStatus
   id_game_fk fk game.id_game
 game_invitation
@@ -61,3 +59,16 @@ tournament
 tournament_participant
   id_tournament_fk uuid pk fk tournament.id_tournament
   id_user_fk uuid pk fk user.id_user
+achievemnets
+  user_fk
+  name string 
+
+
+# signals ->create (create game 200) [,1,2,3,4,6 ]
+
+# match winner o loser 
+# score winner  o loser 
+# rank
+# last 5 matches History
+# achievements 
+

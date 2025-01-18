@@ -2,11 +2,28 @@
 import React, { useContext }  from "react";
 
 import { axiosPath ,BACKEND } from "../utils/Constants";
+import mailman from "../utils/AxiosFetcher";
+
 import { UserContext } from "./UserContext";
 
 
  
 export function MatchHistory({ profileData }: { profileData: any }) {
+
+  
+  // const fetchUserData = async () =>{
+  //   try {
+  //   const req = {
+  //     url: `/game/get_matches/PONG`,
+  //     method: 'GET',
+  //   };
+  //   const resp = await mailman(req);
+  //   console.log('first resp ->>', resp)
+  // }
+  // catch (err) {
+  //   console.error(err);
+  // }
+// }
 
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
