@@ -20,8 +20,8 @@ class Game(models.Model):
     )
     user_p1 = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='games_as_p1', null=True, blank=True)
     user_p2 = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='games_as_p2', null=True, blank=True)
-    winner = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='wins', null=True, blank=True)
-    loser = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='losts', null=True, blank=True)
+    # winner = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='wins', null=True, blank=True)
+    # loser = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='losts', null=True, blank=True)
     score_p1 = models.IntegerField(default=0)
     score_p2 = models.IntegerField(default=0)
     # this can be useless 
