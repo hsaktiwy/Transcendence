@@ -3,9 +3,10 @@ from .models import Notification, ProfileStatus, MyUser
 from .serializers import NotificationSerializer, ProfileStatusSerializer, RankProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.core.paginator import Paginator
-from users.serializers import UserSerializer
+from users.serializers import PublicUserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+
 
 # Create your views here.
 class NotificationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -44,7 +45,7 @@ def get_top_rank(request):
         for profile in serialized_page.data:
             # Fetch related user
             info_user = MyUser.objects.get(id=profile['id_user_fk'])
-            serialized_user = UserSerializer(info_user)
+            serialized_user = PublicUserSerializer(info_user)
 
             # Combine user and profile data
             _update = {

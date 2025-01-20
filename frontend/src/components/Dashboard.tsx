@@ -135,7 +135,7 @@ function Dashboard(){
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
                 <div className="  rounded-2xl bg-gradient-to-br from-[#283137] to-[#242729]  h-full p-7 ">
-                      <MatchHistory profileData={userContextConsumer.userData} />
+                      <MatchHistory  />
                   </div>
         </div>
         <div className=" row-span-4 hidden xl:block xl:col-span-4 xl:row-span-7 2xl:col-span-3 2xl:row-span-7">
@@ -158,7 +158,7 @@ function Dashboard(){
         </div>
         <div className="xl:pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
             <div className="  rounded-2xl bg-gradient-to-tr from-[#2c353a] to-[#2B2F32] h-full p-4 ">
-                        <MatchHistory profileData={userContextConsumer.userData}/>
+                        <MatchHistory/>
             </div>
         </div>
         <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
