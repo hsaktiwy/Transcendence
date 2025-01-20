@@ -1,12 +1,26 @@
-import * as React from "react"
+import React, { useContext, useEffect }  from "react";
+
  
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { UserContext } from "./UserContext";
 // import { Separator } from "@/components/ui/separator"
 // const tags = Array.from({ length: 50 }).map(
 //   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 // )
  
 function RankFile() {
+
+    const userContextConsumer = useContext(UserContext)
+       if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
+    const {userRank} = userContextConsumer;
+
+    useEffect(()=>{
+        if(userRank.length)
+            console.log('user Rank is here ->>', userRank);
+
+    },[userRank])
+
     React.useEffect(()=>{}, [])    
   return (
     <div className=" 2xl:col-span-2 rounded-2xl  bg-[#2B2F32]   text-center text-xl text-white h-96 sm:h-full  ">
