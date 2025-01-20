@@ -33,9 +33,10 @@ import ProfileLocked from "./blocked/Profileblocked.tsx";
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
+    const [userMatchHistory, setUserMatchHistory] = useState([]);
     if (!SocketContext)
         throw new Error('error')
-   const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
+    const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true);
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
@@ -76,8 +77,9 @@ const ProfileTest  = () =>{
             method: 'GET',
           };
           const resp = await mailman(req);
-          console.log('user data ->>>', resp.data)
-          console.log('first resp ->>', resp)
+        //   console.log('user data ->>>', resp.data)
+        //   console.log('first resp ->>', resp)
+          setUserMatchHistory(resp.data);
       }
       {
         const req = {
@@ -85,7 +87,7 @@ const ProfileTest  = () =>{
             method: 'GET',
           };
           const resp = await mailman(req);
-          console.log('second resp ->>',resp)
+        //   console.log('second resp ->>',resp)
       }
     } catch (err) {
       console.error(err);
@@ -167,7 +169,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className=" md:hidden xxl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6">
                             <div className=" relative rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] h-full p-4 ">
-                                <MatchHistory profileData={profileData} />
+                                <MatchHistory  userMatchHistory={userMatchHistory}  />
                             </div>
                         </div>
                         <div className=" relative p-4 rounded-2xl xxl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3  xxl:row-span-6 xl:p-3 xxl:p-10 flex justify-center items-center  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869]">
@@ -191,7 +193,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
                             <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
-                                <MatchHistory profileData={profileData}/>
+                                <MatchHistory userMatchHistory={userMatchHistory}/>
                             </div>
                         </div>
                         <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
