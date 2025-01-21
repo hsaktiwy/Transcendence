@@ -45,3 +45,10 @@ class ProfileStatus(models.Model):
     wins = models.IntegerField()
     lostes = models.IntegerField()
     rank = models.IntegerField()
+    level = models.FloatField(default=0)
+
+class Acheivements(models.Model):
+    id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
+    name  = models.CharField(null=True)
+
+

@@ -25,7 +25,7 @@ class FriendRequest(models.Model):
 		]
 
 class BlockList(models.Model):
-	user = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='block_list')
+	user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='block_list')
 	block_users = models.ManyToManyField(MyUser, related_name='blocked_by')
 
 class FriendShip(models.Model):

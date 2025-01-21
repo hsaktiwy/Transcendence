@@ -4,7 +4,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import FriendShip, FriendRequest, RelationShipStatus, BlockList
-from .serializers import FriendshipSerializer, FriendRequestSerializer
+from .serializers import FriendshipSerializer, FriendRequestSerializer, BlockListSerializer
 from users.models import MyUser
 from conversations.models import Message
 
@@ -88,7 +88,7 @@ def BlockUser(request, _login):
 		check = list.block_users.filter(id=blocked_user.id).exists()
 		if (not check):
 			list.block_users.add(blocked_user)
-		return Response({'message': 'User '+_login+' in the Block List'}, status=status.HTTP_200_OK)
+		return Response({'message': 'User '+_login+' in the Block List', 'status': 'blocked'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -99,7 +99,7 @@ def UnBlockUser(request, _login):
 		user = request.user
 		list = BlockList.objects.get(user=user)
 		list.block_users.remove(blocked_user)
-		return Response({'message': 'User is  Unblocked!'}, status=status.HTTP_200_OK)
+		return Response({'message': 'User is  Unblocked!','status': 'unblocked'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -227,3 +227,20 @@ def FriendsList(request):
 
 	# except:
 	# 	return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def GetBlockList(request):
+	print("allo w9")
+	try:
+		user= request.user
+		block_list = BlockList.objects.filter(user=user)
+		serialized_data = BlockListSerializer(block_list, many=True)
+		print(serialized_data.data[0])
+		return Response(serialized_data.data[0].get('block_users'), status=status.HTTP_200_OK)
+	except BlockList.DoesNotExist:
+		return Response({'Error':'user does not exist'}, status=404)
+	except Exception as e:
+		print(e)
+		return Response({'Error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
+		
+		
