@@ -10,3 +10,8 @@ class ProfileStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileStatus
         fields = '__all__'
+
+class RankProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileStatus
+        fields = ['id_user_fk', 'rank', 'level']

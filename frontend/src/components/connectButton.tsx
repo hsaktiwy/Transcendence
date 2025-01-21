@@ -46,7 +46,7 @@ function ConnectButton(prop: buttonInterface) {
           withCredentials: true,
         }
         const resp = await mailman(req)
-        console.log(resp)
+        console.log('hana ->>>>>', resp)
         setBtn_block(isblock ? 'Block' : 'Unblock');
         setIsbLock(!isblock)
       }
@@ -225,9 +225,7 @@ function ConnectButton(prop: buttonInterface) {
     console.log("Unfriend action triggered");
   };
 
-  const blockActionCheck = () => {
-    console.log("Block action triggered");
-  };
+
 
   
   return (
@@ -258,7 +256,7 @@ function ConnectButton(prop: buttonInterface) {
               {/* Dropdown Menu */}
               {isMenuOpen && (
                 <motion.div
-                  className="absolute rounded-lg   absolute text-base right-[-160px]  top-[15%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-0 animate-pluse-right shadow-lg z-10"
+                  className="absolute rounded-lg    text-base right-[-160px]  top-[15%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-0 animate-pluse-right shadow-lg z-50"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -350,17 +348,6 @@ function ConnectButton(prop: buttonInterface) {
                   </motion.button>
                 </>
               }
-              {/* <motion.button
-                className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
-                onClick={BlockActionCheck}
-              >
-                    <div className='text-xl'>
-                      <MdBlock/>
-                    </div>
-                    <p>{btn_block}</p>
-                    
-              </motion.button> */}
-
           </motion.nav>
         }
       </>
