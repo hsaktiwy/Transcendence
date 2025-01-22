@@ -104,6 +104,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     const logout =  async () =>{
         if (loggedIn !== undefined){
             try{
+                
                 const request = {
                     url: '/api/user/logout/',
                     method: 'GET',
@@ -153,7 +154,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     useEffect (() =>{
             checkLoggedInUser()
     },[location])
-    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, VerifyTFA,checkLoggedInUser, logout}}>
+    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, VerifyTFA, checkLoggedInUser, logout}}>
         {children}
     </AuthContext.Provider>
 }

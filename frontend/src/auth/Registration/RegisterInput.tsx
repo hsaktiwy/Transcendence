@@ -1,22 +1,28 @@
 import React, { useState } from "react";
-import { inputsDataInterface } from "../RegisterForm";
+import { inputsDataInterface, inputsErrorInterface } from "../RegisterForm";
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
+import { userNameError } from "../signUpError";
+
 
 interface FormInputPropInterface {
     name?: keyof inputsDataInterface ,
     type: string,
     errorMessage:string,
     label: string,
-    pattern: string,
+    pattern: string ,
     required: boolean,
     setInputsData?: React.Dispatch<React.SetStateAction<inputsDataInterface> >,
     setInput?: React.Dispatch<React.SetStateAction<string> > ,
-    value: string,
-    inputsData?: inputsDataInterface
+    value: string | undefined,
+    inputsData?: inputsDataInterface,
+    inputsError?:inputsErrorInterface, 
+    setInputError?: React.Dispatch<React.SetStateAction<inputsErrorInterface> > ,
+    usernameError?: boolean,
+    setUSernameError?: React.Dispatch<React.SetStateAction<boolean> >
 }
 const FormInput = (prop: FormInputPropInterface)=>{
-    const {value,name, type,label, inputsData ,pattern ,setInputsData, setInput,errorMessage, ...inputProps} = prop
+    const {value,name, type,label, inputsData ,pattern ,setInputsData, setInput,errorMessage, setInputError, inputsError, usernameError, setUSernameError,...inputProps} = prop
     const [hide, setHide] = useState<boolean>(true)
     const [passFocus, setPassFocus] = useState<boolean>(false)
     const [hide2, setHide2] = useState<boolean>(true)
@@ -24,23 +30,43 @@ const FormInput = (prop: FormInputPropInterface)=>{
     const [error, setError] = useState<boolean>(false)
 
     const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-
         if (name === 'password')
             setPassFocus(false)
         else if (name === 'password2')
             setPassFocus2(false)
         if (e.target.name !== 'password2'){
             const inputRegex = new RegExp(pattern)
-            if(!inputRegex.test(e.target.value.trim()) && error === false)
+            if(!inputRegex.test(e.target.value.trim()) )
+            {
+                console.log(usernameError)
                 setError(true)
-            else if (inputRegex.test(e.target.value) && error === true)
+                if (name && setInputError && inputsError)
+                    setInputError({...inputsError, [name]: true})
+                else if (setUSernameError ){
+                        setUSernameError(true)
+                }
+            }
+            else if (inputRegex.test(e.target.value)){
                 setError(false)
+                if (name && setInputError && inputsError)
+                    setInputError({...inputsError, [name]: false})
+                else if (setUSernameError ){
+                        setUSernameError(false)
+                }
+            }
         }
         else {
-            if(inputsData && e.target.value !== inputsData['password'] && error === false)
+            if(inputsData && e.target.value !== inputsData['password'] ){
                 setError(true)
-            else if (inputsData && e.target.value === inputsData['password'] && error === true)
+                if (name && setInputError && inputsError)
+                    setInputError({...inputsError, [name]: true})
+            }
+            else if (inputsData && e.target.value === inputsData['password'] ){
                 setError(false)
+                if (name && setInputError && inputsError)
+                    setInputError({...inputsError, [name]: false})
+
+            }
         }
     };
     const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {

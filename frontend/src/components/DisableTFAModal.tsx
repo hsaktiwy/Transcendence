@@ -51,9 +51,9 @@ const DisableTFAModal: React.FC<prop> = ({dispatch}) =>{
                 <div className=" flex flex-col items-center justify-center gap-4">
                     
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  color="#e53f3f" fill="none" className="w-[100px] lg:w-[150px] h-[100px] lg:h-[150px]">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                        <path d="M11.992 15H12.001" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M12 12L12 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+                        <path d="M11.992 15H12.001" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 12L12 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <h1 className="text-lg lg:text-2xl font-bold text-center">Are you sure you want to disable Two Factor Authentication</h1>
                     <div className="flex justify-center gap-2 lg:gap-4 items-center flex-wrap">

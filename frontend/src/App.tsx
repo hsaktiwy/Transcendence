@@ -48,15 +48,7 @@ const App = () =>
                       <Route path='/'  element={ <Layout/>}>
                         <Route path='/profile/:username' element={ <ProfileTest/>}/>
                         <Route index element={ <Dashboard/>}/>
-                        {/* <Route
-                          index
-                          element={
-                            <Suspense fallback={<SkeletonDashboard />}>
-                              <Dashboard />
-                            </Suspense>
-                          }
-                        /> */}
-                        <Route path='/chat' element={ <ChatSection/>}/>
+                        <Route path='/chat/:channel_id?' element={ <ChatSection/>}/>
                         <Route path='/settings' element={ <Settings/>}/>
                         <Route path='/Game' element={<GameCenter />}/>
                       </Route>

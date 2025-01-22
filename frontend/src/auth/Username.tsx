@@ -1,21 +1,12 @@
 // Login.tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { BACKEND, LOGIN_PATH, INIT_CSRFTOKEN_PATH } from '../utils/Constants';
-import { cookies } from './Cookie';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
 // import { user_id } from '../utils/Constants';
 import { toast } from 'react-toastify'
-import { UserContext } from '../components/UserContext';
-import { AuthContext, LoginDataInterface, LoginError, LoginResp, LoginTFAResponse } from '@/components/AuhtenticationContext';
+import { AuthContext} from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
-import { resolve } from 'path';
-import { LuEye } from "react-icons/lu";
-import { LuEyeOff } from "react-icons/lu";
 import { motion } from 'framer-motion';
-import background from 'astro-bg.png'
-import TfaVerification from './TfaVerification';
-import ThreeScene from '@/components/ThreeScene';
 import { FaArrowRight } from "react-icons/fa6";
 import { inputInterface } from './RegisterForm';
 import FormInput from './Registration/RegisterInput';
@@ -30,6 +21,7 @@ const Username = (prop: SetUsernameProps) => {
     const Navigate = useNavigate();
     const [username, setUsername] = useState<string>('');
     const {email, setNeedLogin} = prop
+    const [usernameError, setUsernameError] = useState<boolean>(true)
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try{
@@ -57,7 +49,7 @@ const Username = (prop: SetUsernameProps) => {
         type: "text",
         errorMessage: "Username must be 3-20 characters and can only contain letters, numbers, and underscores.",
         label: "Username",
-        pattern: "^.{3,50}$",
+        pattern: "^[a-zA-Z0-9_]{3,20}$",
         required: true,
     }
 
@@ -105,15 +97,35 @@ const Username = (prop: SetUsernameProps) => {
                                     <h1 >One more step!</h1>
                                     <p className='text-lg font-normal '>Please Enter a username</p>
                                 </div>
-                                    <FormInput {...usernameInput} value={username} setInput={setUsername}/>
+                                    <FormInput {...usernameInput} value={username} setInput={setUsername} usernameError={usernameError} setUSernameError={setUsernameError}/>
 
                                 <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
 
-                                    <button type="submit" className="w-full  bg-white/90 text-black text-[18px] font-semibold py-2 px-4 rounded-2xl hover:bg-white transition-all border-0  duration-150 flex justify-center gap-5 items-center">
+                                    <button type="submit"
+                                            disabled= {usernameError ? true : false}
+                                            className=" relative group w-full  bg-white/90 text-black text-[18px] font-semibold py-2 px-4 rounded-2xl hover:bg-white transition-all border-0  duration-150 flex justify-center gap-5 items-center">
                                         <p>Get Started</p>
                                         <div>
                                             <FaArrowRight/>
                                         </div>
+                                        <style >{`
+                                            .group:hover::after {
+                                            display: ${usernameError ? 'inline-block' : 'none'};
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                            content: 'Please enter a correct username ';
+                                            position: absolute;
+                                            bottom: -90%;
+                                            left: 50%;           /* 50% from the left */
+                                            transform: translateX(-50%);
+                                            color: white;
+                                            background-color: rgb(239 68 68 / 0.75);
+                                            padding: 4px;
+                                            border-radius: 0.75rem;
+                                            width: 300px;
+                                            animation: slideUpFadeIn 0.5s ease-out forwards;
+                                            }
+                                `}</style>
                                         
                                     </button>
                                 </div>

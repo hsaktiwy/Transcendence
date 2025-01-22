@@ -11,7 +11,7 @@ import { ChartFile } from "@/components/Chartfile.tsx";
 import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
 import RankFile from "./rankFile.tsx";
-import { axiosPath ,BACKEND } from "../utils/Constants";
+// import { import.meta.env.VITE_axiosPath ,BACKEND } from "../utils/Constants";
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
 
 import { UserDataInterface, ProfileDataInterface } from "../utils/UserDataInterface";
@@ -30,95 +30,118 @@ import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 import { SlLock } from "react-icons/sl";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
 
-
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
    
     if (!SocketContext)
         throw new Error('error')
     const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState(true);
+    const [channel_id, setChannelId] = useState<number | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isblock, setIsbLock] = useState<boolean>(false);
+
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
 
-   const fetchUserData = async () =>{
-     try {
-      const req = {
-        url: `/api/users/${username}/`,
-        method: 'GET',
-      };
-      const resp = await mailman(req);
-      const {
-        login,
-        email,
-        firstName,
-        lastName,
-        state,
-        last_visit,
-        profile_pic,
-        CoverProfile,
-      } = resp.data;
+   const getChannelId = async () =>{
+        try{
+            const req = {
+                url: "/chat/conversation/get_channel/"+username+'/',
+                method: 'GET'
+            }
+            const resp = await mailman(req)
+            const id:number = resp.data.channel_id;
+            if (id)
+                setChannelId(id);
+        }
+        catch (error){
 
-      setProfileData({
-        login,
-        email,
-        firstName,
-        lastName,
-        state,
-        last_visit,
-        profile_pic,
-        CoverProfile,
-      });
-      
-    //   {
-    //     const req = {
-    //         url: `/profile/get_top_rank/`,
-    //         method: 'GET',
-    //       };
-    //       const resp = await mailman(req);
-    //     //   console.log('second resp ->>',resp)
-    //   }
-    } catch (err) {
-      console.error(err);
+
+        }
+   }
+   const fetchUserData = async () =>{
+    try{
+        const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
+        console.log('waaaaaaaa    ',user, "waaaaa2 ",  username)
+        if (user.length === 0)
+        {
+            setIsLoading(true);
+            const req = {
+                url: `/api/users/${username}/`,
+                method: 'GET',
+            }
+            
+            const resp = await mailman(req)
+            const respData: ProfileDataInterface = resp.data
+    
+            setProfileData(respData)
+            // setIsLoading(false);
+        }
+        else{
+            setProfileData(user[0])
+            await getChannelId()
+        }
+        
+        
+    }
+    catch (err){
+        console.error("dddddd======????",err)
     }
   };
 
-  // useEffect to handle the loading state
-  useEffect(() => {
-    // Fetch the data when the component mounts
-    fetchUserData().finally(() => {
-      // Add a delay of 1.2 seconds before setting isLoading to false
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
+  const BlockStatusCheck = async ()=>
+    {
+        try{
+          const req = {
+            url:'friendship/is/BLOCKED_BOTH_SIDE/'+ username,
+            method: 'GET',
+            withCredentials:true,
+          }
+          const resp = await mailman(req)
+          const  responce:boolean = resp.data['status']
+          setIsbLock(responce)
 
-      return () => clearTimeout(timer);
-    });
-  }, [username]); 
-
+        //   setBtn_block(responce ? 'UnBlock' : 'Block');
+          console.log('hiii ->>>', resp);
+        }
+        catch(err)
+        {
+            console.log("Block status ", err)
+        }
+    }
 
 
    useEffect(() =>{
     if (userContextConsumer?.userData?.login !== username){
-        fetchUserData()
+        fetchUserData().finally(() => {
+            // Add a delay of 1.2 seconds before setting isLoading to false
+            const timer = setTimeout(() => {
+              setIsLoading(false);
+            }, 600);
+      
+            // Cleanup timer
+            return () => clearTimeout(timer);
+          });
+          BlockStatusCheck();
     }
     else{
         setProfileData(userContextConsumer?.userData)
+        setIsLoading(false)
     }
-   },[username])
-    console.log('block list ', userContextConsumer.blockList)
+   },[username, userContextConsumer.blockList])
+
     return(
         <>
             {isLoading ? (
                 <SkeletonProfile />
-            ) : userContextConsumer.blockList.filter(user => user.login===username).length ? <ProfileLocked/> : (
-                <div className="lg:mb-0 pb-20  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]    dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
+            ) :  isblock ? <ProfileLocked/> : (
+                <div className=" lg:mb-0 pb-20  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]    dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
                         <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-5  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                         <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
                                     <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
-                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${import.meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                                 
                                                 <div className=" flex  mt-5 flex-col justify-center ">
                                                     <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
@@ -130,7 +153,7 @@ const ProfileTest  = () =>{
                                                         Edit profile</button>
                                                     </Link> 
                                                     ) : (
-                                                        <ConnectButton /> 
+                                                        <ConnectButton channel_id={channel_id} user={profileData}/> 
                                                     )}
                                     </div>
                         </div>
@@ -138,7 +161,7 @@ const ProfileTest  = () =>{
                                 <div className="flex relative items-cente justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                                     <div className="w-full  h-full  grid grid-rows-2 ">
                                             <div className="relative bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 "
-                                            style={{ backgroundImage: `url(${axiosPath}${profileData?.CoverProfile})`,}}>
+                                            style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})`,}}>
                                             <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                                 <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
                                                     <div className="  h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">

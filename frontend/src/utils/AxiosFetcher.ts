@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { axiosPath } from './Constants';
+// import { axiosPath } from './Constants';
 
 const mailman = axios.create(
     {
-        baseURL: axiosPath,
+        baseURL: import.meta.env.VITE_axiosPath,
         withCredentials: true
     }
 );
@@ -26,6 +26,7 @@ mailman.interceptors.request.use(
 
 mailman.interceptors.response.use(
     (response) =>{
+        console.log("wala", location.origin);
         if(response.headers['csrf_token'])
             localStorage.setItem("csrf_token", response.headers['csrf_token'])
         return response
@@ -38,7 +39,7 @@ mailman.interceptors.response.use(
                 
             try{
                 console.log("access token haa9 mcha")
-                const req:string = axiosPath+"/api/user/refresh_token/"
+                const req:string = import.meta.env.VITE_axiosPath+"/api/user/refresh_token/"
                 const refreshToken = await axios.get(req, {
                     withCredentials: true,
                 })

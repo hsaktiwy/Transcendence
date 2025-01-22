@@ -53,7 +53,16 @@ def random_quote():
 @api_view(['GET'])
 def AcceptFriendRequest(request, id):
 	try:
+		print('hmmm--')
 		friend_request = FriendRequest.objects.get(id=id)
+		list1, create = BlockList.objects.get_or_create(user=friend_request.sender)
+		check1 = list1.block_users.filter(id=friend_request.receiver.id).exists()
+		list2, create = BlockList.objects.get_or_create(user=friend_request.receiver)
+		check2 = list2.block_users.filter(id=friend_request.sender.id).exists()
+		print('hmmm++')
+		if check1 or check2:
+			friend_request.delete()
+			return Response({'message': 'You are Blocked!'}, status=403)
 		if friend_request.status == RelationShipStatus.ACCEPTED.value:
 			return Response({'message': 'All ready Accepted'}, status=status.HTTP_200_OK)
 		friend_request.status = RelationShipStatus.ACCEPTED.value
@@ -66,10 +75,10 @@ def AcceptFriendRequest(request, id):
 			channel = Channel.objects.create()
 			channel.users.add(friend_request.sender)
 			channel.users.add(friend_request.receiver)
-			message = Message.objects.create(sender=friend_request.sender, id_channel_fk=channel, content=random_quote())
+			# message = Message.objects.create(sender=friend_request.sender, id_channel_fk=channel, content=random_quote())
 		return Response({'message': 'Accept request sent'}, status=status.HTTP_200_OK)
-	except:
-		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+	except Exception as e:
+		return Response({'Error': 'Something went wrong?' + str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def BlockUser(request, _login):
@@ -99,6 +108,7 @@ def UnBlockUser(request, _login):
 @api_view(['GET'])
 def UnFriendUser(request, _login):
 	try:
+		# intented solution you can postman this even whne you are blocked (my logic my rules contact hsaktiwy )
 		friend = MyUser.objects.get(login=_login)
 		myuser = request.user
 		friendship = FriendShip.objects.filter((Q(user=myuser) & Q(friend=friend)) | (Q(user=friend) & Q(friend=myuser)))
@@ -110,6 +120,8 @@ def UnFriendUser(request, _login):
 		if len(f_request) > 0:
 			f_request.first().delete()
 		return Response({'mesasge': 'Done'}, status=status.HTTP_200_OK)
+	except MyUser.DoesNotExist:
+		return Response({'mesasge': f'{_login} does not exist'}, status=404)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -124,6 +136,24 @@ def isBlocked(request, _login):
 		if isblocked:
 			return Response({'status': True}, status=status.HTTP_200_OK)
 		else:
+			return Response({'status': False}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def isBlockedRelationship(request, _login):
+	try:
+		user = request.user
+		otheruser = MyUser.objects.get(login=_login)
+		blocklist = BlockList.objects.get(user=user)
+		isblocked = blocklist.block_users.filter(id=otheruser.id).exists()
+		if isblocked:
+			return Response({'status': True}, status=status.HTTP_200_OK)
+		else:
+			blocklist2 = BlockList.objects.get(user=otheruser)
+			isblocked = blocklist2.block_users.filter(id = user.id).exists()
+			if (isblocked):
+				return Response({'status': True}, status=status.HTTP_200_OK)
 			return Response({'status': False}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
