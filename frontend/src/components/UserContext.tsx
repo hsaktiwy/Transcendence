@@ -11,6 +11,7 @@ import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
 import LoadingIndecator from "./Loading";
 import { backendPath } from "./ChatSession";
+import { useNavigate } from "react-router-dom";
 
 export interface NotificationPropreties{
     id: number;
@@ -21,6 +22,11 @@ export interface NotificationPropreties{
     friend_request_id: number;
     is_readed: boolean;
     sender: ProfileDataInterface
+}
+export interface NotificationStatePropreties{
+    type: string,
+    sender: ProfileDataInterface,
+    state: string
 }
 
 
@@ -95,6 +101,7 @@ interface rankInterface
 export const UserContext = createContext<UserContextInterface | undefined>(undefined)
 
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
+    const Navigate = useNavigate()
     const AuthContextConsummer = useContext(AuthContext)
     const SocketContext = useContext(WebSocketContext)
     if (!SocketContext || !AuthContext)
@@ -110,6 +117,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
     const [friends, setFriends] = useState<ProfileDataInterface[]>([])
+    const [ready, setReady] = useState<boolean>(false)
     const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
     const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     const [userRank, setUserRank] = useState<rankInterface[]>([]);
@@ -289,6 +297,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 }
                 const resp = await mailman(req)
                 const friendsList: ProfileDataInterface[] = resp.data
+                console.log(friendsList)
                 setFriends(friendsList)
             }
             catch (err){
@@ -329,39 +338,80 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
             
     }
+    const friendStateHandler = (data: NotificationStatePropreties) =>{
+        if (data.sender.login === userData?.login && data.state === 'offline'){
+            AuthContextConsummer?.setLoggedIn(false)
+            Navigate('/home')
+        }
+
+        console.log(friends)
+        data.sender.state = data.state
+        const friend  = data.sender as ProfileDataInterface
+        //friend.state = data.state
+        const tmpFriends = friends.filter(friendElm=> friend.login !== friendElm.login)
+        tmpFriends.push(friend)
+        setFriends(tmpFriends)
+    }
     useEffect(() =>{
-        SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
-        SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
-        SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
-        SocketContext.AddChannel('NOTIFICATION', PureNotification)
+        if (ready)
+        {       
+            SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
+            SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
+            SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
+            SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
+            SocketContext.AddChannel('NOTIFICATION', PureNotification)
+            // const stateObj = {
+            //     type: "NOTIFICATION_STATE",
+            //     state: "online"
+            // }
+            // SocketContext.socket?.current.send(JSON.stringify(stateObj))
+
+        }
         return () => {
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
+            SocketContext.RemoveChannel('NOTIFICATION_ACCEPT_FRIEND')
+            SocketContext.RemoveChannel('NOTIFICATION_MESSAGE')
+            SocketContext.RemoveChannel('NOTIFICATION_STATE')
+            SocketContext.RemoveChannel('NOTIFICATION')
         }
         
-    }, [])
+    }, [ready])
+    
     useEffect(() => {
         if (AuthContextConsummer?.loggedIn){
             fetchNotification()
         }
-    },[AuthContextConsummer?.loggedIn, notificationReaded])
+        console.log(' ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ')
+    },[AuthContextConsummer?.loggedIn, notificationReaded, blockList])
+
+    const ajami = async() =>
+    {
+        await fetchUserData()
+        await fetchFriends()
+        await fetchReceivedFriendRequest()
+        await fetchSentFriendRequest()
+        await fetchBlockList()
+        await matchHistoryData()
+        await rankData()
+        setReady(true)
+    }
     useEffect(() =>{
-        console.log('hooo->', coverPicChanged, '   ', AuthContextConsummer?.loggedIn)
         if (AuthContextConsummer?.loggedIn){
-            fetchUserData()
-            fetchFriends()
-            fetchReceivedFriendRequest()
-            fetchSentFriendRequest()
-            fetchBlockList()
-            matchHistoryData()
-            rankData()
+            // fetchUserData()
+     
+            // fetchFriends()
+            // fetchReceivedFriendRequest()
+            // fetchSentFriendRequest()
+            // setReady(true)
+            ajami();
             
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
         <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
-            {/* {userData ? children : <LoadingIndecator/>} */}
-            { children }
+            {ready  ? children : <LoadingIndecator/>}
+            {/* { children } */}
         </UserContext.Provider>
     )
 }

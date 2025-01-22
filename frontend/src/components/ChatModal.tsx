@@ -5,8 +5,6 @@ import { Navigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { ActionType } from "@/utils/interfaces";
 import mailman from "@/utils/AxiosFetcher";
-
-import { MESSAGES_PACKET_SIZE } from "@/utils/Constants";
 function ChatModal(){
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
@@ -47,7 +45,7 @@ function ChatModal(){
                     // get the old messages
                     try{
                         const req = {
-                            url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+MESSAGES_PACKET_SIZE+'/',
+                            url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/',
                             method: "GET",
                             withCredentials: true,
                         }
@@ -60,7 +58,7 @@ function ChatModal(){
                         })
                     }
                     catch(e){
-                        console.log('Error : in ChatModel get {'+ 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+MESSAGES_PACKET_SIZE+'/' +'} :\n')
+                        console.log('Error : in ChatModel get {'+ 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/' +'} :\n')
                         console.log(e)
                     }
                 }
@@ -77,9 +75,9 @@ function ChatModal(){
         <div className="h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter bg-black/40 backdrop-blur-sm z-50 animate-delay-75  duration-75">
                 <div className="mx-auto sm:mx-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#ffffff]  w-[90%] sm:w-[500px] rounded-md flex flex-col items-center gap-4 text-center px-2 py-4 ">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="60" height="60" color="#5E97A9" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                        <path d="M11.992 15H12.001" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M12 12L12 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+                        <path d="M11.992 15H12.001" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 12L12 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <p className="text-lg font-medium">{`Are you sure you want to ${chatContext.modalMessage}?`}</p>
                     <div className="flex gap-4 flex-wrap items-center justify-center ">

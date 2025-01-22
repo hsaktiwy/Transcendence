@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom'
 
 
 function ChatFriendInfo(){
-    const backendPath:string = BACKEND.substring(0, BACKEND.length - 1)
+    const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
     const [Status, setStatus] = useState<string>("Block")
@@ -53,7 +53,7 @@ function ChatFriendInfo(){
     },[userContext.action, chatContext.active])
 
     return(
-        <div className={`  rounded-l-xl lg:rounded-l-none rounded-r-xl border-r-0 lg:border-l-[1px] border-white/50 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
+        <div className={`  rounded-l-xl lg:rounded-l-none rounded-r-xl border-r-0 lg:border-l-[1px] border-white/20 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
             <div className=" bg-black/35  w-full  overflow-auto relative   ">
                 <div id="friend-info-header" className=" m-4 text-[24px] text-white flex justify-between items-center">

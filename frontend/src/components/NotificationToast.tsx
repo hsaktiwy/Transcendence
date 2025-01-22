@@ -119,7 +119,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                                 (item.type === 'friendship' || item.type === 'message') &&
                                                 <div className=" h-[35px] w-[35px] sm:h-[50px] sm:w-[50px]">
                                                     {/* <p>{usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}</p> */}
-                                                    <img src={`${axiosPath}${item.sender.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
+                                                    <img src={`${import.meta.env.VITE_axiosPath}${item.sender.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                                 </div>
                                             }
                                             <p className="text-white/80">

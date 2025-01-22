@@ -5,6 +5,7 @@ import { CgLogOut } from "react-icons/cg";
 import { UserContext } from "./UserContext";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./AuhtenticationContext";
+import { WebSocketContext } from "@/utils/WSContext";
 import { toast } from "react-toastify";
 interface prop {
     display: boolean
@@ -14,9 +15,10 @@ const NavBarDrop = (info: prop) =>{
 
     const userContextConsumer  = useContext(UserContext)
     const authContextConsumer  = useContext(AuthContext)
-    if (!userContextConsumer || !authContextConsumer)
+    const WsContextConsumer  = useContext(WebSocketContext)
+    if (!userContextConsumer || !authContextConsumer || !WsContextConsumer)
         throw new Error('error')
-
+    const {socket} = WsContextConsumer
     return (
 
         <div className={`${info.display ? 'flex' : 'hidden'} absolute -right-4 top-[40px] h-[220px] w-[200px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm  rounded-xl z-50 text-white font-poppins overflow-visible  flex-col r items-center py-4 px-6 justify-center gap-8`}>
@@ -36,6 +38,11 @@ const NavBarDrop = (info: prop) =>{
     
             </Link>
             <div  className="w-full flex justify-between text-2xl opacity-50 hover:opacity-100 duration-75 text-red-500" onClick={()=>{
+                const stateObj = {
+                    type: "NOTIFICATION_STATE",
+                    state: "offline"
+                }
+                socket?.current.send(JSON.stringify(stateObj))
                 authContextConsumer.setLoggedIn(false)
                 toast.info('User Logged Out')
 

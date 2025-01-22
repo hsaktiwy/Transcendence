@@ -113,6 +113,8 @@ def LoginWithOAuth42(request):
             elif user.two_factor_auth:
                 resp = generate_TFA_verification_response(user)
             else:
+                user.state = 'online'
+                user.save()
                 resp = generate_tokens_response(user, request)
             return resp
         except MyUser.DoesNotExist:
@@ -132,6 +134,8 @@ def LoginWithOAuth42(request):
             if loginUsed:
                 resp = generate_set_username_response(user, True)
             else:
+                user.state = 'online'
+                user.save()
                 resp = generate_tokens_response(user, request)
             return resp
 
@@ -406,13 +410,13 @@ class Verify2faOTPView(APIView):
             }, status=400)
             
 
-@api_view(['POST'])
+@api_view(['GET'])
 def Search(request):
     try:
-        identifier = request.data.get('search')
-        print(identifier)
-        Users = MyUser.objects.filter(login__icontains=identifier)
+        identifier = request.GET.get('search')
+        Users = MyUser.objects.filter(login__icontains=identifier)[:10]
         SerializedUsers = SearchUserSerializer(Users, many=True)
+
         return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
     except:
         return Response({"error": "wala\n"},status=400)

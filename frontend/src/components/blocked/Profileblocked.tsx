@@ -2,7 +2,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { SlLock } from "react-icons/sl";
-import { axiosPath ,BACKEND } from "../../utils/Constants";
 import { UserDataInterface, ProfileDataInterface } from "../../utils/UserDataInterface";
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
@@ -17,6 +16,9 @@ import { Link } from "react-router-dom"
 
 function ProfileLocked() {
   const SocketContext = useContext(WebSocketContext)
+  const [channel_id, setChannelId] = useState<number | undefined>(undefined);
+  
+  
   if (!SocketContext)
       throw new Error('error')
  const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
@@ -28,36 +30,64 @@ const [isLoading, setIsLoading] = useState(true);
 
  const fetchUserData = async () =>{
    try {
-    const req = {
-      url: `/api/users/${username}/`,
-      method: 'GET',
-    };
-    const resp = await mailman(req);
-    const {
-      login,
-      email,
-      firstName,
-      lastName,
-      state,
-      last_visit,
-      profile_pic,
-      CoverProfile,
-    } = resp.data;
 
-    setProfileData({
-      login,
-      email,
-      firstName,
-      lastName,
-      state,
-      last_visit,
-      profile_pic,
-      CoverProfile,
-    });
+    // check if the user is already existing friend
+    const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
+    if (user.length === 0)
+    {
+      const req = {
+        url: `/api/users/${username}/`,
+        method: 'GET',
+      };
+      const resp = await mailman(req);
+      const {
+        login,
+        email,
+        firstName,
+        lastName,
+        state,
+        last_visit,
+        profile_pic,
+        CoverProfile,
+      } = resp.data;
+
+      setProfileData({
+        login,
+        email,
+        firstName,
+        lastName,
+        state,
+        last_visit,
+        profile_pic,
+        CoverProfile,
+      });
+    }
+    else
+    {
+      setProfileData(user[0])
+      await getChannelId()
+    }
   } catch (err) {
     console.error(err);
   }
 };
+
+const getChannelId = async () =>{
+  try{
+      const req = {
+          url: "/chat/conversation/get_channel/"+username+'/',
+          method: 'GET'
+      }
+      const resp = await mailman(req)
+      const id:number = resp.data.channel_id;
+      if (id)
+          setChannelId(id);
+  }
+  catch (error){
+
+
+  }
+}
 
 // useEffect to handle the loading state
 useEffect(() => {
@@ -90,7 +120,7 @@ useEffect(() => {
         <div className="rounded-2xl row-span-1 justify-center items-center md:col-span-12 md:row-span-3 xl:row-span-5 2xl:col-span-12 xxl:row-span-6 xxl:col-span-9 grid grid-cols-12">
           <div className="h-full col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
           <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
-                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${import.meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                                 
                                                 <div className=" flex  mt-5 flex-col justify-center ">
                                                     <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
@@ -102,7 +132,7 @@ useEffect(() => {
                                                         Edit profile</button>
                                                     </Link> 
                                                     ) : (
-                                                        <ConnectButton /> 
+                                                        <ConnectButton channel_id={channel_id} user={profileData}/> 
                                                     )}
                                     </div>
           </div>

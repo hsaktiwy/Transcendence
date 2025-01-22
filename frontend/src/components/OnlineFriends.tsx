@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useContext, useState } from "react"
-import { axiosPath } from "@/utils/Constants"
+// import { import.meta.env.VITE_axiosPath } from "@/utils/Constants"
 import { UserContext } from "./UserContext"
 import { Link } from "react-router-dom"
 import { SkeletonTheme } from 'react-loading-skeleton'
@@ -96,7 +96,7 @@ function OnlineFriends() {
                                             className="flex items-center gap-3 px-4 py-2   w-full rounded-xl transition-all duration-200 ease-in-out rounded-xl hover:bg-[#1D1E22] cursor-pointer"
                                         >
                                             <img
-                                                src={`${axiosPath}${friend.profile_pic}`}
+                                                src={`${import.meta.env.VITE_axiosPath}${friend.profile_pic}`}
                                                 alt={`${friend.firstName} ${friend.lastName}`}
                                                 className="w-10 h-10 aspect-square rounded-full object-cover"
                                             />
@@ -127,10 +127,10 @@ function OnlineFriends() {
                                     to={`/profile/${friend.login}`}
                                     key={index}
                                     className="each-user relative px-10  my-2  rounded-xl hover:bg-[#1D1E22] overflow-hidden"
-                                    style={{ backgroundImage: `url(${axiosPath}${friend.CoverProfile})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                                    style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${friend.CoverProfile})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                                   >
                                     <div className="absolute inset-0 bg-black/70  rounded-xl pointer-events-none"></div>
-                                    <img className="w-14 h-14 z-10 aspect-square rounded-full object-cover" src={`${axiosPath}${friend.profile_pic}`} />
+                                    <img className="w-14 h-14 z-10 aspect-square rounded-full object-cover" src={`${import.meta.env.VITE_axiosPath}${friend.profile_pic}`} />
                                     <div className=" mx-3 z-10 flex flex-col items-start justify-center  w-72 ">
                                         <h1 className="font-medium  z-10 text-base">{`${friend.firstName} ${friend.lastName} `}</h1>
                                         <h1 className="font-normal z-10 opacity-80 text-xs text-left">{`@${friend.login}`}</h1>

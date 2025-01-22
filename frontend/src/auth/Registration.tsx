@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { ADD_USER, BACKEND } from '../utils/Constants';
-import { generateRandomString } from '../utils/functions';
 import { useNavigate } from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher';
 
@@ -61,7 +59,7 @@ const RegistrationForm: React.FC = () => {
         }
       });
 
-      const url = BACKEND + ADD_USER;
+      const url = import.meta.env.VITE_BACKEND + import.meta.env.VITE_ADD_USER;
       const request={
         url: url,
         method: 'POST',

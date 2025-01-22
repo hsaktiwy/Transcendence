@@ -1,6 +1,5 @@
-import React, {useEffect, createContext, useRef, useState, useContext} from 'react'
-import { ws_url } from './Constants'
-import {channelType, WebSocketContextType, childrenInterface, defaultContextValue} from './interfaces'
+import React, {useEffect, createContext, useRef, useContext} from 'react'
+import {channelType, WebSocketContextType, childrenInterface} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 import { AuthContext } from '@/components/AuhtenticationContext'
@@ -13,7 +12,6 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
     const channels = useRef<channelType>({})
     const socket = useRef<WebSocket>()
     const connected = useRef<boolean>(false)
-    const [inc, setInc] = useState(200000);
     const authContextConsumer =  useContext(AuthContext)
     if (!authContextConsumer)
       throw new Error('error occured')
@@ -34,7 +32,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
 
     const ConnectSocket = ()=>
     {
-      const url:string = ws_url + '/ws/chat/'
+      const url:string = import.meta.env.VITE_ws_url + '/ws/chat/'
       console.log(url)
       if (!connected.current)//
         socket.current = new WebSocket(url)
@@ -50,6 +48,8 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
       socket.current.onclose = (event) => { //this function do not update the state dynamically we should in every change in the state of logge in user to update it 
         console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
         connected.current = false
+        // check axios check user is loging 
+
         // if (authContextConsumer.loggedIn === true){ // we need a logic to handle reconnection maybe with status of backend ws response
         //   console.log('from ws context',authContextConsumer.loggedIn)
         //   ReconnectSocket()
@@ -90,14 +90,37 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
 
                 const notifData =  JSON.parse(message.data);
                 if (notifData['friend_req_status' ] === 'pending')
+                {
                   channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
+                  if (channels.current['FriendRequestReceived'])
+                    channels.current['FriendRequestReceived'](notifData);
+                }
                 else{
                   console.log(message.data)
                   channels.current['NOTIFICATION_ACCEPT_FRIEND'](notifData)
+                  if (channels.current['FriendRequestAccepted'])
+                    channels.current['FriendRequestAccepted'](notifData)
                 }
-
               }
-              
+            }
+            if (type === 'profile_notif')
+            {
+              interface friendship{
+                action:string,
+                sender:string
+              }
+              const info: friendship = {
+                action: data.action,
+                sender: data.sender,
+              };
+              if (channels.current[info.action])
+              {
+                if (channels.current[info.action])
+                {
+                  console.log('____________________________________', data)
+                  channels.current[info.action](info)
+                }
+              }
             }
             if (type === 'message'){
               if(channels.current['NOTIFICATION_MESSAGE'])
@@ -106,6 +129,10 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                 channels.current['NOTIFICATION_MESSAGE'](notifData)
   
               }
+            }
+            if (type === 'state'){
+              const notifData =  JSON.parse(message.data);
+              channels.current['NOTIFICATION_STATE'](notifData)
             }
             if (type == "NOTIFICATION")
             {
