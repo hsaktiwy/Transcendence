@@ -213,26 +213,30 @@ function ChatSession(){
     // this function will update our conv list and add packet of old messages to it
     // const 
     const FetchOldMessages = async ()=>
+    {
+        try
         {
-            try
-            {
-                const extracting = 'update/' + chatContext.active?.channelId + '/' + import.meta.env.VITE_MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
-                const url = import.meta.env.VITE_CONVERSATION + extracting
-                // console.log(url)
-                const request = {
-                    url: url,
-                    method: 'GET',
-                    // withCredentials: true
-                }
-                const response = await mailman(request)
-                interface conversation_type {
+            const extracting = 'update/' + chatContext.active?.channelId + '/' + import.meta.env.VITE_MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
+            const url = import.meta.env.VITE_CONVERSATION + extracting
+            // console.log(url)
+            const request = {
+                url: url,
+                method: 'GET',
+                // withCredentials: true
+            }
+            const response = await mailman(request)
+            interface conversation_type {
                 messages : Message[]
                 next_packet_number : number
                 is_next_packet: number
             }
+            console.log("()(()()())",response)
             const old_messages:conversation_type  = response.data as conversation_type
-            if ( chatContext.active && old_messages && old_messages.is_next_packet && chatContext.active?.last_packet < old_messages.next_packet_number)
+            console.log("old messages", old_messages)
+            console.log("last packet in the chatcontext : ",  chatContext.active?.last_packet, old_messages.next_packet_number)
+            if ( chatContext.active && old_messages && chatContext.active?.last_packet < old_messages.next_packet_number)
             {
+                console.log("hmm ? ")
                 // console.log(old_messages)
                 // console.log(chatContext.active)
                 if (containerRef.current)
