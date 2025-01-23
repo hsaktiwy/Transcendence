@@ -381,8 +381,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         if (AuthContextConsummer?.loggedIn){
             fetchNotification()
         }
-        console.log(' ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ')
-    },[AuthContextConsummer?.loggedIn, notificationReaded, blockList])
+    },[AuthContextConsummer?.loggedIn, notificationReaded])
 
     const ajami = async() =>
     {
