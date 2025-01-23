@@ -59,7 +59,6 @@ def AcceptFriendRequest(request, id):
 		check1 = list1.block_users.filter(id=friend_request.receiver.id).exists()
 		list2, create = BlockList.objects.get_or_create(user=friend_request.receiver)
 		check2 = list2.block_users.filter(id=friend_request.sender.id).exists()
-		print('hmmm++')
 		if check1 or check2:
 			friend_request.delete()
 			return Response({'message': 'You are Blocked!'}, status=403)

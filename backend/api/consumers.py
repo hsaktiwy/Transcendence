@@ -227,10 +227,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
                 await self.channel_layer.group_add(self.session_group_name, self.channel_name)
                 state = 'online'
-                try:
-                    await self.update_and_broadcast_state(user , state)
-                except Exception as e:
-                    print(f"Error updating and broadcasting state: {e}")
+                # try:
+                #     await self.update_and_broadcast_state(user , state)
+                # except Exception as e:
+                #     print(f"Error updating and broadcasting state: {e}")
                 channels = await sync_to_async(self.get_user_channels)(user.id)
                 # print(channels)
                 self.rooms = set()
@@ -246,10 +246,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, code):
         user = self.scope['user']
         state = 'offline'
-        try:
-            await self.update_and_broadcast_state(user , state)
-        except Exception as e:
-            print(f"Error updating and broadcasting state: {e}")
+        # try:
+        #     await self.update_and_broadcast_state(user , state)
+        # except Exception as e:
+        #     print(f"Error updating and broadcasting state: {e}")
         for room in self.rooms :
             await self.channel_layer.group_discard(
                 room,
@@ -322,7 +322,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         try:
             print(self.scope.get('session'))
-            print(f'tsahdgjasdhjashdkasjhdhlkasgdjhasdlkasjdgksajdlas +=======++++++++ {text_data}')
             user = self.scope['user']
             message_json = json.loads(text_data)
             if message_json['type'] == 'MESSAGE':
