@@ -32,11 +32,11 @@ const Winner = () => {
       {/* <PingPongBack /> */}
   <div className="main-game-page-container">
         <div className="game-options-container-w">
-          <div className="game-options-header-w">
+          <div className="game-options-header-w Text-wt">
             <h1>Winner</h1>
           </div>
           
-          <div className="players-container-w">
+          <div className="players-container-w Text-tt">
             {/* Add your game content here */}
             <h1 >{winner}</h1>
           </div>

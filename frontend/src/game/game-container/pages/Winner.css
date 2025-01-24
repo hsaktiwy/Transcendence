@@ -47,7 +47,7 @@
 
 .game-options-header-w h1 {
   font-family: 'SNES Italic', sans-serif;
-  font-size: 48px;
+  /* font-size: 48px; */
   text-transform: uppercase;
   color: #ffffff;
   text-shadow: 2px 2px 0px #ff0000,

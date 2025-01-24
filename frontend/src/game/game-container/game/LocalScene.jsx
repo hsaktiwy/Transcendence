@@ -10,6 +10,7 @@ import LoadingScreen from '../components/LoadingScreen';
 
 import Hud from '../components/Hud'
 
+import './GamePages.css'
 import './RemoteScene.css'
 
 import Scoreboard from '../components/Scoreboard';
@@ -18,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 const LocalGame = () => {
     const navigate = useNavigate();
     const canvasRef = useRef(null);
+    const countdownRef = useRef(null);
 
   
     const [playerScore, setPlayerScore] = useState(0);
@@ -27,6 +29,46 @@ const LocalGame = () => {
     const [match, setMatch] = useState(JSON.parse(localStorage.getItem('Matches_data')));
     const [matchId, setMatchId] = useState(localStorage.getItem('matchId'))
 
+
+
+////
+    const [isCountdownComplete, setIsCountdownComplete] = useState(false);
+
+
+    useEffect(() => {
+        if (isCountdownComplete === true) return;
+        let count = 7;
+        if (countdownRef.current) {
+            countdownRef.current.style.display = 'block';
+            countdownRef.current.textContent = count;
+        }
+
+        const countdownInterval = setInterval(() => {
+            count--;
+            if (countdownRef.current) {
+            if (count > 0) {
+                // Add puffer animation class
+                countdownRef.current.classList.add('puffer');
+                // Update the count
+                setTimeout(() => {
+                countdownRef.current.textContent = count;
+                countdownRef.current.classList.remove('puffer');
+                }, 400);
+            } else {
+                clearInterval(countdownInterval);
+                countdownRef.current.style.display = 'none';
+                // BallCreator.cameraFixed = true;
+                setIsCountdownComplete(true);
+            }
+            }
+        }, 1000);
+        
+        return () => {
+            clearInterval(countdownInterval);
+        };
+
+    }); 
+    
     useEffect(() => {
 
 ////=>////
@@ -258,8 +300,8 @@ const LocalGame = () => {
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
         }
         
-        gui.add(BallCreator, 'createBall')
-        gui.add(BallCreator, 'reset')
+        // gui.add(BallCreator, 'createBall')
+        // gui.add(BallCreator, 'reset')
         
         //Table 
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
@@ -322,7 +364,7 @@ const LocalGame = () => {
               if (keyName === "a"){
                   Chained_Keys.a = 1;
               }
-              if (keyName === "r"){
+              if (keyName === " "){
                   BallCreator.createBall()
               }}
         ;
@@ -491,8 +533,8 @@ const LocalGame = () => {
         // scene.add(new THREE.AxesHelper(15))
 
         
-        gui.add(BallCreator, 'cameraFixed');
-        gui.add(BallCreator, 'PADDLE_SPEED', 0.01 , 0.2).step(0.01)
+        // gui.add(BallCreator, 'cameraFixed');
+        // gui.add(BallCreator, 'PADDLE_SPEED', 0.01 , 0.2).step(0.01)
         
         //  Animate
         const clock = new THREE.Clock()
@@ -500,10 +542,12 @@ const LocalGame = () => {
         
         const tick = () =>
         {
+            // isCountdownComplete :  true
+            // console.log("=> isCountdownComplete : ", isCountdownComplete);
             //tbr
-            if (paddleAi && paddle){
-                setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
-            }
+            // if (paddleAi && paddle){
+            //     setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
+            // }
             const elapsedTime = clock.getElapsedTime()
             const deltaTime = elapsedTime - previousTime
             previousTime = elapsedTime
@@ -535,15 +579,21 @@ const LocalGame = () => {
                         // aiScore += 1;
                         New_ball_launched = false;
                         setAiScore((aiScore) => aiScore + 1)
+                        BallCreator.createBall();
+
                     } else if (Objects[Objects.length - 1].sphere.position.z < (paddleAi.position.z - 1)) {
                         // playerScore += 1;
                         New_ball_launched = false;
                         setPlayerScore((playerScore) => playerScore + 1)
+                        BallCreator.createBall();
                     }
                 }
             }
         
-            if (BallCreator.cameraFixed & Cameras.length === 2){
+            if (isCountdownComplete === true && Cameras.length === 2 && paddle && paddleAi){
+                // if (playerScore === 0 && aiScore === 0 && !New_ball_launched){
+                //     BallCreator.createBall();
+                // }
                 checkCollision();
                 
                 if ( Chained_Keys.w === 1) {
@@ -680,7 +730,7 @@ const LocalGame = () => {
             hit_sound.src = "";
         };
 
-    }, []);
+    }, [isCountdownComplete]);
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
@@ -745,6 +795,11 @@ const LocalGame = () => {
     return (
         <>
             <LoadingScreen show={loading} />
+            <div 
+                ref={countdownRef} 
+                id="countdown" 
+                className='countdown-v'
+            ></div>
             <canvas style={{zIndex:97, position: 'absolute',top: 0,
                 left: 0,
                 width: '100%',
