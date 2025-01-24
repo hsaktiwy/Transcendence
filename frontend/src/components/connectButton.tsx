@@ -13,8 +13,10 @@ import { FiUser } from "react-icons/fi";
 import { channel } from 'diagnostics_channel';
 import {NotificationPropreties} from './UserContext'
 import { ProfileDataInterface, UserDataInterface } from '@/utils/UserDataInterface';
+import { SlLock } from "react-icons/sl";
+
 interface buttonInterface{
-  channel_id?: number 
+  channel_id: number | undefined 
   user: UserDataInterface | ProfileDataInterface | undefined
 }
 
@@ -28,6 +30,8 @@ function ConnectButton(prop: buttonInterface) {
   const [FriendRequest, setFriendRequest] = useState("")
   const [friend_req_id, setFriendRequestId] = useState<number>(-1)
   const [loading, setLoading] = useState<boolean>(true)
+  const [channelId, setChannelId] = useState<number | undefined>(prop.channel_id)
+  const [blocker, setBloker] = useState<boolean>(false)
 
   const {username} = useParams();
   const userContextConsumer = useContext(UserContext)
@@ -41,6 +45,23 @@ function ConnectButton(prop: buttonInterface) {
     setStatus("accepted");
   };
   
+  const getChannelId = async () =>{
+      try{
+          const req = {
+              url: "/chat/conversation/get_channel/"+username+'/',
+              method: 'GET'
+          }
+          const resp = await mailman(req)
+          const id:number = resp.data.channel_id;
+          if (id)
+              setChannelId(id);
+      }
+      catch (error){
+
+
+      }
+  }
+
   const BlockActionCheck = async ()=>
   {
     if (prop.user){
@@ -82,7 +103,7 @@ function ConnectButton(prop: buttonInterface) {
   {
       try{
         const req = {
-          url:'friendship/is/BLOCKED/'+ username,
+          url:'friendship/block_status/'+ username,
           method: 'GET',
           withCredentials:true,
         }
@@ -90,7 +111,13 @@ function ConnectButton(prop: buttonInterface) {
         const  responce:boolean = resp.data['status']
         setIsbLock(responce)
         setBtn_block(responce ? 'UnBlock' : 'Block');
-        // console.log(resp)
+        console.log('block  status  heere  ->>>>', resp.data);
+        if(resp.data['blocker'] ===  userContextConsumer?.userData?.login)
+        {
+            setBloker(true);
+        }
+        else
+          setBloker(false);
       }
       catch(err)
       {
@@ -144,6 +171,7 @@ function ConnectButton(prop: buttonInterface) {
     // friendship ?
     // does we have
     setLoading(false)
+    getChannelId()
   } , [username]);
   // FIRST FETCH DATA ABOUT THE USER
   // CASE 1: NO FRIEND REQUEST STATUS : SEND,BLOCK
@@ -158,6 +186,7 @@ function ConnectButton(prop: buttonInterface) {
       if (data.sender.login == username)
       {
         //console.log('ACCEPTED :', username, data)
+        getChannelId()
         setFriendRequest("")
         setIsfriend("UNFRIEND")
       }
@@ -217,11 +246,12 @@ function ConnectButton(prop: buttonInterface) {
             const notification = {
               type: 'NOTIFICATION_ACCEPT_FRIEND',
               to : username
-          }
-          const message = JSON.stringify(notification)
-          SocketContext?.socket?.current?.send(message)
+            }
+            const message = JSON.stringify(notification)
+            SocketContext?.socket?.current?.send(message)
             setFriendRequest("")
             setIsfriend("UNFRIEND")
+            getChannelId()
           }
           // we need to rest all thing to get back to what it should be
       }
@@ -287,7 +317,7 @@ function ConnectButton(prop: buttonInterface) {
         console.log(e)
     }
   }
-
+ 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -299,14 +329,29 @@ function ConnectButton(prop: buttonInterface) {
   };
 
 
-
+  useEffect(()=>{
+    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++> reload connect botton')
+  },[])
   
   return (
     <>
       {
         loading ? 
           <Loading__/>
-        : 
+        :
+        isblock ? <div> {blocker ?
+        <li
+          className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] flex cursor-pointer gap-3 items-center justify-center focus:outline-none active:outline-none"
+        onClick={BlockActionCheck}>
+            <div className='text-xl'>
+              <MdBlock/>
+            </div>
+            <p>{btn_block}</p>
+            
+        </li>
+       : <div className='ext-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all hover:bg-[#5E97A9] flex gap-3 items-center justify-center'>
+        <div><SlLock/></div> Locked</div> }
+       </div> : 
           <motion.nav
             initial={false}
             animate={isOpen ? "open" : "closed"}
@@ -371,7 +416,7 @@ function ConnectButton(prop: buttonInterface) {
                     <p >UnFriend</p>
                     
                   </motion.button> */}
-                  <Link to="/chat/" state={{channel_id : prop.channel_id}}>
+                  <Link to="/chat/" state={{channel_id : channelId}}>
                     <motion.button
                       className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none   "
                       whileTap={{ scale: 0.97 }}

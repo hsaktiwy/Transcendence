@@ -158,6 +158,23 @@ def isBlockedRelationship(request, _login):
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+def defineStatusOfBlocker(request, _login):
+	try:
+		user = request.user
+		otheruser = MyUser.objects.get(login=_login)
+		blocklist = BlockList.objects.get(user=user)  #did i block him
+		isblocked = blocklist.block_users.filter(id=otheruser.id).exists()
+		if isblocked:
+			return Response({'status':True, 'blocker' : user.login, 'blocked' : _login}, status = 200)
+		blocklist2 = BlockList.objects.get(user=otheruser) #did he block me 
+		isblocked = blocklist2.block_users.filter(id = user.id).exists()
+		if isblocked:
+			return Response({'status':True, 'blocker' : _login, 'blocked' : user.login}, status = 200)
+		return Response({'status': False}, status=status.HTTP_200_OK)
+	except:
+		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
 def isFriend(request, _login):
 	try:
 		user = request.user
