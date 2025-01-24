@@ -78,6 +78,7 @@ const ProfileTest  = () =>{
     
             setProfileData(respData)
             // setIsLoading(false);
+            await getChannelId()
         }
         else{
             setProfileData(user[0])
@@ -131,6 +132,9 @@ const ProfileTest  = () =>{
         setIsLoading(false)
     }
    },[username, userContextConsumer.blockList])
+   useEffect(()=>{
+    console.log('-----------------------------------------------------------------------------> reload profile')
+   },[])
     console.log('', )
     return(
         <>

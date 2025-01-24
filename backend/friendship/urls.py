@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import FriendRequestList, AcceptFriendRequest, BlockUser, UnFriendUser, isBlocked, UnBlockUser,FriendRequestSentList, FriendRequestReceivedList, isFriend, FriendRequestStatus, CancelFriendRequest, FriendsList,GetBlockList, isBlockedRelationship
+from .views import FriendRequestList, AcceptFriendRequest, BlockUser, UnFriendUser, isBlocked, UnBlockUser,FriendRequestSentList, FriendRequestReceivedList, isFriend, FriendRequestStatus, CancelFriendRequest, FriendsList,GetBlockList, isBlockedRelationship, defineStatusOfBlocker
 urlpatterns = [
    path("requests/", FriendRequestList.as_view(), name='listfriendRequest'),
    path("request/status/set/accept/<int:id>", AcceptFriendRequest, name="FirendRequest"),
@@ -15,5 +15,5 @@ urlpatterns = [
    path("friend_requests_received/", FriendRequestReceivedList, name="friend_requests_received"),
    path("friend_list/", FriendsList, name="friend_list"),
    path("block_list/", GetBlockList, name="block_list"),
-
+   path("block_status/<str:_login>", defineStatusOfBlocker, name="block_status"),
 ]
