@@ -19,6 +19,8 @@ function Backgrounds() {
   ].includes(location.pathname)
 
   const OnPongRoute = [
+    '/game',
+    '/game/',
     '/game/PingPong_Lobby',
     '/game/Tournament',
     '/game/PlayLocally_1v1',
@@ -42,17 +44,17 @@ function Backgrounds() {
         <PingPongBack />
       </div>
 
-      <div className={show ? "" : "hidden-v"}>
+      {/* <div className={show ? "" : "hidden-v"}>
         <DefaultBack />
-      </div>
+      </div> */}
 
   
       <div className={show ? "teams-container" : "hidden-v"} >
         <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
-            <ModelPreview modelPath="/GamePub/chess-assets/models/horse_statue_01_2k.gltf/horse_statue_01_2k.gltf" Scale={10} />
+            {/* <ModelPreview modelPath="/GamePub/chess-assets/models/horse_statue_01_2k.gltf/horse_statue_01_2k.gltf" Scale={10} /> */}
         </div>
         <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
-            <ModelPreview modelPath="/GamePub/chess-assets/models/yellow_onion_2k.gltf/yellow_onion_2k.gltf" Scale={25} />
+            {/* <ModelPreview modelPath="/GamePub/chess-assets/models/yellow_onion_2k.gltf/yellow_onion_2k.gltf" Scale={25} /> */}
         </div>
       </div>
 
