@@ -419,7 +419,7 @@ function ConnectButton(prop: buttonInterface) {
                   >
                     Cancel
                   </motion.button>
-                  <li
+                  {/* <li
                   className='m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer '
                 // className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
                 onClick={BlockActionCheck}
@@ -429,7 +429,7 @@ function ConnectButton(prop: buttonInterface) {
                     </div>
                     <p>{btn_block}</p>
                     
-              </li>
+              </li> */}
                 </>
               }
           </motion.nav>
