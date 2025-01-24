@@ -70,7 +70,7 @@ const App = () =>
           <Auth>
             <WebSocketProvider>
               <UserProvider>
-                {/* <MatchProvider> */}
+                <MatchProvider>
                   <Routes>
                         <Route path='/'  element={ <Layout/>}>
                           <Route path='/profile/:username' element={ <ProfileTest/>}/>
@@ -85,9 +85,9 @@ const App = () =>
                             <Route path='/game/LocalGame' element={<LocalGame />}/>
                             <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
                             <Route path='/game/Multiplayer' element={<MultiplayerGame />}/>
+                            <Route path='/game/PreRemote' element={<PreRemote />}/>
                             <Route path='/game/Winner' element={<Winner />}/>
                             {/* <Route path='/game/PreTournament' element={<PreTournament />}/>
-                            <Route path='/game/PreRemote' element={<PreRemote />}/>
                             <Route path='/game/RemoteGame' element={<RemoteGame />}/>
                             <Route path='/game/Tournament' element={<Tournament />}/>
                             <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
@@ -101,7 +101,7 @@ const App = () =>
                         </Route>
                         <Route path='*' element={<LoadingIndecator/>}/>
                   </Routes>
-                {/* </MatchProvider> */}
+                </MatchProvider>
             </UserProvider>
             </WebSocketProvider>
           </Auth>

@@ -37,6 +37,7 @@ function Backgrounds() {
 
   return (
     <>
+    
       <div className={OnChessRoute ? "" : "hidden-v"}>
         <ChessGameBack />
       </div>
