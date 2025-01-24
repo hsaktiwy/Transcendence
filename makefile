@@ -4,7 +4,7 @@ CMD = docker-compose
 all : run
 
 run:
-	$(CMD) up -d --build
+	$(CMD) up --build
 clean:
 	$(CMD) down
 re: fclean all

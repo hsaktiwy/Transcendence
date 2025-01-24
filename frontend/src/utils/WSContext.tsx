@@ -90,14 +90,37 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
 
                 const notifData =  JSON.parse(message.data);
                 if (notifData['friend_req_status' ] === 'pending')
+                {
                   channels.current['NOTIFICATION_ADD_FRIEND'](notifData)
+                  if (channels.current['FriendRequestReceived'])
+                    channels.current['FriendRequestReceived'](notifData);
+                }
                 else{
                   console.log(message.data)
                   channels.current['NOTIFICATION_ACCEPT_FRIEND'](notifData)
+                  if (channels.current['FriendRequestAccepted'])
+                    channels.current['FriendRequestAccepted'](notifData)
                 }
-
               }
-              
+            }
+            if (type === 'profile_notif')
+            {
+              interface friendship{
+                action:string,
+                sender:string
+              }
+              const info: friendship = {
+                action: data.action,
+                sender: data.sender,
+              };
+              if (channels.current[info.action])
+              {
+                if (channels.current[info.action])
+                {
+                  console.log('____________________________________', data)
+                  channels.current[info.action](info)
+                }
+              }
             }
             if (type === 'message'){
               if(channels.current['NOTIFICATION_MESSAGE'])

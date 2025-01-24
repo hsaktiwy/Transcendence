@@ -30,15 +30,16 @@ import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 import { SlLock } from "react-icons/sl";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
 
-
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
    
     if (!SocketContext)
         throw new Error('error')
-   const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
-   const [channel_id, setChannelId] = useState<number | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+    const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
+    const [channel_id, setChannelId] = useState<number | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isblock, setIsbLock] = useState<boolean>(false);
+
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
@@ -90,7 +91,26 @@ const ProfileTest  = () =>{
     }
   };
 
+  const BlockStatusCheck = async ()=>
+    {
+        try{
+          const req = {
+            url:'friendship/is/BLOCKED_BOTH_SIDE/'+ username,
+            method: 'GET',
+            withCredentials:true,
+          }
+          const resp = await mailman(req)
+          const  responce:boolean = resp.data['status']
+          setIsbLock(responce)
 
+        //   setBtn_block(responce ? 'UnBlock' : 'Block');
+          console.log('hiii ->>>', resp);
+        }
+        catch(err)
+        {
+            console.log("Block status ", err)
+        }
+    }
 
 
    useEffect(() =>{
@@ -104,21 +124,20 @@ const ProfileTest  = () =>{
             // Cleanup timer
             return () => clearTimeout(timer);
           });
+          BlockStatusCheck();
     }
     else{
         setProfileData(userContextConsumer?.userData)
         setIsLoading(false)
     }
-   },[username])
-    console.log(profileData);
-    console.log(import.meta.env.VITE_axiosPath)
-    console.log('block list ', userContextConsumer.blockList)
+   },[username, userContextConsumer.blockList])
+    console.log('', )
     return(
         <>
             {isLoading ? (
                 <SkeletonProfile />
-            ) : userContextConsumer.blockList.filter(user => user.login===username).length ? <ProfileLocked/> : (
-                <div className="lg:mb-0 pb-20  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]    dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
+            ) :  isblock ? <ProfileLocked/> : (
+                <div className=" lg:mb-0 pb-20  font-poppins 2xl:my-[20px] p-3 lg:ml-[70px]    dashboard-container  md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">
                         <div className=" rounded-2xl  row-span-1 justify-center items-center   md:col-span-12 md:row-span-3  xl:row-span-5  2xl:col-span-12   xxl:row-span-6 xxl:col-span-9 grid grid-cols-12 ">
                         <div className="h-full   col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
                                     <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
@@ -134,7 +153,7 @@ const ProfileTest  = () =>{
                                                         Edit profile</button>
                                                     </Link> 
                                                     ) : (
-                                                        <ConnectButton channel_id={channel_id}/> 
+                                                        <ConnectButton channel_id={channel_id} user={profileData}/> 
                                                     )}
                                     </div>
                         </div>

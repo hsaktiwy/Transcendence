@@ -191,6 +191,7 @@ class getAuthenticatedUser(APIView):
     def patch(self, request):
         user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
+        print('from view  ')
         if serializer.is_valid():
             user = serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
@@ -231,6 +232,7 @@ class LoginView(APIView):
 class UpdateUserData(APIView):
     def patch(self, request):
         user = request.user
+ 
         serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             user = serializer.update(instance=user, validated_data=serializer.validated_data)

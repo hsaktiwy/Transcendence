@@ -11,10 +11,13 @@ import { MdBlock } from "react-icons/md";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { channel } from 'diagnostics_channel';
-
+import {NotificationPropreties} from './UserContext'
+import { ProfileDataInterface, UserDataInterface } from '@/utils/UserDataInterface';
 interface buttonInterface{
   channel_id?: number 
+  user: UserDataInterface | ProfileDataInterface | undefined
 }
+
 function ConnectButton(prop: buttonInterface) {
   const navigate =  useNavigate()
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +35,7 @@ function ConnectButton(prop: buttonInterface) {
   const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
         throw new Error('error')
+  const {AddChannel,RemoveChannel} = SocketContext
   const handleAcceptClick = () => {
     setIsOpen(true);
     setStatus("accepted");
@@ -39,6 +43,7 @@ function ConnectButton(prop: buttonInterface) {
   
   const BlockActionCheck = async ()=>
   {
+    if (prop.user){
       try{
         const req = {
           url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+username,
@@ -46,7 +51,21 @@ function ConnectButton(prop: buttonInterface) {
           withCredentials: true,
         }
         const resp = await mailman(req)
-        console.log('hana ->>>>>', resp)
+        // userContextConsumer?.blockList.push()
+        // console.log('hana ->>>>>', resp)
+        const user = prop.user as ProfileDataInterface
+        if (!isblock)
+        {
+          userContextConsumer?.setBlockList(prev=>[...prev, user])
+        }
+        else
+        {
+          userContextConsumer?.setBlockList((prev) =>{
+            return(
+              prev.filter(blocked => blocked.login !== user.login)
+            )
+          })
+        }
         setBtn_block(isblock ? 'Block' : 'Unblock');
         setIsbLock(!isblock)
       }
@@ -54,6 +73,9 @@ function ConnectButton(prop: buttonInterface) {
       {
           console.log("Block status ", err)
       }
+    }
+    else
+      console.log(prop.user)
   }
 
   const BlockStatusCheck = async ()=>
@@ -129,6 +151,45 @@ function ConnectButton(prop: buttonInterface) {
   // CASE 3: FRIEND : UNFRIEND + SENDMESSAGE,BLOCK
   // 
 
+  // add our state update to the socket channel
+
+  useEffect(()=>{
+    const FriendRequestAccepted = (data:NotificationPropreties)=>{
+      if (data.sender.login == username)
+      {
+        //console.log('ACCEPTED :', username, data)
+        setFriendRequest("")
+        setIsfriend("UNFRIEND")
+      }
+    }
+    const FriendRequestReceived = (data:NotificationPropreties)=>{
+      if (data.sender.login == username)
+      {
+        // console.log('RECEIVED :', username, data)
+        setFriendRequestId(data.friend_request_id)
+        setFriendRequest('Accept')
+      }
+    }
+
+    const TOCONNECT = (data:any)=>{
+      console.log('+===========================+++++++++++++++++', data)
+      if (data.sender == username)
+      {
+        setFriendRequest("")
+        setIsfriend("CONNECT")
+      }
+    }
+    AddChannel('FriendRequestAccepted', FriendRequestAccepted)
+    AddChannel('FriendRequestReceived', FriendRequestReceived)
+    AddChannel('NOTIFICATION_UNCONNECT', TOCONNECT)
+
+    return () => {
+      // Remove the CHAT call back function when we exist the chat section
+      RemoveChannel('FriendRequestAccepted')
+      RemoveChannel('FriendRequestReceived')
+      RemoveChannel('NOTIFICATION_UNFRIEND')
+    }
+  },[])
   const send_friend_request = ()=>{
     const notification = {
       type: 'NOTIFICATION_ADD_FRIEND',
@@ -181,6 +242,12 @@ function ConnectButton(prop: buttonInterface) {
             }
             const resp = await mailman(req)
             console.log(resp.data)
+            const notification = {
+              type: 'NOTIFICATION_UNCONNECT',
+              to : username
+            }
+            const message = JSON.stringify(notification)
+            SocketContext?.socket?.current?.send(message)
             setFriendRequest("")
             setIsfriend("CONNECT")
           }
@@ -205,6 +272,12 @@ function ConnectButton(prop: buttonInterface) {
           const resp = await mailman(req)
           console.log(resp.data)
           userContextConsumer?.fetchFriends()
+          const notification = {
+            type: 'NOTIFICATION_UNCONNECT',
+            to : username
+          }
+          const message = JSON.stringify(notification)
+          SocketContext?.socket?.current?.send(message)
           setFriendRequest("")
           setIsfriend("CONNECT")
         }
@@ -346,6 +419,17 @@ function ConnectButton(prop: buttonInterface) {
                   >
                     Cancel
                   </motion.button>
+                  {/* <li
+                  className='m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer '
+                // className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
+                onClick={BlockActionCheck}
+              >
+                    <div className='text-xl'>
+                      <MdBlock/>
+                    </div>
+                    <p>{btn_block}</p>
+                    
+              </li> */}
                 </>
               }
           </motion.nav>

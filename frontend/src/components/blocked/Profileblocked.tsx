@@ -16,6 +16,9 @@ import { Link } from "react-router-dom"
 
 function ProfileLocked() {
   const SocketContext = useContext(WebSocketContext)
+  const [channel_id, setChannelId] = useState<number | undefined>(undefined);
+  
+  
   if (!SocketContext)
       throw new Error('error')
  const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
@@ -27,36 +30,64 @@ const [isLoading, setIsLoading] = useState(true);
 
  const fetchUserData = async () =>{
    try {
-    const req = {
-      url: `/api/users/${username}/`,
-      method: 'GET',
-    };
-    const resp = await mailman(req);
-    const {
-      login,
-      email,
-      firstName,
-      lastName,
-      state,
-      last_visit,
-      profile_pic,
-      CoverProfile,
-    } = resp.data;
 
-    setProfileData({
-      login,
-      email,
-      firstName,
-      lastName,
-      state,
-      last_visit,
-      profile_pic,
-      CoverProfile,
-    });
+    // check if the user is already existing friend
+    const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
+    if (user.length === 0)
+    {
+      const req = {
+        url: `/api/users/${username}/`,
+        method: 'GET',
+      };
+      const resp = await mailman(req);
+      const {
+        login,
+        email,
+        firstName,
+        lastName,
+        state,
+        last_visit,
+        profile_pic,
+        CoverProfile,
+      } = resp.data;
+
+      setProfileData({
+        login,
+        email,
+        firstName,
+        lastName,
+        state,
+        last_visit,
+        profile_pic,
+        CoverProfile,
+      });
+    }
+    else
+    {
+      setProfileData(user[0])
+      await getChannelId()
+    }
   } catch (err) {
     console.error(err);
   }
 };
+
+const getChannelId = async () =>{
+  try{
+      const req = {
+          url: "/chat/conversation/get_channel/"+username+'/',
+          method: 'GET'
+      }
+      const resp = await mailman(req)
+      const id:number = resp.data.channel_id;
+      if (id)
+          setChannelId(id);
+  }
+  catch (error){
+
+
+  }
+}
 
 // useEffect to handle the loading state
 useEffect(() => {
@@ -89,7 +120,7 @@ useEffect(() => {
         <div className="rounded-2xl row-span-1 justify-center items-center md:col-span-12 md:row-span-3 xl:row-span-5 2xl:col-span-12 xxl:row-span-6 xxl:col-span-9 grid grid-cols-12">
           <div className="h-full col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
           <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
-                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${import.meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                                 
                                                 <div className=" flex  mt-5 flex-col justify-center ">
                                                     <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
@@ -101,7 +132,7 @@ useEffect(() => {
                                                         Edit profile</button>
                                                     </Link> 
                                                     ) : (
-                                                        <ConnectButton /> 
+                                                        <ConnectButton channel_id={channel_id} user={profileData}/> 
                                                     )}
                                     </div>
           </div>
@@ -232,7 +263,7 @@ useEffect(() => {
                     </div>
                     
                     {/* Blur Effect */}
-                    <div className="absolute inset-0 text-xl bg-black/10 backdrop-blur-md rounded-lg z-10 flex justify-center items-center text-white ">
+                    <div className="absolute b inset-0 text-xl bg-black/10 backdrop-blur-md rounded-lg z-10 flex justify-center items-center text-white ">
                       <SlLock />
                     </div>
                   </div>
@@ -246,7 +277,7 @@ useEffect(() => {
             <div className="mb-4">
               <div className="bg-[#2f3a41] w-[60%] h-[24px] rounded" />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-4 ">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index} className="flex items-center  gap-4 bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md rounded-lg p-4">
                   <div className="bg-[#2f3a41] rounded-full w-[48px] h-[48px]" />
@@ -260,7 +291,35 @@ useEffect(() => {
             </div>
           </div>
         </div>
-
+        <div className="row-span-2 hidden md:block  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xl:hidden">
+          <div className="gap-4 relative rounded-lg   bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] xl:h-96  h-full w-full  flex items-center  flex-col  justify-center p-4">
+              <div className="h-full">
+                <div className="absolute bottom-20 inset-0 w-52 h-52 m-auto rounded-full bg-black/20 backdrop-blur-md  z-40 flex justify-center items-center text-white text-3xl">
+                                            <SlLock />
+                </div>
+              </div>  
+              <div className="absolute inset-0 top-48 w-60 h-9  bg-black/20 backdrop-blur-md
+               rounded-xl m-auto flex justify-center items-center">
+                <SlLock />
+                </div> 
+          </div>
+        </div>
+        <div className="row-span-2 hidden md:block  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
+          <div className="gap-4 relative rounded-lg   bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] xl:h-96  h-full w-full  flex items-center  flex-col  justify-center p-4"> 
+              <div className="absolute inset-0 w-40 h-9  bg-black/20 backdrop-blur-md
+                rounded-xl m-auto flex justify-center items-center">
+                    <SlLock />
+                </div>
+                <div className="absolute top-28 inset-0 w-60 h-9  bg-black/20 backdrop-blur-md
+               rounded-xl m-auto flex justify-center items-center">
+                <SlLock />
+                </div>
+                <div className="absolute bottom-28 inset-0 w-60 h-9  bg-black/20 backdrop-blur-md
+               rounded-xl m-auto flex justify-center items-center">
+                <SlLock />
+                </div>
+          </div>
+        </div>
       </div>
       
     </div>
