@@ -745,12 +745,12 @@ const LocalGame = () => {
     return (
         <>
             <LoadingScreen show={loading} />
-            <canvas style={{zIndex: 1, position: 'absolute',top: 0,
+            <canvas style={{zIndex:97, position: 'absolute',top: 0,
                 left: 0,
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
             {/* <Hud/> */}
-            <Scoreboard player1={(matchId && match && match[matchId]) ? match[matchId].player1 : "PL1"} playerScore={playerScore} player2={matchId && match && match[matchId] ? match[matchId].player2 : "PL2"} aiScore={aiScore}/>
+            <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={(matchId && match && match[matchId]) ? match[matchId].player1 : "PL1"} playerScore={playerScore} player2={matchId && match && match[matchId] ? match[matchId].player2 : "PL2"} aiScore={aiScore}/>
         </>
     )
 };
