@@ -263,7 +263,7 @@ useEffect(() => {
                     </div>
                     
                     {/* Blur Effect */}
-                    <div className="absolute inset-0 text-xl bg-black/10 backdrop-blur-md rounded-lg z-10 flex justify-center items-center text-white ">
+                    <div className="absolute b inset-0 text-xl bg-black/10 backdrop-blur-md rounded-lg z-10 flex justify-center items-center text-white ">
                       <SlLock />
                     </div>
                   </div>
@@ -277,7 +277,7 @@ useEffect(() => {
             <div className="mb-4">
               <div className="bg-[#2f3a41] w-[60%] h-[24px] rounded" />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-4 ">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index} className="flex items-center  gap-4 bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md rounded-lg p-4">
                   <div className="bg-[#2f3a41] rounded-full w-[48px] h-[48px]" />
@@ -291,7 +291,35 @@ useEffect(() => {
             </div>
           </div>
         </div>
-
+        <div className="row-span-2 hidden md:block  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xl:hidden">
+          <div className="gap-4 relative rounded-lg   bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] xl:h-96  h-full w-full  flex items-center  flex-col  justify-center p-4">
+              <div className="h-full">
+                <div className="absolute bottom-20 inset-0 w-52 h-52 m-auto rounded-full bg-black/20 backdrop-blur-md  z-40 flex justify-center items-center text-white text-3xl">
+                                            <SlLock />
+                </div>
+              </div>  
+              <div className="absolute inset-0 top-48 w-60 h-9  bg-black/20 backdrop-blur-md
+               rounded-xl m-auto flex justify-center items-center">
+                <SlLock />
+                </div> 
+          </div>
+        </div>
+        <div className="row-span-2 hidden md:block  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
+          <div className="gap-4 relative rounded-lg   bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] xl:h-96  h-full w-full  flex items-center  flex-col  justify-center p-4"> 
+              <div className="absolute inset-0 w-40 h-9  bg-black/20 backdrop-blur-md
+                rounded-xl m-auto flex justify-center items-center">
+                    <SlLock />
+                </div>
+                <div className="absolute top-28 inset-0 w-60 h-9  bg-black/20 backdrop-blur-md
+               rounded-xl m-auto flex justify-center items-center">
+                <SlLock />
+                </div>
+                <div className="absolute bottom-28 inset-0 w-60 h-9  bg-black/20 backdrop-blur-md
+               rounded-xl m-auto flex justify-center items-center">
+                <SlLock />
+                </div>
+          </div>
+        </div>
       </div>
       
     </div>
