@@ -15,5 +15,9 @@
     },
     "jsx": "react-jsx",  // For React 17+
     "moduleResolution": "node"
-  }
+  },
+
+  
+  // "allowJs": true,
+  // "checkJs": false
 }
