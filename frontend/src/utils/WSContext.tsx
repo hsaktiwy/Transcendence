@@ -1,8 +1,9 @@
 import React, {useEffect, createContext, useRef, useContext} from 'react'
-import {channelType, WebSocketContextType, childrenInterface} from './interfaces'
+import {channelType, WebSocketContextType, childrenInterface, friendship} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 import { AuthContext } from '@/components/AuhtenticationContext'
+
 
 let inc: number = 222222 // desable the id that amine use later else we will use this 
 // type CallbackType = (message: any) => void
@@ -105,10 +106,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
             }
             if (type === 'profile_notif')
             {
-              interface friendship{
-                action:string,
-                sender:string
-              }
+             
               const info: friendship = {
                 action: data.action,
                 sender: data.sender,
