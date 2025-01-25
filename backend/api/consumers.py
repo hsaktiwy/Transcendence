@@ -435,7 +435,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender
                     }
                 )
-            elif message_json['type'] == 'NOTIFICATION_UNCONNECT' :
+            elif message_json['type'] == 'NOTIFICATION_UNCONNECT' or message_json['type'] == 'NotifBlock' :
                 login = user.login
                 print('NOTIFICATION_UNFRIEND +++++++++++++++++++++++++++++++++++++ ', login, '\n')
                 receiver = message_json['to']
@@ -445,7 +445,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     {
                         'type': 'profile_notif',
                         'action': message_json['type'],
-                        'sender': login
+                        'sender': login,
+
                     }
                 )
             elif message_json['type'] == 'NOTIFICATION_STATE':
