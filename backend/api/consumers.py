@@ -246,15 +246,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, code):
         user = self.scope['user']
         state = 'offline'
+        try:
         # try:
         #     await self.update_and_broadcast_state(user , state)
         # except Exception as e:
         #     print(f"Error updating and broadcasting state: {e}")
-        for room in self.rooms :
-            await self.channel_layer.group_discard(
-                room,
-                self.channel_name
-            )
+            if self.rooms:
+                for room in self.rooms :
+                    await self.channel_layer.group_discard(
+                        room,
+                        self.channel_name
+                    )
+        except Exception as e:
+            print(f"Error in ChatConsumer.disconnect : ", e)
     @sync_to_async
     def increment_sessions(self, user):
         if user.sessions is None:
@@ -431,7 +435,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender
                     }
                 )
-            elif message_json['type'] == 'NOTIFICATION_UNCONNECT':
+            elif message_json['type'] == 'NOTIFICATION_UNCONNECT' :
                 login = user.login
                 print('NOTIFICATION_UNFRIEND +++++++++++++++++++++++++++++++++++++ ', login, '\n')
                 receiver = message_json['to']
