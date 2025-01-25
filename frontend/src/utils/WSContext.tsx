@@ -115,11 +115,8 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
               };
               if (channels.current[info.action])
               {
-                if (channels.current[info.action])
-                {
-                  console.log('____________________________________', data)
-                  channels.current[info.action](info)
-                }
+                console.log('____________________________________', data)
+                channels.current[info.action](info)
               }
             }
             if (type === 'message'){
