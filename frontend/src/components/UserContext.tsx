@@ -11,7 +11,7 @@ import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
 import LoadingIndecator from "./Loading";
 import { backendPath } from "./ChatSession";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export interface NotificationPropreties{
     id: number;
@@ -121,7 +121,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
     const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     const [userRank, setUserRank] = useState<rankInterface[]>([]);
-    
+    const location = useLocation()
 
   
     const PureNotification = (data:MiniNotification) =>
@@ -339,6 +339,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
+        console.log("khroj t9awed")
         if (data.sender.login === userData?.login && data.state === 'offline'){
             AuthContextConsummer?.setLoggedIn(false)
             Navigate('/home')
@@ -353,11 +354,13 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         setFriends(tmpFriends)
     }
     useEffect(() =>{
+        console.log(location.pathname)
         if (ready)
         {       
             SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
             SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
-            SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
+            if (location.pathname !== '/chat/' && location.pathname !== '/chat')
+                SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
             SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
             SocketContext.AddChannel('NOTIFICATION', PureNotification)
             // const stateObj = {

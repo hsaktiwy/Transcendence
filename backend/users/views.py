@@ -290,9 +290,12 @@ class CheckAuth(APIView):
             #         'message': 'csrf_token mismatch'
             #     }, status=status.HTTP_401_UNAUTHORIZED)
             # else:
-                return Response({
-                    'message': 'user already logged in'
-                }, status=status.HTTP_200_OK)
+                resp = {
+                    'message' : 'user already logged in'
+                }
+                # if request.user.state == 'offline':
+                #     resp['state']= 'online'
+                return Response(resp, status=status.HTTP_200_OK)
         else:
             return Response({
                 'message': 'Anonymous user'

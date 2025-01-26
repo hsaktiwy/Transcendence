@@ -25,16 +25,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def get_user_friends_group_names(self, user):
         try:
             list_s = FriendRequest.objects.filter(Q(sender=user, status='accepted'))
+            list_r = FriendRequest.objects.filter(Q(receiver=user, status='accepted'))
             friend_group_list = []
             for s in list_s:
                 group_name = f'notification_user_{s.receiver.login}'
                 friend_group_list.append(group_name)
-            list_r = FriendRequest.objects.filter(Q(receiver=user, status='accepted'))
             for s in list_r:
                 group_name = f'notification_user_{s.sender.login}'
                 friend_group_list.append(group_name)
+            if len(friend_group_list) == 0:
+                return None
             return friend_group_list
         except Exception as e:
+            print(e)
             return None
 
 
@@ -59,6 +62,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             acceptedFriendReq = FriendRequest.objects.filter(sender=receiver, receiver=_sender, status="accepted").first()
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='friendship', friend_request_id=acceptedFriendReq.id)
             rev_notif = Notification.objects.filter(id_user_fk=_sender, friend_request_id=acceptedFriendReq.id).first()
+            # channel = Channel.objects.filter(users=_sender).filter(users=receiver)
+            # self.add_group(self, channel, _sender)
             if rev_notif:
                 rev_notif.is_readed = True
                 rev_notif.save()
@@ -227,10 +232,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
                 await self.channel_layer.group_add(self.session_group_name, self.channel_name)
                 state = 'online'
-                # try:
-                #     await self.update_and_broadcast_state(user , state)
-                # except Exception as e:
-                #     print(f"Error updating and broadcasting state: {e}")
+                try:
+                    await self.update_and_broadcast_state(user , state)
+                except Exception as e:
+                    print(f"Error updating and broadcasting state: {e}")
                 channels = await sync_to_async(self.get_user_channels)(user.id)
                 # print(channels)
                 self.rooms = set()
@@ -247,15 +252,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user = self.scope['user']
         state = 'offline'
         try:
-        # try:
-        #     await self.update_and_broadcast_state(user , state)
-        # except Exception as e:
-        #     print(f"Error updating and broadcasting state: {e}")
+            try:
+                await self.update_and_broadcast_state(user , state)
+            except Exception as e:
+                print(f"Error updating and broadcasting state: {e}")
             if self.rooms:
                 for room in self.rooms :
                     await self.channel_layer.group_discard(
                         room,
                         self.channel_name
+
                     )
         except Exception as e:
             print(f"Error in ChatConsumer.disconnect : ", e)
@@ -273,43 +279,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user.save()
 
     def has_active_sessions(self, user):
-        print(f'active_sessions {user.sessions}')
         return user.sessions > 0 
 
     def is_online(self, user):
         return user.state == 'online' or user.state == 'in_game'
     
     async def update_and_broadcast_state(self, user, state):
-        if state == 'online':
-            await self.increment_group_member_count(self.session_group_name)
-            same_sessions = await self.get_group_member_count(self.session_group_name)
-            print(same_sessions)
-            if same_sessions == 1: 
-                await self.increment_sessions(user)
- 
-        elif state == 'offline':
-            await self.decrement_group_member_count(self.session_group_name)
-            await self.decrement_sessions(user)
-            if self.has_active_sessions(user):
-                if await self.get_group_member_count(self.session_group_name) > 0:
-                    try:
-                        await self.channel_layer.group_send(
-                            self.session_group_name,
-                            {
-                                'type': 'state',
-                                'sender': SerializedSender,
-                                'state': state
-                            }
-                        )
-                    except Exception as e:
-                        print(f"Error sending to group {group_name}: {e}")
-                return
+        SerializedSender = await sync_to_async(self.get_sender)(user)
+        if state == 'offline':
+            try:
+                await self.channel_layer.group_send(
+                    self.session_group_name,
+                    {
+                        'type': 'state',
+                        'sender': SerializedSender,
+                        'state': state
+                    }
+                )
+            except Exception as e:
+                print(f"Error sending to group {group_name}: {e}")
         user.state = state
         await sync_to_async(user.save)() 
         friend_groups_list = await sync_to_async(self.get_user_friends_group_names)(user)
         if (friend_groups_list == None):
             return 
-        SerializedSender = await sync_to_async(self.get_sender)(user)
         for group_name in friend_groups_list:
             try:
                 await self.channel_layer.group_send(
