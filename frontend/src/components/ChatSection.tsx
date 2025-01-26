@@ -57,8 +57,40 @@ function ChatSection(){
             }
         }
     }, userContextConsumer.friends)
+    const UpdateConvs = (data:any)=>
+    {
+        console.log('Update convs ...')
+        const message_received: Message = {
+            id: data.message_id,
+            sender: data.user,
+            content: data.message,
+            isread: false,
+            timestamp: data.timestamp
+        };
+        // Assuming chatContext.setConvs is a state update function
+        const channelId = data.channel;
+        setConvs((prevConvs: Conversation[]) => {
+            const updatedConvs = prevConvs.map(conv =>
+                conv.channelId === channelId
+                    ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received], new_message: 1 }
+                    : conv
+            );
+            updatedConvs.sort((a, b)=>{
+                const DateA = new Date(a.LastUpdate) 
+                const DateB = new Date(b.LastUpdate)
+                console.log(DateA)
+                console.log(DateB)
+                return DateB - DateA;
+            })
+            console.log('Updated convs:', updatedConvs);
+            return updatedConvs
+        })
+    }
     useEffect(()=>
     {
+        console.log('hekkkk')
+        RemoveChannel('NOTIFICATION_MESSAGE')
+        AddChannel('CHAT', UpdateConvs)
         if (location?.state?.channel_id)
         {
             const {channel_id} = location.state 
@@ -70,37 +102,7 @@ function ChatSection(){
             init_conv(setLoading,setActive, setConvs, channelId);
         console.log("wala ", channelId)
         // create a function that will update the general data
-        const UpdateConvs = (data:any)=>
-        {
-            console.log('Update convs ...')
-            const message_received: Message = {
-                id: data.message_id,
-                sender: data.user,
-                content: data.message,
-                isread: false,
-                timestamp: data.timestamp
-            };
-            // Assuming chatContext.setConvs is a state update function
-            const channelId = data.channel;
-            setConvs((prevConvs: Conversation[]) => {
-                const updatedConvs = prevConvs.map(conv =>
-                    conv.channelId === channelId
-                        ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received], new_message: 1 }
-                        : conv
-                );
-                updatedConvs.sort((a, b)=>{
-                    const DateA = new Date(a.LastUpdate) 
-                    const DateB = new Date(b.LastUpdate)
-                    console.log(DateA)
-                    console.log(DateB)
-                    return DateB - DateA;
-                })
-                console.log('Updated convs:', updatedConvs);
-                return updatedConvs
-            })
-        }
-        RemoveChannel('NOTIFICATION_MESSAGE')
-        AddChannel('CHAT', UpdateConvs)
+
         return () => {
             // Remove the CHAT call back function when we exist the chat section
             AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)

@@ -12,6 +12,8 @@ import qrcode
 import io
 from django.http import HttpResponse
 from .models import MyUser
+from friendship.models import FriendRequest
+from .serializers import PublicUserSerializer
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 ACCESS_TOKEN_EXPIRATION = datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFETIME)
@@ -129,3 +131,50 @@ def isLoginAlreadyUSed(login):
         return True
     except MyUser.DoesNotExist:
         return False
+# def get_user_friends_group_names(user):
+#     try:
+#         list_s = FriendRequest.objects.filter(Q(sender=user, status='accepted'))
+#         list_r = FriendRequest.objects.filter(Q(receiver=user, status='accepted'))
+#         friend_group_list = []
+#         for s in list_s:
+#             group_name = f'notification_user_{s.receiver.login}'
+#             friend_group_list.append(group_name)
+#         for s in list_r:
+#             group_name = f'notification_user_{s.sender.login}'
+#             friend_group_list.append(group_name)
+#         if len(friend_group_list) == 0:
+#             return None
+#         return friend_group_list
+#     except Exception as e:
+#         print(e)
+#         return None
+# def update_and_broadcast_state(user, state):
+#         SerializedSender = PublicUserSerializer(user)
+#         try:
+#             async_to_sync(channel_layer.group_send)(
+#                 session_group_name,
+#                 {
+#                     'type': 'state',
+#                     'sender': SerializedSender,
+#                     'state': state
+#                 }
+#             )
+#         except Exception as e:
+#             print(f"Error sending to group {group_name}: {e}")
+#         user.state = state
+#         await sync_to_async(user.save)() 
+#         friend_groups_list = await sync_to_async(self.get_user_friends_group_names)(user)
+#         if (friend_groups_list == None):
+#             return 
+#         for group_name in friend_groups_list:
+#             try:
+#                 await self.channel_layer.group_send(
+#                     group_name,
+#                     {
+#                         'type': 'state',
+#                         'sender': SerializedSender,
+#                         'state': state
+#                     }
+#                 )
+#             except Exception as e:
+#                 print(f"Error sending to group {group_name}: {e}")

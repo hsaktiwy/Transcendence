@@ -56,7 +56,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=OFFLINE)
     last_visit = models.DateTimeField(null=True, blank=True)
     oauth = models.BooleanField(default=False)
-    sessions = models.IntegerField(default=0)
 
 
     is_active = models.BooleanField(default=True)
@@ -83,6 +82,3 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-class USER_SESSIONS(models.Model):
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
-    session_key = models.CharField(max_length=500, null=False)
