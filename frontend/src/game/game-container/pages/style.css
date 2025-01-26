@@ -22,8 +22,8 @@
 /* e.g., in style.css or another stylesheet */
 .yy {
     position: absolute;
-    bottom: 20px;
-    right: 50px;
+    bottom: 5%;
+    right:  3%;
     
     /* Optional: if you want them vertically stacked with some spacing: */
     display: flex;
@@ -174,14 +174,14 @@
 
   .main-game-page-container {
     /* border: 5px solid white; */
-    width: calc(100% - 130px - 10px); /* Subtract 350px + 10px for borders */
+    width: calc(100% - 130px - 10px);
     height: 100vh;
     margin-left: 130px;
     /* position: relative; */
     /* margin: 0; */
     /* padding: 0; */
     position: fixed;
-    top: 0;
+    /* top: 0; */
     /* left: 0; */
     /* outline: none; */
     overflow: hidden;
