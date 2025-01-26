@@ -59,13 +59,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             acceptedFriendReq = FriendRequest.objects.filter(sender=receiver, receiver=_sender, status="accepted").first()
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='friendship', friend_request_id=acceptedFriendReq.id)
             rev_notif = Notification.objects.filter(id_user_fk=_sender, friend_request_id=acceptedFriendReq.id).first()
+            channel = Channel.objects.filter(users=_sender).filter(users=receiver)
             if rev_notif:
                 rev_notif.is_readed = True
                 rev_notif.save()
-            return 1, notification, receiver.id, acceptedFriendReq.id     
+            return 1, notification, receiver.id, acceptedFriendReq.id, channel     
         except Exception as e:
             print(f'error  : {e}')
-            return 0, None, None, None
+            return 0, None, None, None, None
     def create_message_notification(self, receiver, sender, message):
         try:
             not_content = f'{sender.login} : {message}'
@@ -415,7 +416,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 )
             elif message_json['type'] == 'NOTIFICATION_ACCEPT_FRIEND':
                 receiver = message_json['to']
-                success,notification, receiver_id, friend_request_id = await sync_to_async(self.accept_friend_notification)(receiver, user)
+                success,notification, receiver_id, friend_request_id, channel = await sync_to_async(self.accept_friend_notification)(receiver, user)
+                await self.add_group(channel, user)
                 group_name = f'notification_user_{receiver}'
                 if (success == 0):
                     return 
