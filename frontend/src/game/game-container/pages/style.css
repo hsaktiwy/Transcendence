@@ -1,22 +1,22 @@
-*
+/* *
+{
+  }
+  
+  html, */
+  /* body
+  {
+    } */
+    
+/* .webgl
 {
     margin: 0;
     padding: 0;
-}
-
-html,
-body
-{
-    overflow: hidden;
-}
-
-.webgl
-{
     position: fixed;
     top: 0;
     left: 0;
     outline: none;
-}
+    overflow: hidden;
+} */
 
 
 /* e.g., in style.css or another stylesheet */
@@ -177,7 +177,14 @@ body
     width: calc(100% - 130px - 10px); /* Subtract 350px + 10px for borders */
     height: 100vh;
     margin-left: 130px;
-    position: relative;
+    /* position: relative; */
+    /* margin: 0; */
+    /* padding: 0; */
+    position: fixed;
+    top: 0;
+    /* left: 0; */
+    /* outline: none; */
+    overflow: hidden;
   }
   
   @media screen and (max-width: 1024px) {
