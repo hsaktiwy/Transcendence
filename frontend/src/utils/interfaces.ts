@@ -13,6 +13,11 @@ export interface Action{
     ConversationChannel: number | undefined;
 }
 
+export interface friendship{
+    action:string,
+    sender:string,
+}
+
 export interface MiniNotification{
     type: string,
     content: string,
