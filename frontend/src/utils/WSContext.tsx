@@ -62,6 +62,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         console.log('Connected' + socket.current?.protocol)
           try {
             const { type, ...data } = JSON.parse(message.data);
+            console.log(message)
             if (type === 'send_message'){
               if (data.ConversationType == 'Message') {
                   const message_received: Message = {

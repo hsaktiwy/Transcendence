@@ -101,12 +101,19 @@ function ChatSession(){
     // hamza
     const sendMessage = () =>
     {
-        if (message.length > 0)
+        if (message.length > 0 &&  socket?.current && socket?.current.readyState === WebSocket.OPEN)
         {
-            const holder:string = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
-            socket?.current.send(holder)
-            setMessage('')
-        }
+            if (socket?.current && socket?.current.readyState === WebSocket.OPEN)
+            {
+                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.login}` , message : message, channel_id: chatContext.active?.channelId})
+                socket?.current.send(holder)
+                holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
+                socket?.current.send(holder)
+                setMessage('')
+            }
+            else
+                console.error('WebSocket connection is not open')
+        } 
     }
 
     const TryToSendMessage = (event: React.KeyboardEvent) =>
