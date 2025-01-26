@@ -72,6 +72,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
 
                   };
                   const channelId = data.channel;
+                  console.log(message_received, channelId)
                   if (channels.current['CHAT'])
                   {
                     console.log("in :  channels.current['CHAT']")
