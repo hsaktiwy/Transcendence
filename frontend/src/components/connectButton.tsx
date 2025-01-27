@@ -14,6 +14,7 @@ import { channel } from 'diagnostics_channel';
 import {NotificationPropreties} from './UserContext'
 import { ProfileDataInterface, UserDataInterface } from '@/utils/UserDataInterface';
 import { SlLock } from "react-icons/sl";
+import { friendship } from '@/utils/interfaces';
 
 interface buttonInterface{
   channel_id: number | undefined 
@@ -89,6 +90,13 @@ function ConnectButton(prop: buttonInterface) {
         }
         setBtn_block(isblock ? 'Block' : 'Unblock');
         setIsbLock(!isblock)
+        const notification = {
+          type: 'NotifBlock',
+          to : username,
+          status: isblock
+        }
+        const message = JSON.stringify(notification)
+        SocketContext?.socket?.current?.send(message)
       }
       catch(err)
       {
@@ -199,8 +207,8 @@ function ConnectButton(prop: buttonInterface) {
         setFriendRequest('Accept')
       }
     }
-
-    const TOCONNECT = (data:any)=>{
+  
+    const TOCONNECT = (data:friendship)=>{
       console.log('+===========================+++++++++++++++++', data)
       if (data.sender == username)
       {
@@ -208,15 +216,27 @@ function ConnectButton(prop: buttonInterface) {
         setIsfriend("CONNECT")
       }
     }
+    const blocknotify = (data:friendship)=>{
+      if(data)
+      {
+        setBloker(false);
+        setIsbLock(true);
+        userContextConsumer?.setBlockList(prev=>[...prev])
+      }
+
+    }
     AddChannel('FriendRequestAccepted', FriendRequestAccepted)
     AddChannel('FriendRequestReceived', FriendRequestReceived)
     AddChannel('NOTIFICATION_UNCONNECT', TOCONNECT)
+    AddChannel('NotifBlock', blocknotify)
 
     return () => {
       // Remove the CHAT call back function when we exist the chat section
       RemoveChannel('FriendRequestAccepted')
       RemoveChannel('FriendRequestReceived')
       RemoveChannel('NOTIFICATION_UNFRIEND')
+      RemoveChannel('NotifBlock')
+
     }
   },[])
   const send_friend_request = ()=>{

@@ -149,6 +149,9 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     useEffect(()=>{
         if (loggedIn === false)
             logout()
+        else if(loggedIn === true && (location.pathname === '/login' || location.pathname === '/login/'))
+            Navigate('/')
+
     }, [loggedIn])
     useEffect (() =>{
             checkLoggedInUser()

@@ -24,7 +24,9 @@ load_dotenv()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET')#'django-insecure-r@#v5v%q!xj3gdyr*y)v69xmzq4n#u+rcn_cjsxzk*v7f&j25h'
-
+OAUTH_API_KEY = os.getenv('DJANGO_API_KEY')
+OAUTH_REDIRECT_URI = os.getenv('DJANGO_REDIRECT_URI')
+OAUTH_CLIENT = os.getenv('DJANGO_CLIENT')
 JWT_SECRET_KEY = os.getenv('DJANGO_JWT_SECRET_KEY')#'4484877278439867979ffd7ecc7f5a5e82f53544e22b4d0fdd2211dcae3b4c0e'
 ACCESS_TOKEN_LIFETIME = 10
 REFRESH_TOKEN_LIFETIME = 7
@@ -90,7 +92,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "http://10.11.5.7:5173",
     "https://localhost:4444",
     "https://localhost",
 )
@@ -98,7 +100,7 @@ CORS_ORIGIN_WHITELIST = (
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "http://10.11.5.7:5173",
     "https://localhost:4444",
     "https://localhost",
 ]
@@ -111,7 +113,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:6379",
     "http://10.13.4.11:5173",
-    "http://10.13.3.3:5173",
+    "http://10.11.5.7:5173",
     "http://172.21.0.3:5173",
     "https://localhost:4444",
     "https://localhost",

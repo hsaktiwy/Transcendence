@@ -49,7 +49,6 @@ from io import BytesIO
 from django.core.files import File
 from django.http import Http404
 
-
 from django.contrib.auth import login
 from rest_framework.decorators import api_view, permission_classes
 import requests
@@ -65,9 +64,12 @@ def LoginWithOAuth42(request):
             return Response({"error": "user not found"} , status=404)
     else:
         code = request.data.get('code')
-        client_id = 'u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041'
-        client_secret = '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'
-        redirect_uri = 'https://localhost:4444/login/'
+        client_id = settings.OAUTH_CLIENT
+        client_secret = settings.OAUTH_API_KEY
+        redirect_uri = settings.OAUTH_REDIRECT_URI
+        print(client_id)
+        print(client_secret)
+        print(redirect_uri)
 
         token_url = 'https://api.intra.42.fr/oauth/token'
         user_info_url = 'https://api.intra.42.fr/v2/me'

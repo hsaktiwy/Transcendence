@@ -121,6 +121,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
     const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     const [userRank, setUserRank] = useState<rankInterface[]>([]);
+    const [convsUpdate, setConvsUpdate] = useState<boolean>(false)
     const location = useLocation()
 
   
@@ -339,7 +340,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
-        console.log("khroj t9awed")
         if (data.sender.login === userData?.login && data.state === 'offline'){
             AuthContextConsummer?.setLoggedIn(false)
             Navigate('/home')

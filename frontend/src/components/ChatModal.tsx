@@ -54,7 +54,8 @@ function ChatModal(){
                         console.log(fetched_conv)
                         chatContext.setActive(fetched_conv)
                         chatContext.setConvs((prevConvs) =>{
-                            return (prevConvs && prevConvs?.map((conv)=>(conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel ? fetched_conv : conv))))
+                            if (!prevConvs) return [fetched_conv] as Conversation[]
+                            return (prevConvs && prevConvs?.map((conv)=>(conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel ? fetched_conv : conv)))) as Conversation[]
                         })
                     }
                     catch(e){

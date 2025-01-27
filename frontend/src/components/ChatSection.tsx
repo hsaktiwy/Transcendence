@@ -10,9 +10,10 @@ import LoadingIndecator from "./Loading";
 import ChatModal from "./ChatModal";
 import { WebSocketContext, WebSocketProvider } from "../utils/WSContext";
 import { createContext } from "react";
-import { UserContext } from "./UserContext";
+import { NotificationPropreties, UserContext } from "./UserContext";
 import { useLocation } from "react-router-dom";
 import { ProfileDataInterface } from "@/utils/UserDataInterface";
+import mailman from "@/utils/AxiosFetcher";
 
 function ChatSection(){
     const location = useLocation()
@@ -86,10 +87,51 @@ function ChatSection(){
             return updatedConvs
         })
     }
+    const get_conversation = async (channel_id:number)=>{
+        try{
+
+            const req = {
+                url: 'chat/conversation/'+channel_id+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/',
+                method: "GET",
+                withCredentials: true,
+            }
+            const rep  = await mailman(req)
+            const fetched_conv:Conversation =  rep.data.conv as Conversation
+            console.log(fetched_conv)
+            console.log('conv', convs)
+            let list_conv:Conversation[] = convs ? convs : []
+            list_conv.push(fetched_conv)
+            setConvs(list_conv)
+            
+        }
+        catch(e){
+            console.log('Error : in ChatModel get {'+ 'chat/conversation/'+channel_id+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/' +'} :\n')
+            console.log(e)
+        }
+    }
+    const Update_chat_notif = (data:NotificationPropreties)=>{
+        if (data)
+        {
+            const channel_id = data.channel_id
+            console.log('wa hafida ', convs, channel_id)
+            if (convs)
+            {
+                if (convs?.filter(conv => conv.channelId === channel_id).length === 0)
+                    get_conversation(channel_id)
+            }
+            else
+                get_conversation(channel_id)
+        }
+    }
+
+    useEffect(()=>{
+        console.log('3afake : ',convs)
+    },[convs])
     useEffect(()=>
     {
         console.log('hekkkk')
         RemoveChannel('NOTIFICATION_MESSAGE')
+        AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
         AddChannel('CHAT', UpdateConvs)
         if (location?.state?.channel_id)
         {
@@ -107,6 +149,7 @@ function ChatSection(){
             // Remove the CHAT call back function when we exist the chat section
             AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
             RemoveChannel('CHAT')
+            RemoveChannel('UPDATE_CHAT_NOTIF')
         }
     }, [])
 
