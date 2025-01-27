@@ -3,7 +3,7 @@ import "./PreRemote.css";
 import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
-import { useMatchContext } from '../game/MatchContext'; // Assuming you have this context
+import { useMatchContext } from '../game/MatchContext';
 
 const PreRemote = () => {
   const navigate = useNavigate();
@@ -15,7 +15,10 @@ const PreRemote = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
-    const socket = new WebSocket('ws://localhost:8000/ws/server-endpoint-socket/');
+    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
+    console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
+    
+    // wss://localhost:4444/game/ws/
     // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
@@ -45,12 +48,14 @@ const PreRemote = () => {
       }
     };
     
-    socket.onerror = (error) => {
-      console.error("WebSocket Error:", error);
+    socket.onerror = (event) => {
+      // console.error("WebSocket Error:", error);
+      console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
       setIsSearching(false);
     };
     
-    socket.onclose = () => {
+    socket.onclose = (event) => {
+      console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
       console.log("Matchmaking WebSocket Closed");
     };
     

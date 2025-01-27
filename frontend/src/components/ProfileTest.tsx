@@ -29,7 +29,13 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 import { SlLock } from "react-icons/sl";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
+import { LoseWins } from "@/utils/interfaces.ts";
 
+// interface LoseWins
+// {
+//     wins:number;
+//     lose:number;
+// }
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
    
@@ -39,6 +45,8 @@ const ProfileTest  = () =>{
     const [channel_id, setChannelId] = useState<number | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(true);
     const [isblock, setIsbLock] = useState<boolean>(false);
+    const [matches, setMatches] = useState<LoseWins | undefined>()
+    
 
    const {username} = useParams();
    const userContextConsumer = useContext(UserContext)
@@ -61,6 +69,38 @@ const ProfileTest  = () =>{
 
         }
    }
+   const fetchLineChart = async () =>
+    {
+        try{
+            const req = {
+                url: `/profile/get_line_chart/${username}/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req);
+            console.log('matches  is here  ma hree : \n', resp.data);
+            // setMatches(resp.data);
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+    }}
+
+   const fetchMatches = async () =>
+    {
+        try{
+            const req = {
+                url: `/profile/get_win_lose/${username}/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req);
+            console.log('print win and lose mheree pleas : \n', resp.data);
+            setMatches(resp.data);
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
+    }
    const fetchUserData = async () =>{
     try{
         const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
@@ -126,10 +166,15 @@ const ProfileTest  = () =>{
             return () => clearTimeout(timer);
           });
           BlockStatusCheck();
+          fetchMatches();
+          fetchLineChart();
     }
     else{
         setProfileData(userContextConsumer?.userData)
         setIsLoading(false)
+        // console.
+        fetchLineChart();
+        fetchMatches();
     }
    },[username, userContextConsumer.blockList])
    useEffect(()=>{
@@ -191,10 +236,10 @@ const ProfileTest  = () =>{
                             </div>
                         </div>
                         <div className=" relative p-4 rounded-2xl xxl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3  xxl:row-span-6 xl:p-3 xxl:p-10 flex justify-center items-center  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869]">
-                            <PieChartFile/>
+                            <PieChartFile matches={matches}/>
                         </div>
                         <div className="row-span-4 relative md:col-span-12  md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:col-span-8 xl:row-span-4 2xl:col-span-9 xxl:row-span-6 xxl:col-span-6">
-                            <div className="w-full  h-full bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+                            <div className="w-full  h-full bg-gradient-to-br from-[#495155] to-[#1b1e1f] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
                                 <LineCharFile />
                             </div>
                             
@@ -215,7 +260,7 @@ const ProfileTest  = () =>{
                             </div>
                         </div>
                         <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
-                                        <PieChartFile/>
+                                        <PieChartFile matches={matches}/>
                         </div>
                     </div>
             )}
