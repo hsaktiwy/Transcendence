@@ -79,7 +79,7 @@ const App = () =>
                           <Route path='/settings' element={ <Settings/>}/>
 
 
-                            {/* <Route path='/game' element={<MainGamePage />}/>
+                             {/* <Route path='/game' element={<MainGamePage />}/>
                             <Route path='/game/PingPong_Lobby' element={<Lobby />}/>
                             <Route path='/game/PlayLocally_1v1' element={<PlayLocally_1v1 />}/>
                             <Route path='/game/LocalGame' element={<LocalGame />}/>

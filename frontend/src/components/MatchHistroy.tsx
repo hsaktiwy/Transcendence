@@ -1,5 +1,5 @@
 
-import React, { useContext, useState }  from "react";
+import React, { useContext, useEffect, useState }  from "react";
 
 
 import mailman from "../utils/AxiosFetcher";
@@ -78,8 +78,10 @@ export function MatchHistory() {
       
       // // Call the function
       // fetchUserMatchHistory();
-      if(userMatchHistory.length)
-          setIsPlayed(true);
+      useEffect(()=>{
+        if(userMatchHistory.length)
+            setIsPlayed(true);
+      }, [])
     return (
   <>
        {!isPlayed ? (<div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-lg  font-semibold flex flex-col justify-center items-center p-4">

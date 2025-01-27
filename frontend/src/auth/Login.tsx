@@ -34,8 +34,8 @@ const Login = () => {
     const [needLogin, setNeedLogin] = useState<boolean |  undefined>(undefined)
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        window.location.href =
-            "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-70dc836346e26f4efb68c4811174ea4d330c4830fa5ddcb7a61e415640aa7041&redirect_uri=https%3A%2F%2Flocalhost%3A4444%2Flogin%2F&response_type=code";
+        // console.log(import.meta.env.API_REDIRECT)
+        window.location.href = import.meta.env.VITE_REDIRECT
     };
     const tryToLogin = async () =>{
         const data: LoginDataInterface = {

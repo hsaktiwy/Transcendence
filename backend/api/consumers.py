@@ -63,14 +63,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='friendship', friend_request_id=acceptedFriendReq.id)
             rev_notif = Notification.objects.filter(id_user_fk=_sender, friend_request_id=acceptedFriendReq.id).first()
             # channel = Channel.objects.filter(users=_sender).filter(users=receiver)
-            # self.add_group(self, channel, _sender)
             if rev_notif:
                 rev_notif.is_readed = True
                 rev_notif.save()
-            return 1, notification, receiver.id, acceptedFriendReq.id     
+            return 1, notification, receiver.id, acceptedFriendReq.id,# channel.first() if len(channel) > 0 else None
         except Exception as e:
             print(f'error  : {e}')
-            return 0, None, None, None
+            return 0, None, None, None,# None
     def create_message_notification(self, receiver, sender, message):
         try:
             not_content = f'{sender.login} : {message}'
@@ -182,25 +181,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
     async def add_group(self, channel, user):
-        room_name = f'CHATROOM{channel.id}'
-        print(f"Adding room: {room_name}")
-        self.rooms.add(room_name)
-        print(f'Room {room_name}, added to the {user.login} goups')
+        try:
+            if channel and user:
+                room_name = f'CHATROOM{channel.id}'
+                print(f"Adding room: {room_name}")
+                self.rooms.add(room_name)
+                print(f'Room {room_name}, added to the {user.login} goups')
 
-        await self.channel_layer.group_add(
-            room_name,
-            self.channel_name
-        )
-        await self.channel_layer.group_send(
-            room_name,
-            {
-                'type': 'send_message',
-                'channel_id' : channel.id,
-                'username': user.login,
-                'ConversationType' : 'Connection',
-                'message': f'ok, I am in channel {room_name}'
-            }
-        )
+                await self.channel_layer.group_add(
+                    room_name,
+                    self.channel_name
+                )
+                await self.channel_layer.group_send(
+                    room_name,
+                    {
+                        'type': 'send_message',
+                        'channel_id' : channel.id,
+                        'username': user.login,
+                        'ConversationType' : 'Connection',
+                        'message': f'ok, I am in channel {room_name}'
+                    }
+                )
+        except Exception as e:
+            print(f"Error while trying to add to group: {e}")
 
 
 
@@ -409,6 +412,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             elif message_json['type'] == 'NOTIFICATION_ACCEPT_FRIEND':
                 receiver = message_json['to']
                 success,notification, receiver_id, friend_request_id = await sync_to_async(self.accept_friend_notification)(receiver, user)
+                # await self.add_group(channel, user)
                 group_name = f'notification_user_{receiver}'
                 if (success == 0):
                     return 
@@ -428,7 +432,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender
                     }
                 )
-            elif message_json['type'] == 'NOTIFICATION_UNCONNECT' :
+            elif message_json['type'] == 'NOTIFICATION_UNCONNECT' or message_json['type'] == 'NotifBlock' :
                 login = user.login
                 print('NOTIFICATION_UNFRIEND +++++++++++++++++++++++++++++++++++++ ', login, '\n')
                 receiver = message_json['to']
@@ -438,7 +442,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     {
                         'type': 'profile_notif',
                         'action': message_json['type'],
-                        'sender': login
+                        'sender': login,
+
                     }
                 )
             elif message_json['type'] == 'NOTIFICATION_STATE':

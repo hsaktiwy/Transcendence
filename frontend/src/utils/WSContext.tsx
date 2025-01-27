@@ -1,8 +1,9 @@
 import React, {useEffect, createContext, useRef, useContext} from 'react'
-import {channelType, WebSocketContextType, childrenInterface} from './interfaces'
+import {channelType, WebSocketContextType, childrenInterface, friendship} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 import { AuthContext } from '@/components/AuhtenticationContext'
+
 
 let inc: number = 222222 // desable the id that amine use later else we will use this 
 // type CallbackType = (message: any) => void
@@ -61,6 +62,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         console.log('Connected' + socket.current?.protocol)
           try {
             const { type, ...data } = JSON.parse(message.data);
+            console.log(message)
             if (type === 'send_message'){
               if (data.ConversationType == 'Message') {
                   const message_received: Message = {
@@ -72,6 +74,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
 
                   };
                   const channelId = data.channel;
+                  console.log(message_received, channelId)
                   if (channels.current['CHAT'])
                   {
                     console.log("in :  channels.current['CHAT']")
@@ -105,10 +108,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
             }
             if (type === 'profile_notif')
             {
-              interface friendship{
-                action:string,
-                sender:string
-              }
+             
               const info: friendship = {
                 action: data.action,
                 sender: data.sender,
@@ -120,12 +120,17 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
               }
             }
             if (type === 'message'){
-              if(channels.current['NOTIFICATION_MESSAGE'])
-              {
-                const notifData =  JSON.parse(message.data);
-                channels.current['NOTIFICATION_MESSAGE'](notifData)
-  
-              }
+              if (channels.current['UPDATE_CHAT_NOTIF'])
+                {
+                  const notifData =  JSON.parse(message.data);
+                  console.log('sa333iiiiid', notifData)
+                  channels.current['UPDATE_CHAT_NOTIF'](notifData)
+                }
+                if(channels.current['NOTIFICATION_MESSAGE'])
+                {
+                  const notifData =  JSON.parse(message.data);
+                  channels.current['NOTIFICATION_MESSAGE'](notifData)
+                }
             }
             if (type === 'state'){
               const notifData =  JSON.parse(message.data);

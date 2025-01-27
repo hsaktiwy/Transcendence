@@ -10,6 +10,9 @@
      gap: 20vw;
      align-items: center;
      z-index: 1;
+
+
+
     }
     
   .team {
@@ -27,3 +30,31 @@
   .hidden-v{
     display: none;
 }
+
+
+
+/* teams-container */
+
+
+  .main-game-page-container {
+    /* border: 5px solid white; */
+    width: calc(100% - 130px - 10px);
+    height: 100vh;
+    margin-left: 130px;
+    /* position: relative; */
+    /* margin: 0; */
+    /* padding: 0; */
+    position: fixed;
+    /* top: 0; */
+    /* left: 0; */
+    /* outline: none; */
+    overflow: hidden;
+  }
+  
+/*  @media screen and (max-width: 1024px) {
+    .main-game-page-container {
+        border: 5px solid rgb(223, 60, 60);
+        margin-left: 0; Remove left margin completely
+        width: 100%; Full width
+    }
+}*/
