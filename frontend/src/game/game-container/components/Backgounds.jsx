@@ -33,7 +33,7 @@ function Backgrounds() {
 
   const show = (location.pathname ===  '/game') || (location.pathname ===  '/game/');
   
-  console.log(location.pathname, ", OnPongRoute : ", OnPongRoute, ", OnChessRoute : ", OnChessRoute, ", show : ", show);
+  // console.log(location.pathname, ", OnPongRoute : ", OnPongRoute, ", OnChessRoute : ", OnChessRoute, ", show : ", show);
 
   return (
     <>
@@ -55,13 +55,13 @@ function Backgrounds() {
           <center>
             <h1>Le7ya's Game</h1>
           </center>
-            {/* <ModelPreview modelPath="/GamePub/chess-assets/models/horse_statue_01_2k.gltf/horse_statue_01_2k.gltf" Scale={10} /> */}
+            <ModelPreview modelPath="/GamePub/chess-assets/models/horse_statue_01_2k.gltf/horse_statue_01_2k.gltf" Scale={10} />
         </div>
         <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
           <center>
             <h1>Ping Pong</h1>
           </center>
-            {/* <ModelPreview modelPath="/GamePub/chess-assets/models/yellow_onion_2k.gltf/yellow_onion_2k.gltf" Scale={25} /> */}
+            <ModelPreview modelPath="/GamePub/chess-assets/models/yellow_onion_2k.gltf/yellow_onion_2k.gltf" Scale={25} />
         </div>
       </div>
 
