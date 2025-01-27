@@ -33,17 +33,17 @@ function Backgrounds() {
 
   const show = (location.pathname ===  '/game') || (location.pathname ===  '/game/');
   
-  console.log(location.pathname, ", OnPongRoute : ", OnPongRoute, ", OnChessRoute : ", OnChessRoute, ", show : ", show);
+  // console.log(location.pathname, ", OnPongRoute : ", OnPongRoute, ", OnChessRoute : ", OnChessRoute, ", show : ", show);
 
   return (
     <>
     
-      <div className={OnChessRoute ? "" : "hidden-v"}>
+      {/* <div className={OnChessRoute ? "" : "hidden-v"}>
         <ChessGameBack />
       </div>
       <div className={OnPongRoute ? "" : "hidden-v"}>
         <PingPongBack />
-      </div>
+      </div> */}
 
       {/* <div className={show ? "" : "hidden-v"}>
         <DefaultBack />
