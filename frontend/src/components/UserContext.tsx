@@ -67,6 +67,8 @@ interface UserContextInterface{
     setUserMatchHistory: React.Dispatch<React.SetStateAction<MatchHistoryDataInterface[]> >;
     userRank: rankInterface[];
     setUserRank:React.Dispatch<React.SetStateAction<rankInterface[]> >;
+    // matches: LoseWins | undefined;
+    // setMatches : React.Dispatch<React.SetStateAction<LoseWins | undefined>>;
 
     
 }
@@ -87,11 +89,13 @@ interface MatchHistoryDataInterface{
     score_p1:number;
     score_p2:number;
 }
+
 interface ProfileRank
-{
+{  
     rank:number;
     level:number;
 }
+
 interface rankInterface
 {
     profile:ProfileRank;
@@ -121,6 +125,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
     const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     const [userRank, setUserRank] = useState<rankInterface[]>([]);
+    // const [matches, setMatches] = useState<LoseWins | undefined>()
     
 
   
@@ -141,6 +146,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
            const resp = await mailman(req);
            if(resp.data.profiles)
             setUserRank(resp.data.profiles);
+           console.log('print data  hre  ->>>', resp.data)
         }
         catch (err){
             console.error(" ",err)
@@ -316,15 +322,32 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             const resp = await mailman(req)
             const BlockList: ProfileDataInterface[] = resp.data
             setBlockList(BlockList)
-            console.log('block lis')
-            console.log(resp.data)
 
         }
         catch (err){
             console.error("dddddd======????",err)
         }
 
-}
+    }
+    // const fetchMatches = async () =>
+    // {
+    //     try{
+    //         if (userData?.login)
+    //         {
+    //             const req = {
+    //                 url: `/profile/get_win_lose/${userData?.login}/`,
+    //                 method: 'GET',
+    //                 withCredentials: true,
+    //             }
+    //             const resp = await mailman(req);
+    //             console.log('print win and lose : \n', resp.data, userData?.login);
+    //             setMatches(resp.data);
+    //         }
+    //     }
+    //     catch (err){
+    //         console.error("dddddd======????",err)
+    //     }
+    // }
     const notificationHandler = (data: NotificationPropreties) => {
 
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
@@ -386,6 +409,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const ajami = async() =>
     {
         await fetchUserData()
+        // await fetchMatches()
         await fetchFriends()
         await fetchReceivedFriendRequest()
         await fetchSentFriendRequest()
@@ -407,7 +431,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank, /*matches, setMatches*/}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {ready  ? children : <LoadingIndecator/>}
             {/* { children } */}

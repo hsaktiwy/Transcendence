@@ -83,4 +83,4 @@ def get_match_history(request, type):
         last_matches = GameSerializer(games[:5], many=True)
         return Response({'Game': last_matches.data}, status=200)
     except:
-        return Response({'erro': 'something went wrong'}, status=400)
+        return Response({'error': 'something went wrong'}, status=400)
