@@ -1,8 +1,10 @@
 "use client"
 
-import * as React from "react"
+import React, { useContext, useEffect } from "react";
 import { TrendingUp } from "lucide-react"
 import { Label, Pie, PieChart } from "recharts"
+import { UserContext } from "./UserContext";
+
 
 import {
   Card,
@@ -21,49 +23,53 @@ import {
 
 export const description = "A donut chart with text"
 
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "#5E97A9" },
-  { browser: "edge", visitors: 173, fill: "#B9D9E4" },
-  { browser: "other", visitors: 190, fill: "#303C40" },
-]
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig
 
-export function PieChartFile() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+interface LoseWins
+{
+    wins:number;
+    lose:number;
+
+}
+
+interface prop{
+  matches:  LoseWins | undefined
+}
+export function PieChartFile(prop: prop) {
+
+
+    // const userContextConsumer = useContext(UserContext);
+    // if (!userContextConsumer)
+    //   throw new Error("userContext must be used within a UserProvider");
+  
+    // const {matches} = userContextConsumer;
+
+    const chartData = [
+      { browser: "Win", Matches: prop.matches?.wins, fill: "#5E97A9" },
+      { browser: "Lose", Matches: prop.matches?.lose, fill: "#303C40" },
+    ]
+    
+    const chartConfig = {
+      Wins: {
+        label: "Wins",
+        color: "hsl(var(--chart-1))",
+      },
+      Loses: {
+        label: "Loses",
+        color: "hsl(var(--chart-5))",
+      },
+    } satisfies ChartConfig
+    
+    console.log('hii from pie chart :', prop.matches);
+  let totalMatches = 0;
+  if (prop.matches)
+    totalMatches = prop.matches?.wins + prop.matches?.lose
 
   return (
-    <Card className=" h-full w-full flex flex-col border-none  bg-white/5  backdrop-filter backdrop-blur-sm">
+    <Card className=" h-full w-full flex flex-col border-none bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] backdrop-filter backdrop-blur-sm">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
-      </CardHeader>
+        <CardTitle>Pie Chart Matches</CardTitle>
+    </CardHeader>
       <CardContent className="flex-1  pb-0">
         <ChartContainer
           config={chartConfig}
@@ -76,7 +82,7 @@ export function PieChartFile() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
+              dataKey="Matches"
               nameKey="browser"
               innerRadius={60}
               strokeWidth={5}
@@ -98,7 +104,7 @@ export function PieChartFile() {
                           className="fill-foreground text-3xl font-bold"
                           fill="white"
                           >
-                          {totalVisitors.toLocaleString()}
+                          {totalMatches.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
@@ -106,7 +112,7 @@ export function PieChartFile() {
                           className="fill-muted-foreground"
                           fill="white"
                         >
-                          Visitors
+                          Matches
                         </tspan>
                       </text>
                     )
@@ -117,14 +123,6 @@ export function PieChartFile() {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="hidden xxl:block flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   )
 }

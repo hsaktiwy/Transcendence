@@ -45,3 +45,9 @@ export const defaultContextValue: WebSocketContextType = {
     RemoveChannel: () => {},
     socket: undefined,
 };
+
+export interface LoseWins
+{
+    wins:number;
+    lose:number;
+}
