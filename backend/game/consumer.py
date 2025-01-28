@@ -114,13 +114,26 @@ Gconnected_users = []
 class ApiConsumer(WebsocketConsumer):
     connected_users = 0
     my_id = 0
+    user = ''
 
     def connect(self):
         self.accept()
+
+        user = self.scope['user']
+
+        print("=> AL USER :", user)
+
+        user = self.scope['url_route']['kwargs']['user_id']
+
+        print("=> AL USER :", user)
+
+
+
         ApiConsumer.connected_users += 1
         self.my_id = ApiConsumer.connected_users
+        self.user = user
 
-        Gconnected_users.append((self.my_id, self))
+        Gconnected_users.append((self.my_id, self, user))
 
         print("=>", f"Client {self.my_id} Connected !. (Total users {len(Gconnected_users)})")
         # print("=>", Gconnected_users)
@@ -128,7 +141,7 @@ class ApiConsumer(WebsocketConsumer):
         self.send(json.dumps({
             'type': 'connection_established',
             'my_id': self.my_id,
-            'message': f'ki rak b9it assadi9, nta hwa {self.my_id} '
+            'message': f'ki rak b9it assadi9, {self.user} '
         }))
 
         if (len(Gconnected_users) == 2):
@@ -136,14 +149,16 @@ class ApiConsumer(WebsocketConsumer):
             # room_name = str(uuid.uuid4())[:8]  # create a short random room name
             room_name = 'Bit_N3as'
 
-            p1_id, p1_consumer = Gconnected_users[0]
-            p2_id, p2_consumer = Gconnected_users[1]
+            p1_id, p1_consumer, p1_user = Gconnected_users[0]
+            p2_id, p2_consumer, p2_user = Gconnected_users[1]
 
             p1_consumer.send(json.dumps({
                 'type': 'match_found',
                 'my_id': p1_id,
                 'room_name': room_name,
                 'opponent_id': p2_id,
+                'user_name' : p1_user,
+                'opponent_name': p2_user,
             }))
 
             p2_consumer.send(json.dumps({
@@ -151,9 +166,13 @@ class ApiConsumer(WebsocketConsumer):
                 'my_id': p2_id,
                 'room_name': room_name,
                 'opponent_id': p1_id,
+                'user_name' : p2_user,
+                'opponent_name': p1_user,
             }))
 
-            Gconnected_users.clear()
+            Gconnected_users.pop(p1_id)
+            Gconnected_users.pop(p2_id)
+            # Gconnected_users.clear()
 
     def receive(self, text_data):
         data = json.loads(text_data)
@@ -169,12 +188,11 @@ class ApiConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         print("=>", f"Client {self.my_id}  DisConnected !")
-        # ApiConsumer.connected_users -= 1
-        # Gconnected_users.remove(self.my_id)
         for i, (cid, instance) in enumerate(Gconnected_users):
             if cid == self.my_id:
                 Gconnected_users.pop(i)
                 break
+        ApiConsumer.connected_users -= 1
 
 
 class GameRoomConsumer(AsyncWebsocketConsumer):
@@ -187,18 +205,10 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         # print("=> This consumer belongs to user_id:", self.user_id)
         # print("  => Url :", self.scope["query_string"].decode(), '\n')
 
-        # if self.scope["user"].is_authenticated:
-            # print("=> Authenticated user:", self.scope["user"].username)
-        # else:
-            # print("=> Anonymous user")
-
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        # print("=>", "Room created :", self.room_name)
 
-        # Create a group name, e.g. "game_room_<room_name>"
         self.room_group_name = f"game_room_{self.room_name}"
 
-        # Join the group (everyone in the same room_name joins this group)
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -230,16 +240,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
     async def broadcast_event(self, event):
 
-        # print(event['payload'].get('my_id'), self.user_id)
         if (str(event['payload'].get('my_id')) == self.user_id):
             return
 
-        # print(type(event['payload'].get('my_id')), type(self.user_id))
-        # event['payload'].get('my_id')
-        # Forward the broadcasted message to the actual WebSocket
-        # so all connected clients in the group see it
-        # print("=>", "from the player ", self.user_id, ":")
-        # print("=>", "All players gonna recieve : ", event['payload'])
         await self.send(json.dumps(event['payload']))
 
 

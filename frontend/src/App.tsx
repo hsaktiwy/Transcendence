@@ -41,6 +41,8 @@ import PreTournament from './game/game-container/pages/PreTournament.jsx';
 import Winner from './game/game-container/pages/Winner.jsx';
 import PreRemote from './game/game-container/pages/PreRemote.jsx';
 import { MatchProvider } from './game/game-container/game/MatchContext.jsx';
+import { RemoteGameProvider } from './game/game-container/game/MatchContext.jsx';
+
 import PreMultiplayerGame from './game/game-container/pages/PreMultiplayerGame.jsx';
 import MultiplayerGame from './game/game-container/game/Multiplayer.jsx';
 import ChessLobby from './game/game-container/chess/LobbyChess.jsx';
@@ -71,37 +73,39 @@ const App = () =>
               {/* <Backgrounds/> */}
                 <UserProvider>
                   <MatchProvider>
-                    <Routes>
-                          <Route path='/'  element={ <Layout/>}>
-                            <Route path='/profile/:username' element={ <ProfileTest/>}/>
-                            <Route index element={ <Dashboard/>}/>
-                            <Route path='/chat/:channel_id?' element={ <ChatSection/>}/>
-                            <Route path='/settings' element={ <Settings/>}/>
+                    <RemoteGameProvider >
+                      <Routes>
+                            <Route path='/'  element={ <Layout/>}>
+                              <Route path='/profile/:username' element={ <ProfileTest/>}/>
+                              <Route index element={ <Dashboard/>}/>
+                              <Route path='/chat/:channel_id?' element={ <ChatSection/>}/>
+                              <Route path='/settings' element={ <Settings/>}/>
 
 
-                              <Route path='/game' element={<MainGamePage />}/>
-                              <Route path='/game/PingPong_Lobby' element={<Lobby />}/>
-                              <Route path='/game/PlayLocally_1v1' element={<PlayLocally_1v1 />}/>
-                              <Route path='/game/LocalGame' element={<LocalGame />}/>
-                              {/*<Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
-                              <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> */}
-                              <Route path='/game/PreRemote' element={<PreRemote />}/>
-                              <Route path='/game/RemoteGame' element={<RemoteGame />}/>
-                              <Route path='/game/Winner' element={<Winner />}/>
-                              {/* <Route path='/game/PreTournament' element={<PreTournament />}/>
-                              <Route path='/game/Tournament' element={<Tournament />}/>
-                              <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
-                              <Route path='/game/ChessLocally' element={<LocalChessGame />}/>
-                              <Route path='/game/ChessPreLocal' element={<ChessPreLocal />}/>
-                              <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/>
-                              <Route path='/game/ChessRemoteGame' element={<ChessRemoteGame />}/>
-                              <Route path='/game/ChessWinner' element={<ChessWinner />}/> */}
+                                <Route path='/game' element={<MainGamePage />}/>
+                                <Route path='/game/PingPong_Lobby' element={<Lobby />}/>
+                                <Route path='/game/PlayLocally_1v1' element={<PlayLocally_1v1 />}/>
+                                <Route path='/game/LocalGame' element={<LocalGame />}/>
+                                {/*<Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
+                                <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> */}
+                                <Route path='/game/PreRemote' element={<PreRemote />}/>
+                                <Route path='/game/RemoteGame' element={<RemoteGame />}/>
+                                <Route path='/game/Winner' element={<Winner />}/>
+                                {/* <Route path='/game/PreTournament' element={<PreTournament />}/>
+                                <Route path='/game/Tournament' element={<Tournament />}/>
+                                <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
+                                <Route path='/game/ChessLocally' element={<LocalChessGame />}/>
+                                <Route path='/game/ChessPreLocal' element={<ChessPreLocal />}/>
+                                <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/>
+                                <Route path='/game/ChessRemoteGame' element={<ChessRemoteGame />}/>
+                                <Route path='/game/ChessWinner' element={<ChessWinner />}/> */}
 
 
-                          </Route>
-                        <Route path='*' element={<LoadingIndecator/>}/>
-                    </Routes>
-                  </MatchProvider>
+                            </Route>
+                          <Route path='*' element={<LoadingIndecator/>}/>
+                      </Routes>
+                    </RemoteGameProvider>
+                 </MatchProvider>
               </UserProvider>
             </WebSocketProvider>
           </Auth>

@@ -1,25 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import "./PreRemote.css";
 import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
 import { useMatchContext } from '../game/MatchContext';
+import { useRemoteGameContext } from '../game/MatchContext';
+
+import { UserContext } from '../../../components/UserContext'
+
 
 const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
   const { setMatchData } = useMatchContext();
+  const { setReomteGameData } = useRemoteGameContext();
+  
+
+  const user = useContext(UserContext)
+
+  const username = user?.userData?.login;
+  // const userId = user?.userData.;
+  const image = user?.userData?.profile_pic;
+
+  const UserId = user?.userData?.state;
+
+  console.log("==> USERNAME : <", username, ">, image : <", image, ">, id : <", UserId, ">");
+  
 
   const startMatchmaking = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
-    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
+    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + username);
     console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
-    
-    // wss://localhost:4444/game/ws/
-    // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
       console.log("Matchmaking WebSocket Connected");
@@ -30,9 +44,11 @@ const PreRemote = () => {
       
       if (data['type'] === 'match_found') {
         console.log("=> Match Found:");
-        console.log("   => room_name   :", data['room_name']);
-        console.log("   => my_id    :", data['my_id']);
-        console.log("   => opponent_id :", data['opponent_id']);
+        console.log("   => room_name     :", data['room_name']);
+        console.log("   => my_id         :", data['my_id']);
+        console.log("   => opponent_id   :", data['opponent_id']);
+        console.log("   => user_name     :", data['user_name']);
+        console.log("   => opponent_name :", data['opponent_name']);
         
         // Update match context
         setMatchData({
@@ -41,6 +57,15 @@ const PreRemote = () => {
           opponentId: data['opponent_id'],
         });
         
+        
+        // Update Reomte context
+        setReomteGameData({
+          player1 : null,
+          player2 : null,
+          p1_image: null,
+          p2_image: null,
+          winner  : null
+        });
         // Close the socket and navigate to RemoteGame
         socket.close();
         setIsSearching(false);
