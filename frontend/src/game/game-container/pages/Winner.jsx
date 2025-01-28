@@ -7,11 +7,36 @@ import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
 
-const Winner = () => {
-  const navigate = useNavigate();
-  // const matchId = localStorage.getItem("matchId");
-  const [winner, setWinner] = useState('Winnar')
 
+// import { useMatchContext } from './MatchContext';
+// import { useRemoteGameContext } from '../game/MatchContext';
+
+// import { useMatchContext } from '../game/MatchContext';
+import { useRemoteGameContext } from '../game/MatchContext';
+
+// import { UserContext } from '../../../components/UserContext'
+
+
+
+// const RemoteGame = () => {
+    
+  
+const Winner = () => {
+
+  const navigate = useNavigate();
+  
+  // Remote LOgic
+  // const { matchData } = useMatchContext();
+  const { ReomteGameData } = useRemoteGameContext();
+
+  console.log("===> Winner : ", ReomteGameData.Winner);
+  
+  if (ReomteGameData.Winner === null || ReomteGameData.Winner === undefined){
+      navigate('/game/PingPong_Lobby');
+  };
+  
+  // const matchId = localStorage.getItem("matchId");
+  const [winner, setWinner] = useState(ReomteGameData.Winner)
 
   // useEffect( () => {
   //     if (matchId === null){
