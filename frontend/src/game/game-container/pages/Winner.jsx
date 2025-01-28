@@ -9,20 +9,20 @@ import { useNavigate } from "react-router-dom";
 
 const Winner = () => {
   const navigate = useNavigate();
-  const matchId = localStorage.getItem("matchId");
-  const [winner, setWinner] = useState('')
+  // const matchId = localStorage.getItem("matchId");
+  const [winner, setWinner] = useState('Winnar')
 
 
-  useEffect( () => {
-      if (matchId === null){
-        navigate('/game');
-      }
-      else{
-        const matchData = JSON.parse(localStorage.getItem("Matches_data"));
-        setWinner(matchData[matchId].winner);
-      }
-    }, [matchId]
-  )
+  // useEffect( () => {
+  //     if (matchId === null){
+  //       navigate('/game');
+  //     }
+  //     else{
+  //       const matchData = JSON.parse(localStorage.getItem("Matches_data"));
+  //       setWinner(matchData[matchId].winner);
+  //     }
+  //   }, [matchId]
+  // )
 
 
 
@@ -46,23 +46,23 @@ const Winner = () => {
               default_icon='/GamePub/bottouns/default_offline.svg'
               hovered_icon='/GamePub/bottouns/hovered_offline.svg'
               onClick={() => {
-                localStorage.removeItem('Matches_data');
-                localStorage.removeItem('Matches_history');
-                localStorage.removeItem("matchId")
+                // localStorage.removeItem('Matches_data');
+                // localStorage.removeItem('Matches_history');
+                // localStorage.removeItem("matchId")
                 navigate('/game/PingPong_Lobby')
               }}
             />
-            <Frame
+            {/* <Frame
               text="Re-Match"
               default_icon='/GamePub/bottouns/default_offline.svg'
               hovered_icon='/GamePub/bottouns/hovered_offline.svg'
               onClick={() => {
-                localStorage.removeItem('Matches_data');
-                localStorage.removeItem('Matches_history');
-                localStorage.removeItem("matchId")
+                // localStorage.removeItem('Matches_data');
+                // localStorage.removeItem('Matches_history');
+                // localStorage.removeItem("matchId")
                 navigate('/game/LocalGame')
               }}
-            />
+            /> */}
           </div>
         </div>
       </div>

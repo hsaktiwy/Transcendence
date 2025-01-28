@@ -60,8 +60,8 @@ const PreRemote = () => {
         
         // Update Reomte context
         setReomteGameData({
-          player1 : null,
-          player2 : null,
+          player1 : data['user_name'],
+          player2 : data['opponent_name'],
           p1_image: null,
           p2_image: null,
           winner  : null

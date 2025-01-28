@@ -12,6 +12,9 @@ export function MatchProvider({ children }) {
     roomName: null,
     myId: null,
     opponentId: null,
+    gametype: null, // Local, Multiplayer, Tournament 
+    user_name: null,
+    opponent_user: null,
     color: ''
   });
 
@@ -33,7 +36,7 @@ export function useMatchContext() {
 const LocalGamesContext = createContext(null);
 
 export function LocalGamesProvider({ children }) {
-  const [matchData, setLocalGamesData] = useState({
+  const [LocalGamesData, setLocalGamesData] = useState({
     gametype: null, // Local, Multiplayer, Tournament 
     player1: null,
     player2: null,
@@ -45,7 +48,7 @@ export function LocalGamesProvider({ children }) {
   });
 
   return (
-    <LocalGamesContext.Provider value={{ matchData, setLocalGamesData }}>
+    <LocalGamesContext.Provider value={{ LocalGamesData, setLocalGamesData }}>
       {children}
     </LocalGamesContext.Provider>
   );
@@ -62,7 +65,7 @@ export function useLocalGamesContext() {
 const RemoteGameContext = createContext(null);
 
 export function RemoteGameProvider({ children }) {
-  const [matchData, setReomteGameData] = useState({
+  const [ReomteGameData, setReomteGameData] = useState({
     player1 : null,
     player2 : null,
     p1_image: null,
@@ -73,7 +76,7 @@ export function RemoteGameProvider({ children }) {
   });
 
   return (
-    <RemoteGameContext.Provider value={{ matchData, setReomteGameData }}>
+    <RemoteGameContext.Provider value={{ ReomteGameData, setReomteGameData }}>
       {children}
     </RemoteGameContext.Provider>
   );
