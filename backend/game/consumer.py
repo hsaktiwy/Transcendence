@@ -170,8 +170,9 @@ class ApiConsumer(WebsocketConsumer):
                 'opponent_name': p1_user,
             }))
 
-            Gconnected_users.pop(p1_id)
-            Gconnected_users.pop(p2_id)
+            Gconnected_users.pop(0)
+            Gconnected_users.pop(0)
+            # Gconnected_users.pop(1)
             # Gconnected_users.clear()
 
     def receive(self, text_data):

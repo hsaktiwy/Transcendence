@@ -15,25 +15,34 @@ import './RemoteScene.css'
 import Scoreboard from '../components/Scoreboard';
 import { useNavigate } from 'react-router-dom';
 import { useMatchContext } from './MatchContext';
+//   const { setReomteGameData } = useRemoteGameContext();
+import { useRemoteGameContext } from '../game/MatchContext';
+
+
 
 const RemoteGame = () => {
     
+    const navigate = useNavigate();
+    const canvasRef = useRef(null);
     
     // Remote LOgic
     const { matchData } = useMatchContext();
+    const { ReomteGameData } = useRemoteGameContext();
     
-    if (!matchData.roomName || !matchData.myId) return;
-
-
+    if (!matchData.roomName || !matchData.myId){
+        navigate('/game/PreRemote');
+    };
+    
+    
+    
     // Remote LOgic
-    
-    const navigate = useNavigate();
-    const canvasRef = useRef(null);
     
     const [playerScore, setPlayerScore] = useState(0);
     const [aiScore, setAiScore] = useState(0);
     
     const [loading, setLoading] = useState(true);
+    // const [The_end, setThe_end] = useState(false);
+    
 
 
     let Aix        = 0;
@@ -87,11 +96,16 @@ const RemoteGame = () => {
                 ball_y            = data['ball']['y'];
                 ball_z            = data['ball']['z'];
 
-                state             = data['ball']['state'];
+                state             = Boolean(data['ball']['state']);
+
                 OppmouseDirection = data['ball']['mousedirection'];
     
 
-                if (state === true && (Objects.length && Objects[Objects.length - 1].created_by_me === false)){
+                if (state === true){
+                    console.log("==> STATE : ", state);
+                    
+                    setAiScore(0);
+                    setPlayerScore(0);
                     navigate('/game/Winner');
                     // navigate()
                 }
@@ -641,6 +655,7 @@ const RemoteGame = () => {
                             sendPaddleUpdate(true);
                         }
                         setAiScore((aiScore) => aiScore + 1)
+                        // sendPaddleUpdate(true);
                     } else if (Objects[Objects.length - 1].sphere.position.z < (paddleAi.position.z - 1)) {
                         // playerScore += 1;
                         New_ball_launched = false;
@@ -648,6 +663,7 @@ const RemoteGame = () => {
                             sendPaddleUpdate(true);
                         }
                         setPlayerScore((playerScore) => playerScore + 1)
+                        // sendPaddleUpdate(true);
                     }
                 }
                 
@@ -753,7 +769,7 @@ const RemoteGame = () => {
     }, [matchData.roomName]);
   
     useEffect(() => {
-    if (playerScore === 7 || aiScore === 7) {
+    if (playerScore === 7 || aiScore === 7 ) {
         // sendPaddleUpdate(true);
         setPlayerScore(0);
         setAiScore(0);
@@ -770,7 +786,7 @@ const RemoteGame = () => {
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
             <Hud/>
-            <Scoreboard playerScore={playerScore} aiScore={aiScore}/>
+            <Scoreboard player1={ReomteGameData.player1} player2={ReomteGameData.player2} playerScore={playerScore} aiScore={aiScore}/>
         </>
     )
 };
