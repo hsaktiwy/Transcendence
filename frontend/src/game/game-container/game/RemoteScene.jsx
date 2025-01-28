@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-import GUI from 'lil-gui'
+// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -135,7 +135,7 @@ const RemoteGame = () => {
             });
           };
 
-        const gui = new GUI()
+        // const gui = new GUI()
 
         let canvas = null;
         if (canvasRef.current != null)
@@ -329,16 +329,16 @@ const RemoteGame = () => {
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
         }
         
-        gui.add(BallCreator, 'createBall')
-        gui.add(BallCreator, 'reset')
+        // gui.add(BallCreator, 'createBall')
+        // gui.add(BallCreator, 'reset')
         
-        gui.add(BallCreator, 'serve_x',  -20,  70).step(0.05)
-        gui.add(BallCreator, 'serve_y',  -20,  70).step(0.05)
-        gui.add(BallCreator, 'serve_z',  -20,  70).step(0.05)
+        // gui.add(BallCreator, 'serve_x',  -20,  70).step(0.05)
+        // gui.add(BallCreator, 'serve_y',  -20,  70).step(0.05)
+        // gui.add(BallCreator, 'serve_z',  -20,  70).step(0.05)
         
-        gui.add(BallCreator, 'hit_x', -20,  70).step(0.05)
-        gui.add(BallCreator, 'hit_y', -20,  70).step(0.05)
-        gui.add(BallCreator, 'hit_z', -20,  70).step(0.05)
+        // gui.add(BallCreator, 'hit_x', -20,  70).step(0.05)
+        // gui.add(BallCreator, 'hit_y', -20,  70).step(0.05)
+        // gui.add(BallCreator, 'hit_z', -20,  70).step(0.05)
         
         //Table 
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
@@ -545,7 +545,7 @@ const RemoteGame = () => {
         // scene.add(new THREE.GridHelper( 50, 50 ))
         // scene.add(new THREE.AxesHelper( 50 ))
         
-        gui.add(BallCreator, 'cameraFixed');
+        // gui.add(BallCreator, 'cameraFixed');
         
         //Scoring System
         let PlayerScore = 0;
@@ -741,7 +741,7 @@ const RemoteGame = () => {
 
             renderer.dispose();
 
-            gui.destroy();
+            // gui.destroy();
 
             topControls.dispose();
 
