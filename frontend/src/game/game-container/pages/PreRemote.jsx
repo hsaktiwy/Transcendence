@@ -13,6 +13,7 @@ const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
+  
   const { setMatchData } = useMatchContext();
   const { setReomteGameData } = useRemoteGameContext();
   
@@ -48,7 +49,9 @@ const PreRemote = () => {
         console.log("   => my_id         :", data['my_id']);
         console.log("   => opponent_id   :", data['opponent_id']);
         console.log("   => user_name     :", data['user_name']);
+        console.log("   => user_image    :", data['user_image']);
         console.log("   => opponent_name :", data['opponent_name']);
+        console.log("   => opponent_image:", data['opponent_image']);
         
         // Update match context
         setMatchData({
@@ -62,8 +65,8 @@ const PreRemote = () => {
         setReomteGameData({
           player1 : data['user_name'],
           player2 : data['opponent_name'],
-          p1_image: null,
-          p2_image: null,
+          p1_image: data['user_image'],
+          p2_image: data['opponent_image'],
           winner  : null
         });
         // Close the socket and navigate to RemoteGame

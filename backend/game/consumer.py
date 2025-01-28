@@ -121,7 +121,7 @@ class ApiConsumer(WebsocketConsumer):
 
         user = self.scope['user']
 
-        print("=> AL USER :", user)
+        print("=> AL USER :", user.login)
 
         user = self.scope['url_route']['kwargs']['user_id']
 
@@ -189,11 +189,11 @@ class ApiConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         print("=>", f"Client {self.my_id}  DisConnected !")
+        ApiConsumer.connected_users -= 1
         for i, (cid, instance) in enumerate(Gconnected_users):
             if cid == self.my_id:
-                Gconnected_users.pop(i)
+                Gconnected_users.pop(i-1)
                 break
-        ApiConsumer.connected_users -= 1
 
 
 class GameRoomConsumer(AsyncWebsocketConsumer):

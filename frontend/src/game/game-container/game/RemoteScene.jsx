@@ -20,6 +20,7 @@ import { useRemoteGameContext } from '../game/MatchContext';
 
 
 
+
 const RemoteGame = () => {
     
     const navigate = useNavigate();
@@ -27,11 +28,17 @@ const RemoteGame = () => {
     
     // Remote LOgic
     const { matchData } = useMatchContext();
+    const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
+
     
-    if (!matchData.roomName || !matchData.myId){
-        navigate('/game/PreRemote');
+  useEffect( () => {
+        if (!matchData.roomName || !matchData.myId){
+            navigate('/game/PreRemote');
     };
+    
+    }, [matchData.roomName]
+  )
     
     
     
@@ -41,7 +48,8 @@ const RemoteGame = () => {
     const [aiScore, setAiScore] = useState(0);
     
     const [loading, setLoading] = useState(true);
-    // const [The_end, setThe_end] = useState(false);
+    const [The_end, setThe_end] = useState(false);
+    const [docket, setdocket] = useState(null);
     
 
 
@@ -66,6 +74,7 @@ const RemoteGame = () => {
         
         gameSocket.onopen = () => {
             console.log("Connected to the game room:", matchData.roomName);
+            setdocket(gameSocket);
         };
   
         const scene = new THREE.Scene();
@@ -101,9 +110,27 @@ const RemoteGame = () => {
                 OppmouseDirection = data['ball']['mousedirection'];
     
 
+                // console.log("==> STATE : ", state);
                 if (state === true){
-                    console.log("==> STATE : ", state);
-                    
+                    if (OppmouseDirection === 1){
+                        setReomteGameData({
+                            player1 : 'pp',
+                            player2 : 'pp',
+                            p1_image: 'pp',
+                            p2_image: 'pp',
+                            Winner  : ReomteGameData.player1
+                        });
+                    }
+                    else {
+                        setReomteGameData({
+                            player1 : 'pp',
+                            player2 : 'pp',
+                            p1_image: 'pp',
+                            p2_image: 'pp',
+                            Winner  : ReomteGameData.player2
+                        });        
+                    }
+                    console.log("==> decided Winner before : ", ReomteGameData.winner);
                     setAiScore(0);
                     setPlayerScore(0);
                     navigate('/game/Winner');
@@ -651,17 +678,19 @@ const RemoteGame = () => {
                     if (Objects[Objects.length - 1].sphere.position.z > (paddle.position.z + 1)) {
                         // aiScore += 1;
                         New_ball_launched = false;
-                        if (aiScore === 6){
-                            sendPaddleUpdate(true);
-                        }
+                        // if (aiScore === 7){
+                        //     // sendPaddleUpdate(true);
+                        //     setThe_end(true);
+                        // }
                         setAiScore((aiScore) => aiScore + 1)
                         // sendPaddleUpdate(true);
                     } else if (Objects[Objects.length - 1].sphere.position.z < (paddleAi.position.z - 1)) {
                         // playerScore += 1;
                         New_ball_launched = false;
-                        if (playerScore === 6){
-                            sendPaddleUpdate(true);
-                        }
+                        // if (playerScore === 7){
+                        //     // sendPaddleUpdate(true);
+                        //     setThe_end(true);
+                        // }
                         setPlayerScore((playerScore) => playerScore + 1)
                         // sendPaddleUpdate(true);
                     }
@@ -763,20 +792,78 @@ const RemoteGame = () => {
 
             hit_sound.pause();
             hit_sound.src = "";
-            gameSocket.close();
+            // gameSocket.close();
         };
 
     }, [matchData.roomName]);
   
     useEffect(() => {
-    if (playerScore === 7 || aiScore === 7 ) {
+    if (playerScore === 7 || aiScore === 7 || The_end === true ) {
         // sendPaddleUpdate(true);
+        // const sendPaddleUpdate = (end_state) => {
+            // console.log("=======>", Objects.length);
+
+        const message = {
+            type: 'paddle_update',
+            my_id: matchData.myId,
+            paddle: {
+                x: 0,
+                y: 0,      
+            },
+            ball: {
+                c: 1,
+                
+                x:  1,
+                y:  1,
+                z:  1,
+
+                mousedirection: 1,
+
+                status: Objects[Objects.length - 1]?.created_by_me ?? false,
+                state : true
+            }
+        };
+        if (playerScore === 7){
+            setReomteGameData({
+                player1 : 'pp',
+                player2 : 'pp',
+                p1_image: 'pp',
+                p2_image: 'pp',
+                Winner  : ReomteGameData.player1
+            });    
+            message.ball.mousedirection = 1;
+        }
+        else {
+            setReomteGameData({
+                player1 : 'pp',
+                player2 : 'pp',
+                p1_image: 'pp',
+                p2_image: 'pp',
+                Winner  : ReomteGameData.player2
+            });     
+            message.ball.mousedirection = 2;
+        }
+            if (docket.readyState === 1)
+                docket.send(JSON.stringify(message));
+        // };
+        // setReomteGameData({
+        //     player1 : 'kk',
+        //     player2 : 'kk',
+        //     p1_image: 'kk',
+        //     p2_image: 'kk',
+        //     winner  : 'kk'
+        //   });
+
+        console.log("==> decided Winner before : ", ReomteGameData.winner);
+        
         setPlayerScore(0);
         setAiScore(0);
         navigate('/game/Winner');
         // alert(`${playerScore === 7 ? 'Player' : 'Ai'} Wins!`);
+
+        return(docket.close());
     }
-      }, [playerScore, aiScore]);
+      }, [playerScore, aiScore, The_end]);
 
     return (
         <>
