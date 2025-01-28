@@ -13,6 +13,7 @@ const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
+  
   const { setMatchData } = useMatchContext();
   const { setReomteGameData } = useRemoteGameContext();
   

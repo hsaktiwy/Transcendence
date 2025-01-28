@@ -28,12 +28,17 @@ const RemoteGame = () => {
     
     // Remote LOgic
     const { matchData } = useMatchContext();
-    const { ReomteGameData } = useRemoteGameContext();
     const { setReomteGameData } = useRemoteGameContext();
+    const { ReomteGameData } = useRemoteGameContext();
+
     
-    if (!matchData.roomName || !matchData.myId){
-        navigate('/game/PreRemote');
+  useEffect( () => {
+        if (!matchData.roomName || !matchData.myId){
+            navigate('/game/PreRemote');
     };
+    
+    }, [matchData.roomName]
+  )
     
     
     
@@ -107,7 +112,25 @@ const RemoteGame = () => {
 
                 // console.log("==> STATE : ", state);
                 if (state === true){
-                    
+                    if (OppmouseDirection === 1){
+                        setReomteGameData({
+                            player1 : 'pp',
+                            player2 : 'pp',
+                            p1_image: 'pp',
+                            p2_image: 'pp',
+                            Winner  : ReomteGameData.player1
+                        });
+                    }
+                    else {
+                        setReomteGameData({
+                            player1 : 'pp',
+                            player2 : 'pp',
+                            p1_image: 'pp',
+                            p2_image: 'pp',
+                            Winner  : ReomteGameData.player2
+                        });        
+                    }
+                    console.log("==> decided Winner before : ", ReomteGameData.winner);
                     setAiScore(0);
                     setPlayerScore(0);
                     navigate('/game/Winner');
@@ -780,14 +803,35 @@ const RemoteGame = () => {
         // const sendPaddleUpdate = (end_state) => {
             // console.log("=======>", Objects.length);
 
+        const message = {
+            type: 'paddle_update',
+            my_id: matchData.myId,
+            paddle: {
+                x: 0,
+                y: 0,      
+            },
+            ball: {
+                c: 1,
+                
+                x:  1,
+                y:  1,
+                z:  1,
+
+                mousedirection: 1,
+
+                status: Objects[Objects.length - 1]?.created_by_me ?? false,
+                state : true
+            }
+        };
         if (playerScore === 7){
             setReomteGameData({
                 player1 : 'pp',
                 player2 : 'pp',
                 p1_image: 'pp',
                 p2_image: 'pp',
-                winner  : 'PP'
-              });    
+                Winner  : ReomteGameData.player1
+            });    
+            message.ball.mousedirection = 1;
         }
         else {
             setReomteGameData({
@@ -795,32 +839,23 @@ const RemoteGame = () => {
                 player2 : 'pp',
                 p1_image: 'pp',
                 p2_image: 'pp',
-                winner  : 'PP'
-              });     
+                Winner  : ReomteGameData.player2
+            });     
+            message.ball.mousedirection = 2;
         }
-            const message = {
-                type: 'paddle_update',
-                my_id: matchData.myId,
-                paddle: {
-                    x: 0,
-                    y: 0,      
-                },
-                ball: {
-                    c: 1,
-                    
-                    x:  1,
-                    y:  1,
-                    z:  1,
-
-                    mousedirection: 1,
-
-                    status: Objects[Objects.length - 1]?.created_by_me ?? false,
-                    state : true
-                }
-            };
             if (docket.readyState === 1)
                 docket.send(JSON.stringify(message));
         // };
+        // setReomteGameData({
+        //     player1 : 'kk',
+        //     player2 : 'kk',
+        //     p1_image: 'kk',
+        //     p2_image: 'kk',
+        //     winner  : 'kk'
+        //   });
+
+        console.log("==> decided Winner before : ", ReomteGameData.winner);
+        
         setPlayerScore(0);
         setAiScore(0);
         navigate('/game/Winner');

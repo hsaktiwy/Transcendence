@@ -33,34 +33,34 @@ export function useMatchContext() {
 
 
 // Local User Context (Local Games Context)
-const LocalGamesContext = createContext(null);
+// const LocalGamesContext = createContext(null);
 
-export function LocalGamesProvider({ children }) {
-  const [LocalGamesData, setLocalGamesData] = useState({
-    gametype: null, // Local, Multiplayer, Tournament 
-    player1: null,
-    player2: null,
-    player3: null,
-    player4: null,
-    winner : null,
-    //infos for tournament ...
-    //images ...
-  });
+// export function LocalGamesProvider({ children }) {
+//   const [LocalGamesData, setLocalGamesData] = useState({
+//     gametype: null, // Local, Multiplayer, Tournament 
+//     player1: null,
+//     player2: null,
+//     player3: null,
+//     player4: null,
+//     winner : null,
+//     //infos for tournament ...
+//     //images ...
+//   });
 
-  return (
-    <LocalGamesContext.Provider value={{ LocalGamesData, setLocalGamesData }}>
-      {children}
-    </LocalGamesContext.Provider>
-  );
-}
+//   return (
+//     <LocalGamesContext.Provider value={{ LocalGamesData, setLocalGamesData }}>
+//       {children}
+//     </LocalGamesContext.Provider>
+//   );
+// }
 
-export function useLocalGamesContext() {
-  return useContext(LocalGamesContext);
-}
-
-
+// export function useLocalGamesContext() {
+//   return useContext(LocalGamesContext);
+// }
 
 
+
+// MatchContext.jsx
 // Remote User Context (Remote Game Context)
 const RemoteGameContext = createContext(null);
 
@@ -71,8 +71,6 @@ export function RemoteGameProvider({ children }) {
     p1_image: null,
     p2_image: null,
     winner  : null,
-    //images ...
-    //scores !?
   });
 
   return (
