@@ -107,7 +107,7 @@ const RemoteGame = () => {
 
                 state             = Boolean(data['ball']['state']);
 
-                OppmouseDirection = data['ball']['mousedirection'];
+                OppmouseDirection = Number(data['ball']['mousedirection']);
     
 
                 // console.log("==> STATE : ", state);
@@ -118,7 +118,7 @@ const RemoteGame = () => {
                             player2 : 'pp',
                             p1_image: 'pp',
                             p2_image: 'pp',
-                            Winner  : ReomteGameData.player1
+                            Winner  : ReomteGameData.player2
                         });
                     }
                     else {
@@ -127,7 +127,7 @@ const RemoteGame = () => {
                             player2 : 'pp',
                             p1_image: 'pp',
                             p2_image: 'pp',
-                            Winner  : ReomteGameData.player2
+                            Winner  : ReomteGameData.player1
                         });        
                     }
                     console.log("==> decided Winner before : ", ReomteGameData.winner);
