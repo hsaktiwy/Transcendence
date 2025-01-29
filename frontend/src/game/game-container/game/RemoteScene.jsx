@@ -367,7 +367,10 @@ const RemoteGame = () => {
             let y = 4.92;
             let z = -10.1;
             
+            // console.log("==>  paddle.position.z : ", paddle.position.z);
+            // console.log("==> -paddle.position.z : ", -paddle.position.z);
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
+            
         }
         
         // gui.add(BallCreator, 'createBall')
@@ -419,7 +422,7 @@ const RemoteGame = () => {
         const handleKeyDown = (event) => {
             const keyName = event.key;
           
-              if (keyName === "r"){
+              if (keyName === " "){
                   BallCreator.createBall()
               }
               if (keyName === "t"){
@@ -632,11 +635,28 @@ const RemoteGame = () => {
         const targetInterval = 1/60; // ~0.0333 seconds = 33ms
         ////==>////
         
+////Ball Thrower
+        const Ball_Thrower = (New_ball_launched) => {
+            if (New_ball_launched === false){
+                // BallCreator.createBall ();
+                // New_ball_launched = true;
+                // setTimeout(() => {
+                //     BallCreator.createBall()
+                // }, 2800);
+                // createSphere()
+                
+            }
+        };
+/////====///////
+
+        let p =false;
+
         const tick = () =>
         {
             //tbr
-            if (paddleAi && paddle){
-                setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
+            if (p === false && paddleAi && paddle){
+                setTimeout(() => {BallCreator.cameraFixed = true} , 3800)
+                p = true;
             }
             
             deltaTime = clock.getDelta();
@@ -670,6 +690,7 @@ const RemoteGame = () => {
             }
             
             if (Objects.length && paddleAi){
+                Ball_Thrower(New_ball_launched)
                 // paddleAi.position.x = Objects[Objects.length - 1].sphere.position.x; 
                 // paddleAi.position.y = Objects[Objects.length - 1].sphere.position.y - 0.4;
                 
@@ -843,7 +864,7 @@ const RemoteGame = () => {
             });     
             message.ball.mousedirection = 2;
         }
-            if (docket.readyState === 1)
+            if (docket && docket.readyState === 1)
                 docket.send(JSON.stringify(message));
         // };
         // setReomteGameData({
