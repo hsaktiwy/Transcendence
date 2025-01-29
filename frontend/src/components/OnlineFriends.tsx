@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import { SkeletonTheme } from 'react-loading-skeleton'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { ProfileDataInterface } from "@/utils/UserDataInterface"
 
 function OnlineFriends() {
     const userContext = useContext(UserContext)
@@ -14,7 +15,7 @@ function OnlineFriends() {
     const friends = userContext?.friends
     
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredFriends, setFilteredFriends] = useState([]);
+    const [filteredFriends, setFilteredFriends] = useState<ProfileDataInterface[]>([]);
     
     // const friends = [
     //     {
@@ -42,13 +43,16 @@ function OnlineFriends() {
         setSearchTerm(value);
 
         // Filter friends based on login, firstName, or lastName
-        const results = friends.filter((friend) =>
-            friend.login.toLowerCase().includes(value) ||
-            friend.firstName.toLowerCase().includes(value) ||
-            friend.lastName.toLowerCase().includes(value)
-        );
+        if(friends){
+            const results: ProfileDataInterface[] = friends.filter((friend) =>
+                friend.login.toLowerCase().includes(value) ||
+                friend.firstName.toLowerCase().includes(value) ||
+                friend.lastName.toLowerCase().includes(value)
+            );
+            setFilteredFriends(results);
 
-        setFilteredFriends(results);
+        }
+
     };
     console.log('here-->', userContext?.friends)
   return (
@@ -91,9 +95,9 @@ function OnlineFriends() {
                             {searchTerm && filteredFriends.length > 0 && (
                                 <div className="mt-1  w-4/5 bg-gradient-to-br from-[#2a3236] to-[#1e2124]  p-2  rounded-lg shadow-lg max-h-40 overflow-y-auto">
                                     {filteredFriends.map((friend) => (
-                                        <Link to={`/profile/${friend.login}`}
+                                        <Link to={`/profile/${friend.unique_id}`}
                                             key={friend.login}
-                                            className="flex items-center gap-3 px-4 py-2   w-full rounded-xl transition-all duration-200 ease-in-out rounded-xl hover:bg-[#1D1E22] cursor-pointer"
+                                            className="flex items-center gap-3 px-4 py-2   w-full rounded-xl transition-all duration-200 ease-in-out  hover:bg-[#1D1E22] cursor-pointer"
                                         >
                                             <img
                                                 src={`${import.meta.env.VITE_axiosPath}${friend.profile_pic}`}
@@ -122,9 +126,11 @@ function OnlineFriends() {
                         <div className='online-users  px-8'>
                         {
                             userContext?.friends.map((friend, index)=>{
-                                return(
+                                if (userContext.blockList.filter(blocked=>blocked.unique_id === friend.unique_id).length === 0)
+                                {
+                                    return(
                                     <Link
-                                    to={`/profile/${friend.login}`}
+                                    to={`/profile/${friend.unique_id}`}
                                     key={index}
                                     className="each-user relative px-10  my-2  rounded-xl hover:bg-[#1D1E22] overflow-hidden"
                                     style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${friend.CoverProfile})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
@@ -141,6 +147,7 @@ function OnlineFriends() {
                                     
                                 </Link>
                                 )
+                                }
                             })
                         }
                             

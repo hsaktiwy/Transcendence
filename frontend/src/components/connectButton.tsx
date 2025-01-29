@@ -17,7 +17,6 @@ import { SlLock } from "react-icons/sl";
 import { friendship } from '@/utils/interfaces';
 
 interface buttonInterface{
-  channel_id: number | undefined 
   user: UserDataInterface | ProfileDataInterface | undefined
 }
 
@@ -31,10 +30,10 @@ function ConnectButton(prop: buttonInterface) {
   const [FriendRequest, setFriendRequest] = useState("")
   const [friend_req_id, setFriendRequestId] = useState<number>(-1)
   const [loading, setLoading] = useState<boolean>(true)
-  const [channelId, setChannelId] = useState<number | undefined>(prop.channel_id)
+  const [channelId, setChannelId] = useState<number | undefined>(undefined)
   const [blocker, setBloker] = useState<boolean>(false)
 
-  const {username} = useParams();
+  const {uuid} = useParams();
   const userContextConsumer = useContext(UserContext)
 
   const SocketContext = useContext(WebSocketContext)
@@ -49,7 +48,7 @@ function ConnectButton(prop: buttonInterface) {
   const getChannelId = async () =>{
       try{
           const req = {
-              url: "/chat/conversation/get_channel/"+username+'/',
+              url: "/chat/conversation/get_channel/"+uuid+'/',
               method: 'GET'
           }
           const resp = await mailman(req)
@@ -68,7 +67,7 @@ function ConnectButton(prop: buttonInterface) {
     if (prop.user){
       try{
         const req = {
-          url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+username,
+          url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+uuid,
           method: "GET",
           withCredentials: true,
         }
@@ -79,22 +78,25 @@ function ConnectButton(prop: buttonInterface) {
         if (!isblock)
         {
           userContextConsumer?.setBlockList(prev=>[...prev, user])
+          userContextConsumer?.setFriends(prev=>prev.filter(friend => friend.unique_id!==user.unique_id))
         }
         else
         {
           userContextConsumer?.setBlockList((prev) =>{
             return(
-              prev.filter(blocked => blocked.login !== user.login)
+              prev.filter(blocked => blocked.unique_id!== user.unique_id)
             )
           })
+          userContextConsumer?.setFriends(prev=>[...prev, user])
         }
         setBtn_block(isblock ? 'Block' : 'Unblock');
         setIsbLock(!isblock)
         const notification = {
           type: 'NotifBlock',
-          to : username,
+          to : uuid,
           status: isblock
         }
+        console.log(notification)
         const message = JSON.stringify(notification)
         SocketContext?.socket?.current?.send(message)
       }
@@ -111,7 +113,7 @@ function ConnectButton(prop: buttonInterface) {
   {
       try{
         const req = {
-          url:'friendship/block_status/'+ username,
+          url:'friendship/block_status/'+ uuid,
           method: 'GET',
           withCredentials:true,
         }
@@ -120,7 +122,7 @@ function ConnectButton(prop: buttonInterface) {
         setIsbLock(responce)
         setBtn_block(responce ? 'UnBlock' : 'Block');
         console.log('block  status  heere  ->>>>', resp.data);
-        if(resp.data['blocker'] ===  userContextConsumer?.userData?.login)
+        if(resp.data['blocker'] ===  userContextConsumer?.userData?.unique_id)
         {
             setBloker(true);
         }
@@ -138,18 +140,21 @@ function ConnectButton(prop: buttonInterface) {
   {
     try{
         const req = {
-          url:'friendship/is/FRIEND/'+ username,
+          url:'friendship/is/FRIEND/'+ uuid,
           method: 'GET',
           withCredentials:true,
         }
         const resp = await mailman(req)
         const  responce:boolean = resp.data['status']
         setIsfriend(responce ? 'UNFRIEND' : 'CONNECT' );
+        console.log("rrrrrr    ----- ,", responce)
+        if (responce)
+          await getChannelId()
         console.log(resp)
         // if  (responce)
         // {
         const req2 = {
-          url:'friendship/status/'+ username,
+          url:'friendship/status/'+ uuid,
           method: 'GET',
           withCredentials:true,
         }
@@ -179,8 +184,7 @@ function ConnectButton(prop: buttonInterface) {
     // friendship ?
     // does we have
     setLoading(false)
-    getChannelId()
-  } , [username]);
+  } , [uuid]);
   // FIRST FETCH DATA ABOUT THE USER
   // CASE 1: NO FRIEND REQUEST STATUS : SEND,BLOCK
   // CASE 2: ...: PENDING
@@ -190,19 +194,20 @@ function ConnectButton(prop: buttonInterface) {
   // add our state update to the socket channel
 
   useEffect(()=>{
+    console.log("FRIENDDDS ====>", userContextConsumer?.friends)
     const FriendRequestAccepted = (data:NotificationPropreties)=>{
-      if (data.sender.login == username)
+      if (data.sender.unique_id == uuid)
       {
-        //console.log('ACCEPTED :', username, data)
+        //console.log('ACCEPTED :', uuid, data)
         getChannelId()
         setFriendRequest("")
         setIsfriend("UNFRIEND")
       }
     }
     const FriendRequestReceived = (data:NotificationPropreties)=>{
-      if (data.sender.login == username)
+      if (data.sender.unique_id == uuid)
       {
-        // console.log('RECEIVED :', username, data)
+        // console.log('RECEIVED :', uuid, data)
         setFriendRequestId(data.friend_request_id)
         setFriendRequest('Accept')
       }
@@ -210,20 +215,17 @@ function ConnectButton(prop: buttonInterface) {
   
     const TOCONNECT = (data:friendship)=>{
       console.log('+===========================+++++++++++++++++', data)
-      if (data.sender == username)
+      if (data.sender.unique_id == uuid)
       {
         setFriendRequest("")
         setIsfriend("CONNECT")
+
       }
     }
     const blocknotify = (data:friendship)=>{
-      if(data)
-      {
         setBloker(false);
         setIsbLock(true);
         userContextConsumer?.setBlockList(prev=>[...prev])
-      }
-
     }
     AddChannel('FriendRequestAccepted', FriendRequestAccepted)
     AddChannel('FriendRequestReceived', FriendRequestReceived)
@@ -234,7 +236,7 @@ function ConnectButton(prop: buttonInterface) {
       // Remove the CHAT call back function when we exist the chat section
       RemoveChannel('FriendRequestAccepted')
       RemoveChannel('FriendRequestReceived')
-      RemoveChannel('NOTIFICATION_UNFRIEND')
+      RemoveChannel('NOTIFICATION_UNCONNECT')
       RemoveChannel('NotifBlock')
 
     }
@@ -242,7 +244,7 @@ function ConnectButton(prop: buttonInterface) {
   const send_friend_request = ()=>{
     const notification = {
       type: 'NOTIFICATION_ADD_FRIEND',
-      to : username
+      to : uuid
     }
     const message = JSON.stringify(notification)
     SocketContext?.socket?.current?.send(message)
@@ -265,12 +267,13 @@ function ConnectButton(prop: buttonInterface) {
             userContextConsumer?.fetchFriends()
             const notification = {
               type: 'NOTIFICATION_ACCEPT_FRIEND',
-              to : username
+              to : uuid
             }
             const message = JSON.stringify(notification)
             SocketContext?.socket?.current?.send(message)
             setFriendRequest("")
             setIsfriend("UNFRIEND")
+            console.log("hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm?")
             getChannelId()
           }
           // we need to rest all thing to get back to what it should be
@@ -294,7 +297,7 @@ function ConnectButton(prop: buttonInterface) {
             console.log(resp.data)
             const notification = {
               type: 'NOTIFICATION_UNCONNECT',
-              to : username
+              to : uuid
             }
             const message = JSON.stringify(notification)
             SocketContext?.socket?.current?.send(message)
@@ -315,7 +318,7 @@ function ConnectButton(prop: buttonInterface) {
         if (friend_req_id != -1)
         {
           const req = {
-            url: "friendship/unfriend/"+username,
+            url: "friendship/unfriend/"+uuid,
             method: "GET",
             withCredentials: true,
           }
@@ -324,7 +327,7 @@ function ConnectButton(prop: buttonInterface) {
           userContextConsumer?.fetchFriends()
           const notification = {
             type: 'NOTIFICATION_UNCONNECT',
-            to : username
+            to : uuid
           }
           const message = JSON.stringify(notification)
           SocketContext?.socket?.current?.send(message)
@@ -349,9 +352,6 @@ function ConnectButton(prop: buttonInterface) {
   };
 
 
-  useEffect(()=>{
-    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++> reload connect botton')
-  },[])
   
   return (
     <>

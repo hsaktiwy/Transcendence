@@ -31,11 +31,6 @@ import { SlLock } from "react-icons/sl";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
 import { LoseWins } from "@/utils/interfaces.ts";
 
-// interface LoseWins
-// {
-//     wins:number;
-//     lose:number;
-// }
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
    
@@ -46,34 +41,34 @@ const ProfileTest  = () =>{
     const [isLoading, setIsLoading] = useState(true);
     const [isblock, setIsbLock] = useState<boolean>(false);
     const [matches, setMatches] = useState<LoseWins | undefined>()
-    
 
-   const {username} = useParams();
+   const {uuid} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
 
-   const getChannelId = async () =>{
-        try{
-            const req = {
-                url: "/chat/conversation/get_channel/"+username+'/',
-                method: 'GET'
+    const getChannelId = async () =>{
+            try{
+                const req = {
+                    url: "/chat/conversation/get_channel/"+uuid+'/',
+                    method: 'GET'
+                }
+                const resp = await mailman(req)
+                const id:number = resp.data.channel_id;
+                if (id)
+                    setChannelId(id);
             }
-            const resp = await mailman(req)
-            const id:number = resp.data.channel_id;
-            if (id)
-                setChannelId(id);
-        }
-        catch (error){
+            catch (error){
 
 
-        }
-   }
-   const fetchLineChart = async () =>
+            }
+    }
+
+    const fetchLineChart = async () =>  
     {
         try{
             const req = {
-                url: `/profile/get_line_chart/${username}/`,
+                url: `/profile/get_line_chart/${uuid}/`,
                 method: 'GET',
                 withCredentials: true,
             }
@@ -85,11 +80,11 @@ const ProfileTest  = () =>{
             console.error("dddddd======????",err)
     }}
 
-   const fetchMatches = async () =>
+    const fetchMatches = async () =>
     {
         try{
             const req = {
-                url: `/profile/get_win_lose/${username}/`,
+                url: `/profile/get_win_lose/${uuid}/`,
                 method: 'GET',
                 withCredentials: true,
             }
@@ -101,15 +96,16 @@ const ProfileTest  = () =>{
             console.error("dddddd======????",err)
         }
     }
+
    const fetchUserData = async () =>{
     try{
-        const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
-        console.log('waaaaaaaa    ',user, "waaaaa2 ",  username)
+        const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
+        console.log('waaaaaaaa    ',user, "waaaaa2 ",  uuid)
         if (user.length === 0)
         {
             setIsLoading(true);
             const req = {
-                url: `/api/users/${username}/`,
+                url: `/api/users/${uuid}/`,
                 method: 'GET',
             }
             
@@ -118,11 +114,11 @@ const ProfileTest  = () =>{
     
             setProfileData(respData)
             // setIsLoading(false);
-            await getChannelId()
+            // await getChannelId()
         }
         else{
             setProfileData(user[0])
-            await getChannelId()
+            // await getChannelId()
         }
         
         
@@ -136,7 +132,7 @@ const ProfileTest  = () =>{
     {
         try{
           const req = {
-            url:'friendship/is/BLOCKED_BOTH_SIDE/'+ username,
+            url:'friendship/is/BLOCKED_BOTH_SIDE/'+ uuid,
             method: 'GET',
             withCredentials:true,
           }
@@ -155,7 +151,7 @@ const ProfileTest  = () =>{
 
 
    useEffect(() =>{
-    if (userContextConsumer?.userData?.login !== username){
+    if (userContextConsumer?.userData?.unique_id !== uuid){
         fetchUserData().finally(() => {
             // Add a delay of 1.2 seconds before setting isLoading to false
             const timer = setTimeout(() => {
@@ -172,11 +168,10 @@ const ProfileTest  = () =>{
     else{
         setProfileData(userContextConsumer?.userData)
         setIsLoading(false)
-        // console.
-        fetchLineChart();
         fetchMatches();
+        fetchLineChart();
     }
-   },[username, userContextConsumer.blockList])
+   },[uuid, userContextConsumer.blockList])
    useEffect(()=>{
     console.log('-----------------------------------------------------------------------------> reload profile')
    },[])
@@ -196,13 +191,13 @@ const ProfileTest  = () =>{
                                                     <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
                                                     <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
                                                 </div>
-                                                {userContextConsumer?.userData?.login === username ? (
+                                                {userContextConsumer?.userData?.unique_id === uuid ? (
                                                     <Link to="/settings"> 
                                                         <button className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none">
                                                         Edit profile</button>
                                                     </Link> 
                                                     ) : (
-                                                        <ConnectButton channel_id={channel_id} user={profileData}/> 
+                                                        <ConnectButton user={profileData}/> 
                                                     )}
                                     </div>
                         </div>
@@ -260,7 +255,7 @@ const ProfileTest  = () =>{
                             </div>
                         </div>
                         <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
-                                        <PieChartFile matches={matches}/>
+                            <PieChartFile matches={matches}/>
                         </div>
                     </div>
             )}

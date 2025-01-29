@@ -3,6 +3,7 @@ import {channelType, WebSocketContextType, childrenInterface, friendship} from '
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 import { AuthContext } from '@/components/AuhtenticationContext'
+import { channel } from 'diagnostics_channel'
 
 
 let inc: number = 222222 // desable the id that amine use later else we will use this 
@@ -99,7 +100,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                     channels.current['FriendRequestReceived'](notifData);
                 }
                 else{
-                  console.log(message.data)
+                  console.log("accepteeed ===>> ", message.data)
                   channels.current['NOTIFICATION_ACCEPT_FRIEND'](notifData)
                   if (channels.current['FriendRequestAccepted'])
                     channels.current['FriendRequestAccepted'](notifData)
@@ -112,18 +113,21 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
               const info: friendship = {
                 action: data.action,
                 sender: data.sender,
+                status: data.status
+
               };
+              console.log("+++++++,", info)
               if (channels.current[info.action])
-              {
-                console.log('____________________________________', data)
                 channels.current[info.action](info)
-              }
+              if (info.action === 'NOTIFICATION_UNCONNECT')
+                channels.current['UPDATE_FRIEND_LIST'](info.sender)
+              else
+                channels.current['UPDATE_FRIENDSHIP'](info)
             }
             if (type === 'message'){
               if (channels.current['UPDATE_CHAT_NOTIF'])
                 {
                   const notifData =  JSON.parse(message.data);
-                  console.log('sa333iiiiid', notifData)
                   channels.current['UPDATE_CHAT_NOTIF'](notifData)
                 }
                 if(channels.current['NOTIFICATION_MESSAGE'])

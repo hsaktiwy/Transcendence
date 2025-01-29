@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 import {

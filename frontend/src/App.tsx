@@ -67,6 +67,7 @@ const App = () =>
   
   <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
     <BrowserRouter>
+      {/* <Backgrounds/> */}
         <AuthProvider>
           <Auth>
             <WebSocketProvider>
@@ -75,13 +76,11 @@ const App = () =>
                   <MatchProvider>
                     <RemoteGameProvider >
                       <Routes>
-                            <Route path='/'  element={ <Layout/>}>
-                              <Route path='/profile/:username' element={ <ProfileTest/>}/>
+                              <Route path='/'  element={ <Layout/>}>
+                              <Route path='/profile/:uuid' element={ <ProfileTest/>}/>
                               <Route index element={ <Dashboard/>}/>
                               <Route path='/chat/:channel_id?' element={ <ChatSection/>}/>
                               <Route path='/settings' element={ <Settings/>}/>
-
-
                               <Route path='/game' element={<MainGamePage />}/>
                               <Route path='/game/PingPong_Lobby' element={<Lobby />}/>
                               <Route path='/game/PlayLocally_1v1' element={<PlayLocally_1v1 />}/>

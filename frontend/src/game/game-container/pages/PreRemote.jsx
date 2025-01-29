@@ -76,14 +76,12 @@ const PreRemote = () => {
       }
     };
     
-    socket.onerror = (event) => {
-      // console.error("WebSocket Error:", error);
-      console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
+    socket.onerror = (error) => {
+      console.error("WebSocket Error:", error);
       setIsSearching(false);
     };
     
-    socket.onclose = (event) => {
-      console.log("WebSocket connection closed. Code:", event.code, "Reason:", event.reason);
+    socket.onclose = () => {
       console.log("Matchmaking WebSocket Closed");
     };
     

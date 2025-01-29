@@ -47,4 +47,3 @@ class Command(BaseCommand):
                 game.time = randtime
                 game.save()
                 self.stdout.write(f"Created game: {game.time}")
-
