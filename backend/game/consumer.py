@@ -3,7 +3,9 @@ from django.db.models import Count, Q
 from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 from .models import Game
+from users.models import MyUser
 import json
+
 class GameConsumer(AsyncWebsocketConsumer):
 
     def get_or_create_game(self, user):
@@ -128,7 +130,6 @@ class ApiConsumer(WebsocketConsumer):
         print("=> AL USER :", user)
 
 
-
         ApiConsumer.connected_users += 1
         self.my_id = ApiConsumer.connected_users
         self.user = user
@@ -151,6 +152,23 @@ class ApiConsumer(WebsocketConsumer):
 
             p1_id, p1_consumer, p1_user = Gconnected_users[0]
             p2_id, p2_consumer, p2_user = Gconnected_users[1]
+
+
+            #fake DATA creation !
+            users = MyUser.objects.filter(login=p1_user)
+            if users.exists():
+                user = users.first()
+            else:
+                user = None
+
+            users = MyUser.objects.filter(login=p2_user)
+            if users.exists():
+                user2 = users.first()
+            else:
+                user2 = None
+
+            Game.objects.create(user_p1=user, user_p2=user2, winner=user, loser=user2, score_p1=7, score_p2=5)
+            #
 
             p1_consumer.send(json.dumps({
                 'type': 'match_found',
@@ -189,11 +207,11 @@ class ApiConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         print("=>", f"Client {self.my_id}  DisConnected !")
-        ApiConsumer.connected_users -= 1
-        for i, (cid, instance) in enumerate(Gconnected_users):
+        for i, (cid, instance, pp) in enumerate(Gconnected_users):
             if cid == self.my_id:
                 Gconnected_users.pop(i-1)
                 break
+        ApiConsumer.connected_users -= 1
 
 
 class GameRoomConsumer(AsyncWebsocketConsumer):
