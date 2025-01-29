@@ -14,7 +14,7 @@ import { LineCharFile } from "./lineChart.tsx";
 import { RadarChartFile } from "./RadarChartFile.tsx";
 import { RadarChart } from "recharts";
 import RankFile from "./rankFile.tsx";
-import { axiosPath ,BACKEND } from "../utils/Constants";
+// import { axiosPath ,BACKEND } from "../utils/Constants";
 import OnlineFriends from "./OnlineFriends.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Achievements from "./Achievements.tsx";
@@ -23,6 +23,9 @@ import { UserContext } from "./UserContext";
 import { MatchHistory } from "./MatchHistroy.tsx";
 import SkeletonDashboard from "./Skeletons/SkeletoneDashboard.tsx";
 import { WebSocketContext } from "@/utils/WSContext.tsx";
+import mailman from "@/utils/AxiosFetcher.ts";
+import { useParams } from "react-router-dom";
+import { LinechartData, LoseWins, RadarChartInterFace } from "@/utils/interfaces.ts";
 
 Chart.register(CategoryScale);
 
@@ -64,13 +67,60 @@ function Dashboard(){
   const userContextConsumer = useContext(UserContext);
   const wsConsumer = useContext(WebSocketContext)
   const [isLoading, setIsLoading] = useState(true);
+  const [matches, setMatches] = useState<LoseWins | undefined>()
+  const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
+  const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
+  
+
+  const username = userContextConsumer?.userData?.login;
+  console.log('hiii user name', userContextConsumer?.userData?.login);
+  const fetchLineChart = async () =>
+    {
+        try{
+            const req = {
+                url: `/profile/get_line_chart/${username}/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req);
+            console.log('matches  is here  ma hree : \n', resp.data);
+            const fetchedData: LinechartData = {
+                user: resp.data.user,
+                weekly_match_data: resp.data.weekly_match_data, // This should already be an array
+            };
+            setLineChartData(fetchedData);
+            console.log('hiiii mhere', lineChartData);
+            // setMatches(resp.data);
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+    }}
+    
+   const fetchMatches = async () =>
+    {
+        try{
+            const req = {
+                url: `/profile/get_win_lose/${username}/`,
+                method: 'GET',
+                withCredentials: true,
+            }
+            const resp = await mailman(req);
+            console.log('print win and lose mheree pleas : \n', resp.data);
+            setMatches(resp.data);
+            setRadarChartData(resp.data);
+        }
+        catch (err){
+            console.error("dddddd======????",err)
+        }
+    }
   
   useEffect(() => {
     // Add a delay of 2 seconds before changing isLoading to false
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
-    
+    fetchLineChart()
+    fetchMatches()
     // Cleanup the timer to avoid memory leaks
     return () => clearTimeout(timer);
   }, []);
@@ -147,7 +197,7 @@ function Dashboard(){
     
         <div className=" row-span-4 md:col-span-12  md:row-span-4 rounded-2xl p-4 shadow-3xl  shadow-[#22333869] bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]   xl:col-span-8 xl:row-span-3 2xl:col-span-5 2xl:row-span-6 xxl:col-span-6">
             <div className="w-full h-full  bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
-                <LineCharFile />
+                <LineCharFile data={lineChartData} />
             </div>
         </div>
         <div className="  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
@@ -155,7 +205,7 @@ function Dashboard(){
         </div>
         <div className="2xl:px-7  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5">
         <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] h-full w-full  flex items-center mr-6  justify-center p-4">
-                   <RadarChartFile/>
+              <RadarChartFile radarchartData={radarchartData || { wins: 0, lose: 0, _wins: 0, _lose: 0 }} />
         </div>
         </div>
         <div className="xl:pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
@@ -164,7 +214,7 @@ function Dashboard(){
             </div>
         </div>
         <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
-            <PieChartFile/>
+            <PieChartFile matches={matches} />
         </div>
     </div>
         </>

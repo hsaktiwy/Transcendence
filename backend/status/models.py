@@ -44,6 +44,8 @@ class ProfileStatus(models.Model):
     total_games = models.IntegerField()
     wins = models.IntegerField()
     lose = models.IntegerField()
+    _wins = models.IntegerField()
+    _lose = models.IntegerField()
     rank = models.IntegerField()
     level = models.FloatField(default=0)
 
