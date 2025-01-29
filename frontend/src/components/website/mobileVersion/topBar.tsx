@@ -22,7 +22,7 @@ import { UserContext } from "@/components/UserContext.tsx";
 import { useParams } from "react-router-dom";
 function TopBar()
 {
-    const {username} = useParams()
+    const {uuid} = useParams()
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");

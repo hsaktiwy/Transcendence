@@ -27,7 +27,7 @@ function SideBarV2(){
                     <img src="/assets/svg/Overview.svg" alt="Home Icon" className="w-full h-full" />
                 </Link>
                 {/* <embed type="image/svg+xml" src="/assets/svg/Vector.svg" className="w-[30px] h-[30px]"></embed> */}
-                <Link to={`/profile/${userContextConsumer?.userData?.login}`} className=" cursor-pointer w-[30px] h-[30px] ">
+                <Link to={`/profile/${userContextConsumer?.userData?.unique_id}`} className=" cursor-pointer w-[30px] h-[30px] ">
                     <FiUser className="w-full h-full text-white/75"/>
                 </Link>
                 <Link to="/chat" className=" cursor-pointer w-[30px] h-[30px] ">

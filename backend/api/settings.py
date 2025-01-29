@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # 'api.utils.JWTAuthHTTPMiddlware',
-    'silk.middleware.SilkyMiddleware',# THIS IS FOR SILK TESTING PURPOSE
+    'silk.middleware.SilkyMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
     
@@ -92,7 +92,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:5173",
-    "http://10.11.7.7:5173",
+    "http://localhost:5173",
     "https://localhost:4444",
     "https://localhost",
 )
@@ -100,7 +100,7 @@ CORS_ORIGIN_WHITELIST = (
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://10.11.7.7:5173",
+    "http://localhost:5173",
     "https://localhost:4444",
     "https://localhost",
 ]
@@ -113,7 +113,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:6379",
     "http://10.13.4.11:5173",
-    "http://10.11.7.7:5173",
+    "http://localhost:5173",
     "http://172.21.0.3:5173",
     "https://localhost:4444",
     "https://localhost",

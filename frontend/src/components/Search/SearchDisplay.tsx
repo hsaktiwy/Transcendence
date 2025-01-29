@@ -3,6 +3,7 @@
 import { Link } from 'react-router-dom'
 interface props
 {
+    unique_id: string,
     login : string,
     firstName : string,
     lastName : string,
@@ -10,12 +11,12 @@ interface props
     lastElm: boolean
 }
 
-function SearchDisplay({login, firstName, lastName, profile_pic, lastElm}:props)
+function SearchDisplay({unique_id,login, firstName, lastName, profile_pic, lastElm}:props)
 {
-    console.log("in searchDisplay",  login)
+    console.log("in searchDisplay",  unique_id)
     return (
         <>
-            <Link to={`/profile/${login}`}>
+            <Link to={`/profile/${unique_id}`}>
                 <div className={`font-poppins ${lastElm === false && 'border-b-[1px] border-[#5E97A9]/85'} min-h-[100px] `}>
                     <div className="px-2 sm:px-4 py-4 flex gap-8 items-center  justify-center  flex-wrap ">
                         <div className="  w-[60px] h-[60px] relative ">

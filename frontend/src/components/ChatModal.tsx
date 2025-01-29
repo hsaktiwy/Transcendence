@@ -17,13 +17,13 @@ function ChatModal(){
             {
                 const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": (userContext?.action?.type == ActionType.UNFRIEND ? "unfriend" :'none'))
                 const req = {
-                    url: "friendship/"+action+"/"+userContext?.action?.Target_User_Login,
+                    url: "friendship/"+action+"/"+userContext?.action?.Target_User_UniqueId,
                     method: "GET",
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
                 console.log(resp)
-                userContext.setAction({type:ActionType.NONE, Target_User_Login:undefined,ConversationChannel:undefined})
+                userContext.setAction({type:ActionType.NONE, Target_User_UniqueId:undefined,ConversationChannel:undefined})
                 chatContext.setOpenModal(false)
                 // LOOP OVER ALL THE USERS and get the user that hold our messages and then change the status to like 1
                 if (action == 'block')

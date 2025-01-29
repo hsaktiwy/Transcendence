@@ -14,6 +14,7 @@ import { NotificationPropreties, UserContext } from "./UserContext";
 import { useLocation } from "react-router-dom";
 import { ProfileDataInterface } from "@/utils/UserDataInterface";
 import mailman from "@/utils/AxiosFetcher";
+import { Underline } from "lucide-react";
 
 function ChatSection(){
     const location = useLocation()
@@ -32,32 +33,36 @@ function ChatSection(){
     if (!SocketContext)
         throw new Error('error')
     const {AddChannel,RemoveChannel, socket} = SocketContext
-    useEffect(()=>{
+    const updateConvsState = () =>{
         if (convs && convs.length){
             const {friends} = userContextConsumer
-            if (friends.length)
-            {
-                let tmpConvs: Conversation[] = []
-                for(let i = 0; i < convs.length; i++){
-                    let currentConv = convs[i]
-                    const elm = currentConv.user2 as ProfileDataInterface
-                    const friendInList = friends.find(friend => friend.login === elm.login)
-                    if (friendInList)
-                    {
-                        const newFriendState: User = {...friendInList, id: currentConv.user2.id} 
-                        currentConv = {...currentConv, user2: newFriendState}
-                        tmpConvs.push(currentConv)
-                    }
-                    else{
-                        const notFriend = currentConv.user2
-                        notFriend.state = 'none'
-                        tmpConvs.push({...currentConv, user2: notFriend})
-                    }
+            let tmpConvs: Conversation[] = []
+            for(let i = 0; i < convs.length; i++){
+                let currentConv = convs[i]
+                const elm = currentConv.user2 as ProfileDataInterface
+                let friendInList:ProfileDataInterface | undefined = undefined
+                if (friends.length)
+                     friendInList = friends.find(friend => friend.login === elm.login)
+                if (friendInList != undefined)
+                {
+                    const newFriendState: User = {...friendInList, id: currentConv.user2.id} 
+                    currentConv = {...currentConv, user2: newFriendState}
+                    tmpConvs.push(currentConv)
                 }
-                setConvs(tmpConvs)
+                else{
+                    const notFriend = currentConv.user2
+                    notFriend.state = 'none'
+                    tmpConvs.push({...currentConv, user2: notFriend})
+                }
             }
+            console.log("tmpppppp ====== ?>>>>> ", tmpConvs)
+            setConvs(tmpConvs)
         }
-    }, userContextConsumer.friends)
+    }
+    useEffect(()=>{
+        console.log("dada")
+        updateConvsState()
+    }, [userContextConsumer.friends])
     const UpdateConvs = (data:any)=>
     {
         console.log('Update convs ...')
@@ -123,10 +128,11 @@ function ChatSection(){
                 get_conversation(channel_id)
         }
     }
-
-    useEffect(()=>{
-        console.log('3afake : ',convs)
-    },[convs])
+    useEffect(() =>{
+        if (loading == false)
+            updateConvsState()
+    },[loading])
+  
     useEffect(()=>
     {
         console.log('hekkkk')
@@ -142,9 +148,10 @@ function ChatSection(){
         }
         else
             init_conv(setLoading,setActive, setConvs, channelId);
-        console.log("wala ", channelId)
-        // create a function that will update the general data
+        console.log("wala ", convs)
 
+        // create a function that will update the general data
+        // updateConvsState()
         return () => {
             // Remove the CHAT call back function when we exist the chat section
             AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)

@@ -39,7 +39,7 @@ function Lobby(){
                 <button onClick={() => {navigate('/game/RemoteGame')}} > <em>Play Now</em></button>
             <button onClick={() => {navigate('/game/Matchmaking')}} > <em>Matchmaking</em></button> */}
                 <div className="text-wrapper">SELECT MODE</div>
-                <Frame 
+                <Frame
                     text="Play Locally"
                     default_icon='/GamePub/bottouns/default_offline.svg'
                     hovered_icon='/GamePub/bottouns/hovered_offline.svg'

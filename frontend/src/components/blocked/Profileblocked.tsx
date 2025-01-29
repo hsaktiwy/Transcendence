@@ -23,7 +23,7 @@ function ProfileLocked() {
       throw new Error('error')
  const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
 const [isLoading, setIsLoading] = useState(true);
- const {username} = useParams();
+ const {uuid} = useParams();
  const userContextConsumer = useContext(UserContext)
  if (!userContextConsumer)
   throw new Error("userContext must be used within a UserProvider");
@@ -32,62 +32,42 @@ const [isLoading, setIsLoading] = useState(true);
    try {
 
     // check if the user is already existing friend
-    const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
+    const user = userContextConsumer.friends.filter(friend=>(friend.login === uuid)); 
     if (user.length === 0)
     {
       const req = {
-        url: `/api/users/${username}/`,
+        url: `/api/users/${uuid}/`,
         method: 'GET',
       };
       const resp = await mailman(req);
-      const {
-        login,
-        email,
-        firstName,
-        lastName,
-        state,
-        last_visit,
-        profile_pic,
-        CoverProfile,
-      } = resp.data;
-
-      setProfileData({
-        login,
-        email,
-        firstName,
-        lastName,
-        state,
-        last_visit,
-        profile_pic,
-        CoverProfile,
-      });
+      const respData : ProfileDataInterface = resp.data
+      setProfileData(respData);
     }
     else
     {
       setProfileData(user[0])
-      await getChannelId()
     }
   } catch (err) {
     console.error(err);
   }
 };
 
-const getChannelId = async () =>{
-  try{
-      const req = {
-          url: "/chat/conversation/get_channel/"+username+'/',
-          method: 'GET'
-      }
-      const resp = await mailman(req)
-      const id:number = resp.data.channel_id;
-      if (id)
-          setChannelId(id);
-  }
-  catch (error){
+// const getChannelId = async () =>{
+//   try{
+//       const req = {
+//           url: "/chat/conversation/get_channel/"+uuid+'/',
+//           method: 'GET'
+//       }
+//       const resp = await mailman(req)
+//       const id:number = resp.data.channel_id;
+//       if (id)
+//           setChannelId(id);
+//   }
+//   catch (error){
 
 
-  }
-}
+//   }
+// }
 
 // useEffect to handle the loading state
 useEffect(() => {
@@ -101,17 +81,17 @@ useEffect(() => {
     // Cleanup timer
     return () => clearTimeout(timer);
   });
-}, [username]); 
+}, [uuid]); 
 
 
  useEffect(() =>{
-  if (userContextConsumer?.userData?.login !== username){
+  if (userContextConsumer?.userData?.login !== uuid){
       fetchUserData()
   }
   else{
       setProfileData(userContextConsumer?.userData)
   }
- },[username])
+ },[uuid])
   console.log(profileData);
   return (
     <div className="animate-pulse">
@@ -126,13 +106,13 @@ useEffect(() => {
                                                     <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
                                                     <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
                                                 </div>
-                                                {userContextConsumer?.userData?.login === username ? (
+                                                {userContextConsumer?.userData?.login === uuid ? (
                                                     <Link to="/settings"> 
                                                         <button className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none">
                                                         Edit profile</button>
                                                     </Link> 
                                                     ) : (
-                                                        <ConnectButton channel_id={channel_id} user={profileData}/> 
+                                                        <ConnectButton user={profileData}/> 
                                                     )}
                                     </div>
           </div>

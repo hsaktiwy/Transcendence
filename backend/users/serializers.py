@@ -7,8 +7,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyUser
-        fields = ['login', 'email', 'firstName', 'lastName', 'password', 'state', 'last_visit', 'profile_pic', 'CoverProfile', 'oauth', 'two_factor_auth']
+        fields = ['unique_id' ,'login', 'email', 'firstName', 'lastName', 'password', 'state', 'last_visit', 'profile_pic', 'CoverProfile', 'oauth', 'two_factor_auth']
         extra_kwargs = {
+            'unique_id': {'required': False},
             'login': {'required': False},
             'email': {'required': False},
             'firstName': {'required': False},
@@ -45,12 +46,12 @@ class UserSerializer(serializers.ModelSerializer):
 class PublicUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
-        fields = ['login', 'email', 'firstName', 'lastName', 'state', 'last_visit', 'profile_pic', 'CoverProfile']
+        fields = ['unique_id','login', 'email', 'firstName', 'lastName', 'state', 'last_visit', 'profile_pic', 'CoverProfile']
     
 class SearchUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
-        fields = ['login', 'firstName', 'lastName', 'profile_pic']
+        fields = ['unique_id','login', 'firstName', 'lastName', 'profile_pic']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=6, write_only=True)
