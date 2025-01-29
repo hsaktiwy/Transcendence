@@ -36,7 +36,7 @@ const chartConfig = {
 
 export function LineCharFile() {
   return (
-    <Card className="border-none shadow-none h-full w-full">
+    <Card className="border-none h-full w-full">
         <CardHeader className="p-2">
         <CardTitle>Line Chart - Linear</CardTitle>
         <CardDescription>January - June 2024</CardDescription>

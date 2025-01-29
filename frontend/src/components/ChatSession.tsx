@@ -46,8 +46,9 @@ function ChatSession(){
     const BlockStatusCheck = async ()=>
     {
         try{
+            console.log("unique untell i die :",chatContext.active?.user2.unique_id)
             const req = {
-                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.login,
+                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.unique_id,
                 method: 'GET',
                 withCredentials:true,
             }
@@ -105,7 +106,7 @@ function ChatSession(){
         {
             if (socket?.current && socket?.current.readyState === WebSocket.OPEN)
             {
-                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.login}` , message : message, channel_id: chatContext.active?.channelId})
+                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.unique_id}` , message : message, channel_id: chatContext.active?.channelId})
                 socket?.current.send(holder)
                 holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
                 socket?.current.send(holder)
@@ -122,7 +123,7 @@ function ChatSession(){
         {
             if (socket?.current && socket?.current.readyState === WebSocket.OPEN)
             {
-                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.login}` , message : message, channel_id: chatContext.active?.channelId})
+                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.unique_id}` , message : message, channel_id: chatContext.active?.channelId})
                 socket?.current.send(holder)
                 holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
                 socket?.current.send(holder)
@@ -341,7 +342,7 @@ function ChatSession(){
                                         <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer " onClick={() =>{
                                                 chatContext.setOpenModal(true)
                                                 chatContext.setModalMessage("unfriend this user")
-                                                const action:Action = {type: ActionType.UNFRIEND, Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                                                const action:Action = {type: ActionType.UNFRIEND, Target_User_UniqueId: chatContext.active?.user2.unique_id, ConversationChannel:chatContext.active?.channelId};
                                                 userContext?.setAction(action)
                                                 }}>
                                                 <span className="inline-block text-xl"><IoPersonRemoveOutline /></span>
@@ -354,7 +355,7 @@ function ChatSession(){
                                             () => {
                                                 chatContext.setOpenModal(true)
                                                 chatContext.setModalMessage("block this user")
-                                                const action:Action = {type: (Status=='Block' ? ActionType.BLOCK : ActionType.UNBLOCK), Target_User_Login: chatContext.active?.user2.login, ConversationChannel:chatContext.active?.channelId};
+                                                const action:Action = {type: (Status=='Block' ? ActionType.BLOCK : ActionType.UNBLOCK), Target_User_UniqueId: chatContext.active?.user2.unique_id, ConversationChannel:chatContext.active?.channelId};
                                                 userContext?.setAction(action)
                                             }
                                         }>

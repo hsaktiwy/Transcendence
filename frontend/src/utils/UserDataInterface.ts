@@ -1,4 +1,5 @@
 export interface UserDataInterface {
+    unique_id:string;
     login:string;
     email:string;
     firstName:string;
@@ -10,6 +11,7 @@ export interface UserDataInterface {
     CoverProfile: string;
 }
 export interface ProfileDataInterface {
+    unique_id:string;
     login:string;
     email:string;
     firstName:string;

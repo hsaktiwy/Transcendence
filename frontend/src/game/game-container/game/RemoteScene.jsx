@@ -52,7 +52,7 @@ const RemoteGame = () => {
     useEffect(() => {
         
         // Connect to the game server using those values
-        const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${matchData.roomName}/?user_id=${matchData.myId}`);
+        const gameSocket = new WebSocket(`ws://localhost:8000/ws/ping-pong/room/${matchData.roomName}/?user_id=${matchData.myId}`);
         // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${matchData.roomName}/?user_id=${matchData.myId}`);
         
         gameSocket.onopen = () => {
@@ -765,10 +765,7 @@ const RemoteGame = () => {
     return (
         <>
             <LoadingScreen show={loading} />
-            <canvas style={{zIndex:97, position: 'absolute',top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%'}} ref={canvasRef}></canvas>
+            <canvas ref={canvasRef}></canvas>
             <Hud/>
             <Scoreboard playerScore={playerScore} aiScore={aiScore}/>
         </>

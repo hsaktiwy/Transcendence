@@ -80,22 +80,22 @@ def AcceptFriendRequest(request, id):
 		return Response({'Error': 'Something went wrong?' + str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def BlockUser(request, _login):
+def BlockUser(request, unique_id):
 	try:
-		blocked_user = MyUser.objects.get(login=_login)
+		blocked_user = MyUser.objects.get(unique_id=unique_id)
 		myuser = request.user
 		list, create = BlockList.objects.get_or_create(user=myuser)
 		check = list.block_users.filter(id=blocked_user.id).exists()
 		if (not check):
 			list.block_users.add(blocked_user)
-		return Response({'message': 'User '+_login+' in the Block List', 'status': 'blocked'}, status=status.HTTP_200_OK)
+		return Response({'message': 'User '+unique_id+' in the Block List', 'status': 'blocked'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def UnBlockUser(request, _login):
+def UnBlockUser(request, unique_id):
 	try:
-		blocked_user = MyUser.objects.get(login=_login)
+		blocked_user = MyUser.objects.get(unique_id=unique_id)
 		user = request.user
 		list = BlockList.objects.get(user=user)
 		list.block_users.remove(blocked_user)
@@ -105,31 +105,31 @@ def UnBlockUser(request, _login):
 
 
 @api_view(['GET'])
-def UnFriendUser(request, _login):
+def UnFriendUser(request, unique_id):
 	try:
 		# intented solution you can postman this even whne you are blocked (my logic my rules contact hsaktiwy )
-		friend = MyUser.objects.get(login=_login)
+		friend = MyUser.objects.get(unique_id=unique_id)
 		myuser = request.user
 		friendship = FriendShip.objects.filter((Q(user=myuser) & Q(friend=friend)) | (Q(user=friend) & Q(friend=myuser)))
 		f_request = FriendRequest.objects.filter((Q(sender=myuser) & Q(receiver=friend)) | (Q(sender=friend) & Q(receiver=myuser)))
 		if len(friendship) > 0:
 			friendship.first().delete()
 		else:
-			return Response({'mesasge': 'No friendship was found with '+_login+"!"}, status=status.HTTP_200_OK)
+			return Response({'mesasge': 'No friendship was found with '+unique_id+"!"}, status=status.HTTP_200_OK)
 		if len(f_request) > 0:
 			f_request.first().delete()
 		return Response({'mesasge': 'Done'}, status=status.HTTP_200_OK)
 	except MyUser.DoesNotExist:
-		return Response({'mesasge': f'{_login} does not exist'}, status=404)
+		return Response({'mesasge': f'{unique_id} does not exist'}, status=404)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
-def isBlocked(request, _login):
+def isBlocked(request, unique_id):
 	try:
 		user = request.user
-		otheruser = MyUser.objects.get(login=_login)
+		otheruser = MyUser.objects.get(unique_id=unique_id)
 		blocklist = BlockList.objects.get(user=user)
 		isblocked = blocklist.block_users.filter(id=otheruser.id).exists()
 		if isblocked:
@@ -140,10 +140,10 @@ def isBlocked(request, _login):
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def isBlockedRelationship(request, _login):
+def isBlockedRelationship(request, uuid):
 	try:
 		user = request.user
-		otheruser = MyUser.objects.get(login=_login)
+		otheruser = MyUser.objects.get(unique_id=uuid)
 		blocklist = BlockList.objects.get(user=user)
 		isblocked = blocklist.block_users.filter(id=otheruser.id).exists()
 		if isblocked:
@@ -158,27 +158,27 @@ def isBlockedRelationship(request, _login):
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def defineStatusOfBlocker(request, _login):
+def defineStatusOfBlocker(request, uuid):
 	try:
 		user = request.user
-		otheruser = MyUser.objects.get(login=_login)
+		otheruser = MyUser.objects.get(unique_id=uuid)
 		blocklist = BlockList.objects.get(user=user)  #did i block him
 		isblocked = blocklist.block_users.filter(id=otheruser.id).exists()
 		if isblocked:
-			return Response({'status':True, 'blocker' : user.login, 'blocked' : _login}, status = 200)
+			return Response({'status':True, 'blocker' : user.unique_id, 'blocked' : uuid}, status = 200)
 		blocklist2 = BlockList.objects.get(user=otheruser) #did he block me 
 		isblocked = blocklist2.block_users.filter(id = user.id).exists()
 		if isblocked:
-			return Response({'status':True, 'blocker' : _login, 'blocked' : user.login}, status = 200)
+			return Response({'status':True, 'blocker' : uuid, 'blocked' : user.unique_id}, status = 200)
 		return Response({'status': False}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def isFriend(request, _login):
+def isFriend(request, uuid):
 	try:
 		user = request.user
-		otheruser = MyUser.objects.get(login=_login)
+		otheruser = MyUser.objects.get(unique_id=uuid)
 		friendship_exists = FriendShip.objects.filter(Q(user=user, friend=otheruser) | Q(user=otheruser, friend=user)).exists()
 		if friendship_exists:
 			return Response({'status': True}, status=status.HTTP_200_OK)
@@ -188,10 +188,10 @@ def isFriend(request, _login):
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def FriendRequestStatus(request, _login):
+def FriendRequestStatus(request, uuid):
 	try:
 		myuser = request.user
-		friend = MyUser.objects.get(login=_login)
+		friend = MyUser.objects.get(unique_id=uuid)
 		friendrequest = FriendRequest.objects.filter((Q(sender=myuser) & Q(receiver=friend)) | (Q(sender=friend) & Q(receiver=myuser)))
 		if len(friendrequest) > 0:
 			return Response({'status': friendrequest.first().status, 'sender' : friendrequest.first().sender == myuser, 'friend_req_id' : friendrequest.first().id}, status=status.HTTP_200_OK)
@@ -248,9 +248,17 @@ def FriendsList(request):
 		list_s = FriendRequest.objects.filter(Q(sender=user, status='accepted'))
 		array = []
 		for s in list_s:
+			blocked = BlockList.objects.get(user=s.receiver).block_users.filter(id=user.id).exists()
+			blocker = BlockList.objects.get(user=user).block_users.filter(id=s.receiver.id).exists()
+			if blocked or blocker:
+				continue
 			array.append(s.receiver)
 		list_r = FriendRequest.objects.filter(Q(receiver=user, status='accepted'))
 		for s in list_r:
+			blocked = BlockList.objects.get(user=s.receiver).block_users.filter(id=user.id).exists()
+			blocker = BlockList.objects.get(user=user).block_users.filter(id=s.receiver.id).exists()
+			if blocker or blocked:
+				continue
 			array.append(s.sender)
 		serialized_data = PublicUserSerializer(array, many=True)
 		return Response(serialized_data.data, status=status.HTTP_200_OK)

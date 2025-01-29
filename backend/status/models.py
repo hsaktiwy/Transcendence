@@ -43,7 +43,7 @@ class ProfileStatus(models.Model):
     id_user_fk =  models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     total_games = models.IntegerField()
     wins = models.IntegerField()
-    lose = models.IntegerField()
+    lostes = models.IntegerField()
     rank = models.IntegerField()
     level = models.FloatField(default=0)
 

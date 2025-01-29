@@ -33,7 +33,7 @@ function ChatFriendInfo(){
     {
         try{
             const req = {
-                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.login,
+                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.unique_id,
                 method: 'GET',
                 withCredentials:true,
             }
@@ -81,7 +81,7 @@ function ChatFriendInfo(){
                         </div>
                     </div>
                     <div className="flex gap-8 mt-4 flex-wrap items-center justify-center ">
-                        <Link to={`/profile/${chatContext.active?.user2.login}`} className="cursor-pointer  hover:scale-110 duration-150 px-4  py-2 bg-black/30 rounded-xl  w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center" >
+                        <Link to={`/profile/${chatContext.active?.user2.unique_id}`} className="cursor-pointer  hover:scale-110 duration-150 px-4  py-2 bg-black/30 rounded-xl  w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center" >
                             <span className="text-xl flex items-center gap-1">
                                 <FiUser/>
                                 <span className="text-white/70 text-sm">Profile</span>

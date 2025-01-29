@@ -6,5 +6,5 @@ import Chat from './components/Chat.tsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <App />
+    <App className="border" />
 )
