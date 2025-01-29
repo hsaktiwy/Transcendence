@@ -145,6 +145,14 @@
     bottom: -90%;
   }
 }
+@keyframes progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-progress {
+  animation: progress linear forwards;
+}
 /* @layer base {
   * {
     @apply border-border;
