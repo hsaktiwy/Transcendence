@@ -13,6 +13,7 @@ import mailman from "../../utils/AxiosFetcher";
 import { PiMaskSadLight } from "react-icons/pi";
 import { Loading__ } from "@/auth/Login";
 import { RiInbox2Line } from "react-icons/ri";
+import { toast } from "react-toastify";
 interface prop {
     display: boolean
 }
@@ -141,7 +142,23 @@ const NotificationDropDown = (info: prop) =>{
         return words[0];
     }
     let linkProfile = ''
-
+    const removeNotification = async (notification: NotificationPropreties) =>{
+        try{
+                const req = {
+                    url: `/profile/notification/${notification.id}/`,
+                    method: 'DELETE',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req)
+                if (resp.status === 204)
+                    userContextConsumer.setnotifications(prev => prev.filter(notif=>notif.id !== notification.id))
+                
+            
+        }
+        catch(e){
+            toast.error("Error occured")
+        }
+    }
     return(
         <ul
       
@@ -155,13 +172,15 @@ const NotificationDropDown = (info: prop) =>{
                         
                         linkProfile = '/';
                         if(item.type === 'friendship')
-                            linkProfile = `/profile/${item.sender.login}`;
+                            linkProfile = `/profile/${item.sender.unique_id}`;
                         return (
                             
                          
                                 <Link to={`${linkProfile}`}
                                 className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
-                                key={index + 1}
+                                key={index + 1} onClick={() =>{
+                                    removeNotification(item)
+                                }}
                                 >
                                     
                                     <img

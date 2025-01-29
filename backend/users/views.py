@@ -169,14 +169,13 @@ class GetUsers(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class getPublicUser(APIView):
-    permission_classes = [AllowAny]
     def get(self, request,*args, **kwargs):
         identifier = self.kwargs.get('identifier')
         try:
             if identifier.isdigit():
                 user = MyUser.objects.get(pk=identifier)
             else:
-                user = MyUser.objects.get(login=identifier)
+                user = MyUser.objects.get(unique_id=identifier)
         except MyUser.DoesNotExist:
                 return Response({
                     'message': 'User not found'

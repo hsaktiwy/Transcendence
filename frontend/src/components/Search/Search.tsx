@@ -8,6 +8,7 @@ interface props{
 
 interface User
 {
+    unique_id: string,
     login : string,
     firstName : string,
     lastName : string,
@@ -51,6 +52,7 @@ function Search(info:props) {
 
                             <SearchDisplay
                             key={index+1}
+                            unique_id={user.unique_id}
                             login={user.login}
                             firstName={user.firstName}
                             lastName={user.lastName}

@@ -30,11 +30,12 @@ const FormInput = (prop: FormInputPropInterface)=>{
     const [error, setError] = useState<boolean>(false)
 
     const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        console.log(e.target.name)
         if (name === 'password')
             setPassFocus(false)
         else if (name === 'password2')
             setPassFocus2(false)
-        if (e.target.name !== 'password2'){
+        if (name !== 'password2'){
             const inputRegex = new RegExp(pattern)
             if(!inputRegex.test(e.target.value.trim()) )
             {
@@ -56,6 +57,7 @@ const FormInput = (prop: FormInputPropInterface)=>{
             }
         }
         else {
+            console.log(e.target.value)
             if(inputsData && e.target.value !== inputsData['password'] ){
                 setError(true)
                 if (name && setInputError && inputsError)
@@ -94,6 +96,7 @@ const FormInput = (prop: FormInputPropInterface)=>{
                 onChange={onChange}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                name={name}
                 className={` bg-transparent w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border ${error ? 'border-red-500' : 'border-slate-200'} focus:border-slate-900 focus:bg-slate-200 focus:text-black`}
                 />
             {

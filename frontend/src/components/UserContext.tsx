@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
-import { Action, ActionType, MiniNotification} from "@/utils/interfaces";
+import { Action, ActionType, friendship, MiniNotification} from "@/utils/interfaces";
 import { toast } from "react-toastify";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
@@ -67,8 +67,6 @@ interface UserContextInterface{
     setUserMatchHistory: React.Dispatch<React.SetStateAction<MatchHistoryDataInterface[]> >;
     userRank: rankInterface[];
     setUserRank:React.Dispatch<React.SetStateAction<rankInterface[]> >;
-    // matches: LoseWins | undefined;
-    // setMatches : React.Dispatch<React.SetStateAction<LoseWins | undefined>>;
 
     
 }
@@ -89,13 +87,11 @@ interface MatchHistoryDataInterface{
     score_p1:number;
     score_p2:number;
 }
-
 interface ProfileRank
-{  
+{
     rank:number;
     level:number;
 }
-
 interface rankInterface
 {
     profile:ProfileRank;
@@ -125,8 +121,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
     const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     const [userRank, setUserRank] = useState<rankInterface[]>([]);
-    // const [matches, setMatches] = useState<LoseWins | undefined>()
-    
+    const [convsUpdate, setConvsUpdate] = useState<boolean>(false)
+    const location = useLocation()
 
   
     const PureNotification = (data:MiniNotification) =>
@@ -146,7 +142,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
            const resp = await mailman(req);
            if(resp.data.profiles)
             setUserRank(resp.data.profiles);
-           console.log('print data  hre  ->>>', resp.data)
         }
         catch (err){
             console.error(" ",err)
@@ -171,29 +166,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             }
             const resp = await mailman(req)
 
-            const {
-                login,
-                email,
-                firstName,
-                lastName,
-                state,
-                last_visit,
-                profile_pic,
-                CoverProfile,
-                two_factor_auth,
-
-            } = resp.data
-            setUserData({
-                login,
-                email,
-                firstName,
-                lastName,
-                state,
-                last_visit,
-                profile_pic,
-                CoverProfile,
-                two_factor_auth
-            })
+            const respData: UserDataInterface = resp.data
+            setUserData(respData)
             console.log('hana->>',resp.data)
             setProfilePicChanged(false)
             
@@ -242,6 +216,16 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             console.error("dddddd======????",err)
         }
     }
+    const getNewContent = (content: string, username: string) =>{
+        const space = " "
+        const index = content.indexOf(space)
+        if (index !== -1){
+            const contentSubStr = content.slice(index)
+            return `${username} ${contentSubStr}`
+        }
+        return content
+
+    }
     const getNotificationData = async (notifications: NotificationPropreties[]) =>{
         const tmp_senders: ProfileDataInterface[] = [];
         for(const notif of notifications){
@@ -249,24 +233,27 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             if (notif.type === 'message' || notif.type === 'friendship' || notif.type === 'gameInvitation'){
                 const index = notif.content.indexOf(str)
                 const sender = notif.content.slice(0 , index)
-                const sender_occurence = tmp_senders.filter((item)=>item.login === sender)
+                const sender_occurence = tmp_senders.filter((item)=>item.unique_id === sender)
                 if (sender_occurence.length === 0)
-                {
-                    try{
-                        const req = {
-                            url: `/api/users/${sender}/`,
-                            method: 'GET',
-                        }
+                    {
+                        try{
+                            const req = {
+                                url: `/api/users/${sender}/`,
+                                method: 'GET',
+                            }
                         const resp = await mailman(req)
                         notif.sender = resp.data
+                        notif.content = getNewContent(notif.content, notif.sender.login)
                         tmp_senders.push(notif.sender)
                     }
                     catch (err){
                         console.error("error while fetching sender data ======????",err)
                     }
                 }
-                else
+                else{
+                    notif.content = getNewContent(notif.content, sender_occurence[0].login)
                     notif.sender = sender_occurence[0]
+                }
 
             }
         }
@@ -322,34 +309,17 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             const resp = await mailman(req)
             const BlockList: ProfileDataInterface[] = resp.data
             setBlockList(BlockList)
+            console.log(resp.data)
 
         }
         catch (err){
             console.error("dddddd======????",err)
         }
 
-    }
-    // const fetchMatches = async () =>
-    // {
-    //     try{
-    //         if (userData?.login)
-    //         {
-    //             const req = {
-    //                 url: `/profile/get_win_lose/${userData?.login}/`,
-    //                 method: 'GET',
-    //                 withCredentials: true,
-    //             }
-    //             const resp = await mailman(req);
-    //             console.log('print win and lose : \n', resp.data, userData?.login);
-    //             setMatches(resp.data);
-    //         }
-    //     }
-    //     catch (err){
-    //         console.error("dddddd======????",err)
-    //     }
-    // }
+}
     const notificationHandler = (data: NotificationPropreties) => {
 
+        data.content = getNewContent(data.content, data.sender.login)
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
         if (data.type === 'friendship')
@@ -361,8 +331,17 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
             
     }
+    const updateFriendList = (user: ProfileDataInterface) =>{
+        setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
+    }
+    const updateFriendShip = (info: friendship) =>{
+        if(info.status!== undefined && info.status === false)
+            setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
+        else if (info.status!== undefined && info.status === true)
+            setFriends(prev => [...prev, info.sender])
+    }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
-        if (data.sender.login === userData?.login && data.state === 'offline'){
+        if (data.sender.unique_id === userData?.unique_id && data.state === 'offline'){
             AuthContextConsummer?.setLoggedIn(false)
             Navigate('/home')
         }
@@ -370,16 +349,21 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         console.log(friends)
         data.sender.state = data.state
         const friend  = data.sender as ProfileDataInterface
-        //friend.state = data.state
+        friend.state = data.state
         const tmpFriends = friends.filter(friendElm=> friend.login !== friendElm.login)
         tmpFriends.push(friend)
         setFriends(tmpFriends)
     }
+    useEffect(()=>{
+        console.log('shabeeek ',friends)
+    }, [friends])
     useEffect(() =>{
         console.log(location.pathname)
         if (ready)
         {       
             SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
+            SocketContext.AddChannel('UPDATE_FRIEND_LIST', updateFriendList)
+            SocketContext.AddChannel('UPDATE_FRIENDSHIP', updateFriendShip)
             SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
             if (location.pathname !== '/chat/' && location.pathname !== '/chat')
                 SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
@@ -393,6 +377,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         }
         return () => {
+            SocketContext.RemoveChannel('UPDATE_FRIEND_LIST')
+            SocketContext.RemoveChannel('UPDATE_FRIENDSHIP')
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')
             SocketContext.RemoveChannel('NOTIFICATION_ACCEPT_FRIEND')
             SocketContext.RemoveChannel('NOTIFICATION_MESSAGE')
@@ -411,7 +397,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const ajami = async() =>
     {
         await fetchUserData()
-        // await fetchMatches()
         await fetchFriends()
         await fetchReceivedFriendRequest()
         await fetchSentFriendRequest()
@@ -433,7 +418,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank, /*matches, setMatches*/}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {ready  ? children : <LoadingIndecator/>}
             {/* { children } */}

@@ -35,10 +35,10 @@ class ProfileStatusAPICreate(generics.ListCreateAPIView):
 
 
 @api_view(['GET'])
-def get_Win_Lose(request,_login):
+def get_Win_Lose(request,uuid):
     try:
         # euser = request.user
-        user = MyUser.objects.get(login=_login)
+        user = MyUser.objects.get(unique_id=uuid)
         profile = ProfileStatus.objects.get(id_user_fk=user)
         return Response({'wins' : profile.wins, 'lose' : profile.lose }, status=200)
     except:
@@ -74,10 +74,10 @@ def get_top_rank(request):
           return Response({'error': str(e)}, status = 400)
 
 @api_view(['GET'])
-def get_line_chart(request, _login):
+def get_line_chart(request, uuid):
     try:
         # Fetch the user based on the login provided
-        user = MyUser.objects.get(login=_login)
+        user = MyUser.objects.get(unique_id=uuid)
 
         # Get the current date and time
         now = timezone.now()
@@ -116,6 +116,6 @@ def get_line_chart(request, _login):
         return Response(data, status=200)
 
     except MyUser.DoesNotExist:
-        return Response({'error': f"User with login '{_login}' does not exist."}, status=404)
+        return Response({'error': f"User with uuid '{uuid}' does not exist."}, status=404)
     except Exception as e:
         return Response({'error': str(e)}, status=400)

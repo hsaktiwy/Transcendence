@@ -224,13 +224,16 @@ def get_conversation(request, channelId, packetSize):
 		return  Response({'Error' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def Get_channel_id(request, login):
+def Get_channel_id(request, uuid):
 	try:
-		if len(login) > 0:
+		if len(uuid) > 0:
 			user = request.user
-			friend = MyUser.objects.get(login=login)
-			channel = Channel.objects.filter(users=user).filter(users=friend).first()
-			return Response({'channel_id': channel.id}, status=200)
+			friend = MyUser.objects.get(unique_id=uuid)
+			channel = Channel.objects.filter(users=user).filter(users=friend)
+			if len(channel) > 0:
+				return Response({'channel_id': channel[0].id}, status=200)
+			else:
+				return  Response({'Error' : " Channel doesn't exist!"}, status=404)
 		else:
 			return  Response({'message' : "noting"}, status=status.HTTP_400_BAD_REQUEST)
 	except Channel.DoesNotExist as e:

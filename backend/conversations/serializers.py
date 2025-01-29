@@ -38,7 +38,7 @@ class ChannelSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = MyUser
-		fields = ['id','login', 'email', 'firstName', 'lastName', 'state', 'last_visit', 'profile_pic', 'CoverProfile']
+		fields = ['id', 'unique_id' ,'login', 'email', 'firstName', 'lastName', 'state', 'last_visit', 'profile_pic', 'CoverProfile']
 
 class MessageSerializer2(serializers.ModelSerializer):
 	sender = UserSerializer()

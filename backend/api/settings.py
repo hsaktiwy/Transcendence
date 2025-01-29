@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # 'api.utils.JWTAuthHTTPMiddlware',
-    'silk.middleware.SilkyMiddleware',# THIS IS FOR SILK TESTING PURPOSE
+    'silk.middleware.SilkyMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
     

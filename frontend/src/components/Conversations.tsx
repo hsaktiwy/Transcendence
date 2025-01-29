@@ -67,8 +67,8 @@ return(
                                     </div> }
                                         </div>
                                         <div className="flex justify-between items-center w-full ">
-                                            <p className="text-gray-300 text-[12px] xxl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.login === userContextConsumer.userData?.login) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
-                                            <p className="text-white/50">{formatDate2(currentConvData.lastMessage.timestamp)}</p>
+                                            <p className="text-gray-300 text-[12px] xxl:text-base"><span className={`${(currentConvData.lastMessage.sender && currentConvData.lastMessage.sender.unique_id === userContextConsumer.userData?.unique_id) ? 'inline-block' :'hidden'} mr-3`}>You : </span>{(currentConvData.lastMessage.sender && currentConvData.lastMessage?.content.length >= 20) ? currentConvData?.lastMessage?.content.substring(0,20) + "..." : ((currentConvData.lastMessage.sender) ? currentConvData?.lastMessage.content : <span className='text-red-400'>Can't see Data</span>)}</p>
+                                            <p className="text-white/50">{formatDate2(currentConvData.lastMessage.timestamp, true)}</p>
                                         </div>
                                         
                                     </div>

@@ -1,4 +1,5 @@
 import { CallbackType } from "./types";
+import { ProfileDataInterface } from "./UserDataInterface";
 
 export enum ActionType{
     UNFRIEND,
@@ -9,13 +10,14 @@ export enum ActionType{
 
 export interface Action{
     type : ActionType;
-    Target_User_Login: string | undefined;
+    Target_User_UniqueId: string | undefined;
     ConversationChannel: number | undefined;
 }
 
 export interface friendship{
     action:string,
-    sender:string,
+    sender:ProfileDataInterface,
+    status?: boolean
 }
 
 export interface MiniNotification{
