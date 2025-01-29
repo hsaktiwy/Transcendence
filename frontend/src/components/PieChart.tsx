@@ -43,7 +43,7 @@ export function PieChartFile(prop: prop) {
     //   throw new Error("userContext must be used within a UserProvider");
   
     // const {matches} = userContextConsumer;
-
+    console.log('from pie chartt anan here ->>> ', prop);
     const chartData = [
       { browser: "Win", Matches: prop.matches?.wins, fill: "#5E97A9" },
       { browser: "Lose", Matches: prop.matches?.lose, fill: "#303C40" },
@@ -68,7 +68,7 @@ export function PieChartFile(prop: prop) {
   return (
     <Card className=" h-full w-full flex flex-col border-none bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] backdrop-filter backdrop-blur-sm">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart Matches</CardTitle>
+        <CardTitle className="text-2xl">Matches</CardTitle>
     </CardHeader>
       <CardContent className="flex-1  pb-0">
         <ChartContainer

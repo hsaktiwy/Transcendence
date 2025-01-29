@@ -1,6 +1,9 @@
 "use client"
+import React, { useMemo } from "react";
 
+import { LinechartData } from "@/utils/interfaces"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+
 import {
   Card,
   CardContent,
@@ -16,30 +19,59 @@ import {
   
 } from "@/components/ui/chart"
 
-export const description = "A linear line chart"
+export const description = "Win A linear line chart"
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  Wins: {
+    label: "Wins",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig
 
-export function LineCharFile() {
+
+interface LineCharFileProps {
+  data: LinechartData | undefined; // Data passed to the component
+}
+
+
+export function LineCharFile({ data }: LineCharFileProps) {
+  const { chartData, range } = useMemo(() => {
+    if (!data || !data.weekly_match_data) return { chartData: [], range: "" };
+  
+    const sortedData = [...data.weekly_match_data].sort(
+      (a, b) => new Date(a.week_start).getTime() - new Date(b.week_start).getTime()
+    );
+  
+    const firstWeek = sortedData[0];
+    const lastWeek = sortedData[sortedData.length - 1];
+  
+    const firstMonth = new Date(firstWeek.week_start).toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    });
+    const lastMonth = new Date(lastWeek.week_end).toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    });
+  
+    const range = `${firstMonth} - ${lastMonth}`;
+  
+    const chartData = data.weekly_match_data.map((week, index) => ({
+      month: `W ${index + 1}`,
+      Wins: week.match_count, 
+    }));
+  
+    return { chartData, range };
+  }, [data]);
+
+  console.log("Chart Data:", chartData);
+  console.log('m here ', data)
   return (
     <Card className="border-none shadow-none h-full w-full">
         <CardHeader className="p-2">
-        <CardTitle>Line Chart - Linear</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Wins Line Chart - Linear</CardTitle>
+        <CardDescription>{range}</CardDescription>
       </CardHeader>
       <CardContent className="p-4 flex items-center justify-center w-full h-[90%] ">
         <ChartContainer className="w-full md:h-full" config={chartConfig}>
@@ -64,7 +96,7 @@ export function LineCharFile() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="Wins"
               type="linear"
               stroke="#5E97A9"
               strokeWidth={2}

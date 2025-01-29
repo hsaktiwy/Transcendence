@@ -17,6 +17,8 @@ class Command(BaseCommand):
             total_games = random.randint(10, 50)  # Between 10 and 50 games
             wins = random.randint(0, total_games)  # Wins can't exceed total games
             losses = total_games - wins  # Losses calculated based on total games
+            _wins = random.randint(0, total_games)  # Wins can't exceed total games
+            _losses = total_games - _wins  # Losses calculated based on total games
             rank = random.randint(1, 100)  # Random rank between 1 and 100
             level = round(random.uniform(0, 10), 2)  # Level as a float (0 to 10)
 
@@ -27,6 +29,8 @@ class Command(BaseCommand):
                     'total_games': total_games,
                     'wins': wins,
                     'lose': losses,
+                    '_wins': _wins,
+                    '_lose': _losses,
                     'rank': rank,
                     'level': level,
                 },
@@ -35,4 +39,5 @@ class Command(BaseCommand):
             action = "Created" if created else "Updated"
             self.stdout.write(f"{action} ProfileStatus for user {user.login}: "
                               f"Total Games: {total_games}, Wins: {wins}, Losses: {losses}, "
+                              f"_Wins: {_wins}, _Losses: {_losses}"
                               f"Rank: {rank}, Level: {level}")

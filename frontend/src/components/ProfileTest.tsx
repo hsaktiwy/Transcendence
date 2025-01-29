@@ -29,7 +29,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 import { SlLock } from "react-icons/sl";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
-import { LoseWins } from "@/utils/interfaces.ts";
+import { LoseWins, LinechartData, RadarChartInterFace } from "@/utils/interfaces.ts";
 
 // interface LoseWins
 // {
@@ -46,6 +46,9 @@ const ProfileTest  = () =>{
     const [isLoading, setIsLoading] = useState(true);
     const [isblock, setIsbLock] = useState<boolean>(false);
     const [matches, setMatches] = useState<LoseWins | undefined>()
+    const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
+    const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
+    
     
 
    const {username} = useParams();
@@ -79,28 +82,35 @@ const ProfileTest  = () =>{
             }
             const resp = await mailman(req);
             console.log('matches  is here  ma hree : \n', resp.data);
+            const fetchedData: LinechartData = {
+                user: resp.data.user,
+                weekly_match_data: resp.data.weekly_match_data, // This should already be an array
+            };
+            setLineChartData(fetchedData);
+            console.log('hiiii mhere', lineChartData);
             // setMatches(resp.data);
         }
         catch (err){
             console.error("dddddd======????",err)
     }}
 
-   const fetchMatches = async () =>
-    {
-        try{
-            const req = {
-                url: `/profile/get_win_lose/${username}/`,
-                method: 'GET',
-                withCredentials: true,
+    const fetchMatches = async () =>
+        {
+            try{
+                const req = {
+                    url: `/profile/get_win_lose/${username}/`,
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req);
+                console.log('print win and lose mheree pleas : \n', resp.data);
+                setMatches(resp.data);
+                setRadarChartData(resp.data);
             }
-            const resp = await mailman(req);
-            console.log('print win and lose mheree pleas : \n', resp.data);
-            setMatches(resp.data);
+            catch (err){
+                console.error("dddddd======????",err)
+            }
         }
-        catch (err){
-            console.error("dddddd======????",err)
-        }
-    }
    const fetchUserData = async () =>{
     try{
         const user = userContextConsumer.friends.filter(friend=>(friend.login === username)); 
@@ -169,10 +179,11 @@ const ProfileTest  = () =>{
           fetchMatches();
           fetchLineChart();
     }
-    else{
+    else
+    {
+        setIsbLock(false)
         setProfileData(userContextConsumer?.userData)
         setIsLoading(false)
-        // console.
         fetchLineChart();
         fetchMatches();
     }
@@ -180,7 +191,7 @@ const ProfileTest  = () =>{
    useEffect(()=>{
     console.log('-----------------------------------------------------------------------------> reload profile')
    },[])
-    console.log('', )
+
     return(
         <>
             {isLoading ? (
@@ -239,8 +250,8 @@ const ProfileTest  = () =>{
                             <PieChartFile matches={matches}/>
                         </div>
                         <div className="row-span-4 relative md:col-span-12  md:row-span-3 rounded-2xl p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:col-span-8 xl:row-span-4 2xl:col-span-9 xxl:row-span-6 xxl:col-span-6">
-                            <div className="w-full  h-full bg-gradient-to-br from-[#495155] to-[#1b1e1f] flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
-                                <LineCharFile />
+                            <div className="w-full  h-full bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]   flex flex-col justify-center items-center pb-7 pt-4 px-4 rounded-2xl">
+                                <LineCharFile data={lineChartData} />
                             </div>
                             
                         </div>
@@ -250,7 +261,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className="row-span-2  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
                             <div className="  rounded-lg bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] xl:h-96  h-full w-full  flex items-center   justify-center p-4">
-                                <RadarChartFile/>
+                                  <RadarChartFile radarchartData={radarchartData || { wins: 0, lose: 0, _wins: 0, _lose: 0 }} />
                             </div>
                             
                         </div>
