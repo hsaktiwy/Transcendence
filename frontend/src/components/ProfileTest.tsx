@@ -231,7 +231,7 @@ const ProfileTest  = () =>{
                                             <div className=" flex flex-col justify-center  items-center mb-7">
                                                 <h1 className="text-2xl font-semibold xxl:text-3xl">7.5 Level</h1>
                                                 <div className="h-3 w-[100%]  bg-[#444444] rounded-full">
-                                                    <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
+                                                    <div className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"></div>
                                                 </div>
                                             </div>
                                         </div>

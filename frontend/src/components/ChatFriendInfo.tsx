@@ -69,10 +69,10 @@ function ChatFriendInfo(){
     },[userContext.action, chatContext.active])
 
     return(
-        <div className={`  rounded-l-xl lg:rounded-l-none rounded-r-xl border-r-0 lg:border-l-[1px] border-white/20 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
+        <div className={`rounded-l-xl lg:rounded-l-none rounded-r-3xl border-r-0 lg:border-l-[1px] border-white/20 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
             <div className=" bg-black/35  w-full  overflow-auto relative   ">
-                <div id="friend-info-header" className=" m-4 text-[24px] text-white flex justify-between items-center">
+                <div id="friend-info-header" className=" m-4 text-[24px]  text-white flex justify-between items-center">
 
                     <h1 className="text-xl font-semibold">Contact Info</h1>
                     <span className="block text-white cursor-pointer" onClick={() =>{
@@ -114,7 +114,7 @@ function ChatFriendInfo(){
             </div>
             <div className="">
                 <div className="px-5">
-                    <ScrollArea className="p-5 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl w-[434px] overflow-x-auto gap-4 flex">
+                    <ScrollArea className="p-5 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl w-full overflow-x-auto gap-4 flex">
                     <div className=" rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md p-3  h-32 w-32  xxl:h-48 xxl:w-48 ">
                 <div className="h-3/5 ">
                     <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
