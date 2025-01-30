@@ -2,6 +2,8 @@
 
 import { TrendingUp } from "lucide-react"
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
+import { RadarChartInterFace } from "@/utils/interfaces"
+
 
 import {
   Card,
@@ -20,23 +22,30 @@ import {
 
 export const description = "A radar chart"
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 273 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  game: {
+    label: "game",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig
 
-export function RadarChartFile() {
+
+// interface prop{
+//   matches:  RadarChartInterFace | undefined
+// }
+
+export function RadarChartFile(props: { radarchartData: RadarChartInterFace }) {
+  
+  console.log('hiiii from rada chart ->>', props.radarchartData.wins)
+  // console.log('zbii hana  ->>', prop.matches?.wins)
+  // const zbi = 12
+  const chartData = [
+    { matches: "w", game: props.radarchartData.wins},
+    { matches: "Lo", game: props.radarchartData.lose },
+    { matches: "wi", game: props.radarchartData._wins },
+    { matches: "lo", game: props.radarchartData._lose },
+  ]
   return (
     <Card className="border-none bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] w-full   h-full">
       <CardHeader className="items-center pb-4">
@@ -52,10 +61,10 @@ export function RadarChartFile() {
         >
           <RadarChart data={chartData}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <PolarAngleAxis dataKey="month" />
+            <PolarAngleAxis dataKey="matches" />
             <PolarGrid />
             <Radar
-              dataKey="desktop"
+              dataKey="game"
               fill="#5E97A9"
               fillOpacity={0.6}
             />
