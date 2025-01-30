@@ -232,7 +232,7 @@ const ProfileTest  = () =>{
                                                 </div>
                                             </div>
                                         </div>
-                                        <Achievements/>
+                                        <Achievements uuid={uuid}/>
                                     </div>    
                                    
                                 </div>
