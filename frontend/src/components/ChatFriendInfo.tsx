@@ -1,6 +1,6 @@
 import React, { useContext, useState , useEffect} from "react";
 import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
-import { Action, ActionType} from "@/utils/interfaces";
+import { Action, ActionType, RadarChartInterFace} from "@/utils/interfaces";
 import { IoCloseSharp } from "react-icons/io5";
 import { BsTrophy } from "react-icons/bs";
 import { PiPingPongFill } from "react-icons/pi";
@@ -9,13 +9,12 @@ import { IoPersonRemoveOutline } from "react-icons/io5";
 import { MdOutlineBlock } from "react-icons/md";
 import { VscGame } from "react-icons/vsc";
 import { User } from "../utils/ChatContext";
-import { BACKEND } from "../utils/Constants";
 import { UserContext } from '../components/UserContext';
 import mailman from "@/utils/AxiosFetcher";
 import { RadarChartFile } from "./RadarChartFile";
 import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
 import { FiUser } from "react-icons/fi";
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 
 
@@ -24,11 +23,27 @@ function ChatFriendInfo(){
     const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
+    const {username} = useParams();
+    const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
     const [Status, setStatus] = useState<string>("Block")
     if (!chatContext || !userContext)
      throw new Error('error')
     const user2_level:number = (Math.random() * 10)
-    
+    const fetchMatches = async () =>
+        {
+            try{
+                const req = {
+                    url: `/profile/get_win_lose/${chatContext.active?.user2.login}/`,
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req);
+                setRadarChartData(resp.data);
+            }
+            catch (err){
+                console.error("dddddd======????",err)
+            }
+        }
     const BlockStatusCheck = async ()=>
     {
         try{
@@ -49,14 +64,15 @@ function ChatFriendInfo(){
     }
     useEffect(()=>{
         BlockStatusCheck()
+        fetchMatches()
         console.log('hna ', chatContext.active?.user2)
     },[userContext.action, chatContext.active])
 
     return(
-        <div className={`  rounded-l-xl lg:rounded-l-none rounded-r-xl border-r-0 lg:border-l-[1px] border-white/20 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
+        <div className={`rounded-l-xl lg:rounded-l-none rounded-r-3xl border-r-0 lg:border-l-[1px] border-white/20 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
             <div className=" bg-black/35  w-full  overflow-auto relative   ">
-                <div id="friend-info-header" className=" m-4 text-[24px] text-white flex justify-between items-center">
+                <div id="friend-info-header" className=" m-4 text-[24px]  text-white flex justify-between items-center">
 
                     <h1 className="text-xl font-semibold">Contact Info</h1>
                     <span className="block text-white cursor-pointer" onClick={() =>{
@@ -98,7 +114,7 @@ function ChatFriendInfo(){
             </div>
             <div className="">
                 <div className="px-5">
-                    <ScrollArea className="p-5 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl w-[434px] overflow-x-auto gap-4 flex">
+                    <ScrollArea className="p-5 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl w-full overflow-x-auto gap-4 flex">
                     <div className=" rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md p-3  h-32 w-32  xxl:h-48 xxl:w-48 ">
                 <div className="h-3/5 ">
                     <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
@@ -140,7 +156,7 @@ function ChatFriendInfo(){
 
                 <div className=" p-5 z-10 ">
                     <div className=" bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl p-5">
-                            <RadarChartFile/>
+                           <RadarChartFile radarchartData={radarchartData || { wins: 0, lose: 0, _wins: 0, _lose: 0 }} />
                     </div>
                 </div>  
             </div>

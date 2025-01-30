@@ -40,7 +40,7 @@ def get_Win_Lose(request,uuid):
         # euser = request.user
         user = MyUser.objects.get(unique_id=uuid)
         profile = ProfileStatus.objects.get(id_user_fk=user)
-        return Response({'wins' : profile.wins, 'lose' : profile.lose }, status=200)
+        return Response({'wins' : profile.wins, 'lose' : profile.lose, '_wins' : profile._wins, '_lose' : profile._lose }, status=200)
     except:
         return Response({'error': 'somthing went wrong'}, status=400)
 

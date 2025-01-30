@@ -44,8 +44,23 @@ class ProfileStatus(models.Model):
     total_games = models.IntegerField()
     wins = models.IntegerField()
     lose = models.IntegerField()
+    _wins = models.IntegerField()
+    _lose = models.IntegerField()
     rank = models.IntegerField()
     level = models.FloatField(default=0)
+
+
+class   AchievementTypes(Enum):
+    FIRST_MATCH = 'FIRST_MATCH'
+    # levels related acheivement
+    wood = 'WOOD'#
+    bronze = 'BRONZE'
+    silver = 'SILVER'
+    gold = 'GOLD'
+    legend = 'LEGEND'
+    # tourenaments
+
+    # 
 
 class Acheivements(models.Model):
     id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)

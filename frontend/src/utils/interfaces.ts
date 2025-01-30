@@ -53,3 +53,23 @@ export interface LoseWins
     wins:number;
     lose:number;
 }
+
+export interface weekly_match_data
+{
+    week_start:string;
+    week_end:string;
+    match_count:number;
+}
+export interface LinechartData
+{
+    user:string;
+    weekly_match_data: weekly_match_data[];
+}
+
+export interface RadarChartInterFace
+{
+    wins:number;
+    lose:number;
+    _wins:number;
+    _lose:number;
+}
