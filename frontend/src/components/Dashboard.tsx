@@ -179,7 +179,7 @@ function Dashboard(){
                                                                           </div>
                                                                       </div>
                                                                   </div>
-                                                                          <Achievements/>
+                                                                          <Achievements uuid={uuid}/>
                                                           </div>    
                                                       </div>
                                           </div>

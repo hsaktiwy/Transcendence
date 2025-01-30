@@ -4,15 +4,46 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { SlLock } from "react-icons/sl";
 import { useState } from "react";
 import { motion } from "framer-motion";
-
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import mailman from "@/utils/AxiosFetcher";
 export interface Artwork {
   artist: string
   art: string
 }
 
-function Achievements() {
-  const [flippedIndex, setFlippedIndex] = useState(null);
+interface Acheivements{
+  type :string,
+  description  :string,
+  game_numbers :number,
+  win_streak :number,
+  unlocked : boolean
+}
 
+interface prop{
+  uuid:string | undefined
+}
+function Achievements(prop:prop) {
+    const [flippedIndex, setFlippedIndex] = useState(null);
+    const fetchAchievements = async ()=>{
+      try{
+        const req = {
+          url:`profile/get_achievements/${prop.uuid}`,
+          method: 'GET',
+        }
+        const resp = await mailman(req)
+        const array:Acheivements[] = resp.data as Acheivements[]
+        console.log('ultra data: ',resp)
+        console.log(array)
+      }
+      catch (e){
+          console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj', e)
+      }
+    }
+    useEffect(()=>{
+      if (prop.uuid != undefined)
+        fetchAchievements()
+    },[])
     return (
       <>
          <ScrollArea className="w-full overflow-x-auto whitespace-nowrap rounded-md">
