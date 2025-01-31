@@ -13,11 +13,29 @@ import './RemoteScene.css'
 
 import Scoreboard from '../components/Scoreboard';
 import { useNavigate } from 'react-router-dom';
+import { useLocalGamesContext } from './MatchContext';
+
+
 
 const LocalGame = () => {
+    
     const navigate     = useNavigate();
     const canvasRef    = useRef(null);
     const countdownRef = useRef(null);
+
+    const { LocalGamesData }    = useLocalGamesContext();
+    const { setLocalGamesData } = useLocalGamesContext();
+
+
+      useEffect( () => {
+          if ( LocalGamesData.player1 === null
+            || LocalGamesData.player2 === null  || LocalGamesData.gametype === null
+          ){
+            navigate('/game/PingPong_Lobby');
+          };
+          
+        }
+      )
 
   
     const [playerScore, setPlayerScore] = useState(0);
@@ -32,38 +50,41 @@ const LocalGame = () => {
 
 
     useEffect(() => {
-        if (isCountdownComplete === true) return;
-        let count = 7;
-        if (countdownRef.current) {
-            countdownRef.current.style.display = 'block';
-            countdownRef.current.textContent = count;
-        }
-
-        const countdownInterval = setInterval(() => {
-            count--;
+        // if (isCountdownComplete === true) return;
+        if (!isCountdownComplete && !loading){
+            let count = 3;
             if (countdownRef.current) {
-            if (count > 0) {
-                // Add puffer animation class
-                countdownRef.current.classList.add('puffer');
-                // Update the count
-                setTimeout(() => {
+                countdownRef.current.style.display = 'block';
                 countdownRef.current.textContent = count;
-                countdownRef.current.classList.remove('puffer');
-                }, 400);
-            } else {
-                clearInterval(countdownInterval);
-                countdownRef.current.style.display = 'none';
-                // BallCreator.cameraFixed = true;
-                setIsCountdownComplete(true);
             }
-            }
-        }, 1000);
-        
-        return () => {
-            clearInterval(countdownInterval);
-        };
+    
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (countdownRef.current) {
+                if (count > 0) {
+                    // Add puffer animation class
+                    countdownRef.current.classList.add('puffer');
+                    // Update the count
+                    setTimeout(() => {
+                    countdownRef.current.textContent = count;
+                    countdownRef.current.classList.remove('puffer');
+                    }, 400);
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownRef.current.style.display = 'none';
+                    // BallCreator.cameraFixed = true;
+                    setIsCountdownComplete(true);
+                }
+                }
+            }, 1000);
 
-    }); 
+            return () => {
+                clearInterval(countdownInterval);
+            };
+        }
+        
+
+    }, [isCountdownComplete, loading]); 
     
     useEffect(() => {
 
@@ -214,9 +235,9 @@ const LocalGame = () => {
         const hit_sound = new Audio("/GamePub/sounds/ping_pong.mp3");
         
         const Pong_Ball_colide = (impact) => {
-            hit_sound.volume = Math.min(impact, 1);
-            hit_sound.currentTime = 0;
-            hit_sound.play();
+            // hit_sound.volume = Math.min(impact, 1);
+            // hit_sound.currentTime = 0;
+            // hit_sound.play();
         }
         
         const TextureLoader = new THREE.TextureLoader(loadingManager);
@@ -730,13 +751,29 @@ const LocalGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
-            setPlayerScore(0);
-            setAiScore(0);
 
-            // set match type to local
-            // append winner infos
-            // navigate("/Winner")
-            navigate("game/Winner")
+            if (playerScore === 7){
+                setLocalGamesData({
+                    gametype: 'local', // Local, Multiplayer, Tournament 
+                    player1: null,
+                    player2: null,
+                    player3: null,
+                    player4: null,
+                    Winner  : LocalGamesData.player1
+                });    
+            }
+            else {
+                setLocalGamesData({
+                    gametype: 'local', // Local, Multiplayer, Tournament 
+                    player1: null,
+                    player2: null,
+                    player3: null,
+                    player4: null,
+                    Winner  : LocalGamesData.player2
+                });     
+            }
+
+            navigate("/game/Winner")
         }
       }, [playerScore, aiScore]);
 
@@ -752,7 +789,7 @@ const LocalGame = () => {
                 left: 0,
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
-            <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={playerScore} aiScore={aiScore}/>
+            <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={LocalGamesData.player1} player2={LocalGamesData.player2} playerScore={playerScore} aiScore={aiScore}/>
         </>
     )
 };
