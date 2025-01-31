@@ -1071,7 +1071,8 @@ const MultiplayerGame = () => {
             renderer.setScissorTest(false);
             
             // stat.update()
-            window.requestAnimationFrame(tick)
+            // window.requestAnimationFrame(tick)
+            renderer.setAnimationLoop(tick);
         }
         
         tick()
