@@ -6,7 +6,11 @@ import PlayerInput from '../components/PlayerInput';
 import "./PreMultiplayerGame.css";
 
 
+import { useLocalGamesContext } from '../game/MatchContext';
+
 const PreMultiplayerGame = () => {
+  const { setLocalGamesData } = useLocalGamesContext();
+
   const [blueTeamPlayers, setBlueTeamPlayers] = useState({
     player1: 'Haskitwy',
     player3: 'Haskitwy'
@@ -77,7 +81,16 @@ const PreMultiplayerGame = () => {
             text="Launch The Game"
             default_icon='/GamePub/bottouns/default_offline.svg'
             hovered_icon='/GamePub/bottouns/hovered_offline.svg'
-            onClick={() => {navigate('/game/Multiplayer')}}
+            onClick={() => {
+              setLocalGamesData({
+                gametype: 'Local', // Local, Multiplayer, Tournament 
+                player1: "BLUE",
+                player2: "RED",
+                player3: null,
+                player4: null,
+                Winner : null
+              });
+              navigate('/game/Multiplayer')}}
           />
         </div>
       </div>
