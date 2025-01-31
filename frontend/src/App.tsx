@@ -71,7 +71,7 @@ const App = () =>
         <AuthProvider>
           <Auth>
             <WebSocketProvider>
-              {/* <Backgrounds/> */}
+              <Backgrounds/>
                 <UserProvider>
                   <MatchProvider>
                     <RemoteGameProvider >
