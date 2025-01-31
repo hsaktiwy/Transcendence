@@ -50,7 +50,7 @@ function Backgrounds() {
       </div> */}
 
   
-      {/* <div className={show ? "teams-container" : "hidden-v"} >
+      <div className={show ? "teams-container" : "hidden-v"} >
         <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
           <center>
             <h1>Le7ya's Game</h1>
@@ -63,7 +63,7 @@ function Backgrounds() {
           </center>
             <ModelPreview modelPath="/GamePub/chess-assets/models/yellow_onion_2k.gltf/yellow_onion_2k.gltf" Scale={25} />
         </div>
-      </div> */}
+      </div>
 
     </>
   );
