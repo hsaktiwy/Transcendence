@@ -1,0 +1,56 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:700italic);
+
+#countdown {
+  font-family: 'Roboto Condensed', sans-serif;
+  transition: all 0.4s ease;
+  -webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+}
+
+#countdown.puffer {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.6);
+  transition: all 0.4s ease-out;
+}
+
+
+/* #countdown {
+    transition: all 0.4s ease;
+  }
+  
+  #countdown.puffer {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.6);
+  } */
+
+  .Text-wt{
+    font-family: 'Roboto Condensed', sans-serif;
+    color: white;
+    font-size: 5em;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+.Text-tt{
+    font-family: 'Roboto Condensed', sans-serif;
+    color: white;
+    font-size: 5em;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+.countdown-v { 
+    z-index: 999; 
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Roboto Condensed', sans-serif;
+    color: white;
+    font-size: 11em;
+    font-weight: bold;
+    font-style: italic;
+  }

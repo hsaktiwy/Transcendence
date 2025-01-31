@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-import GUI from 'lil-gui'
+// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -107,7 +107,7 @@ const LocalGame = () => {
             });
           };
 
-        const gui = new GUI()
+        // const gui = new GUI()
 
         let canvas = null;
         if (canvasRef.current != null)
@@ -732,7 +732,7 @@ const LocalGame = () => {
             document.removeEventListener('keyup', handleKeyUp);
             renderer.dispose();
 
-            gui.destroy();
+            // gui.destroy();
             
             while (scene.children.length > 0) {
                 const child = scene.children[0];
