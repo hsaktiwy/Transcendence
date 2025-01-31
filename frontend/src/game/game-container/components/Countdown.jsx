@@ -1,28 +1,35 @@
-import { useEffect, useRef } from "react";
+
+import React, { useRef, useEffect } from 'react';
 import './Countdown.css'
 
-export default function Countdown({ onComplete }) {
-    const countdownRef = useRef(null);
-  
-    useEffect(() => {
-      let count = 3;
+
+function Countdown({ onFinish }) {
+  const countdownRef = useRef(null);
+
+  useEffect(() => {
+    let count = 7;
+    if (countdownRef.current) {
+      countdownRef.current.textContent = count;
+    }
+    const intervalId = setInterval(() => {
+      count--;
       if (countdownRef.current) {
-        countdownRef.current.textContent = count;
-      }
-      const intervalId = setInterval(() => {
-        count--;
-        if (countdownRef.current) {
-          if (count > 0) {
-            countdownRef.current.textContent = count;
-          } else {
-            clearInterval(intervalId);
-            onComplete(); // Let the parent know you finished
-          }
+        if (count > 0) {
+          countdownRef.current.textContent = count;
+        } else {
+          clearInterval(intervalId);
+          // Instead of unmounting or calling setState, just call onFinish
+          onFinish();
         }
-      }, 1000);
-  
-      return () => clearInterval(intervalId);
-    }, []);
-  
-    return <div ref={countdownRef} id="countdown" className="countdown-v" />;
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [onFinish]);
+
+  return (
+    <div ref={countdownRef} id="countdown" className="countdown-v" />
+  );
 }
+
+export default Countdown;
