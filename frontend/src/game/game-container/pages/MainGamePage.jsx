@@ -27,12 +27,14 @@ function MainGamePage(){
 
                 <div className={"teams-container"} >
                     <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
-                        <h1>Le7ya's Game</h1>
-                        {/* <ModelPreview modelPath="/GamePub/chess-assets/models/horse_statue_01_2k.gltf/horse_statue_01_2k.gltf" Scale={10} /> */}
+                        <center>
+                            <h1>Le7ya's Game</h1>
+                        </center>
                     </div>
                     <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
-                        <h1>Ping Pong</h1>
-                        {/* <ModelPreview modelPath="/GamePub/chess-assets/models/yellow_onion_2k.gltf/yellow_onion_2k.gltf" Scale={25} /> */}
+                        <center>
+                            <h1>Ping Pong</h1>
+                        </center>
                     </div>
                 </div>
 
