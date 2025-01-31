@@ -71,7 +71,7 @@ const App = () =>
         <AuthProvider>
           <Auth>
             <WebSocketProvider>
-              {/* <Backgrounds/> */}
+              <Backgrounds/>
                 <UserProvider>
                   <MatchProvider>
                     <RemoteGameProvider >
@@ -94,9 +94,10 @@ const App = () =>
                           <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> 
                           {/* <Route path='/game/PreTournament' element={<PreTournament />}/>
                           <Route path='/game/Tournament' element={<Tournament />}/>*/}
-                          <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
+
+                          {/* <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
                           <Route path='/game/ChessPreLocal' element={<ChessPreLocal />}/>
-                          <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/>
+                          <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/> */}
                           {/* <Route path='/game/ChessLocally' element={<LocalChessGame />}/>
                           <Route path='/game/ChessRemoteGame' element={<ChessRemoteGame />}/>
                           <Route path='/game/ChessWinner' element={<ChessWinner />}/> */}
@@ -118,5 +119,3 @@ const App = () =>
 }
 
 export default App
-
-
