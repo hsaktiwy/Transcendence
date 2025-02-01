@@ -55,7 +55,6 @@ function ChatSection(){
                     tmpConvs.push({...currentConv, user2: notFriend})
                 }
             }
-            console.log("tmpppppp ====== ?>>>>> ", tmpConvs)
             setConvs(tmpConvs)
         }
     }
@@ -63,6 +62,16 @@ function ChatSection(){
         console.log("dada")
         updateConvsState()
     }, [userContextConsumer.friends])
+    useEffect(()=>{
+        if (active && convs && convs?.filter(conv=>conv.user2.id===active?.user2.id).length > 0)
+            setActive((prev)=>{
+                        if (!prev)
+                            return undefined
+                        const newUserState = convs?.filter(conv=>conv.user2.id===prev?.user2.id)[0].user2
+                        return({...prev, user2: newUserState})
+                    }
+            )
+    }, convs)
     const UpdateConvs = (data:any)=>
     {
         console.log('Update convs ...')
@@ -118,7 +127,6 @@ function ChatSection(){
         if (data)
         {
             const channel_id = data.channel_id
-            console.log('wa hafida ', convs, channel_id)
             if (convs)
             {
                 if (convs?.filter(conv => conv.channelId === channel_id).length === 0)
@@ -132,10 +140,13 @@ function ChatSection(){
         if (loading == false)
             updateConvsState()
     },[loading])
+    useEffect(()=>{
+        if (active)
+            userContextConsumer.setnotifications(prev=>prev.filter(notif=>notif.channel_id !== active.channelId))
+    },[active])
   
     useEffect(()=>
     {
-        console.log('hekkkk')
         RemoveChannel('NOTIFICATION_MESSAGE')
         AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
         AddChannel('CHAT', UpdateConvs)

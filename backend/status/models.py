@@ -42,13 +42,56 @@ class Notification(models.Model):
 class ProfileStatus(models.Model):
     id_user_fk =  models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     total_games = models.IntegerField()
-    wins = models.IntegerField()
-    lose = models.IntegerField()
+    wins = models.IntegerField(default=0)
+    lose = models.IntegerField(default=0)
+    _wins = models.IntegerField(default=0)
+    _lose = models.IntegerField(default=0)
     rank = models.IntegerField()
     level = models.FloatField(default=0)
 
-class Acheivements(models.Model):
-    id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
-    name  = models.CharField(null=True)
 
+class   AchievementTypes(models.TextChoices):
+    FIRST_MATCH = 'FIRST_MATCH'
+    WINNING_STREAK='WIN_STREAK'
+    BRONZE = 'BRONZE'
+    SILVER = 'SILVER'
+    GOLD = 'GOLD'
+    PLATINUM = 'PLATINUM'
+    LEGEND = 'LEGEND'
+
+ACHIEVEMENT_DESCRIPTIONS = {
+    AchievementTypes.FIRST_MATCH: "First match.",
+    AchievementTypes.WINNING_STREAK: "5 consecutive wins.",
+    AchievementTypes.BRONZE: "Bronze.",
+    AchievementTypes.SILVER: "Silver.",
+    AchievementTypes.GOLD: "Gold.",
+    AchievementTypes.PLATINUM: "Platinum.",
+    AchievementTypes.LEGEND: "Legend.",
+}
+
+class Achievements(models.Model):
+    id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
+    type = models.CharField(max_length=30, choices=AchievementTypes.choices)
+    description  = models.CharField(max_length=50,null=True, blank=True)
+    game_numbers = models.IntegerField(default=0)
+    win_streak = models.IntegerField(default=0)
+    unlocked = models.BooleanField(default=False)
+
+    def save(self , *arg, **kargs):
+        print("Achievements save: ", self, arg, kargs)
+        if (self.type and not self.description):
+            self.description = ACHIEVEMENT_DESCRIPTIONS.get(self.type,"No description available.")
+            if (self.type == AchievementTypes.BRONZE):
+                self.game_numbers = 5
+            elif (self.type == AchievementTypes.SILVER):
+                self.game_numbers = 15
+            elif (self.type == AchievementTypes.GOLD):
+                self.game_numbers = 25
+            elif (self.type == AchievementTypes.PLATINUM):
+                self.game_numbers = 35
+            elif (self.type == AchievementTypes.LEGEND):
+                self.game_numbers = 50
+            elif (self.type == AchievementTypes.FIRST_MATCH):
+                self.game_numbers = 1
+        super().save(*arg, **kargs)
 

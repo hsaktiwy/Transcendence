@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-import GUI from 'lil-gui'
+// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -15,10 +15,25 @@ import './RemoteScene.css'
 import Scoreboard from '../components/Scoreboard';
 import { useNavigate } from 'react-router-dom';
 
+import { useLocalGamesContext } from './MatchContext';
+
+
+
 const MultiplayerGame = () => {
     const navigate = useNavigate();
     const canvasRef = useRef(null);
 
+    const { LocalGamesData }    = useLocalGamesContext();
+    const { setLocalGamesData } = useLocalGamesContext();
+
+
+      useEffect( () => {
+          if ( LocalGamesData.player1 === null
+            || LocalGamesData.player2 === null  || LocalGamesData.gametype === null
+          ){
+            navigate('/game/PingPong_Lobby');
+          };
+    })
   
     const [playerScore, setPlayerScore] = useState(0);
     const [aiScore, setAiScore] = useState(0);
@@ -46,7 +61,7 @@ const MultiplayerGame = () => {
             });
           };
 
-        const gui = new GUI()
+        // const gui = new GUI()
 
         let canvas = null;
         if (canvasRef.current != null)
@@ -300,8 +315,8 @@ const MultiplayerGame = () => {
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
         }
         
-        gui.add(BallCreator, 'createBall')
-        gui.add(BallCreator, 'reset')
+        // gui.add(BallCreator, 'createBall')
+        // gui.add(BallCreator, 'reset')
         
         //Table 
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
@@ -707,8 +722,8 @@ const MultiplayerGame = () => {
         // scene.add(new THREE.AxesHelper(15))
 
         
-        gui.add(BallCreator, 'cameraFixed');
-        gui.add(BallCreator, 'PADDLE_SPEED', 0.01 , 0.2).step(0.01)
+        // gui.add(BallCreator, 'cameraFixed');
+        // gui.add(BallCreator, 'PADDLE_SPEED', 0.01 , 0.2).step(0.01)
         
         //  Animate
         const clock = new THREE.Clock()
@@ -1069,7 +1084,7 @@ const MultiplayerGame = () => {
             document.removeEventListener('keyup', handleKeyUp);
             renderer.dispose();
 
-            gui.destroy();
+            // gui.destroy();
             
             while (scene.children.length > 0) {
                 const child = scene.children[0];
@@ -1089,19 +1104,45 @@ const MultiplayerGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
-            setPlayerScore(0);
-            setAiScore(0);
-            navigate("/Winner")
-            //   alert(`${playerScore === 7 ? 'Player' : 'Ai'} Wins!`);
+            if (playerScore === 7){
+                setLocalGamesData({
+                    gametype: 'Multiplayer', // Local, Multiplayer, Tournament 
+                    player1: null,
+                    player2: null,
+                    player3: null,
+                    player4: null,
+                    Winner  : LocalGamesData.player1
+                });    
+            }
+            else {
+                setLocalGamesData({
+                    gametype: 'Multiplayer', // Local, Multiplayer, Tournament 
+                    player1: null,
+                    player2: null,
+                    player3: null,
+                    player4: null,
+                    Winner  : LocalGamesData.player2
+                });     
+            }
+            
+            // setPlayerScore(0);
+            // setAiScore(0);
+
+            navigate("/game/Winner")
         }
       }, [playerScore, aiScore]);
 
     return (
         <>
             <LoadingScreen show={loading} />
-            <canvas ref={canvasRef}></canvas>
+            <canvas style={{zIndex:97, position: 'absolute',top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%'}} ref={canvasRef}></canvas>
             <Hud/>
-            <Scoreboard player1={"RED"} playerScore={playerScore} player2="BLUE" aiScore={aiScore}/>
+            {/* <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={"RED"} playerScore={playerScore} player2="BLUE" aiScore={aiScore}/> */}
+            <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={LocalGamesData.player1} player2={LocalGamesData.player2} playerScore={playerScore} aiScore={aiScore}/>
+            
         </>
     )
 };
