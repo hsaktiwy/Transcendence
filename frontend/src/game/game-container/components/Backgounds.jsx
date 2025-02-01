@@ -2,9 +2,11 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ChessGameBack from '../chess/ChessBack';
 import PingPongBack from './PingPongBack';
-import ModelPreview from './ModelPreview';
+// import ModelPreview from './ModelPreview';
 import '../pages/MainGamePage.css'
 import DefaultBack from './DefaultBack';
+import ChessPreview from './ChessPreview';
+import PingPongPreview from './PingPongPreview';
 
 
 function Backgrounds() {
@@ -50,20 +52,20 @@ function Backgrounds() {
       </div> */}
 
   
-      {/* <div className={show ? "teams-container" : "hidden-v"} >
+      <div className={show ? "teams-container" : "hidden-v"} >
         <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
           <center>
             <h1>Le7ya's Game</h1>
           </center>
-            <ModelPreview modelPath="/GamePub/chess-assets/models/horse_statue_01_2k.gltf/horse_statue_01_2k.gltf" Scale={10} />
+          <ChessPreview/>
         </div>
         <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
           <center>
             <h1>Ping Pong</h1>
           </center>
-            <ModelPreview modelPath="/GamePub/chess-assets/models/yellow_onion_2k.gltf/yellow_onion_2k.gltf" Scale={25} />
+          <PingPongPreview/>
         </div>
-      </div> */}
+      </div>
 
     </>
   );
