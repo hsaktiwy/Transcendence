@@ -14,7 +14,7 @@ class ProfileStatusSerializer(serializers.ModelSerializer):
 class AchievementsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievements
-        fields = [ 'type' , 'description' , 'game_numbers' , 'win_streak' , 'unlocked' ]
+        fields = [ 'type' , 'description' , 'game_numbers' , 'win_streak' , 'unlocked','icon']
 
 
 class RankProfileSerializer(serializers.ModelSerializer):

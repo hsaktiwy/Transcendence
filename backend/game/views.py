@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from .serializers import Game, GameSerializer
-from .models import GameEnumStatus
+from .models import GameEnumStatus, MyUser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
@@ -73,14 +73,14 @@ class ChangeGameStatus(APIView):
 
 
 @api_view(['GET'])
-def get_match_history(request, type):
+def get_match_history(request, uuid, type):
     try:
-        user = request.user
+        user = MyUser.objects.get(unique_id=uuid)
         # get all games depending on the type and related to our user
         games = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).filter(type=type).order_by('time')
         # reverce the ascending order to descending
         games = games.reverse()
         last_matches = GameSerializer(games[:5], many=True)
         return Response({'Game': last_matches.data}, status=200)
-    except:
-        return Response({'error': 'something went wrong'}, status=400)
+    except Exception as e:
+        return Response({'error': e}, status=400)

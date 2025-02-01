@@ -79,12 +79,12 @@ export function MatchHistory() {
       // // Call the function
       // fetchUserMatchHistory();
       useEffect(()=>{
-        if(userMatchHistory.length)
-            setIsPlayed(true);
+        // if(userMatchHistory.length)
+        //     setIsPlayed(true);
       }, [])
     return (
   <>
-       {!isPlayed ? (<div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
+       {/*!isPlayed*/userMatchHistory.length == 0 ? (<div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
           <div className="flex justify-center items-center rounded-xl bg-gradient-to-bl from-[#283137] to-[#242729] flex-col p-6">
           <svg width="68" height="78" viewBox="0 0 34 39"  className="text-lg" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M10.5144 27.5068C10.7933 26.8975 11.4478 27.0026 11.4478 27.0026L11.4927 27.0077C15.354 27.8865 18.9892 27.7086 21.8527 25.6218" stroke="#FFFCFC" strokeWidth="1.23" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
