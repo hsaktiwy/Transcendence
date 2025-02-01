@@ -93,8 +93,8 @@ const App = () =>
                           <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
                           <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> 
                           
-                          {/* <Route path='/game/PreTournament' element={<PreTournament />}/>
-                          <Route path='/game/Tournament' element={<Tournament />}/>*/}
+                          <Route path='/game/PreTournament' element={<PreTournament />}/>
+                          <Route path='/game/Tournament' element={<Tournament />}/>
 
                           {/* <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
                           <Route path='/game/ChessPreLocal' element={<ChessPreLocal />}/>
