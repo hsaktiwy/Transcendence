@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Notification, ProfileStatus, MyUser
-from .serializers import NotificationSerializer, ProfileStatusSerializer, RankProfileSerializer
+from .models import Notification, ProfileStatus, MyUser, Achievements
+from .serializers import NotificationSerializer, ProfileStatusSerializer, RankProfileSerializer, AchievementsSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.core.paginator import Paginator
 from users.serializers import PublicUserSerializer
@@ -40,7 +40,7 @@ def get_Win_Lose(request,uuid):
         # euser = request.user
         user = MyUser.objects.get(unique_id=uuid)
         profile = ProfileStatus.objects.get(id_user_fk=user)
-        return Response({'wins' : profile.wins, 'lose' : profile.lose }, status=200)
+        return Response({'wins' : profile.wins, 'lose' : profile.lose, '_wins' : profile._wins, '_lose' : profile._lose }, status=200)
     except:
         return Response({'error': 'somthing went wrong'}, status=400)
 
@@ -117,5 +117,15 @@ def get_line_chart(request, uuid):
 
     except MyUser.DoesNotExist:
         return Response({'error': f"User with uuid '{uuid}' does not exist."}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+@api_view(['GET'])
+def get_achievements(request, uuid):
+    try:
+        user = MyUser.objects.get(unique_id = uuid)
+        acheivements = Achievements.objects.filter(id_user_fk=user)
+        data = AchievementsSerializer(acheivements, many=True)
+        return (Response({'data': data.data}, status=200))
     except Exception as e:
         return Response({'error': str(e)}, status=400)

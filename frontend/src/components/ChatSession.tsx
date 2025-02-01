@@ -303,7 +303,7 @@ function ChatSession(){
     },[rcount])
     //
     return(
-            <div  className={`  rounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
+            <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
             `}>
                 <div id="conversation-header-container" className="border-b border-white/20 ">
                     <div id="conversation-header" className="text-white grid grid-cols-4 px-4 py-[2px]">
@@ -322,7 +322,10 @@ function ChatSession(){
                                     chatContext.setShowProfile(true)
                                 }}>
                                     <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
-                                    <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.login}`}</p>
+                                    <div className=" flex gap-3 items-center">
+                                        <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.login}`} </p>
+                                        <div className={`rounded-full h-[6px] w-[6px] ${chatContext.active?.user2.state === 'none' ? 'bg-transparent' : chatContext.active?.user2.state === 'online' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                    </div>
                                 </div>
                             </div>
                             <div id='conv-header-menu ' className="drop relative col-span-1  flex justify-self-end items-center text-[24px]">
@@ -382,13 +385,13 @@ function ChatSession(){
                     </div>
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
                 </div>
-                    <div ref={containerRef} onScroll={handleContainerScroll} className=" text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
-                    {/* #{loading ? <MessageLoading/> : <></>} */}
+                        {/* <div className="h-full w-full top-0 left-0  basis-[85%] backdrop-filter backdrop-blur-md"></div> */}
+                    <div ref={containerRef} onScroll={handleContainerScroll} className=" text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden">
                     {
                         chatContext.active?.messages?.map((msg, index): React.ReactNode => {
                             return(
                                 <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender?.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                                <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] aspect-square rounded-full object-cover rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] aspect-square object-cover rounded-full cursor-pointer" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}/>

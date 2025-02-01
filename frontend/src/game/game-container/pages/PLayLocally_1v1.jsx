@@ -4,20 +4,22 @@ import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PlayerInput from '../components/PlayerInput';
-import { use } from "react";
+
+import { useLocalGamesContext } from '../game/MatchContext';
+
 
 const PlayLocally_1v1 = () => {
-  const [player1Name, setPlayer1Name] = useState('Haskitwy');
-  const [player2Name, setPlayer2Name] = useState('Haskitwy');
+  
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // CLEAR LOCAL SRORAGE
-    localStorage.removeItem('Matches_data');
-    localStorage.removeItem("matchId")
-  }, []);
+  const { setLocalGamesData } = useLocalGamesContext();
+
+
+  const [player1Name, setPlayer1Name] = useState('Haskitwy1');
+  const [player2Name, setPlayer2Name] = useState('Haskitwy2');
+
 
   return (
     <>
@@ -56,12 +58,14 @@ const PlayLocally_1v1 = () => {
                 default_icon='/GamePub/bottouns/default_offline.svg'
                 hovered_icon='/GamePub/bottouns/hovered_offline.svg'
                 onClick={() => {
-                  let match = {
-                    FINALY: {"player1": player1Name, "player2": player2Name, "winner": null, "Score1": 0, "Score2": 0},
-                  }
-                  localStorage.setItem("Matches_data", JSON.stringify(match))
-                  localStorage.setItem("matchId", "FINALY")
-
+                  setLocalGamesData({
+                    gametype: 'Local', // Local, Multiplayer, Tournament 
+                    player1: player1Name,
+                    player2: player2Name,
+                    player3: null,
+                    player4: null,
+                    Winner : null
+                  });
                   navigate('/game/LocalGame')
                 }}
             />

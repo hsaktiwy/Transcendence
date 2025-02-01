@@ -72,7 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'error  : {e}')
             return 0, None, None, None,# None
-    def create_message_notification(self, receiver, sender, message):
+    def create_message_notification(self, receiver, sender, message, channel_id):
         try:
             user = MyUser.objects.filter(unique_id=receiver).first()
             senderObj = MyUser.objects.get(id=sender.id)
@@ -81,9 +81,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if blocked or blocker:
                 return None, None
             friendshipExist = FriendShip.objects.filter(Q(user=user, friend=senderObj) | Q(user=senderObj, friend=user)).exists()
-            if friendshipExist:
+            channel = Channel.objects.filter(users=user).filter(users=senderObj).first()
+            channel_id_2 = channel.id
+            if friendshipExist and channel_id_2 == channel_id:
                 not_content = f'{sender.unique_id} : {message}'
-                notification = Notification.objects.create(id_user_fk=user, content=not_content, type='message')
+                notification = Notification.objects.create(id_user_fk=user, content=not_content, type='message', channel_id=channel_id)
                 return notification, user.id
             return None, None
         except Exception as e:
@@ -178,9 +180,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def set_messages_isread_to_true(self , user, channel_id, start_id):
         try:
             if start_id > 0:
-                # 20 is the message range that i use to paginate the messages in the chat
                 print(start_id, channel_id, user)
-                Message.objects.filter(Q(id__gte=start_id) & Q(id_channel_fk=channel_id) & ~Q(sender=user)).update(isread=True)
+                messages_to_updates = Message.objects.filter(Q(id__gte=start_id) & Q(isread=False) & Q(id_channel_fk=channel_id) & ~Q(sender=user))
+                if messages_to_updates.exists():
+                    print("SAAAAAAALLLLLAAAAAAAAAM", len(messages_to_updates))
+                    messages_to_updates.update(isread=True)
+                    Notification.objects.filter(channel_id=channel_id).update(is_readed=True)
         except Exception as e:
             print(f'Error while trying to create a Message : {e}')
 
@@ -368,7 +373,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 print(text_data)
                 receiver = message_json['to']
                 channel_id = message_json["channel_id"]
-                notification, receiver_id = await sync_to_async(self.create_message_notification)(receiver, user, message_json['message'])
+                notification, receiver_id = await sync_to_async(self.create_message_notification)(receiver, user, message_json['message'], channel_id)
                 if notification is None:
                     return
                 group_name = f'notification_user_{receiver_id}'
@@ -439,14 +444,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 receiverObj = await self.get_receiver(receiver)
                 SerializedSender = await sync_to_async(self.get_sender)(user)
                 group_name = f'notification_user_{receiverObj.id}'
-                await self.channel_layer.group_send(
-                    group_name,
-                    {
+                dictResp = {
                         'type': 'profile_notif',
                         'action': message_json['type'],
                         'sender': SerializedSender,
-                        'status' : message_json['status']
-                    }
+                }
+                print()
+                if message_json.get('status'):
+                    dictResp['status'] = message_json['status']
+                await self.channel_layer.group_send(
+                    group_name,
+                    dictResp
                 )
             elif message_json['type'] == 'NOTIFICATION_STATE':
                 state = message_json['state']

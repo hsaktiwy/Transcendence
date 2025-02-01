@@ -1,7 +1,7 @@
 
 // export default Winner;
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, UserContext } from "react";
 import "./Winner.css";
 import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
@@ -14,44 +14,46 @@ import { useNavigate } from "react-router-dom";
 // import { useMatchContext } from '../game/MatchContext';
 
 import { useRemoteGameContext } from '../game/MatchContext';
-// import { UserContext } from '../../../components/UserContext'
+import { useLocalGamesContext } from '../game/MatchContext';
 
 
 
-// const RemoteGame = () => {
-    
   
 const Winner = () => {
 
   const navigate = useNavigate();
+  let Winner = '';
   
   // Remote LOgic
-  // const { matchData } = useMatchContext();
   const { ReomteGameData } = useRemoteGameContext();
-
-  console.log("===> Winner : ", ReomteGameData.Winner);
+  const { LocalGamesData } = useLocalGamesContext();
   
-  // if (ReomteGameData.Winner === null || ReomteGameData.Winner === undefined){
-  //     navigate('/game/PingPong_Lobby');
-  // };
   
-  // const matchId = localStorage.getItem("matchId");
-  const [winner, setWinner] = useState(ReomteGameData.Winner)
-
   useEffect( () => {
-    if (ReomteGameData.Winner === null || ReomteGameData.Winner === undefined){
+      if ((ReomteGameData.Winner === null || ReomteGameData.Winner === undefined)
+        && (LocalGamesData.gametype === null  || LocalGamesData.gametype === undefined)
+      ){
         navigate('/game/PingPong_Lobby');
-    };
-    
-    }, [ReomteGameData.Winner]
+      };
+      
+    }
   )
+  
+  console.log("===> Remote Winner : ", ReomteGameData.Winner);
+  console.log("===> Local  Winner : ", LocalGamesData.Winner);
+
+  if ((ReomteGameData !== null && ReomteGameData !== undefined) && (ReomteGameData.Winner !== null && ReomteGameData.Winner !== undefined)){
+    Winner = ReomteGameData.Winner;
+  }
+  else if ((LocalGamesData !== null && LocalGamesData !== undefined) && (LocalGamesData.Winner !== null && LocalGamesData.Winner !== undefined)){
+    Winner = LocalGamesData.Winner;
+  }
 
 
 
   return (
     <>
 
-      {/* <PingPongBack /> */}
   <div className="main-game-page-container">
         <div className="game-options-container-w">
           <div className="game-options-header-w Text-wt">
@@ -60,7 +62,7 @@ const Winner = () => {
           
           <div className="players-container-w Text-tt">
             {/* Add your game content here */}
-            <h1 >{winner}</h1>
+            <h1 >{Winner}</h1>
           </div>
           <div className="button-container-w">
             <Frame
@@ -68,9 +70,6 @@ const Winner = () => {
               default_icon='/GamePub/bottouns/default_offline.svg'
               hovered_icon='/GamePub/bottouns/hovered_offline.svg'
               onClick={() => {
-                // localStorage.removeItem('Matches_data');
-                // localStorage.removeItem('Matches_history');
-                // localStorage.removeItem("matchId")
                 navigate('/game/PingPong_Lobby')
               }}
             />
@@ -78,12 +77,10 @@ const Winner = () => {
               text="Re-Match"
               default_icon='/GamePub/bottouns/default_offline.svg'
               hovered_icon='/GamePub/bottouns/hovered_offline.svg'
-              onClick={() => {
-                // localStorage.removeItem('Matches_data');
-                // localStorage.removeItem('Matches_history');
-                // localStorage.removeItem("matchId")
+              onClick={ () => {
                 navigate('/game/LocalGame')
-              }}
+              }
+              }
             /> */}
           </div>
         </div>
