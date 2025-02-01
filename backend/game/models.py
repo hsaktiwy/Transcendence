@@ -30,5 +30,6 @@ class Game(models.Model):
             choices=[(tag.value, tag.name) for tag in GameEnumStatus],
             default=GameEnumStatus.WAITING.value
     )
+    draw = models.BooleanField(default=False)
     # score_p1 = 
     time = models.DateTimeField(auto_now_add=True)

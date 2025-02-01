@@ -29,7 +29,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 import { SlLock } from "react-icons/sl";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
-import { LoseWins, LinechartData, RadarChartInterFace } from "@/utils/interfaces.ts";
+import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface } from "@/utils/interfaces.ts";
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
@@ -43,13 +43,15 @@ const ProfileTest  = () =>{
     const [matches, setMatches] = useState<LoseWins | undefined>()
     const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
-    
+    // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
+    const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
     
 
    const {uuid} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
+   const {setUserMatchHistory} = userContextConsumer;
 
     const getChannelId = async () =>{
             try{
@@ -108,6 +110,16 @@ const ProfileTest  = () =>{
         }
     }
 
+    const getMatchHistoryData = async (type:string) =>{
+        const req = {
+            url: `/game/get_matches/${uuid}/${type}`,
+            method: 'GET',
+          };
+          const resp = await mailman(req);
+        if (resp.data.Game)
+          setUserMatchHistory(resp.data.Game);
+    }
+
    const fetchUserData = async () =>{
     try{
         const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
@@ -131,8 +143,6 @@ const ProfileTest  = () =>{
             setProfileData(user[0])
             // await getChannelId()
         }
-        
-        
     }
     catch (err){
         console.error("dddddd======????",err)
@@ -160,6 +170,18 @@ const ProfileTest  = () =>{
         }
     }
 
+    const switchMatchHistoryType = ()=>{
+        if (matchHistoryType == 'PONG')
+        {
+            setMatchHistoryType('CHESS')
+            getMatchHistoryData('CHESS')
+        }
+        else
+        {
+            setMatchHistoryType('PONG')
+            getMatchHistoryData('PONG')
+        }
+    }
 
    useEffect(() =>{
     if (userContextConsumer?.userData?.unique_id !== uuid){
@@ -240,6 +262,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className=" md:hidden xxl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6">
                             <div className=" relative rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] h-full p-4 ">
+                                <button onClick={switchMatchHistoryType}>{matchHistoryType}</button>
                                 <MatchHistory    />
                             </div>
                         </div>
@@ -277,4 +300,3 @@ const ProfileTest  = () =>{
     )
 }
 export default ProfileTest
-2

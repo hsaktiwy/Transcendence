@@ -21,6 +21,8 @@ class Command(BaseCommand):
             week_start = start_date + timedelta(days=week * 7)
             week_end = week_start + timedelta(days=7)
             for _ in range(20):
+                array =['CHESS', 'PONG']
+                type = random.choice(array)
                 user_p1 = random.choice(all_users)
                 user_p2 = random.choice([user for user in all_users if user != user_p1])
                 score_p1 = random.randint(0, 10)
@@ -34,16 +36,18 @@ class Command(BaseCommand):
                     winner, loser = user_p1, user_p2
                 else:
                     winner, loser = user_p2, user_p1
-
+                draw = random.choice([True, False]) if type == 'CHESS' else False
                 game = Game.objects.create(
+                    type=type,
                     user_p1=user_p1,
                     user_p2=user_p2,
                     winner=winner,
                     loser=loser,
                     score_p1=score_p1,
                     score_p2=score_p2,
+                    draw = draw,
                     status=GameEnumStatus.ENDED,
                 )
                 game.time = randtime
                 game.save()
-                self.stdout.write(f"Created game: {game.time}")
+                self.stdout.write(f"Created game: {game.time} {game.type} {game.user_p1}")
