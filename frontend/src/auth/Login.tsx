@@ -56,11 +56,11 @@ const Login = () => {
         }
         else {
             if (resp.message === 'username needed'){
-                toast.update(toastId, { isLoading: false, autoClose: 0 });
+                toast.update(toastId, { render: 'Please Enter a valid username', type: "info", isLoading: false, autoClose: 3000 });
                 setNeedLogin(true)
             }
             else if (resp.message === 'tfa needed'){
-                toast.update(toastId, { isLoading: false, autoClose: 0 });
+                toast.update(toastId, { render: 'Please Enter the TFA OTP', type: "info", isLoading: false, autoClose: 3000 });
                 const tfaResp = resp as LoginTFAResponse
                 setTfaUser(tfaResp.user)
             }
@@ -113,11 +113,13 @@ const Login = () => {
                     }
                     else if (resp.data.user)
                         setTfaUser(resp.data.user)
-                    else
-                        location.reload();
+                    else{
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        AuthContextConsummer.setLoggedIn(true)
+                        // Navigate('/')
+                    }
+                        // location.reload();
                 }
-                window.history.replaceState({}, document.title, window.location.pathname);
-                // Navigate('/')
 
             }
             catch (error) {
@@ -138,8 +140,8 @@ const Login = () => {
       
             const searchParams = new URLSearchParams(window.location.search);
             const tmpCode = searchParams.get('code');
-            if (tmpCode)
-                setCode(tmpCode)
+            // if (tmpCode)
+            //     setCode(tmpCode)
             console.log(`1234   ${code}`)
     
             // if (code) {
@@ -174,8 +176,9 @@ const Login = () => {
             //     })
             //     .catch(error => console.error('Error:', error));
             // }
-            loginwith42(code)
-    }, [AuthContextConsummer.loggedIn]);
+            if (tmpCode)
+                loginwith42(tmpCode)
+    }, []);
     const [hide, setHide] = useState<boolean>(true)
     const [passFoucs, setPassFocus] = useState<boolean>(false)
     const FormFade = () => {

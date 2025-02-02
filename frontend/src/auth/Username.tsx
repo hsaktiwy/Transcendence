@@ -24,7 +24,6 @@ const Username = (prop: SetUsernameProps) => {
     const [usernameError, setUsernameError] = useState<boolean>(true)
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const toastId = toast.loading("Updating infos...");
         try{
             const data = {
                 email: email,
@@ -38,11 +37,13 @@ const Username = (prop: SetUsernameProps) => {
             }
             const resp = await mailman(req)
             console.log(resp)
-            if(resp.status === 200)
+            if(resp.status === 200){
                 setNeedLogin(false)
+
+            }
         }
         catch(error){
-             toast.update(toastId, { render: "invalid username or already exists! Try again", type: "error", isLoading: false, autoClose: 3000 });
+            toast.error("Invalid username or already exists! Try again")
         }
 
     }
