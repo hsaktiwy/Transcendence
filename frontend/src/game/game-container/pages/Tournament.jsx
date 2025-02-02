@@ -4,23 +4,38 @@ import { Bracket } from 'react-brackets';
 import MatchCard from '../components/MatchCard';
 import './Tournament.css';
 import './style.css';
+import { useLocalGamesContext } from '../game/MatchContext';
+import { useEffect } from 'react';
 
-
-function Tournament({ src }) {
+function Tournament() {
   const navigate = useNavigate();
+  const { LocalGamesData }    = useLocalGamesContext();
+  const { LocalGamesData2 }   = useLocalGamesContext();
+  const { setLocalGamesData } = useLocalGamesContext();
+  
+  useEffect( () => {
+      if ( LocalGamesData.gametype !== 'Tournament'
+        || LocalGamesData.player1 === null
+        || LocalGamesData.player2 === null  
+        || LocalGamesData.player3 === null
+        || LocalGamesData.player4 === null
+      ){
+        navigate('/game/PingPong_Lobby');
+      };
+  })
 
   const [Matches, setMatches] = useState({
     Semi_Final_1: {
-      player1: 'PLY1',
-      player2: 'PLY2',
+      player1: LocalGamesData.player1,
+      player2: LocalGamesData.player2,
       winner: null,
       isReadyP1: false,
       isReadyP2: false,
       thier_Turn: true,
     },
     Semi_Final_2: {
-      player1: 'PLY3',
-      player2: 'PLY4',
+      player1: LocalGamesData.player3,
+      player2: LocalGamesData.player4,
       winner: null,
       isReadyP3: false,
       isReadyP4: false,
@@ -53,7 +68,8 @@ function Tournament({ src }) {
 
   const handleStartMatch = (matchId) => {
     console.log(`Starting match: ${matchId}`);
-    navigate('/Localgame');
+    //tBC
+    navigate('/game/LocalGame');
   };
 
   const rounds = [

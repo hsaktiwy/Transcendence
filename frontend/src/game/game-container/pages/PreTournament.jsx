@@ -6,7 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 import React, { useEffect, useState } from 'react';
 import PlayerInput from '../components/PlayerInput';
+import { useLocalGamesContext } from '../game/MatchContext';
+
 import './PreTournament.css';
+
+
 
 const PreTournament = () => {
   const navigate = useNavigate();
@@ -16,9 +20,16 @@ const PreTournament = () => {
   const [player3Name, setPlayer3Name] = useState('');
   const [player4Name, setPlayer4Name] = useState('');
 
-
-
+  const { setLocalGamesData } = useLocalGamesContext();
   const handleLaunch = () => {    
+      setLocalGamesData({
+        gametype: 'Tournament', // Local, Multiplayer, Tournament 
+        player1: player1Name,
+        player2: player2Name,
+        player3: player3Name,
+        player4: player4Name,
+        Winner : null,
+      });
       navigate('/game/Tournament');
   };
 
