@@ -238,7 +238,7 @@ class UpdateUserData(APIView):
         if serializer.is_valid():
             user = serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=400)
     
 class RefreshToken(APIView):
     permission_classes = [AllowAny]

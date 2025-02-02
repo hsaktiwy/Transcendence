@@ -24,6 +24,7 @@ const Username = (prop: SetUsernameProps) => {
     const [usernameError, setUsernameError] = useState<boolean>(true)
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const toastId = toast.loading("Updating infos...");
         try{
             const data = {
                 email: email,
@@ -41,7 +42,7 @@ const Username = (prop: SetUsernameProps) => {
                 setNeedLogin(false)
         }
         catch(error){
-            toast.error("Something went wrong! Try again")
+             toast.update(toastId, { render: "invalid username or already exists! Try again", type: "error", isLoading: false, autoClose: 3000 });
         }
 
     }
@@ -57,9 +58,6 @@ const Username = (prop: SetUsernameProps) => {
         if (AuthContextConsummer.loggedIn === true)
             Navigate('/')
     }, [AuthContextConsummer.loggedIn, Navigate])
-
-    const [hide, setHide] = useState<boolean>(true)
-    const [passFoucs, setPassFocus] = useState<boolean>(false)
     const FormFade = () => {
         return (
             {

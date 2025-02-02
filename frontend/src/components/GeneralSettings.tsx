@@ -5,6 +5,9 @@ import { toast } from 'react-toastify'
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import GeneralSettingsInput from "./GeneralSettingsInput";
+import { AxiosError } from "axios";
+import { emailError, firstNameError, lastNameError, signupError, userNameError } from "@/auth/signUpError";
+import { inputsErrorInterface } from "@/auth/RegisterForm";
 export interface inputInterface{
     name?: keyof SettingsInputsDataInterface,
     type: string,
@@ -20,6 +23,12 @@ export interface SettingsInputsDataInterface{
     email: string,
     login: string
 }
+export interface SettingsInputsErrorInterface{
+  firstName: boolean,
+  lastName: boolean,
+  email: boolean,
+  username:boolean
+}
 function GeneralSettings(){
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
@@ -31,6 +40,12 @@ function GeneralSettings(){
       email: "",
       login: ""
   })
+      const [inputsError, setInputError] = useState<SettingsInputsErrorInterface>({
+          firstName: false,
+          lastName: false,
+          email: false,
+          username: false
+      })
     useEffect(() => {
       if (userContextConsumer?.userData) {
         setInputsData({
@@ -45,18 +60,18 @@ function GeneralSettings(){
       {
         name: "firstName",
         type: "text",
-        errorMessage: "First name should be 3-50 characters",
+        errorMessage: "First Name should be 3-50 characters long and contain only letters and spaces.",
         label: "First Name",
-        pattern: "^.{3,50}$",
+        pattern: "^(?=.{3,50}$)[A-Za-z]+([ '-][A-Za-z]+)*$",
         required: false,
         inputsData: inputsData
       },
       {
         name: "lastName",
         type: "text",
-        errorMessage: "Last name should be 3-50 characters",
+        errorMessage: "Last Name should be 3-50 characters long and contain only letters and spaces.",
         label: "Last Name",
-        pattern: "^.{3,50}$",
+        pattern: "^(?=.{3,50}$)[A-Za-z]+([ '-][A-Za-z]+)*$",
         required: false,
         inputsData: inputsData
       },
@@ -74,7 +89,7 @@ function GeneralSettings(){
           type: "text",
           errorMessage: "Username must be 3-20 characters and can only contain letters, numbers, and underscores.",
           label: "Username",
-          pattern: "^.{3,50}$",
+          pattern: "^[a-zA-Z0-9_]{3,20}$",
           required: false,
         inputsData: inputsData
       },
@@ -85,6 +100,11 @@ function GeneralSettings(){
       try{
         if (!changed){
           toast.warning('No change have been made')
+        }
+        else if (Object.values(inputsError).includes(true))
+        {
+          console.log(inputsError)
+          toast.error("Please correct the required fields")
         }
         else{
           setChanged(false)
@@ -100,7 +120,16 @@ function GeneralSettings(){
           }
       }
       catch (err){
-        toast.error('Error occurred ! Try again')
+        const customError = err as AxiosError
+        const axiosErrorMessage = customError.response?.data as signupError
+        if (axiosErrorMessage.email)
+            toast.error(emailError)
+        if (axiosErrorMessage.login)
+            toast.error(userNameError)
+        if (axiosErrorMessage.firstName)
+            toast.error(firstNameError)
+        if (axiosErrorMessage.lastName)
+            toast.error(lastNameError)
       }
   };
   
@@ -117,7 +146,7 @@ function GeneralSettings(){
           {
             inputs.filter((item, index)=>index <=1).map((input, index) =>{
               return(
-                <GeneralSettingsInput key={index+1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} setChanged={setChanged} changed={changed}/>
+                <GeneralSettingsInput key={index+1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} setChanged={setChanged} changed={changed} inputsError={inputsError} setInputError={setInputError}/>
               )
             })
           }
@@ -126,13 +155,15 @@ function GeneralSettings(){
         {
             inputs.filter((item, index)=>index > 1).map((input, index) =>{
               return(
-                <GeneralSettingsInput key={index+1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} setChanged={setChanged} changed={changed}/>
+                <GeneralSettingsInput key={index+1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} setChanged={setChanged} changed={changed} inputsError={inputsError} setInputError={setInputError}/>
               )
             })
         }
         </div>
         <div className="relative flex gap-8 flex-wrap justify-center items-center">
-            <button type="submit" className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75">
+            <button 
+              type="submit" 
+              className=" w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75">
                 Save Changes
             </button>
             <button type="button" className="w-[150px] bg-black/35 px-4 py-2 rounded-xl border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75" onClick={() =>{
@@ -151,6 +182,4 @@ function GeneralSettings(){
     );
 }
        
-
-
 export default GeneralSettings
