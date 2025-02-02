@@ -91,6 +91,19 @@ function Tournament({ src }) {
         },
       ],
     },
+    {
+      title: 'Winner',
+      seeds: [
+        {
+          id: 4,
+          date: new Date().toDateString(),
+          teams: [
+            { name: Matches.Final?.player1 || 'TBD' },
+            // { name: Matches.Final?.player2 || 'TBD' },
+          ],
+        },
+      ],
+    },
   ];
 
   return (
