@@ -42,7 +42,7 @@ function ChatSection(){
                 const elm = currentConv.user2 as ProfileDataInterface
                 let friendInList:ProfileDataInterface | undefined = undefined
                 if (friends.length)
-                     friendInList = friends.find(friend => friend.login === elm.login)
+                     friendInList = friends.find(friend => friend.unique_id === elm.unique_id)
                 if (friendInList != undefined)
                 {
                     const newFriendState: User = {...friendInList, id: currentConv.user2.id} 
@@ -62,16 +62,16 @@ function ChatSection(){
         console.log("dada")
         updateConvsState()
     }, [userContextConsumer.friends])
-    useEffect(()=>{
-        if (active && convs && convs?.filter(conv=>conv.user2.id===active?.user2.id).length > 0)
-            setActive((prev)=>{
-                        if (!prev)
-                            return undefined
-                        const newUserState = convs?.filter(conv=>conv.user2.id===prev?.user2.id)[0].user2
-                        return({...prev, user2: newUserState})
-                    }
-            )
-    }, convs)
+    // useEffect(()=>{
+    //     if (active && convs && convs?.filter(conv=>conv.user2.id===active?.user2.id).length > 0)
+    //         setActive((prev)=>{
+    //                     if (!prev)
+    //                         return undefined
+    //                     const newUserState = convs?.filter(conv=>conv.user2.id===prev?.user2.id)[0].user2
+    //                     return({...prev, user2: newUserState})
+    //                 }
+    //         )
+    // }, [convs])
     const UpdateConvs = (data:any)=>
     {
         console.log('Update convs ...')
@@ -137,6 +137,9 @@ function ChatSection(){
         }
     }
     useEffect(() =>{
+        RemoveChannel('NOTIFICATION_MESSAGE')
+        AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
+        AddChannel('CHAT', UpdateConvs)
         if (loading == false)
             updateConvsState()
     },[loading])
@@ -147,9 +150,9 @@ function ChatSection(){
   
     useEffect(()=>
     {
-        RemoveChannel('NOTIFICATION_MESSAGE')
-        AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
-        AddChannel('CHAT', UpdateConvs)
+        // RemoveChannel('NOTIFICATION_MESSAGE')
+        // AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
+        // AddChannel('CHAT', UpdateConvs)
         if (location?.state?.channel_id)
         {
             const {channel_id} = location.state 

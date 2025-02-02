@@ -3,11 +3,12 @@ from .models import MyUser
 from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(write_only=True, required=False)
     password = serializers.CharField(write_only=True, required=False)
-
+    password2 = serializers.CharField(write_only=True, required=False)
     class Meta:
         model = MyUser
-        fields = ['unique_id' ,'login', 'email', 'firstName', 'lastName', 'password', 'state', 'last_visit', 'profile_pic', 'CoverProfile', 'oauth', 'two_factor_auth']
+        fields = ['unique_id' ,'login', 'email', 'firstName', 'lastName', 'password', 'old_password','password2', 'state', 'last_visit', 'profile_pic', 'CoverProfile', 'oauth', 'two_factor_auth']
         extra_kwargs = {
             'unique_id': {'required': False},
             'login': {'required': False},
@@ -29,7 +30,21 @@ class UserSerializer(serializers.ModelSerializer):
     #         password=validated_data['password'],
     #     )
     def update(self, instance, validated_data):
-        print('from update ',validated_data)
+
+        old_password = validated_data.get('old_password', None)
+        new_password = validated_data.get('password', None)
+        confirm_password = validated_data.get('password2', None)
+
+        # If oldPassword, newPassword, and confirmPassword are provided
+        if old_password and new_password and confirm_password:
+            # Check if the old password matches the current password
+            if not instance.check_password(old_password):
+                raise serializers.ValidationError({"old_password": "Old password is incorrect."})
+            elif new_password == old_password:
+                raise serializers.ValidationError({"password": "Old password and New Password must be different."})
+            if new_password != confirm_password:
+                raise serializers.ValidationError({"password2": "New password and confirm password do not match."})
+            instance.set_password(new_password)
         instance.login = validated_data.get('login', instance.login)
         instance.email = validated_data.get('email', instance.email)
         instance.firstName = validated_data.get('firstName', instance.firstName)

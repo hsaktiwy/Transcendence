@@ -43,6 +43,7 @@ const Login = () => {
             password: password
         }
         console.log(data)
+        const toastId = toast.loading("Loading");
         const resp = await AuthContextConsummer.LoginAction(data)
         if ('errorType' in resp) {
             interface tmp {
@@ -50,19 +51,21 @@ const Login = () => {
             }
             const tmpError = resp.errorType as tmp
             if(tmpError['non_field_errors'] !== undefined)
-                toast.error(tmpError['non_field_errors'][0])
+                toast.update(toastId, { render: tmpError['non_field_errors'][0], type: "error", isLoading: false, autoClose: 3000 });
             console.log(resp.errorType)
         }
         else {
-            if (resp.message === 'username needed')
+            if (resp.message === 'username needed'){
+                toast.update(toastId, { isLoading: false, autoClose: 0 });
                 setNeedLogin(true)
+            }
             else if (resp.message === 'tfa needed'){
+                toast.update(toastId, { isLoading: false, autoClose: 0 });
                 const tfaResp = resp as LoginTFAResponse
                 setTfaUser(tfaResp.user)
             }
             else{
-                toast.success(resp.message)
-                console.log(resp)
+                toast.update(toastId, { render: resp.message, type: "success", isLoading: false, autoClose: 3000 });
                 AuthContextConsummer.setLoggedIn(true)
             }
             // Navigate('/')
@@ -227,6 +230,7 @@ const Login = () => {
                                 <div className="mb-6 relative ">
                                     <label htmlFor="password" className="block text-white font-bold mb-2">Password:</label>
                                     <input
+                                        autoComplete='off'
                                         type={hide  ? 'password' : 'text'}
                                         id="password"
                                         value={password}
