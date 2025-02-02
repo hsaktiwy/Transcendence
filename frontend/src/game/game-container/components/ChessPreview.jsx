@@ -55,7 +55,8 @@ function ChessPreview() {
     loader.load("/GamePub/models/king_pown-20250201T201304Z-001/king_pown/king_pown.gltf", (gltf) => {
       model = gltf.scene;
     //   model.scale()
-      model.scale.multiplyScalar(10)
+      model.scale.multiplyScalar(19)
+      model.position.y -= 0.4;
       scene.add(model);
     });
 
@@ -71,8 +72,9 @@ function ChessPreview() {
         // model.position.y = Math.max(Math.min(3 * Math.sin(elapsed), 1), -1)
 
         // model.rotation.x = Math.sin(elapsed) * 0.2;
-        model.rotation.y += 0.015;
         // model.position.y = (Math.sin(elapsed * 1) * 0.2) - 1;
+        
+        model.rotation.y += 0.015;
         // camera.lookAt(model.position)
         camera.lookAt(0, 0, 0)
       }

@@ -1,23 +1,16 @@
-
-import { Bracket } from 'react-brackets';
-
-
-
-
+// tbc
 
 
 import React, { useState } from 'react';
 import './style.css'
 import MatchCard from '../components/MatchCard';
 import { useNavigate } from 'react-router-dom';
-
+import { Bracket } from 'react-brackets';
+// import '../hsaktiwy_css/help.css';
 
 function Tournament({ src }) {
   const navigate = useNavigate();
 
-  // const storedPlayers = localStorage.getItem('tournamentPlayers');
-  // const players = storedPlayers ? JSON.parse(storedPlayers) : null;
-  
   const [Matches, setMatches] = useState(
     {
       "Semi_Final_1": { "player1": "players.p1", "player2": "players.p2", "winner": null, "isReadyP1": false, "isReadyP2": false, "thier_Turn": true },
@@ -44,11 +37,6 @@ function Tournament({ src }) {
     console.log(`Starting match: ${matchId}`);
     navigate('/Localgame');
   };
-
-  
-
-  localStorage.setItem('Matches_data', JSON.stringify(Matches));
-
 
 
   const rounds = [
@@ -92,65 +80,47 @@ function Tournament({ src }) {
 
   return (
     <>
-      {/* <div className="background-wrapper-r">
-        <PingPongBack />
-      </div> */}
-       <div className="main-game-page-container">
-
-        <div className="center width-full">
-          <div className="tournament-container width-90">
+      <div className="center width-full">
+        <div className="tournament-container width-90">
 
 
-            <div className='team width-full min-height-40'>
-                <div className='ultra-space-between'>
-                    <center>
-                      <Bracket rounds={rounds} />
-                    </center>
-                </div>
-            </div>
-
-
-
-            <div className="team width-full tournament-statics min-height-35">
-              {/* For each match, render a card */}
-              <div className='Stocker'>
-
+          <div className='team width-full min-height-40'>
+              <div className='ultra-space-between'>
+                  <center>
+                    <Bracket rounds={rounds} />
+                  </center>
               </div>
-              <div className="vertical-line"></div>
-              {
-                // #region  MatchCard 
-              }
-              <div className='Stocker'>
-                <h1 className='White'>MATCHES QUEUE</h1>
-                <MatchCard 
-                  matchId="Semi_Final_1"
-                  matchData={Matches.Semi_Final_1}
-                  onReady={handleReady}
-                  onStartMatch={handleStartMatch}
-                  />
-                <MatchCard 
-                  matchId="Semi_Final_2"
-                  matchData={Matches.Semi_Final_2}
-                  onReady={handleReady}
-                  onStartMatch={handleStartMatch}
-                  />
-                <MatchCard 
-                  matchId="Final"
-                  matchData={Matches.Final}
-                  onReady={handleReady}
-                  onStartMatch={handleStartMatch}
-                  />
-              </div>
+          </div>
+
+
+
+          <div className="team width-full tournament-statics min-height-35">
+            <div className='Stocker'>
+              <h1 className='White'>MATCHES QUEUE</h1>
+              <MatchCard 
+                matchId="Semi_Final_1"
+                matchData={Matches.Semi_Final_1}
+                onReady={handleReady}
+                onStartMatch={handleStartMatch}
+                />
+              <MatchCard 
+                matchId="Semi_Final_2"
+                matchData={Matches.Semi_Final_2}
+                onReady={handleReady}
+                onStartMatch={handleStartMatch}
+                />
+              <MatchCard 
+                matchId="Final"
+                matchData={Matches.Final}
+                onReady={handleReady}
+                onStartMatch={handleStartMatch}
+                />
             </div>
           </div>
         </div>
-       </div>
+      </div>
     </>
   );
 }
 
 export default Tournament;
-
-
-
-

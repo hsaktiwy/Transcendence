@@ -55,7 +55,8 @@ function PingPongPreview() {
     loader.load("/GamePub/models/king_pown-20250201T201304Z-001/paddle/paddle.gltf", (gltf) => {
       model = gltf.scene;
     //   model.scale()
-      model.scale.multiplyScalar(25)
+      model.scale.multiplyScalar(2.8)
+      model.position.y -= 0.2;
       scene.add(model);
     });
 
@@ -64,19 +65,21 @@ function PingPongPreview() {
     function tick() {
       const delta = clock.getDelta();
 
+
+      
       const elapsed = clock.getElapsedTime()
       if (model){
         //   model.position.x = 1 * Math.cos(elapsed);
         //   model.position.z = 1 * Math.sin(elapsed);
         // model.position.y = Math.max(Math.min(3 * Math.sin(elapsed), 1), -1)
-
-
+        
+        
         // model.rotation.x = Math.sin(elapsed) * 0.2;
         // model.rotation.y = Math.cos(elapsed) * 0.3;
         // model.position.y = (Math.sin(elapsed * 1) * 0.2) - 1;
         model.rotation.y += 0.015;
+        // camera.lookAt(model.position)
         camera.lookAt(0, 0, 0)
-
       }
 
 
