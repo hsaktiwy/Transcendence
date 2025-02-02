@@ -25,7 +25,7 @@ function MainGamePage(){
                     </p>
                 </div>
 
-                <div className={"teams-container"} >
+                {/* <div className={"teams-container"} >
                     <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
                         <center>
                             <h1>Le7ya's Game</h1>
@@ -36,7 +36,7 @@ function MainGamePage(){
                             <h1>Ping Pong</h1>
                         </center>
                     </div>
-                </div>
+                </div> */}
 
                 <InfoLink />
             </div>
