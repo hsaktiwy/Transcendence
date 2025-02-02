@@ -273,7 +273,7 @@ class RefreshToken(APIView):
             except MyUser.DoesNotExist:
                 raise PermissionDenied('User not found')
         except Exception as e:
-            return Response(e, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
             
             
 class CheckAuth(APIView):

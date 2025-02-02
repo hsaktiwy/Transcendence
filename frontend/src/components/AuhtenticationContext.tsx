@@ -141,6 +141,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
 
             }
             catch(error){
+                const axiosError = error as AxiosError
                 if (loggedIn === true)
                     setLoggedIn(false)
             }

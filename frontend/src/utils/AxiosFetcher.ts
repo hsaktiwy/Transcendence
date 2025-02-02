@@ -38,7 +38,6 @@ mailman.interceptors.response.use(
             originalRequest._retry = true
                 
             try{
-                console.log("access token haa9 mcha")
                 const req:string = import.meta.env.VITE_axiosPath+"/api/user/refresh_token/"
                 const refreshToken = await axios.get(req, {
                     withCredentials: true,
@@ -51,7 +50,6 @@ mailman.interceptors.response.use(
 
             }
         }
-        // return Promise.resolve(error.response);
         return Promise.reject(error)
     }
 )
