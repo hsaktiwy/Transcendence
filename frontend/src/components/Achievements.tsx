@@ -16,6 +16,7 @@ export interface Artwork {
 interface Achievements {
   type: string;
   description: string;
+  title: string;
   game_numbers: number;
   win_streak: number;
   unlocked: boolean;
@@ -113,9 +114,13 @@ function Achievements({ uuid }: Prop) {
             className="absolute shadow-md right-2 top-6 gap-2 w-full h-full rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] flex flex-col items-center justify-center text-white text-xl font-semibold"
             style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
           >
+            <div className="flex flex-col justify-center items-center ">
             <img src={`../achievement/${achievement.icon}.svg`} className="w-10 text-[#5E97A9]" alt="Paddle" />
-            <div className="text-sm font-semibold">
-              <p >{achievement.description} </p> </div>
+            <div className="text-sm text-center font-semibold mt-2">
+              <p >{achievement.title} </p>
+              <p className="  text-gray-500 text-[9px]">{achievement.description}</p> </div>
+
+            </div>
           </div>
           
         </motion.div>
