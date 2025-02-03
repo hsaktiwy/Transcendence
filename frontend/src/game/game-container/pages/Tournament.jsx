@@ -15,10 +15,10 @@ function Tournament() {
   
   useEffect( () => {
       if ( LocalGamesData.gametype !== 'Tournament'
-        || LocalGamesData.player1 === null
-        || LocalGamesData.player2 === null  
-        || LocalGamesData.player3 === null
-        || LocalGamesData.player4 === null
+        || LocalGamesData.player1 === null ||  LocalGamesData.player1 === undefined 
+        || LocalGamesData.player2 === null ||  LocalGamesData.player2 === undefined  
+        || LocalGamesData.player3 === null ||  LocalGamesData.player3 === undefined
+        || LocalGamesData.player4 === null ||  LocalGamesData.player4 === undefined
       ){
         navigate('/game/PingPong_Lobby');
       };
