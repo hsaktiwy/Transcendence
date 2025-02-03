@@ -3,7 +3,7 @@ import "./PreRemote.css";
 import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
-import { useMatchContext } from '../game/MatchContext';
+// import { useMatchContext } from '../game/MatchContext';
 
 import { useRemoteGameContext } from '../game/MatchContext';
 
@@ -14,8 +14,7 @@ const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
-  
-  const { setMatchData } = useMatchContext();
+
   const { setReomteGameData } = useRemoteGameContext();
   
 
@@ -53,21 +52,16 @@ const PreRemote = () => {
         console.log("   => my_id         :", data['my_id']);
         console.log("   => opponent_id   :", data['opponent_id']);
         
-        // Update match context
-        setMatchData({
-          roomName: data['room_name'],
-          myId: data['my_id'],
-          opponentId: data['opponent_id'],
-        });
-        
         
         // Update Reomte context
         setReomteGameData({
-          player1 : data['user_name'],
-          player2 : data['opponent_name'],
-          p1_image: data['user_image'],
-          p2_image: data['opponent_image'],
-          winner  : null
+          room_name: data['room_name'],
+          role     : data['role'],
+          my_user  : data['user_name'],
+          opponent : data['opponent_name'],
+          p1_id    : data['my_id'],
+          p2_id    : data['opponent_id'],
+          winner   : null
         });
         // Close the socket and navigate to RemoteGame
         socket.close();

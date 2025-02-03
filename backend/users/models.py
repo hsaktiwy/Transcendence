@@ -33,15 +33,19 @@ class MyUserManager(BaseUserManager):
 
 # Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
-    ONLINE   = 'online'
-    IN_GAME  = 'in_game'
-    END_GAME = 'end_game'
-    OFFLINE  = 'offline'
+    ONLINE    = 'online'
+    IN_GAME   = 'in_game'
+    READY     = 'ready'
+    ALREADYIN = 'alreadyin'
+    END_GAME  = 'end_game'
+    OFFLINE   = 'offline'
     
     STATE_CHOICES = [
-        (ONLINE, 'Online'),
+        (ONLINE,  'Online'),
         (IN_GAME, 'In Game'),
-        (END_GAME, 'End Game'),
+        (END_GAME,'End Game'),
+        (ALREADYIN,'alreadyin'),
+        (READY,   'Ready'),
         (OFFLINE, 'Offline'),
     ]
 
@@ -84,3 +88,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
+
+
+    #delete setMatchData
+
+    #modify all setReomteGameData

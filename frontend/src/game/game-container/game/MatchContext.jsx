@@ -3,34 +3,6 @@
 // // Matchmaking Context
 import  { createContext, useState, useContext } from 'react';
 
-// 1) Create the context
-const MatchContext = createContext(null);
-
-// 2) Create a provider
-export function MatchProvider({ children }) {
-  const [matchData, setMatchData] = useState({
-    roomName: null,
-    myId: null,
-    opponentId: null,
-    gametype: null, // Local, Multiplayer, Tournament 
-    user_name: null,
-    opponent_user: null,
-    color: ''
-  });
-
-  return (
-    <MatchContext.Provider value={{ matchData, setMatchData }}>
-      {children}
-    </MatchContext.Provider>
-  );
-}
-
-// 3) Custom hook for convenience
-export function useMatchContext() {
-  return useContext(MatchContext);
-}
-
-
 
 // Local User Context (Local Games Context)
 const LocalGamesContext = createContext(null);
@@ -67,11 +39,15 @@ const RemoteGameContext = createContext(null);
 
 export function RemoteGameProvider({ children }) {
   const [ReomteGameData, setReomteGameData] = useState({
-    player1 : null,
-    player2 : null,
-    p1_image: null,
-    p2_image: null,
-    winner  : null,
+
+    room_name: null,
+    role     : null,
+    my_user  : null,
+    opponent : null,
+    p1_id    : null,
+    p2_id    : null,
+    winner   : null
+
   });
 
   return (
