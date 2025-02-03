@@ -728,11 +728,12 @@ const MultiplayerGame = () => {
         //  Animate
         const clock = new THREE.Clock()
         let previousTime = 0
-        
+        let p = true 
         const tick = () =>
         {
 //tbr
-            if (paddleAi && paddle){
+            if (p && paddleAi && paddle){
+                p = false
                 setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
             }
 
@@ -1071,7 +1072,8 @@ const MultiplayerGame = () => {
             renderer.setScissorTest(false);
             
             // stat.update()
-            window.requestAnimationFrame(tick)
+            // window.requestAnimationFrame(tick)
+            renderer.setAnimationLoop(tick);
         }
         
         tick()

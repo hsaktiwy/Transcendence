@@ -21,7 +21,7 @@ const LocalGame = () => {
     
     const navigate     = useNavigate();
     const canvasRef    = useRef(null);
-    const countdownRef = useRef(null);
+    // const countdownRef = useRef(null);
 
     const { LocalGamesData }    = useLocalGamesContext();
     const { setLocalGamesData } = useLocalGamesContext();
@@ -46,45 +46,45 @@ const LocalGame = () => {
 
 
 ////
-    const [isCountdownComplete, setIsCountdownComplete] = useState(false);
+    // const [isCountdownComplete, setIsCountdownComplete] = useState(false);
 
 
-    useEffect(() => {
-        // if (isCountdownComplete === true) return;
-        if (!isCountdownComplete && !loading){
-            let count = 3;
-            if (countdownRef.current) {
-                countdownRef.current.style.display = 'block';
-                countdownRef.current.textContent = count;
-            }
+    // useEffect(() => {
+    //     // if (isCountdownComplete === true) return;
+    //     if (!isCountdownComplete && !loading){
+    //         let count = 3;
+    //         if (countdownRef.current) {
+    //             countdownRef.current.style.display = 'block';
+    //             countdownRef.current.textContent = count;
+    //         }
     
-            const countdownInterval = setInterval(() => {
-                count--;
-                if (countdownRef.current) {
-                if (count > 0) {
-                    // Add puffer animation class
-                    countdownRef.current.classList.add('puffer');
-                    // Update the count
-                    setTimeout(() => {
-                    countdownRef.current.textContent = count;
-                    countdownRef.current.classList.remove('puffer');
-                    }, 400);
-                } else {
-                    clearInterval(countdownInterval);
-                    countdownRef.current.style.display = 'none';
-                    // BallCreator.cameraFixed = true;
-                    setIsCountdownComplete(true);
-                }
-                }
-            }, 1000);
+    //         const countdownInterval = setInterval(() => {
+    //             count--;
+    //             if (countdownRef.current) {
+    //             if (count > 0) {
+    //                 // Add puffer animation class
+    //                 countdownRef.current.classList.add('puffer');
+    //                 // Update the count
+    //                 setTimeout(() => {
+    //                 countdownRef.current.textContent = count;
+    //                 countdownRef.current.classList.remove('puffer');
+    //                 }, 400);
+    //             } else {
+    //                 clearInterval(countdownInterval);
+    //                 countdownRef.current.style.display = 'none';
+    //                 // BallCreator.cameraFixed = true;
+    //                 setIsCountdownComplete(true);
+    //             }
+    //             }
+    //         }, 1000);
 
-            return () => {
-                clearInterval(countdownInterval);
-            };
-        }
+    //         return () => {
+    //             clearInterval(countdownInterval);
+    //         };
+    //     }
         
 
-    }, [isCountdownComplete, loading]); 
+    // }, [isCountdownComplete, loading]); 
     
     useEffect(() => {
 
@@ -97,6 +97,7 @@ const LocalGame = () => {
 
         loadingManager.onLoad = () => {
             // If you want a fade-out effect with GSAP:
+            // setLoading(false);
             gsap.to('#loading-screen', {
               opacity: 0,
               duration: 1,
@@ -443,7 +444,7 @@ const LocalGame = () => {
         
 //
     function checkCollision() {
-        if (Objects.length){
+        if (Objects.length && Cameras.length === 2 && paddle && paddleAi){
             // Update bounding boxes with the current positions of the models
             PaddleBoundingBox.setFromObject(paddle);
             PaddleBoundingAiBox.setFromObject(paddleAi);
@@ -556,15 +557,17 @@ const LocalGame = () => {
         //  Animate
         const clock = new THREE.Clock()
         let previousTime = 0
+        let p = true;
         
         const tick = () =>
         {
             // isCountdownComplete :  true
             // console.log("=> isCountdownComplete : ", isCountdownComplete);
             //tbr
-            // if (paddleAi && paddle){
-            //     setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
-            // }
+            if (p && paddleAi && paddle){
+                p = false
+                setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
+            }
             const elapsedTime = clock.getElapsedTime()
             const deltaTime = elapsedTime - previousTime
             previousTime = elapsedTime
@@ -596,18 +599,18 @@ const LocalGame = () => {
                         // aiScore += 1;
                         New_ball_launched = false;
                         setAiScore((aiScore) => aiScore + 1)
-                        BallCreator.createBall();
+                        // BallCreator.createBall();
 
                     } else if (Objects[Objects.length - 1].sphere.position.z < (paddleAi.position.z - 1)) {
                         // playerScore += 1;
                         New_ball_launched = false;
                         setPlayerScore((playerScore) => playerScore + 1)
-                        BallCreator.createBall();
+                        // BallCreator.createBall();
                     }
                 }
             }
-        
-            if (isCountdownComplete === true && Cameras.length === 2 && paddle && paddleAi){
+        if (BallCreator.cameraFixed){
+            if (/*isCountdownComplete === true && */Cameras.length === 2 && paddle && paddleAi){
                 // if (playerScore === 0 && aiScore === 0 && !New_ball_launched){
                 //     BallCreator.createBall();
                 // }
@@ -699,7 +702,7 @@ const LocalGame = () => {
                 }
                 
             }
-        
+        }
             topControls.update()
             bottomControls.update()
         
@@ -719,7 +722,8 @@ const LocalGame = () => {
             renderer.setScissorTest(false);
             
             // stat.update()
-            window.requestAnimationFrame(tick)
+            // window.requestAnimationFrame(tick)
+            renderer.setAnimationLoop(tick);
         }
         
         tick()
@@ -747,7 +751,7 @@ const LocalGame = () => {
             hit_sound.src = "";
         };
 
-    }, [isCountdownComplete]);
+    }, []);
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
@@ -780,11 +784,11 @@ const LocalGame = () => {
     return (
         <>
             <LoadingScreen show={loading} />
-            <div 
+            {/* <div 
                 ref={countdownRef} 
                 id="countdown" 
                 className='countdown-v'
-            ></div>
+            ></div> */}
             <canvas style={{zIndex:97, position: 'absolute',top: 0,
                 left: 0,
                 width: '100%',
@@ -795,3 +799,4 @@ const LocalGame = () => {
 };
 
 export default LocalGame;
+
