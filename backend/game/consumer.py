@@ -231,9 +231,11 @@ class ApiConsumer(WebsocketConsumer):
                 'user_name' : p2_user.login,
                 'opponent_name': p1_user.login,
             }, default=str))
-            
+
             remove_user(p1_user.unique_id, Gconnected_users)
             remove_user(p2_user.unique_id, Gconnected_users)
+
+            # print("=> Queue size after :", len(Gconnected_users)) 
 
 
     def receive(self, text_data):
