@@ -24,7 +24,7 @@ def matcha(room):
         p1_user, p1_consumer = room[1]
         p2_user, p2_consumer = room[2]
 
-        p1_user.state = MyUser.IN_GAME  #sync to asyn
+        p1_user.state = MyUser.IN_GAME  #sync to asyn #to be modified
         p1_user.save()
 
         p2_user.state = MyUser.IN_GAME
@@ -117,6 +117,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
         self.user_id = str(user.unique_id)
 
+
         self.room_name = room[0]
         self.room_group_name = f"game_room_{self.room_name}"
 
@@ -150,33 +151,53 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         )
 
     async def broadcast_event(self, event):
+        if event['payload'].get('type') == 'Game_end':
+            user_id1 = event['payload']['paddle']['x']
+            user_id2 = event['payload']['paddle']['y']
 
+            user  = await get_user_by_unique_id(user_id1)
+            print('==>', user.login)
+            user2 = await get_user_by_unique_id(user_id2)
+            print('==>', user2.login)
 
-        # print(str(event['payload'].get('my_id')), ", ", str(self.scope['user'].unique_id))
-        #check game end
-        #fake DATA creation !
-        # users = MyUser.objects.filter(login=p1_user)
-        # if users.exists():
-        #     user = users.first()
-        # else:
-        #     user = None
+            score_1 = int(event['payload']['ball']['x'])
+            score_2 = int(event['payload']['ball']['y'])
 
-        # users = MyUser.objects.filter(login=p2_user)
-        # if users.exists():
-        #     user2 = users.first()
-        # else:
-        #     user2 = None
-        # if (user and user2):
-        #     Game.objects.create(user_p1=user, user_p2=user2, winner=user, loser=user2, score_p1=7, score_p2=5)
-        #
+            if user and user2:
+                # Decide winner vs loser
+                if score_1 > score_2:
+                    t_winner, t_loser = user, user2
+                else:
+                    t_winner, t_loser = user2, user
 
+                await create_game(
+                    user_p1=user,
+                    user_p2=user2,
+                    winner=t_winner,
+                    loser=t_loser,
+                    score_p1=score_1,
+                    score_p2=score_2
+                )
         
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):
             return
 
         await self.send(json.dumps(event['payload']))
 
+@sync_to_async
+def get_user_by_unique_id(unique_id):
+    return MyUser.objects.filter(unique_id=unique_id).first()
 
+@sync_to_async
+def create_game(user_p1, user_p2, winner, loser, score_p1, score_p2):
+    return Game.objects.create(
+        user_p1=user_p1,
+        user_p2=user_p2,
+        winner=winner,
+        loser=loser,
+        score_p1=score_p1,
+        score_p2=score_p2
+    )
 
 
 

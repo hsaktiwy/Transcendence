@@ -92,7 +92,7 @@ const RemoteGame = () => {
                 console.log("=> The brodcaster :", data['my_id']);
                 console.log("   => Says        :", data['message'], '\n');
             }
-            if (data['type'] == 'paddle_update'){
+            if (data['type'] == 'paddle_update' || data['type'] == 'Game_end'){
                 
                 Aix               = data['paddle']['x'];
                 Aiy               = data['paddle']['y'];
@@ -133,11 +133,9 @@ const RemoteGame = () => {
                             winner  : ReomteGameData.my_user
                         });        
                     }
-                    console.log("=====> decided winner before : ", ReomteGameData);
                     setAiScore(0);
                     setPlayerScore(0);
                     navigate('/game/Winner');
-                    // navigate()
                 }
 
                 if(ball_count > Objects.length){
@@ -595,8 +593,6 @@ const RemoteGame = () => {
         // gui.add(BallCreator, 'cameraFixed');
         
         //Scoring System
-        let PlayerScore = 0;
-        let AiScore     = 0;
         let New_ball_launched = false;
         
         //  Animate
@@ -631,7 +627,6 @@ const RemoteGame = () => {
             };
             if (gameSocket.readyState === 1)
                 gameSocket.send(JSON.stringify(message));
-            console.log("=======>", message.my_id);
         };
 
         let   accumulator = 0;
@@ -783,9 +778,7 @@ const RemoteGame = () => {
                 }
                 
             }
-            // if (Objects.length && (Objects[Objects.length - 1].created_by_me === true)){
             checkCollision();
-            // }
         
             topControls.update()
             // stat.update()
@@ -810,35 +803,30 @@ const RemoteGame = () => {
 
             renderer.dispose();
 
-            // gui.destroy();
-
             topControls.dispose();
 
             hit_sound.pause();
             hit_sound.src = "";
-            // gameSocket.close();
+            gameSocket.close();
         };
 
     }, [ReomteGameData.room_name, ReomteGameData.p1_id, ReomteGameData.p2_id ]);
   
     useEffect(() => {
     if (playerScore === 7 || aiScore === 7 || The_end === true ) {
-        // sendPaddleUpdate(true);
-        // const sendPaddleUpdate = (end_state) => {
-            // console.log("=======>", Objects.length);
 
         const message = {
-            type: 'paddle_update',
+            type: 'Game_end',
             my_id: ReomteGameData.p1_id,
             paddle: {
-                x: 0,
-                y: 0,      
+                x: ReomteGameData.p1_id,
+                y: ReomteGameData.p2_id,      
             },
             ball: {
                 c: 1,
                 
-                x:  1,
-                y:  1,
+                x:  playerScore,
+                y:  aiScore,
                 z:  1,
 
                 mousedirection: 1,
@@ -849,38 +837,22 @@ const RemoteGame = () => {
         };
         if (playerScore === 7){
             setReomteGameData({
-                // room_name: null,
-                // role     : null,
-                // my_user  : null,
-                // opponent : null,
-                // p1_id    : null,
-                // p2_id    : null,
                 winner  : ReomteGameData.my_user
             });    
             message.ball.mousedirection = 1;
         }
         else {
             setReomteGameData({
-                // room_name: null,
-                // role     : null,
-                // my_user  : null,
-                // opponent : null,
-                // p1_id    : null,
-                // p2_id    : null,
                 winner  : ReomteGameData.opponent
             });     
             message.ball.mousedirection = 2;
         }
             if (docket && docket.readyState === 1)
                 docket.send(JSON.stringify(message));
-
-
-        console.log("==> decided winner before : ", ReomteGameData.winner);
         
         setPlayerScore(0);
         setAiScore(0);
         navigate('/game/winner');
-        // alert(`${playerScore === 7 ? 'Player' : 'Ai'} Wins!`);
 
         return(docket.close());
     }
