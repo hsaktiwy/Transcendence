@@ -7,5 +7,5 @@ websocket_urlpatterns = [
     re_path(r'ws/game/', GameConsumer.as_asgi()),
 
     re_path(r'server-endpoint-socket/$', ApiConsumer.as_asgi()),
-    re_path(r'ping-pong/room/(?P<room_name>\w+)', GameRoomConsumer.as_asgi()),
+    re_path(r'ping-pong/room/(?P<room_name>\w+)$', GameRoomConsumer.as_asgi()),
 ]
