@@ -44,14 +44,14 @@ const ProfileTest  = () =>{
     const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
     // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
-    const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
+    // const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
     
 
    const {uuid} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
-   const {setUserMatchHistory} = userContextConsumer;
+//    const {setUserMatchHistorey} = userContextConsumer;
 
     const getChannelId = async () =>{
             try{
@@ -79,13 +79,11 @@ const ProfileTest  = () =>{
                 withCredentials: true,
             }
             const resp = await mailman(req);
-            console.log('matches  is here  ma hree : \n', resp.data);
             const fetchedData: LinechartData = {
                 user: resp.data.user,
                 weekly_match_data: resp.data.weekly_match_data, // This should already be an array
             };
             setLineChartData(fetchedData);
-            console.log('hiiii mhere', lineChartData);
             // setMatches(resp.data);
         }
         catch (err){
@@ -101,7 +99,6 @@ const ProfileTest  = () =>{
                 withCredentials: true,
             }
             const resp = await mailman(req);
-            console.log('print win and lose mheree pleas : \n', resp.data);
             setMatches(resp.data);
             setRadarChartData(resp.data);
         }
@@ -110,20 +107,42 @@ const ProfileTest  = () =>{
         }
     }
 
-    const getMatchHistoryData = async (type:string) =>{
-        const req = {
-            url: `/game/get_matches/${uuid}/${type}`,
-            method: 'GET',
-          };
-          const resp = await mailman(req);
-        if (resp.data.Game)
+    const [matchHistoryType, setMatchHistoryType] = useState("PONG");
+    const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
+  
+    // Function to fetch match history data
+    const getMatchHistoryData = async (type: any) => {
+      const req = {
+        url: `/game/get_matches/${uuid}/${type}`,
+        method: "GET",
+      };
+      const resp = await mailman(req);
+    //   console.log('heeeree reso data', resp.data.Game)
+      if (resp.data.Game)
+      {
           setUserMatchHistory(resp.data.Game);
-    }
+      }
+    };
+    
+    // Function to switch match type
+    const switchMatchHistoryType = (type :any) => {
+        setMatchHistoryType(type);
+        getMatchHistoryData(type);
+    };
+    useEffect(()=>
+    {
+        console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
 
+    }, [userMatchHistory])
+    
+    // Fetch initial data when component mounts
+    // useEffect(() => {
+    //     getMatchHistoryData(matchHistoryType);
+    //   }, [matchHistoryType]);  // <-- Now it will refetch when switching tabs
+      
    const fetchUserData = async () =>{
     try{
         const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
-        console.log('waaaaaaaa    ',user, "waaaaa2 ",  uuid)
         if (user.length === 0)
         {
             setIsLoading(true);
@@ -160,28 +179,21 @@ const ProfileTest  = () =>{
           const resp = await mailman(req)
           const  responce:boolean = resp.data['status']
           setIsbLock(responce)
-
-        //   setBtn_block(responce ? 'UnBlock' : 'Block');
-          console.log('hiii ->>>', resp);
         }
         catch(err)
         {
             console.log("Block status ", err)
         }
     }
+    const waitData=  async() =>
+        {
+            
+            await fetchLineChart();
+            await fetchMatches();
+            await getMatchHistoryData(matchHistoryType);
+            setIsLoading(false)
+        } 
 
-    const switchMatchHistoryType = ()=>{
-        if (matchHistoryType == 'PONG')
-        {
-            setMatchHistoryType('CHESS')
-            getMatchHistoryData('CHESS')
-        }
-        else
-        {
-            setMatchHistoryType('PONG')
-            getMatchHistoryData('PONG')
-        }
-    }
 
    useEffect(() =>{
     if (userContextConsumer?.userData?.unique_id !== uuid){
@@ -195,20 +207,17 @@ const ProfileTest  = () =>{
             return () => clearTimeout(timer);
           });
           BlockStatusCheck();
-          fetchMatches();
-          fetchLineChart();
+          waitData();
+          
     }
     else
     {
         setIsbLock(false)
         setProfileData(userContextConsumer?.userData)
-        setIsLoading(false)
-        fetchLineChart();
-        fetchMatches();
+        waitData()
     }
-   },[uuid, userContextConsumer.blockList])
+   },[uuid, userContextConsumer.blockList, matchHistoryType])
    useEffect(()=>{
-    console.log('-----------------------------------------------------------------------------> reload profile')
    },[])
 
     return(
@@ -260,12 +269,28 @@ const ProfileTest  = () =>{
                                 </div>
                         </div>
                         </div>
-                        <div className=" md:hidden xxl:block  xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6">
-                            <div className=" relative rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869] h-full p-4 ">
-                                <button onClick={switchMatchHistoryType}>{matchHistoryType}</button>
-                                <MatchHistory    />
+                        <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 relative rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] h-full w-full">
+                                <div className="w-full h-full flex flex-col">
+                                    {/* Tab Navigation */}
+                                    <div className="flex">
+                                    {["PONG", "CHESS"].map((type) => (
+                                        <button
+                                        key={type}
+                                        className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                                            matchHistoryType === type
+                                            ? "bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-b-none"
+                                            : "text-gray-500 bg-none"
+                                        } hover:text-[#5E97A9]`}
+                                        onClick={() => switchMatchHistoryType(type)}
+                                        >
+                                        {type}
+                                        </button>
+                                    ))}
+                                    </div>
+                                    <MatchHistory data={userMatchHistory} />
+                                </div>
                             </div>
-                        </div>
+
                         <div className=" relative p-4 rounded-2xl xxl:px-7 md:hidden xl:block  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3  xxl:row-span-6 xl:p-3 xxl:p-10 flex justify-center items-center  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869]">
                             <PieChartFile matches={matches}/>
                         </div>
@@ -287,7 +312,25 @@ const ProfileTest  = () =>{
                         </div>
                         <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
                             <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
-                                <MatchHistory />
+                                <div className="w-full max-w-md mx-auto">
+                                        {/* Tab Navigation */}
+                                        <div className="flex">
+                                            {["PONG", "CHESS"].map((type) => (
+                                            <button
+                                                key={type}
+                                                className={`px-4 py-2 text-sm font-medium  rounded-md bg-[#283137] transition-all
+                                                ${matchHistoryType === type ? "bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-b-none " : "text-gray-500 bg-[#283137]"}
+                                                hover:text-[#5E97A9]`}
+                                                onClick={() => switchMatchHistoryType(type)}
+                                            >
+                                                {type}
+                                            </button>
+                                            ))}
+                                        </div>
+
+                                        {/* Match History Component */}
+                                        <MatchHistory data={userMatchHistory} />
+                                </div>
                             </div>
                         </div>
                         <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">

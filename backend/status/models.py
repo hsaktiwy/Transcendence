@@ -59,7 +59,16 @@ class   AchievementTypes(models.TextChoices):
     PLATINUM = 'PLATINUM'
     LEGEND = 'LEGEND'
 
-ACHIEVEMENT_DESCRIPTIONS = {
+ACHIEVEMENT_DESCRIPTION = {
+    AchievementTypes.FIRST_MATCH: "Win your first match",
+    AchievementTypes.WINNING_STREAK: "Won five matches consecutively",
+    AchievementTypes.BRONZE: "Reached Bronze tier",
+    AchievementTypes.SILVER: "Reached Silver tier",
+    AchievementTypes.GOLD: "Reached Gold tier",
+    AchievementTypes.PLATINUM: "Reached Platinum tier",
+    AchievementTypes.LEGEND: "Achieved legendary status",
+}
+ACHIEVEMENT_TITLE  = {
     AchievementTypes.FIRST_MATCH: "First match",
     AchievementTypes.WINNING_STREAK: "5 wins streak",
     AchievementTypes.BRONZE: "Bronze",
@@ -83,6 +92,7 @@ class Achievements(models.Model):
     id_user_fk = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     type = models.CharField(max_length=30, choices=AchievementTypes.choices)
     description  = models.CharField(max_length=50,null=True, blank=True)
+    title  = models.CharField(max_length=50,null=True, blank=True)
     game_numbers = models.IntegerField(default=0)
     win_streak = models.IntegerField(default=0)
     unlocked = models.BooleanField(default=False)
@@ -92,7 +102,8 @@ class Achievements(models.Model):
         print("Achievements save: ", self, arg, kargs)
         if (self.type and not self.description):
             self.icon = ACHIEVEMENT_ICONS.get(self.type, 'firstPaddle')
-            self.description = ACHIEVEMENT_DESCRIPTIONS.get(self.type,"No description available.")
+            self.title = ACHIEVEMENT_TITLE.get(self.type,"No Title available.")
+            self.description = ACHIEVEMENT_DESCRIPTION.get(self.type,"No description available.")
             if (self.type == AchievementTypes.BRONZE or self.type == AchievementTypes.WINNING_STREAK):
                 self.game_numbers = 5
             elif (self.type == AchievementTypes.SILVER):
