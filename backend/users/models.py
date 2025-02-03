@@ -33,13 +33,15 @@ class MyUserManager(BaseUserManager):
 
 # Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
-    ONLINE = 'online'
-    IN_GAME = 'in_game'
-    OFFLINE = 'offline'
+    ONLINE   = 'online'
+    IN_GAME  = 'in_game'
+    END_GAME = 'end_game'
+    OFFLINE  = 'offline'
     
     STATE_CHOICES = [
         (ONLINE, 'Online'),
         (IN_GAME, 'In Game'),
+        (END_GAME, 'End Game'),
         (OFFLINE, 'Offline'),
     ]
 

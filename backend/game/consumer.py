@@ -5,6 +5,18 @@ from asgiref.sync import sync_to_async
 from .models import Game
 from users.models import MyUser
 import json
+import random
+import string
+
+
+
+
+def random_room_name(length=8):
+    letters_and_digits = string.ascii_lowercase + string.digits
+    return ''.join(random.choices(letters_and_digits, k=length))
+
+# room_name = random_room_name(8)
+# print(room_name)  # e.g. "xb4an0sd"
 
 class GameConsumer(AsyncWebsocketConsumer):
 
@@ -104,6 +116,27 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #/////////
 
 
@@ -112,107 +145,105 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 
 Gconnected_users = []
+#(user, consumer), ...
+
+Rooms = []
+
+# Rooms.append(["Room_name", user1, user2])
+
+
+def remove_user(target_user_id, connected_users):
+    for i, (user_obj, nn) in enumerate(connected_users):
+        if user_obj.unique_id == target_user_id:
+            connected_users.pop(i)
+            break
 
 class ApiConsumer(WebsocketConsumer):
-    connected_users = 0
-    my_id = 0
-    user = ''
+    user_id = 0
 
     def connect(self):
         self.accept()
 
         user = self.scope['user']
 
-        print("=> AL USER :", user.login)
+        print("=> user connected to official route :", user.login)
 
-        user = self.scope['url_route']['kwargs']['user_id']
+        self.user_id = user.unique_id
 
-        print("=> AL USER :", user)
+        Gconnected_users.append((user, self)) #user bkero
 
-
-        ApiConsumer.connected_users += 1
-        self.my_id = ApiConsumer.connected_users
-        self.user = user
-
-        Gconnected_users.append((self.my_id, self, user))
-
-        print("=>", f"Client {self.my_id} Connected !. (Total users {len(Gconnected_users)})")
-        # print("=>", Gconnected_users)
+        print("=>", f"Client {self.user_id}, {user.login} Connected !. (Total users {len(Gconnected_users)})")
 
         self.send(json.dumps({
             'type': 'connection_established',
-            'my_id': self.my_id,
-            'message': f'ki rak b9it assadi9, {self.user} '
+            'my_id': str(user.unique_id),
+            'message': f'ki rak b9it assadi9, {user.login} '
         }))
 
         if (len(Gconnected_users) == 2):
-            # notify the two players
-            # room_name = str(uuid.uuid4())[:8]  # create a short random room name
-            room_name = 'Bit_N3as'
+            room_name = str(random_room_name())  # create a short random room name
 
-            p1_id, p1_consumer, p1_user = Gconnected_users[0]
-            p2_id, p2_consumer, p2_user = Gconnected_users[1]
+            p1_user, p1_consumer = Gconnected_users[0]
+            p2_user, p2_consumer = Gconnected_users[1]
 
+            Rooms.append([room_name, p1_user.unique_id, p2_user.unique_id])
 
             #fake DATA creation !
-            users = MyUser.objects.filter(login=p1_user)
-            if users.exists():
-                user = users.first()
-            else:
-                user = None
+            # users = MyUser.objects.filter(login=p1_user)
+            # if users.exists():
+            #     user = users.first()
+            # else:
+            #     user = None
 
-            users = MyUser.objects.filter(login=p2_user)
-            if users.exists():
-                user2 = users.first()
-            else:
-                user2 = None
-
-            Game.objects.create(user_p1=user, user_p2=user2, winner=user, loser=user2, score_p1=7, score_p2=5)
+            # users = MyUser.objects.filter(login=p2_user)
+            # if users.exists():
+            #     user2 = users.first()
+            # else:
+            #     user2 = None
+            # if (user and user2):
+            #     Game.objects.create(user_p1=user, user_p2=user2, winner=user, loser=user2, score_p1=7, score_p2=5)
             #
+
+            p1_user.state = MyUser.IN_GAME
+            p1_user.save()
+
+            p2_user.state = MyUser.IN_GAME
+            p2_user.save()
 
             p1_consumer.send(json.dumps({
                 'type': 'match_found',
-                'my_id': p1_id,
+                'role': 'p1',
+                'my_id': p1_user.unique_id,
                 'room_name': room_name,
-                'opponent_id': p2_id,
-                'user_name' : p1_user,
-                'opponent_name': p2_user,
-            }))
+                'opponent_id': p2_user.unique_id,
+
+                'user_name' : p1_user.login,
+                'opponent_name': p2_user.login,
+            }, default=str))
 
             p2_consumer.send(json.dumps({
                 'type': 'match_found',
-                'my_id': p2_id,
+                'role': 'p2',
+                'my_id': p2_user.unique_id,
                 'room_name': room_name,
-                'opponent_id': p1_id,
-                'user_name' : p2_user,
-                'opponent_name': p1_user,
-            }))
+                'opponent_id': p1_user.unique_id,
+                
+                'user_name' : p2_user.login,
+                'opponent_name': p1_user.login,
+            }, default=str))
+            
+            remove_user(p1_user.unique_id, Gconnected_users)
+            remove_user(p2_user.unique_id, Gconnected_users)
 
-            Gconnected_users.pop(0)
-            Gconnected_users.pop(0)
-            # Gconnected_users.pop(1)
-            # Gconnected_users.clear()
 
     def receive(self, text_data):
         data = json.loads(text_data)
-
-        if (data['type'] == "Websocket_message"):
-            # print("=>", f"Client {self.my_id}  :", data['message'])
-
-            response = {
-                'type': 'server_response',
-                'message': f"<Server received ur message : {data['message']}>"
-            }
-            self.send(json.dumps(response))
+        #ser 3a t9awed, matsiftlich
 
     def disconnect(self, close_code):
-        print("=>", f"Client {self.my_id}  DisConnected !")
-        for i, (cid, instance, pp) in enumerate(Gconnected_users):
-            if cid == self.my_id:
-                Gconnected_users.pop(i-1)
-                break
-        ApiConsumer.connected_users -= 1
-
+        print('hello')
+        #idik fzeb
+        #other player win forfait if the game still in play
 
 class GameRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -265,3 +296,167 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         await self.send(json.dumps(event['payload']))
 
 
+
+
+# from channels.generic.websocket import WebsocketConsumer
+# # from channels.generic.websocket import AsyncWebsocketConsumer
+# import json
+
+# Gconnected_users = []
+# #user1, user2, user3, ...
+
+# Rooms = []
+# # Rooms.append({
+# #     "Room_name": [user1, user2]
+# # })
+
+# class ApiConsumer(WebsocketConsumer):
+#     connected_users = 0
+#     my_id = 0
+#     user = ''
+
+#     def connect(self):
+#         self.accept()
+
+#         user = self.scope['user']
+
+#         print("=> AL USER :", user.login)
+
+#         user = self.scope['url_route']['kwargs']['user_id']
+
+#         print("=> AL USER :", user)
+
+
+#         ApiConsumer.connected_users += 1
+#         self.my_id = ApiConsumer.connected_users
+#         self.user = user
+
+#         Gconnected_users.append((self.my_id, self, user))
+
+#         print("=>", f"Client {self.my_id} Connected !. (Total users {len(Gconnected_users)})")
+#         # print("=>", Gconnected_users)
+
+#         self.send(json.dumps({
+#             'type': 'connection_established',
+#             'my_id': self.my_id,
+#             'message': f'ki rak b9it assadi9, {self.user} '
+#         }))
+
+#         if (len(Gconnected_users) == 2):
+#             # notify the two players
+#             room_name = str(uuid.uuid4())[:8]  # create a short random room name
+#             # room_name = 'Bit_N3as'
+
+#             p1_id, p1_consumer, p1_user = Gconnected_users[0]
+#             p2_id, p2_consumer, p2_user = Gconnected_users[1]
+
+
+#             #fake DATA creation !
+#             users = MyUser.objects.filter(login=p1_user)
+#             if users.exists():
+#                 user = users.first()
+#             else:
+#                 user = None
+
+#             users = MyUser.objects.filter(login=p2_user)
+#             if users.exists():
+#                 user2 = users.first()
+#             else:
+#                 user2 = None
+
+#             Game.objects.create(user_p1=user, user_p2=user2, winner=user, loser=user2, score_p1=7, score_p2=5)
+#             #
+
+#             p1_consumer.send(json.dumps({
+#                 'type': 'match_found',
+#                 'my_id': p1_id,
+#                 'room_name': room_name,
+#                 'opponent_id': p2_id,
+#                 'user_name' : p1_user,
+#                 'opponent_name': p2_user,
+#             }))
+
+#             p2_consumer.send(json.dumps({
+#                 'type': 'match_found',
+#                 'my_id': p2_id,
+#                 'room_name': room_name,
+#                 'opponent_id': p1_id,
+#                 'user_name' : p2_user,
+#                 'opponent_name': p1_user,
+#             }))
+
+#             Gconnected_users.pop(0)
+#             Gconnected_users.pop(0)
+#             # Gconnected_users.pop(1)
+#             # Gconnected_users.clear()
+
+#     def receive(self, text_data):
+#         data = json.loads(text_data)
+
+#         if (data['type'] == "Websocket_message"):
+#             # print("=>", f"Client {self.my_id}  :", data['message'])
+
+#             response = {
+#                 'type': 'server_response',
+#                 'message': f"<Server received ur message : {data['message']}>"
+#             }
+#             self.send(json.dumps(response))
+
+#     def disconnect(self, close_code):
+#         print("=>", f"Client {self.my_id}  DisConnected !")
+#         for i, (cid, instance, pp) in enumerate(Gconnected_users):
+#             if cid == self.my_id:
+#                 Gconnected_users.pop(i-1)
+#                 break
+#         ApiConsumer.connected_users -= 1
+
+
+# class GameRoomConsumer(AsyncWebsocketConsumer):
+#     async def connect(self):
+
+#         query_string = self.scope["query_string"].decode()  # "user_id=42"
+#         query_params = dict(qc.split('=') for qc in query_string.split('&'))
+#         self.user_id = query_params.get('user_id', 'unknown')
+
+#         # print("=> This consumer belongs to user_id:", self.user_id)
+#         # print("  => Url :", self.scope["query_string"].decode(), '\n')
+
+#         self.room_name = self.scope['url_route']['kwargs']['room_name']
+
+#         self.room_group_name = f"game_room_{self.room_name}"
+
+#         await self.channel_layer.group_add(
+#             self.room_group_name,
+#             self.channel_name
+#         )
+
+#         # Accept the WebSocket connection
+#         await self.accept()
+
+#     async def disconnect(self, close_code):
+#         # On disconnect, remove from the group
+#         await self.channel_layer.group_discard(
+#             self.room_group_name,
+#             self.channel_name
+#         )
+
+#     async def receive(self, text_data):
+#         # Receive a message from the client
+#         data = json.loads(text_data)
+
+#         # Broadcast it to everyone else in the same group
+#         await self.channel_layer.group_send(
+#             self.room_group_name,
+#             {
+#                 # This is the method name that will be called (like a "handler")
+#                 'type': 'broadcast_event',
+#                 'payload': data
+#             }
+#         )
+
+#     async def broadcast_event(self, event):
+
+#         if (str(event['payload'].get('my_id')) == self.user_id):
+#             return
+
+#         await self.send(json.dumps(event['payload']))
