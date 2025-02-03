@@ -10,8 +10,7 @@ import { useEffect } from 'react';
 function Tournament() {
   const navigate = useNavigate();
   const { LocalGamesData }    = useLocalGamesContext();
-  const { LocalGamesData2 }   = useLocalGamesContext();
-  const { setLocalGamesData } = useLocalGamesContext();
+  // const { setLocalGamesData } = useLocalGamesContext();
   
   useEffect( () => {
       if ( LocalGamesData.gametype !== 'Tournament'
