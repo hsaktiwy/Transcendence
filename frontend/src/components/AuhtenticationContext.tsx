@@ -141,8 +141,11 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
 
             }
             catch(error){
-                const axiosError = error as AxiosError
-                if (loggedIn === true)
+                interface errorInterface{
+                    detail?:string
+                }
+                const axiosError = error as AxiosError<errorInterface>
+                if (loggedIn === true || axiosError.response?.data['detail'] && axiosError.response.data['detail'] === 'User not found')
                     setLoggedIn(false)
             }
   

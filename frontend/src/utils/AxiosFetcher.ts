@@ -26,13 +26,11 @@ mailman.interceptors.request.use(
 
 mailman.interceptors.response.use(
     (response) =>{
-        console.log("wala", location.origin);
         if(response.headers['csrf_token'])
             localStorage.setItem("csrf_token", response.headers['csrf_token'])
         return response
     },
     async (error) =>{
-        console.log(error)
         const originalRequest = error.config
         if ((error.response.config.responseType==='blob' || (error.response  && error.response.data['detail'] && error.response.data['detail'] == 'Expired token')) && (error.response.status == 401 && !originalRequest._retry)){
             originalRequest._retry = true
