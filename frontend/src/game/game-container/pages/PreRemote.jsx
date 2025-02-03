@@ -34,7 +34,7 @@ const PreRemote = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
-    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + username);
+    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
     console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
     
     socket.onopen = () => {
@@ -47,12 +47,11 @@ const PreRemote = () => {
       if (data['type'] === 'match_found') {
         console.log("=> Match Found:");
         console.log("   => room_name     :", data['room_name']);
+        console.log("   => my_role       :", data['role']);
+        console.log("   => user_name     :", data['user_name']);
+        console.log("   => opponent_name :", data['opponent_name']);
         console.log("   => my_id         :", data['my_id']);
         console.log("   => opponent_id   :", data['opponent_id']);
-        console.log("   => user_name     :", data['user_name']);
-        console.log("   => user_image    :", data['user_image']);
-        console.log("   => opponent_name :", data['opponent_name']);
-        console.log("   => opponent_image:", data['opponent_image']);
         
         // Update match context
         setMatchData({
