@@ -40,19 +40,19 @@ function Backgrounds() {
   return (
     <>
 
-        {/* <div className={OnChessRoute ? "" : "hidden-v"}>
+        <div className={OnChessRoute ? "" : "hidden-v"}>
           <ChessGameBack />
         </div>
         <div className={OnPongRoute ? "" : "hidden-v"}>
           <PingPongBack />
-        </div> */}
+        </div>
 
         {/* <div className={show ? "" : "hidden-v"}>
           <DefaultBack />
           </div> */}
 
 
-        {/* <div className={show ? "teams-container" : "hidden-v"} >
+        <div className={show ? "teams-container" : "hidden-v"} >
           <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
             <center>
               <h1>Le7ya's Game</h1>
@@ -65,7 +65,7 @@ function Backgrounds() {
             </center>
             <PingPongPreview />
           </div>
-        </div> */}
+        </div>
 
     </>
   );
