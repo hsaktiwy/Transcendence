@@ -155,7 +155,7 @@ function ChatSession(){
             // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
         }
-    },[chatContext.active])// empty dependency to call this useEffect one time
+    },[chatContext.active])
                                 
     // when we rerender the page
     const SendWebSocketToDefine = ()=>

@@ -10,13 +10,15 @@ import { MatchHistoryDataInterface } from "@/utils/interfaces";
 
 interface MatchHistoryProps {
   data: MatchHistoryDataInterface[];
+  username:string
 }
 
  
-export function MatchHistory({ data }: MatchHistoryProps) {
+export function MatchHistory({ data, username }: MatchHistoryProps) {
 
 
   console.log('dataaaa match history : ->>', data);
+  console.log('Username:', username); // Now properly logged
   const [isPlayed, setIsPlayed] = useState<boolean>(false);
   
   // const fetchUserData = async () =>{
@@ -33,12 +35,12 @@ export function MatchHistory({ data }: MatchHistoryProps) {
   // }
 // }
 
-   const userContextConsumer = useContext(UserContext)
-   if (!userContextConsumer)
-    throw new Error("userContext must be used within a UserProvider");
+  //  const userContextConsumer = useContext(UserContext)
+  //  if (!userContextConsumer)
+  //   throw new Error("userContext must be used within a UserProvider");
 
-    // const {userMatchHistory} = userContextConsumer
-    console.log('usermatch hitrory data okda ->>', data);
+    // const {userData} = userContextConsumer
+    // console.log('usermatch hitrory user 3adi->>', username);
     // console.log('usermatch hitrory userMatchHistory okda ->>', userMatchHistory);
 
 
@@ -55,6 +57,13 @@ export function MatchHistory({ data }: MatchHistoryProps) {
       //     console.error('Error fetching match history:', error);
       //   }
       // };
+      const didUserWin = (game: any, username:string): boolean => {
+        const isUserP1 = username === game.user_p1.login;
+        const isUserP2 = username === game.user_p2.login;
+      
+        return (isUserP1 && game.score_p1 > game.score_p2) || (isUserP2 && game.score_p2 > game.score_p1);
+      };
+      
       
       // // Call the function
       // fetchUserMatchHistory();
@@ -64,7 +73,7 @@ export function MatchHistory({ data }: MatchHistoryProps) {
       }, [])
     return (
   <>
-       {/* !isPlayed*/data.length == 0 ? (<div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
+       {data.length == 0 ? (<div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
           <div className="flex justify-center items-center rounded-xl bg-gradient-to-bl from-[#283137] to-[#242729] flex-col p-6">
           <svg width="68" height="78" viewBox="0 0 34 39"  className="text-lg" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.5144 27.5068C10.7933 26.8975 11.4478 27.0026 11.4478 27.0026L11.4927 27.0077C15.354 27.8865 18.9892 27.7086 21.8527 25.6218" stroke="#FFFCFC" strokeWidth="1.23" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
@@ -79,7 +88,7 @@ export function MatchHistory({ data }: MatchHistoryProps) {
           <h1 className="text-center m-2 text-lg">You haven't played any matches yet</h1>
           </div>
        </div>)  :
-            (<div className="text-2xl h-full w-full rounded-2xl rounded-tl-none bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-lg font-semibold flex flex-col justify-center items-center p-4 overflow-auto">
+            (<div className="text-2xl h-full w-full rounded-2xl rounded-t-none  shadow-lg font-semibold flex flex-col justify-center items-center p-4 overflow-auto">
                     <div className="p-3  w-full h-full grid grid-rows-6 ">
                       <div className="row-span-2  px-6 flex items-center justify-between w-full">
                           <div className="flex items-center justify-center flex-col gap-3">
@@ -87,7 +96,7 @@ export function MatchHistory({ data }: MatchHistoryProps) {
                               <div className="text-base font-medium xxl:text-base ">{` ${data[0].user_p1.firstName}`}</div>
                            </div>
                           <div className="">
-                            <h1 className="text-xl  xxl:text-3xl" >{data[0].score_p1} - {data[0].score_p2}</h1>
+                            <h1 className="text-3xl  xxl:text-3xl" >{data[0].score_p1} - {data[0].score_p2}</h1>
                           </div>
                           <div className="flex items-center justify-center flex-col gap-3">
                           <img className="size-14 lg;size-18  xxl:size-24 rounded-full aspect-square  object-cover" src={`${import.meta.env.VITE_axiosPath}${data[0].user_p2.profile_pic}`} alt="user-image" />
@@ -98,47 +107,71 @@ export function MatchHistory({ data }: MatchHistoryProps) {
                           <h1 className="text-base   text-gray-400 font-medium   "> Last 5 matches</h1>
                           <div className="  w-full  border-t border-[#5E97A9] rounded-full my-3 mt-1"></div>
                           <div className="h-40 xxl:h-60 overflow-y-auto px-5">
-                            {data.map((game:any, index:any) => (
-                              <React.Fragment key={game.id}>
-                                <div className="w-full mb-4 flex items-center bg-gradient-to-bl from-[#242b2f] to-[#1b1e1f] gap-4 shadow-lg rounded-lg py-4">
-                                  <div
-                                    className={`bg-gradient-to-b ${
-                                      index % 2 === 0 ? 'from-[#84D679] via-[#598752] to-[#2D392C]' : 'from-[#E45959] via-[#875252] to-[#392C2C]'
-                                    } w-1 h-16 rounded-r-lg`}
-                                  ></div>
-                                  <div className="w-full mr-4">
-                                    <div className="flex items-center">
-                                      <div className="min-w-32 w-[100%] h-full flex items-center">
-                                            <img className="w-11 aspect-square rounded-full object-cover"  src={`${import.meta.env.VITE_axiosPath}${game.user_p1.profile_pic}`} alt="user-image" />
-                                        <div className="mx-3">
-                                          <h1 className="font-medium text-xs">{game.user_p1.firstName} {game.user_p1.lastName}</h1>
-                                          <h1 className="font-normal opacity-80 text-xs text-left">
-                                            {game.user_p1.login || 'N/A'}
-                                          </h1>
+                          {data.map((game: any, index: any) => {
+                              const userWon = didUserWin(game, username); // Determine if the user won
+
+                              return (
+                                <React.Fragment key={game.id}>
+                                  <div className="w-full mb-4 flex items-center bg-gradient-to-bl from-[#242b2f] to-[#1b1e1f] gap-4 shadow-lg rounded-lg py-4">
+                                    {/* Conditional Gradient for Win/Loss */}
+                                    <div
+                                      className={`bg-gradient-to-b ${
+                                        userWon ? 'from-[#84D679] via-[#598752] to-[#2D392C]' : 'from-[#E45959] via-[#875252] to-[#392C2C]'
+                                      } w-1 h-16 rounded-r-lg`}
+                                    ></div>
+
+                                    {/* Player 1 Details */}
+                                    <div className="w-full mr-4">
+                                      <div className="flex items-center">
+                                        <div className="min-w-32 w-[100%] h-full flex items-center">
+                                          <img
+                                            className="w-11 aspect-square rounded-full object-cover"
+                                            src={`${import.meta.env.VITE_axiosPath}${game.user_p1.profile_pic}`}
+                                            alt="user-image"
+                                          />
+                                          <div className="mx-3">
+                                            <h1 className="font-medium text-xs">
+                                              {game.user_p1.firstName} {game.user_p1.lastName}
+                                            </h1>
+                                            <h1 className="font-normal opacity-80 text-xs text-left">
+                                              {game.user_p1.login || 'N/A'}
+                                            </h1>
+                                          </div>
                                         </div>
+                                        <div>{game.score_p1}</div>
                                       </div>
-                                      <div> {game.score_p1}</div>
-                                    </div>
-                                    <div className="w-full border-t border-[#5E97A9] rounded-full my-4"></div>
-                                    <div className="flex items-center">
-                                      <div className="min-w-32 w-[100%] h-full flex items-center">
-                                            <img className="w-11 aspect-square rounded-full object-cover"  src={`${import.meta.env.VITE_axiosPath}${game.user_p2.profile_pic}`} alt="user-image" />
-                                        <div className="mx-3">
-                                          <h1 className="font-medium text-xs">{game.user_p2.firstName} {game.user_p2.last}</h1>
-                                          <h1 className="font-normal opacity-80 text-xs text-left">
-                                            {game.user_p2.login || 'N/A'}
-                                          </h1>
+
+                                      <div className="w-full border-t border-[#5E97A9] rounded-full my-4"></div>
+
+                                      {/* Player 2 Details */}
+                                      <div className="flex items-center">
+                                        <div className="min-w-32 w-[100%] h-full flex items-center">
+                                          <img
+                                            className="w-11 aspect-square rounded-full object-cover"
+                                            src={`${import.meta.env.VITE_axiosPath}${game.user_p2.profile_pic}`}
+                                            alt="user-image"
+                                          />
+                                          <div className="mx-3">
+                                            <h1 className="font-medium text-xs">
+                                              {game.user_p2.firstName} {game.user_p2.lastName}
+                                            </h1>
+                                            <h1 className="font-normal opacity-80 text-xs text-left">
+                                              {game.user_p2.login || 'N/A'}
+                                            </h1>
+                                          </div>
                                         </div>
+                                        <div>{game.score_p2}</div>
                                       </div>
-                                      <div>{game.score_p2}</div>
                                     </div>
                                   </div>
-                                </div>
-                                {index < data.length - 1 && (
-                                  <div className="w-full border-t border-[#5E97A9] rounded-full my-3"></div>
-                                )}
-                              </React.Fragment>
-                            ))}
+
+                                  {/* Separator Line Between Matches */}
+                                  {index < data.length - 1 && (
+                                    <div className="w-full border-t border-[#5E97A9] rounded-full my-3"></div>
+                                  )}
+                                </React.Fragment>
+                              );
+                            })}
                           </div>
                       </div>
 
