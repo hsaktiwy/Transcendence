@@ -177,6 +177,8 @@ function ConnectButton(prop: buttonInterface) {
   }
   useEffect(()=>{
     // and does the main user have block relationship with the searched one (the one in useparam)
+    setIsfriend("")
+    setFriendRequest("")
     BlockStatusCheck()
     // friendship ? 
     FriendStatusCheck()

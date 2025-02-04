@@ -269,25 +269,33 @@ const ProfileTest  = () =>{
                                 </div>
                         </div>
                         </div>
-                        <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 relative rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] h-full w-full">
+                        <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 relative rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-3xl shadow-[#22333869] h-full w-full">
                                 <div className="w-full h-full flex flex-col">
                                     {/* Tab Navigation */}
-                                    <div className="flex">
+                                    <div className="flex ">
                                     {["PONG", "CHESS"].map((type) => (
                                         <button
                                         key={type}
-                                        className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
                                             matchHistoryType === type
-                                            ? "bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-b-none"
-                                            : "text-gray-500 bg-none"
+                                            ? " rounded-b-none"
+                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
                                         } hover:text-[#5E97A9]`}
                                         onClick={() => switchMatchHistoryType(type)}
                                         >
+                                        <div>
+                                            {
+                                                type == "PONG" ?        
+                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
+                                                     :
+                                                     <div><img className="w-6" src="../strategy.png"/></div>
+                                        }
+                                        </div>
                                         {type}
                                         </button>
                                     ))}
                                     </div>
-                                    <MatchHistory data={userMatchHistory} />
+                                    <MatchHistory data={userMatchHistory} username={profileData?.login} />
                                 </div>
                             </div>
 
@@ -310,28 +318,35 @@ const ProfileTest  = () =>{
                             </div>
                             
                         </div>
-                        <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
-                            <div className="  rounded-2xl bg-gradient-to-tr  from-[#2f3a41] to-[#2B2F32]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full p-4 ">
-                                <div className="w-full max-w-md mx-auto">
-                                        {/* Tab Navigation */}
-                                        <div className="flex">
-                                            {["PONG", "CHESS"].map((type) => (
-                                            <button
-                                                key={type}
-                                                className={`px-4 py-2 text-sm font-medium  rounded-md bg-[#283137] transition-all
-                                                ${matchHistoryType === type ? "bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-b-none " : "text-gray-500 bg-[#283137]"}
-                                                hover:text-[#5E97A9]`}
-                                                onClick={() => switchMatchHistoryType(type)}
-                                            >
-                                                {type}
-                                            </button>
-                                            ))}
-                                        </div>
+                        <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full">
 
-                                        {/* Match History Component */}
-                                        <MatchHistory data={userMatchHistory} />
+                            <div className="w-full h-full flex flex-col">
+                                    {/* Tab Navigation */}
+                                    <div className="flex ">
+                                    {["PONG", "CHESS"].map((type) => (
+                                        <button
+                                        key={type}
+                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
+                                            matchHistoryType === type
+                                            ? " rounded-b-none"
+                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
+                                        } hover:text-[#5E97A9]`}
+                                        onClick={() => switchMatchHistoryType(type)}
+                                        >
+                                        <div>
+                                            {
+                                                type == "PONG" ?        
+                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
+                                                     :
+                                                     <div><img className="w-6" src="../strategy.png"/></div>
+                                        }
+                                        </div>
+                                        {type}
+                                        </button>
+                                    ))}
+                                    </div>
+                                    <MatchHistory data={userMatchHistory} username={profileData?.login} />
                                 </div>
-                            </div>
                         </div>
                         <div className="hidden md:block row-span-4 md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
                             <PieChartFile matches={matches}/>
