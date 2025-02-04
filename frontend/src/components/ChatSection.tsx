@@ -137,11 +137,13 @@ function ChatSection(){
         }
     }
     useEffect(() =>{
-        RemoveChannel('NOTIFICATION_MESSAGE')
-        AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
-        AddChannel('CHAT', UpdateConvs)
         if (loading == false)
+        {
+            RemoveChannel('NOTIFICATION_MESSAGE')
+            AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
+            AddChannel('CHAT', UpdateConvs)
             updateConvsState()
+        }
     },[loading])
     useEffect(()=>{
         if (active)
