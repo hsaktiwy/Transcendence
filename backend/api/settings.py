@@ -91,32 +91,32 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
-    "http://localhost:5173",
-    "http://localhost:5173",
-    "https://localhost:4444",
-    "https://localhost",
+    "http://10.11.7.13:5173",
+    "http://10.11.7.13:5173",
+    "https://10.11.7.13:4444",
+    "https://10.11.7.13",
 )
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5173",
-    "https://localhost:4444",
-    "https://localhost",
+    "http://10.11.7.13:5173",
+    "http://10.11.7.13:5173",
+    "https://10.11.7.13:4444",
+    "https://10.11.7.13",
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:5173",
+    "http://10.11.7.13:3000",
+    "http://10.11.7.13:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:6379",
     "http://10.13.4.11:5173",
-    "http://localhost:5173",
+    "http://10.11.7.13:5173",
     "http://172.21.0.3:5173",
-    "https://localhost:4444",
-    "https://localhost",
+    "https://10.11.7.13:4444",
+    "https://10.11.7.13",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
