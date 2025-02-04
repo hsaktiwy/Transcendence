@@ -102,11 +102,19 @@ function ChatSection(){
             }
             const rep  = await mailman(req)
             const fetched_conv:Conversation =  rep.data.conv as Conversation
-            console.log(fetched_conv)
-            console.log('conv', convs)
-            let list_conv:Conversation[] = convs ? convs : []
-            list_conv.push(fetched_conv)
-            setConvs(list_conv)
+            // console.log(fetched_conv)
+            // console.log('conv', convs)
+            if (convs != undefined)
+            {
+                let list_conv:Conversation[] = [fetched_conv, ...convs]
+                setConvs(list_conv)
+            }
+            else
+            {
+                let list_conv:Conversation[] = [fetched_conv]
+                setConvs(list_conv)
+            }
+            // console.log('list conv', list_conv)
             
         }
         catch(e){
@@ -115,30 +123,39 @@ function ChatSection(){
         }
     }
     const Update_chat_notif = (data:NotificationPropreties)=>{
-        if (data)
+        // if (data)
+        // {
+        const channel_id = data.channel_id
+        // console.log('wa hafida ', convs, channel_id)
+        if (convs)
         {
-            const channel_id = data.channel_id
-            console.log('wa hafida ', convs, channel_id)
-            if (convs)
-            {
-                if (convs?.filter(conv => conv.channelId === channel_id).length === 0)
-                    get_conversation(channel_id)
-            }
-            else
+            if (convs?.filter(conv => conv.channelId === channel_id).length === 0)
                 get_conversation(channel_id)
         }
+        else
+            get_conversation(channel_id)
+        // }
     }
     useEffect(() =>{
         if (loading == false)
+        {
             updateConvsState()
+            RemoveChannel('NOTIFICATION_MESSAGE')
+            AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
+            AddChannel('CHAT', UpdateConvs)
+        }
+        return () => {
+            // Remove the CHAT call back function when we exist the chat section
+            AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
+            RemoveChannel('CHAT')
+            RemoveChannel('UPDATE_CHAT_NOTIF')
+        }
     },[loading])
   
     useEffect(()=>
     {
         console.log('hekkkk')
-        RemoveChannel('NOTIFICATION_MESSAGE')
-        AddChannel('UPDATE_CHAT_NOTIF', Update_chat_notif)
-        AddChannel('CHAT', UpdateConvs)
+       
         if (location?.state?.channel_id)
         {
             const {channel_id} = location.state 
@@ -152,12 +169,7 @@ function ChatSection(){
 
         // create a function that will update the general data
         // updateConvsState()
-        return () => {
-            // Remove the CHAT call back function when we exist the chat section
-            AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
-            RemoveChannel('CHAT')
-            RemoveChannel('UPDATE_CHAT_NOTIF')
-        }
+       
     }, [])
 
     return(
