@@ -65,8 +65,8 @@ function ChatSession(){
 
     useEffect(()=>{
         setRCount((re)=>(re+1))
-        BlockStatusCheck()
-    },[userContext.action, chatContext.active])
+        // BlockStatusCheck()
+    },[userContext.action])
     //amine
     
     
