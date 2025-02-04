@@ -2,22 +2,23 @@ import React, { useState, useEffect } from 'react';
 import "./ChessPreRemote.css";
 import { Frame } from "../../components/Frame";
 import { useNavigate } from "react-router-dom";
-import { useMatchContext } from '../../game/MatchContext';
-import ChessGameBack from '../ChessBack';
-import { color } from 'three/webgpu';
+import { useRemoteGameContext } from '../../game/MatchContext';
 
 const ChessPreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
-  const { setMatchData } = useMatchContext();
+
+  const { setReomteGameData } = useRemoteGameContext();
+
+  
 
   const startMatchmaking = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
     // const socket = new WebSocket('ws://localhost:8000/ws/server-endpoint-socket-chess/');
-    const socket = new WebSocket('ws://localhost:8000/ws/server-endpoint-socket-chess/');
+    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket-chess/');
     // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
@@ -35,11 +36,16 @@ const ChessPreRemote = () => {
         console.log("   => color       :", data['color']);
         
         // Update match context
-        setMatchData({
-          roomName: data['room_name'],
-          myId: data['my_id'],
-          opponentId: data['opponent_id'],
-          color: data['color']
+
+        setReomteGameData({
+          room_name: data['room_name'],
+          role     : data['role'],
+          my_user  : data['user_name'],
+          opponent : data['opponent_name'],
+          p1_id    : data['my_id'],
+          p2_id    : data['opponent_id'],
+          color    : data['color'],
+          winner   : null
         });
         
         // Close the socket and navigate to RemoteGame

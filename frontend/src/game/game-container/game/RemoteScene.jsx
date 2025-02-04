@@ -15,7 +15,7 @@ import './RemoteScene.css'
 import Scoreboard from '../components/Scoreboard';
 import { useNavigate } from 'react-router-dom';
 
-import { useRemoteGameContext } from './MatchContext';
+import { useRemoteGameContext } from '../game/MatchContext';
 
 
 
@@ -688,7 +688,7 @@ const RemoteGame = () => {
             }
             
             if (Objects.length && paddleAi){
-                Ball_Thrower(New_ball_launched)
+                // Ball_Thrower(New_ball_launched)
                 // paddleAi.position.x = Objects[Objects.length - 1].sphere.position.x; 
                 // paddleAi.position.y = Objects[Objects.length - 1].sphere.position.y - 0.4;
                 
