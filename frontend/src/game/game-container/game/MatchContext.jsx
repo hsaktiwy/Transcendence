@@ -46,7 +46,8 @@ export function RemoteGameProvider({ children }) {
     opponent : null,
     p1_id    : null,
     p2_id    : null,
-    winner   : null
+    winner   : null,
+    color    : null
 
   });
 
