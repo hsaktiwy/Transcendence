@@ -16,7 +16,7 @@ def random_room_name(length=8):
 from channels.generic.websocket import WebsocketConsumer
 # from channels.generic.websocket import AsyncWebsocketConsumer
 
-Rooms = []
+PPong_Rooms = []
 # Rooms.append(["Room_name", [user1, consumer],[user2, consumer])
 
 def matcha(room):
@@ -24,7 +24,7 @@ def matcha(room):
         p1_user, p1_consumer = room[1]
         p2_user, p2_consumer = room[2]
 
-        p1_user.state = MyUser.IN_GAME  #sync to asyn
+        p1_user.state = MyUser.IN_GAME  #sync to asyn #to be modified
         p1_user.save()
 
         p2_user.state = MyUser.IN_GAME
@@ -36,6 +36,7 @@ def matcha(room):
             'my_id': p1_user.unique_id,
             'room_name': room[0],
             'opponent_id': p2_user.unique_id,
+            'color': 'white',
 
             'user_name' : p1_user.login,
             'opponent_name': p2_user.login,
@@ -47,13 +48,15 @@ def matcha(room):
             'my_id': p2_user.unique_id,
             'room_name': room[0],
             'opponent_id': p1_user.unique_id,
+            'color': 'black',
             
             'user_name' : p2_user.login,
             'opponent_name': p1_user.login,
         }, default=str))
 
 
-def get_or_create_room(user, consumer):
+
+def get_or_create_room(user, consumer, Rooms):
     #find_room
     for room in Rooms:
         if len(room) == 2 and room[1][0].unique_id != user.unique_id and room[1][0].state == MyUser.READY:
@@ -77,7 +80,7 @@ class ApiConsumer(WebsocketConsumer):
         print("=> user connected to official route :", user.login)
         print("=>", f"Client {self.user_id}, {user.login} Connected !)")
 
-        user.state = MyUser.READY
+        user.state = MyUser.READY #TBM
         user.save()
 
         self.send(json.dumps({
@@ -86,13 +89,11 @@ class ApiConsumer(WebsocketConsumer):
             'message': f'ki rak b9it assadi9, {user.login}'
         }, default=str))
 
-        # do the matching and rooms managing stuff
-        get_or_create_room(user, self)
+        get_or_create_room(user, self, PPong_Rooms)
 
-        print("=> Debugging :", Rooms)
-
-        # clean the Rooms, ...
-        # cleaner(Rooms) 
+        print("=> Debugging :", PPong_Rooms)
+        # clean the PPong_Rooms, ...
+        # cleaner(PPong_Rooms) 
 
 
     def receive(self, text_data):
@@ -104,7 +105,7 @@ class ApiConsumer(WebsocketConsumer):
         #idik fzeb
         #other player win forfait if the game still in play
 
-def find_room_name(user):
+def find_room_name(user, Rooms):
     for room in Rooms:
         if (len(room) == 3 and (room[1][0].unique_id == user.unique_id or room[2][0].unique_id == user.unique_id)):
             return room
@@ -113,9 +114,10 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
 
         user = self.scope['user']
-        room = find_room_name(user)
+        room = find_room_name(user, PPong_Rooms)
 
         self.user_id = str(user.unique_id)
+
 
         self.room_name = room[0]
         self.room_group_name = f"game_room_{self.room_name}"
@@ -150,32 +152,148 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         )
 
     async def broadcast_event(self, event):
+        if event['payload'].get('type') == 'Game_end':
+            user_id1 = event['payload']['paddle']['x']
+            user_id2 = event['payload']['paddle']['y']
 
+            user  = await get_user_by_unique_id(user_id1)
+            print('==>', user.login)
+            user2 = await get_user_by_unique_id(user_id2)
+            print('==>', user2.login)
 
-        # print(str(event['payload'].get('my_id')), ", ", str(self.scope['user'].unique_id))
-        #check game end
-        #fake DATA creation !
-        # users = MyUser.objects.filter(login=p1_user)
-        # if users.exists():
-        #     user = users.first()
-        # else:
-        #     user = None
+            score_1 = int(event['payload']['ball']['x'])
+            score_2 = int(event['payload']['ball']['y'])
 
-        # users = MyUser.objects.filter(login=p2_user)
-        # if users.exists():
-        #     user2 = users.first()
-        # else:
-        #     user2 = None
-        # if (user and user2):
-        #     Game.objects.create(user_p1=user, user_p2=user2, winner=user, loser=user2, score_p1=7, score_p2=5)
-        #
+            if user and user2:
+                # Decide winner vs loser
+                if score_1 > score_2:
+                    t_winner, t_loser = user, user2
+                else:
+                    t_winner, t_loser = user2, user
 
+                await create_game(
+                    user_p1=user,
+                    user_p2=user2,
+                    winner=t_winner,
+                    loser=t_loser,
+                    score_p1=score_1,
+                    score_p2=score_2
+                )
         
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):
             return
 
         await self.send(json.dumps(event['payload']))
 
+@sync_to_async
+def get_user_by_unique_id(unique_id):
+    return MyUser.objects.filter(unique_id=unique_id).first()
+
+@sync_to_async
+def create_game(user_p1, user_p2, winner, loser, score_p1, score_p2):
+    return Game.objects.create(
+        user_p1=user_p1,
+        user_p2=user_p2,
+        winner=winner,
+        loser=loser,
+        score_p1=score_p1,
+        score_p2=score_p2
+    )
+
+
+
+Chess_Rooms = []
+# Rooms.append(["Room_name", [user1, consumer],[user2, consumer])
+
+#FOR CHESS
+Chess_Gconnected_users = []
+
+class ApiChessConsumer(WebsocketConsumer):
+    user_id = 0
+
+    def connect(self):
+        self.accept()
+
+        user = self.scope['user']
+        self.user_id = user.unique_id
+
+        print("=> user connected to official chess route :", user.login)
+        print("=>", f"Client {self.user_id}, {user.login} Connected !)")
+
+        user.state = MyUser.READY #TBM
+        user.save()
+
+        self.send(json.dumps({
+            'type': 'connection_established',
+            'my_id': str(user.unique_id),
+            'message': f'ki rak b9it assadi9, {user.login}'
+        }, default=str))
+
+        get_or_create_room(user, self, Chess_Rooms)
+
+        print("=> Debugging :", Chess_Rooms)
+        # clean the Rooms, ...
+        # cleaner(Chess_Rooms) 
+
+
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        #ser 3a t9awed, matsiftlich
+
+    def disconnect(self, close_code):
+        print('hello')
+        #idik fzeb
+
+
+
+class GameChessRoomConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+
+        user = self.scope['user']
+        room = find_room_name(user, Chess_Rooms)
+
+        self.user_id = str(user.unique_id)
+
+
+        self.room_name = room[0]
+        self.room_group_name = f"game_room_{self.room_name}"
+
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+
+        # Accept the WebSocket connection
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # On disconnect, remove from the group
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    async def receive(self, text_data):
+        # Receive a message from the client
+        data = json.loads(text_data)
+
+        # Broadcast it to everyone else in the same group
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                # This is the method name that will be called (like a "handler")
+                'type': 'broadcast_event',
+                'payload': data
+            }
+        )
+
+    async def broadcast_event(self, event):
+        #Save things on db
+        if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):
+            return
+
+        await self.send(json.dumps(event['payload']))
+   
 
 
 
