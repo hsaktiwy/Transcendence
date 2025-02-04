@@ -144,7 +144,13 @@ function ChatSection(){
             AddChannel('CHAT', UpdateConvs)
             updateConvsState()
         }
-    },[loading])
+        return () => {
+            // Remove the CHAT call back function when we exist the chat section
+            AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
+            RemoveChannel('CHAT')
+            RemoveChannel('UPDATE_CHAT_NOTIF')
+        }
+    },[loading, ])
     useEffect(()=>{
         if (active)
             userContextConsumer.setnotifications(prev=>prev.filter(notif=>notif.channel_id !== active.channelId))
@@ -168,12 +174,12 @@ function ChatSection(){
 
         // create a function that will update the general data
         // updateConvsState()
-        return () => {
-            // Remove the CHAT call back function when we exist the chat section
-            AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
-            RemoveChannel('CHAT')
-            RemoveChannel('UPDATE_CHAT_NOTIF')
-        }
+        // return () => {
+        //     // Remove the CHAT call back function when we exist the chat section
+        //     AddChannel('NOTIFICATION_MESSAGE', userContextConsumer.notificationHandler)
+        //     RemoveChannel('CHAT')
+        //     RemoveChannel('UPDATE_CHAT_NOTIF')
+        // }
     }, [])
 
     return(

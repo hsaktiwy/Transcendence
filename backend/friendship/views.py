@@ -88,6 +88,15 @@ def BlockUser(request, unique_id):
 		check = list.block_users.filter(id=blocked_user.id).exists()
 		if (not check):
 			list.block_users.add(blocked_user)
+			friendship = FriendShip.objects.filter((Q(user=myuser) & Q(friend=blocked_user)) | (Q(user=blocked_user) & Q(friend=myuser)))
+			f_request = FriendRequest.objects.filter((Q(sender=myuser) & Q(receiver=blocked_user)) | (Q(sender=blocked_user) & Q(receiver=myuser)))
+			if len(friendship) > 0:
+				channel = Channel.objects.filter(users=myuser).filter(users=blocked_user)
+				if (len(channel) > 0):
+					channel.delete()
+				friendship.first().delete()
+			if len(f_request) > 0:
+				f_request.first().delete()
 		return Response({'message': 'User '+unique_id+' in the Block List', 'status': 'blocked'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)

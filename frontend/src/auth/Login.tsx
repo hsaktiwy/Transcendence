@@ -160,7 +160,7 @@ const Login = () => {
     
             //     const
     
-            //     fetch('http://10.11.7.13:8000/api/LoginWithOAuth42/', {
+            //     fetch('http://localhost:8000/api/LoginWithOAuth42/', {
             //         method: 'POST',
             //         headers: {
             //             'Content-Type': 'application/json',

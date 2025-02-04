@@ -65,7 +65,7 @@ function ChatSession(){
     useEffect(()=>{
         setRCount((re)=>(re+1))
         BlockStatusCheck()
-    },[userContext.action, chatContext.active])
+    },[userContext.action])
     //amine
     
     
@@ -152,7 +152,7 @@ function ChatSession(){
             // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
         }
-    },[])// empty dependency to call this useEffect one time
+    },[chatContext?.active])// empty dependency to call this useEffect one time
                                 
     // when we rerender the page
     const SendWebSocketToDefine = ()=>
