@@ -78,7 +78,7 @@ const App = () =>
                       <Route path='/'  element={ <Layout/>}>
                       <Route path='/profile/:uuid' element={ <ProfileTest/>}/>
                       <Route index element={ <Dashboard/>}/>
-                      <Route path='/chat/:channel_id?' element={ <ChatSection/>}/>
+                      <Route path='/chat' element={ <ChatSection/>}/>
                       <Route path='/settings' element={ <Settings/>}/>
 
                       <Route path='/game' element={<MainGamePage />}/>
