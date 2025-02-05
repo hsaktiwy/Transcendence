@@ -46,11 +46,11 @@ function SideBarV2(){
                 
             </div>
             <div id="log-out" className=" text-white/40 hover:text-red-500 duration-75 cursor-pointer mb-16 font-poppins text-center hidden lg:flex flex-col items-center justify-center gap-4 h-[10%] " onClick={() =>{
-                // const stateObj = {
-                //     type: "NOTIFICATION_STATE",
-                //     state: "offline"
-                // }
-                // socket?.current.send(JSON.stringify(stateObj))
+                const stateObj = {
+                    type: "NOTIFICATION_STATE",
+                    state: "offline"
+                }
+                socket?.current.send(JSON.stringify(stateObj))
                 authContextConsumer.setLoggedIn(false)
                 toast.info('User Logged Out')
                 
