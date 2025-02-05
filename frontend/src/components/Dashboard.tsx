@@ -211,27 +211,32 @@ function Dashboard(){
               </div>
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
-                <div className="  rounded-2xl bg-gradient-to-br from-[#283137] to-[#242729]  h-full  ">
-                                                      <div className="w-full max-w-md mx-auto">
-                                                              {/* Tab Navigation */}
-                                                              <div className="flex">
-                                                                  {["PONG", "CHESS"].map((type) => (
-                                                                  <button
-                                                                      key={type}
-                                                                      className={`px-4 py-2 text-sm font-medium  rounded-md bg-[#283137] transition-all
-                                                                      ${matchHistoryType === type ? "bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-b-none " : "text-gray-500 bg-[#283137]"}
-                                                                      hover:text-[#5E97A9]`}
-                                                                      onClick={() => switchMatchHistoryType(type)}
-                                                                  >
-                                                                      {type}
-                                                                  </button>
-                                                                  ))}
-                                                              </div>
-                      
-                                                              {/* Match History Component */}
-                                                              <MatchHistory data={userMatchHistory} />
-                                                      </div>
+              <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-md shadow-3xl shadow-[#22333869]">
+                  <div className="flex ">
+                  {["PONG", "CHESS"].map((type) => (
+                      <button
+                      key={type}
+                      className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
+                          matchHistoryType === type
+                          ? ""
+                          : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
+                      } hover:text-[#5E97A9]`}
+                      onClick={() => switchMatchHistoryType(type)}
+                      >
+                      <div>
+                          {
+                              type == "PONG" ?        
+                                  <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
+                                    :
+                                    <div><img className="w-6" src="../strategy.png"/></div>
+                      }
+                      </div>
+                      {type}
+                      </button>
+                  ))}
                   </div>
+                  <MatchHistory data={userMatchHistory} username={userContextConsumer?.userData?.login} />
+              </div>
         </div>
         <div className=" row-span-4 hidden xl:block xl:col-span-4 xl:row-span-7 2xl:col-span-3 2xl:row-span-7">
                 <OnlineFriends/>
@@ -252,27 +257,32 @@ function Dashboard(){
         </div>
         </div>
         <div className="xl:pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
-            <div className="  rounded-2xl bg-gradient-to-tr from-[#2c353a] to-[#2B2F32] h-full p-4 ">
-                                                       <div className="w-full max-w-md mx-auto">
-                                                               {/* Tab Navigation */}
-                                                               <div className="flex">
-                                                                   {["PONG", "CHESS"].map((type) => (
-                                                                   <button
-                                                                       key={type}
-                                                                       className={`px-4 py-2 text-sm font-medium  rounded-md bg-[#283137] transition-all
-                                                                       ${matchHistoryType === type ? "bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-b-none " : "text-gray-500 bg-[#283137]"}
-                                                                       hover:text-[#5E97A9]`}
-                                                                       onClick={() => switchMatchHistoryType(type)}
-                                                                   >
-                                                                       {type}
-                                                                   </button>
-                                                                   ))}
-                                                               </div>
-                       
-                                                               {/* Match History Component */}
-                                                               <MatchHistory data={userMatchHistory} />
-                                                       </div>
-            </div>
+        <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-md shadow-3xl shadow-[#22333869]">
+                  <div className="flex ">
+                  {["PONG", "CHESS"].map((type) => (
+                      <button
+                      key={type}
+                      className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
+                          matchHistoryType === type
+                          ? ""
+                          : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
+                      } hover:text-[#5E97A9]`}
+                      onClick={() => switchMatchHistoryType(type)}
+                      >
+                      <div>
+                          {
+                              type == "PONG" ?        
+                                  <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
+                                    :
+                                    <div><img className="w-6" src="../strategy.png"/></div>
+                      }
+                      </div>
+                      {type}
+                      </button>
+                  ))}
+                  </div>
+                  <MatchHistory data={userMatchHistory} username={userContextConsumer?.userData?.login} />
+              </div>
         </div>
         <div className="= row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] rounded-2xl p-4 xl:hidden">
             <PieChartFile matches={matches} />
