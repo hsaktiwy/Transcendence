@@ -14,6 +14,8 @@ export function LocalGamesProvider({ children }) {
     player2: null,
     player3: null,
     player4: null,
+    TBD1   : null,
+    TBD2   : null,
     winner : null,
     //infos for tournament ...
     //images ...
