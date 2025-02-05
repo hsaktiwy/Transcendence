@@ -183,7 +183,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 print(start_id, channel_id, user)
                 messages_to_updates = Message.objects.filter(Q(id__gte=start_id) & Q(isread=False) & Q(id_channel_fk=channel_id) & ~Q(sender=user))
                 if messages_to_updates.exists():
-                    print("SAAAAAAALLLLLAAAAAAAAAM", len(messages_to_updates))
                     messages_to_updates.update(isread=True)
                     Notification.objects.filter(channel_id=channel_id).update(is_readed=True)
         except Exception as e:

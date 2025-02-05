@@ -126,6 +126,7 @@ def get_achievements(request, uuid):
         user = MyUser.objects.get(unique_id = uuid)
         acheivements = Achievements.objects.filter(id_user_fk=user)
         data = AchievementsSerializer(acheivements, many=True)
+        print('data okda  : =>>>>>>>>>> ', data)
         return (Response({'data': data.data}, status=200))
     except Exception as e:
         return Response({'error': str(e)}, status=400)

@@ -143,7 +143,7 @@ const MessageNotificationsDropDown = (info: prop) =>{
                             
                          
                                 <Link to={`${linkToChat}` } state={{channel_id : item.channel_id}} 
-                                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
+                                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f] break-words"
                                 key={index + 1} onClick={() =>{
                                     removeNotification(item)
                                 }}
@@ -155,8 +155,8 @@ const MessageNotificationsDropDown = (info: prop) =>{
                                     className="relative inline-block h-10 w-10 aspect-square rounded-full object-cover object-center"
                                     />
                                     <div className="flex flex-col gap-1 ml-4">
-                                    <p className="text-slate-100 font-medium">
-                                        {item.content}
+                                    <p className="text-slate-100 font-medium break-words">
+                                        {item.content.length > 20 ? `${item.content.substring(0,20)}...` : item.content}
                                     </p>
                                     <p className="text-slate-500 text-sm flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1 text-slate-400">

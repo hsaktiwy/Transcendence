@@ -115,7 +115,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                         <h1 className="font-semibold sm:text-xl">
                                             {`You have a new ${item.type==='message' ? 'Message' :'Notification' }`}
                                         </h1>
-                                        <div className="flex gap-4  items-center">
+                                        <div className="flex gap-4  items-center break-words">
                                             {
                                                 (item.type === 'friendship' || item.type === 'message') &&
                                                 <div className=" h-[35px] w-[35px] sm:h-[50px] sm:w-[50px]">
@@ -123,8 +123,8 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                                     <img src={`${import.meta.env.VITE_axiosPath}${item.sender.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                                 </div>
                                             }
-                                            <p className="text-white/80">
-                                                {item.content.length > 50 ? `${item.content.substring(0,50)}...` : item.content}
+                                            <p className="text-white/80 break-words">
+                                                {item.content.length > 20 ? `${item.content.substring(0,20)}...` : item.content}
                                             </p>
                                         </div>
                                     </div>

@@ -73,3 +73,14 @@ export interface RadarChartInterFace
     _wins:number;
     _lose:number;
 }
+
+export interface MatchHistoryDataInterface{
+    id:number;
+    user_p1: ProfileDataInterface;
+    user_p2: ProfileDataInterface;
+    time:string;
+    type:string;
+    draw: boolean;
+    score_p1:number;
+    score_p2:number;
+}

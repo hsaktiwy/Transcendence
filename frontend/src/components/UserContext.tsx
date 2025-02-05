@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
-import { Action, ActionType, friendship, MiniNotification} from "@/utils/interfaces";
+import { Action, ActionType, friendship, MatchHistoryDataInterface, MiniNotification} from "@/utils/interfaces";
 import { toast } from "react-toastify";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
@@ -78,15 +78,7 @@ interface FriendRequestInterface {
     created_at:string
 }
 
-interface MatchHistoryDataInterface{
-    id:number;
-    user_p1: ProfileDataInterface;
-    user_p2: ProfileDataInterface;
-    time:string;
-    type:string;
-    score_p1:number;
-    score_p2:number;
-}
+
 interface ProfileRank
 {
     rank:number;
@@ -148,13 +140,20 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }
     const matchHistoryData = async () =>{
-        const req = {
-            url: `/game/get_matches/PONG`,
-            method: 'GET',
-          };
-          const resp = await mailman(req);
-        if (resp.data.Game)
-          setUserMatchHistory(resp.data.Game);
+        try
+        {
+            const req = {
+                url: `/game/get_matches/${userData?.unique_id}/PONG`,
+                method: 'GET',
+            };
+            const resp = await mailman(req);
+            if (resp.data.Game)
+            setUserMatchHistory(resp.data.Game);
+        }
+        catch (error)
+        {
+            console.log(error)
+        }
     }
     const fetchUserData = async () =>{
 
@@ -360,7 +359,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     useEffect(() =>{
         console.log(location.pathname)
         if (ready)
-        {       
+        {
+            matchHistoryData()
             SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
             SocketContext.AddChannel('UPDATE_FRIEND_LIST', updateFriendList)
             SocketContext.AddChannel('UPDATE_FRIENDSHIP', updateFriendShip)
@@ -394,6 +394,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     },[AuthContextConsummer?.loggedIn, notificationReaded])
 
+    
     const ajami = async() =>
     {
         await fetchUserData()
@@ -401,7 +402,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         await fetchReceivedFriendRequest()
         await fetchSentFriendRequest()
         await fetchBlockList()
-        await matchHistoryData()
+
         await rankData()
         setReady(true)
     }
