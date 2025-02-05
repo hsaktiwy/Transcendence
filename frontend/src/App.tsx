@@ -88,7 +88,7 @@ const App = () =>
                       <Route path='/game/PreRemote' element={<PreRemote />}/>
                       <Route path='/game/RemoteGame' element={<RemoteGame />}/>
                       <Route path='/game/Winner' element={<Winner />}/>
-                      <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
+                      {/* <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
                       <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> 
                       
                       <Route path='/game/PreTournament' element={<PreTournament />}/>
@@ -99,7 +99,7 @@ const App = () =>
                       <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/>
                       <Route path='/game/ChessLocally' element={<LocalChessGame />}/>
                       <Route path='/game/ChessRemoteGame' element={<ChessRemoteGame />}/>
-                      <Route path='/game/ChessWinner' element={<ChessWinner />}/>
+                      <Route path='/game/ChessWinner' element={<ChessWinner />}/> */}
                       
                       </Route>
 
