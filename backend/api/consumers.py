@@ -269,10 +269,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user = self.scope['user']
         state = 'offline'
         try:
-            try:
-                await self.update_and_broadcast_state(user , state)
-            except Exception as e:
-                print(f"Error updating and broadcasting state: {e}")
+            # try:
+            #     await self.update_and_broadcast_state(user , state)
+            # except Exception as e:
+            #     print(f"Error updating and broadcasting state: {e}")
             if self.rooms:
                 for room in self.rooms :
                     await self.channel_layer.group_discard(
