@@ -423,23 +423,23 @@ const ChessRemoteGame = () => {
                             console.log("Cptured Piece Found : ", capturedPiece.name);
                             scene.remove(capturedPiece);
                             objects = objects.filter(obj => obj !== capturedPiece); // tbu
-                            capture_sound.play(); // Sound for capture
+                            // capture_sound.play(); // Sound for capture
                         }
                     }
-                    move_sound.play();
+                    // move_sound.play();
                     pos.x =  -((cords[0] > 0 ? cords[0] - 1: cords[0]) * SQUARE_DIAMETER) - SQUARE_RADIUS;
                     pos.z =   ((cords[1] > 0 ? cords[1] - 1: cords[1]) * SQUARE_DIAMETER) + SQUARE_RADIUS;
                 }
                 else {
                     console.log('InValid Move !')
-                    illegal_sound.play();
+                    // illegal_sound.play();
                     pos.x = init_pos_x;
                     pos.z = init_pos_y;
                     return ;
                 }   
             } catch (error) {
                 console.log('InValid Move !')
-                illegal_sound.play();
+                // illegal_sound.play();
                 pos.x = init_pos_x;
                 pos.z = init_pos_y;
                 return ;
@@ -460,14 +460,14 @@ const ChessRemoteGame = () => {
         }
 
         function Executor(name, from, to){
-            let result = engine_validator.move({from : from, to: to});
+            let result = engine_validator.move({from : from, to: to}); //Try catch (yes it throws!)
             if (result.captured){
                 const capturedPiece = findCapturedPiece(name, to);
                 if (capturedPiece) {
                     console.log("Cptured Piece Found : ", capturedPiece.name);
                     scene.remove(capturedPiece);
                     objects = objects.filter(obj => obj !== capturedPiece); // tbu
-                    capture_sound.play(); // Sound for capture
+                    // capture_sound.play(); // Sound for capture
                 }
             }
             const affectedPiece = findaffectedPiece(name)
