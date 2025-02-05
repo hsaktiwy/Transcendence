@@ -121,7 +121,7 @@ function ConnectButton(prop: buttonInterface) {
         const  responce:boolean = resp.data['status']
         setIsbLock(responce)
         setBtn_block(responce ? 'UnBlock' : 'Block');
-        console.log('block  status  heere  ->>>>', resp.data);
+        // console.log('block  status  heere  ->>>>', resp.data);
         if(resp.data['blocker'] ===  userContextConsumer?.userData?.unique_id)
         {
             setBloker(true);
@@ -468,6 +468,19 @@ function ConnectButton(prop: buttonInterface) {
                     </div>
                     <p>Connect</p>
                   </motion.button>
+                  <motion.button
+                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none  "
+                    whileTap={{ scale: 0.97 }}
+                onClick={BlockActionCheck}
+              >
+                    <div className='text-xl'>
+                      <MdBlock/>
+                    </div>
+                    <p>{btn_block}</p>
+                    
+                    </motion.button>
+
+                  
                 </>
               }
               {status !== "UNFRIEND" && FriendRequest !== "" &&
