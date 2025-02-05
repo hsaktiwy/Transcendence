@@ -3,6 +3,7 @@ from django.db.models import Count, Q
 from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 from .models import Game
+from status.models import ProfileStatus
 from users.models import MyUser
 import json
 import random
@@ -150,7 +151,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 'payload': data
             }
         )
+    
 
+    
     async def broadcast_event(self, event):
         if event['payload'].get('type') == 'Game_end':
             user_id1 = event['payload']['paddle']['x']
@@ -159,6 +162,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
             user  = await get_user_by_unique_id(user_id1)
             print('==>', user.login)
             user2 = await get_user_by_unique_id(user_id2)
+            profile1 = await get_profile(user)
+            profile2 = await get_profile(user2)
+
             print('==>', user2.login)
 
             score_1 = int(event['payload']['ball']['x'])
@@ -168,8 +174,22 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 # Decide winner vs loser
                 if score_1 > score_2:
                     t_winner, t_loser = user, user2
+                    if (profile1 and profile2):
+                        profile1.wins += 1
+                        profile2.lose += 1
                 else:
                     t_winner, t_loser = user2, user
+                    if (profile1 and profile2):
+                        profile2.wins += 1
+                        profile1.lose += 1
+
+                if (profile1 and profile2):
+                    profile2.total_games += 1
+                    profile1.total_games += 1                    
+
+                if (profile1 and profile2):
+                    await sync_to_async(profile1.save)()
+                    await sync_to_async(profile2.save)()
 
                 await create_game(
                     user_p1=user,
@@ -184,7 +204,14 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
             return
 
         await self.send(json.dumps(event['payload']))
-
+@sync_to_async
+def get_profile(user):
+    try:
+        profile  = ProfileStatus.objects.get(id_user_fk=user)
+        return profile
+    except Exception as e:
+        print("Game get_profile function error :", e)
+        return None
 @sync_to_async
 def get_user_by_unique_id(unique_id):
     return MyUser.objects.filter(unique_id=unique_id).first()

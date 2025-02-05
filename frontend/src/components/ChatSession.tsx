@@ -64,7 +64,7 @@ function ChatSession(){
 
     useEffect(()=>{
         setRCount((re)=>(re+1))
-        BlockStatusCheck()
+        // BlockStatusCheck()
     },[userContext.action])
     //amine
     
@@ -134,15 +134,17 @@ function ChatSession(){
     }
     // hamza
     const UpdateCurrentConvs = useCallback((message_received: Message , __channelId: number) => {
-            if (__channelId === chatContext.active?.channelId) {
-                chatContext.setActive((prevActive) => prevActive && ({
-                ...prevActive,
-                new_message: 1,
-                messages: [...prevActive.messages, message_received]
-                }));
-                setUpdate(true);
-            }
-        }, [chatContext.active?.channelId, chatContext.setActive]);
+        console.log(__channelId, chatContext.active?.channelId)
+        if (__channelId === chatContext.active?.channelId) {
+            console.log('messagr received:  ', message_received)
+            chatContext.setActive((prevActive) => prevActive && ({
+            ...prevActive,
+            new_message: 1,
+            messages: [...prevActive.messages, message_received]
+            }));
+            setUpdate(true);
+        }
+    }, [chatContext.active?.channelId, chatContext.setActive]);
     useEffect(()=>
     {
         setRCount((re)=>(re+1))
@@ -152,7 +154,7 @@ function ChatSession(){
             // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
         }
-    },[chatContext?.active])// empty dependency to call this useEffect one time
+    },[chatContext.active])
                                 
     // when we rerender the page
     const SendWebSocketToDefine = ()=>
@@ -173,6 +175,7 @@ function ChatSession(){
                 : conv
                 );
             });
+            userContext.setnotifications(prev => prev.filter(notif=>notif.channel_id !== chatContext.active?.channelId))
         }
         catch (e)
         {
@@ -210,6 +213,7 @@ function ChatSession(){
 
     useEffect(()=>
     {
+        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ active ", chatContext.active?.channelId)
         setRCount((re)=>(re+1))
         if (chatContext.active?.new_message == 1)
             SendWebSocketToDefine()

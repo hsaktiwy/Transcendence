@@ -177,6 +177,8 @@ function ConnectButton(prop: buttonInterface) {
   }
   useEffect(()=>{
     // and does the main user have block relationship with the searched one (the one in useparam)
+    setIsfriend("")
+    setFriendRequest("")
     BlockStatusCheck()
     // friendship ? 
     FriendStatusCheck()
@@ -219,7 +221,6 @@ function ConnectButton(prop: buttonInterface) {
       {
         setFriendRequest("")
         setIsfriend("CONNECT")
-
       }
     }
     const blocknotify = (data:friendship)=>{
@@ -244,7 +245,8 @@ function ConnectButton(prop: buttonInterface) {
   const send_friend_request = ()=>{
     const notification = {
       type: 'NOTIFICATION_ADD_FRIEND',
-      to : uuid
+      to : uuid,
+      status: false
     }
     const message = JSON.stringify(notification)
     SocketContext?.socket?.current?.send(message)
@@ -297,7 +299,8 @@ function ConnectButton(prop: buttonInterface) {
             console.log(resp.data)
             const notification = {
               type: 'NOTIFICATION_UNCONNECT',
-              to : uuid
+              to : uuid,
+              status: false
             }
             const message = JSON.stringify(notification)
             SocketContext?.socket?.current?.send(message)
@@ -327,7 +330,8 @@ function ConnectButton(prop: buttonInterface) {
           userContextConsumer?.fetchFriends()
           const notification = {
             type: 'NOTIFICATION_UNCONNECT',
-            to : uuid
+            to : uuid,
+            status: false
           }
           const message = JSON.stringify(notification)
           SocketContext?.socket?.current?.send(message)

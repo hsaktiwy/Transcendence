@@ -80,37 +80,36 @@ function OnlineFriends() {
                         <div className='bar-search-freinds z-50'>
                         <div className="relative h-9 w-full ">
                             <input
-                                className="search-bar-div-friends  h-8 w-4/5 px-3 py-5   rounded-lg "
+                                className="search-bar-div-friends  h-8 px-3 py-5  border rounded-lg "
                                 placeholder="Search"
                                 value={searchTerm}
                                 onChange={handleSearch}
                             />
                             {/* Dropdown only appears if searchTerm exists */}
                             {searchTerm && filteredFriends.length > 0 && (
-                                <div className="mt-1  w-4/5 bg-gradient-to-br from-[#2a3236] to-[#1e2124]  p-2  rounded-lg shadow-lg max-h-40 overflow-y-auto">
-                                    {filteredFriends.map((friend) => (
-                                        <Link to={`/profile/${friend.unique_id}`}
-                                            key={friend.login}
-                                            className="flex items-center gap-3 px-4 py-2   w-full rounded-xl transition-all duration-200 ease-in-out  hover:bg-[#1D1E22] cursor-pointer"
-                                        >
-                                            <img
-                                                src={`${import.meta.env.VITE_axiosPath}${friend.profile_pic}`}
-                                                alt={`${friend.firstName} ${friend.lastName}`}
-                                                className="w-10 h-10 aspect-square rounded-full object-cover"
-                                            />
-                                            <div>
-                                                <p className="text-sm font-medium">{friend.firstName} {friend.lastName}</p>
-                                                <p className="text-xs text-gray-500">@{friend.login}</p>
-                                            </div>
-                                        </Link>
-                                    ))}
-                                </div>
+                               <div className="mt-1 bg-gradient-to-br from-[#2a3236] to-[#1e2124] p-2 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+                               {filteredFriends.slice(0, 5).map((friend) => (
+                                 <Link
+                                   to={`/profile/${friend.unique_id}`}
+                                   key={friend.login}
+                                   className="flex items-center gap-3 px-4 py-2 w-full rounded-xl transition-all duration-200 ease-in-out hover:bg-[#1D1E22] cursor-pointer"
+                                 >
+                                   <img
+                                     src={`${import.meta.env.VITE_axiosPath}${friend.profile_pic}`}
+                                     alt={`${friend.firstName} ${friend.lastName}`}
+                                     className="w-10 h-10 aspect-square rounded-full object-cover"
+                                   />
+                                   <div>
+                                     <p className="text-sm font-medium">
+                                       {friend.firstName} {friend.lastName}
+                                     </p>
+                                     <p className="text-xs text-gray-500">@{friend.login}</p>
+                                   </div>
+                                 </Link>
+                               ))}
+                             </div>
                             )}
                         </div>
-
-                        
-                            <img style={{width: '15px', marginRight: '10px'}} className="size-image" src="/images/profileVector.svg" />
-                            <img style={{width: '23px'}} className="size-image" src="/images/Settings.svg" />
                         </div>
                         
 
@@ -147,12 +146,14 @@ function OnlineFriends() {
                         {
                             userContext?.friends.length && 
                                 <>
-                                    <div className='chat-direction'>
-                                        <div className='chat-button'>
-                                            <img style={{width: '20px'}} className="size-image" src="/images/chat_bubble.svg" />
-                                                <h3 style={{fontWeight: '400', margin:'0px 4px', fontSize: '12px'}}>Chat</h3>
+                                    <Link to={`/chat`}>
+                                        <div className='chat-direction h-16'>
+                                            <div className='chat-button'>
+                                                <img style={{width: '20px'}} className="size-image" src="/images/chat_bubble.svg" />
+                                                    <h3 style={{fontWeight: '400', margin:'0px 4px', fontSize: '12px'}}>Chat</h3>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </>
                         }
                     </div>
