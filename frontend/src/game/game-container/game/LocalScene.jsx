@@ -769,7 +769,9 @@ const LocalGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
+            console.log('====> Getted Info : ', LocalGamesData.type );
             if (LocalGamesData.type == 'Tournament'){
+                console.log('====> ON tournament');
                 if (playerScore === 7){
                     setLocalGamesData({
                         gametype: 'Tournament', // Local, Multiplayer, Tournament 
