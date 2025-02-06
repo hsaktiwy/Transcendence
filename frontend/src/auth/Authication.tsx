@@ -1,18 +1,17 @@
-import React, { useContext } from 'react'
-import { BrowserRouter, Routes, Route} from 'react-router-dom'
+
+import { Routes, Route} from 'react-router-dom'
 import { childrenInterface } from '../utils/interfaces';
 import RouteProtection from './RouteProtection';
 import Login  from './Login'
-import RegistrationForm from './Registration';
-import Game from '../game/Game';
 
-import ChatSection from '../components/ChatSection';
-import Settings from '../components/Settings';
-import { Toaster, toast } from 'sonner'
-import LandingPage from '@/components/LandingPage';
+
+
+
+import { Toaster} from 'sonner'
+
 import LandingPage2 from '@/components/Landing/LandingPage2';
-import LoadingIndecator from '@/components/Loading';
-import RedirectRoute from './RedirectRoute';
+
+
 import RegisterForm from './RegisterForm';
 import { ToastContainer } from 'react-toastify';
 function Auth(children:childrenInterface)

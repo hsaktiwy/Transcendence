@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { motion, Variants } from 'framer-motion';
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { motion } from 'framer-motion';
+import { Link, useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import mailman from '@/utils/AxiosFetcher';
 import { WebSocketContext } from '@/utils/WSContext';
@@ -10,7 +10,7 @@ import { TbMessage2 } from "react-icons/tb";
 import { MdBlock } from "react-icons/md";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
-import { channel } from 'diagnostics_channel';
+
 import {NotificationPropreties} from './UserContext'
 import { ProfileDataInterface, UserDataInterface } from '@/utils/UserDataInterface';
 import { SlLock } from "react-icons/sl";
@@ -21,9 +21,7 @@ interface buttonInterface{
 }
 
 function ConnectButton(prop: buttonInterface) {
-  const navigate =  useNavigate()
-  const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState("accept");
+  // const [isOpen, setIsOpen] = useState(false);
   const [isblock, setIsbLock] = useState<boolean>(false);
   const [btn_block, setBtn_block] = useState("Block");
   const [isfriend, setIsfriend] = useState("");
@@ -40,10 +38,10 @@ function ConnectButton(prop: buttonInterface) {
     if (!SocketContext)
         throw new Error('error')
   const {AddChannel,RemoveChannel} = SocketContext
-  const handleAcceptClick = () => {
-    setIsOpen(true);
-    setStatus("accepted");
-  };
+  // const handleAcceptClick = () => {
+  //   setIsOpen(true);
+  //   setStatus("accepted");
+  // };
   
   const getChannelId = async () =>{
       try{
@@ -71,7 +69,7 @@ function ConnectButton(prop: buttonInterface) {
           method: "GET",
           withCredentials: true,
         }
-        const resp = await mailman(req)
+        await mailman(req)
         // userContextConsumer?.blockList.push()
         // console.log('hana ->>>>>', resp)
         const user = prop.user as ProfileDataInterface
@@ -224,9 +222,11 @@ function ConnectButton(prop: buttonInterface) {
       }
     }
     const blocknotify = (data:friendship)=>{
+      if(data){
         setBloker(false);
         setIsbLock(true);
         userContextConsumer?.setBlockList(prev=>[...prev])
+      }
     }
     AddChannel('FriendRequestAccepted', FriendRequestAccepted)
     AddChannel('FriendRequestReceived', FriendRequestReceived)
@@ -265,7 +265,7 @@ function ConnectButton(prop: buttonInterface) {
               url: `/friendship/request/status/set/accept/${friend_req_id}`,
               method: 'GET',
             }
-            const resp = await mailman(req)
+            await mailman(req)
             userContextConsumer?.fetchFriends()
             const notification = {
               type: 'NOTIFICATION_ACCEPT_FRIEND',
@@ -275,7 +275,6 @@ function ConnectButton(prop: buttonInterface) {
             SocketContext?.socket?.current?.send(message)
             setFriendRequest("")
             setIsfriend("UNFRIEND")
-            console.log("hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm?")
             getChannelId()
           }
           // we need to rest all thing to get back to what it should be
@@ -351,9 +350,7 @@ function ConnectButton(prop: buttonInterface) {
     setIsMenuOpen((prev) => !prev);
   };
 
-  const unfriendRequest = () => {
-    console.log("Unfriend action triggered");
-  };
+
 
 
   
@@ -378,7 +375,7 @@ function ConnectButton(prop: buttonInterface) {
        </div> : 
           <motion.nav
             initial={false}
-            animate={isOpen ? "open" : "closed"}
+            // animate={isOpen ? "open" : "closed"}
             className="flex flex-col justify-center items-center"
           >
               { isfriend === "UNFRIEND" &&
@@ -483,7 +480,7 @@ function ConnectButton(prop: buttonInterface) {
                   
                 </>
               }
-              {status !== "UNFRIEND" && FriendRequest !== "" &&
+              {FriendRequest !== "" &&
                 <>
                   <motion.button
                     className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none  "

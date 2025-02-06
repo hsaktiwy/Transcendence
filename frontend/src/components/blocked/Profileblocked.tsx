@@ -1,13 +1,12 @@
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { SlLock } from "react-icons/sl";
 import { UserDataInterface, ProfileDataInterface } from "../../utils/UserDataInterface";
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import mailman from "../../utils/AxiosFetcher";
-import { NotificationPropreties } from "../UserContext";
+
 import { WebSocketContext } from "../../utils/WSContext";
 import ConnectButton from "../connectButton.tsx";
 import { Link } from "react-router-dom"
@@ -16,13 +15,12 @@ import { Link } from "react-router-dom"
 
 function ProfileLocked() {
   const SocketContext = useContext(WebSocketContext)
-  const [channel_id, setChannelId] = useState<number | undefined>(undefined);
   
   
   if (!SocketContext)
       throw new Error('error')
  const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
-const [isLoading, setIsLoading] = useState(true);
+const [_isLoading, setIsLoading] = useState(true);
  const {uuid} = useParams();
  const userContextConsumer = useContext(UserContext)
  if (!userContextConsumer)
@@ -31,7 +29,6 @@ const [isLoading, setIsLoading] = useState(true);
  const fetchUserData = async () =>{
    try {
 
-    // check if the user is already existing friend
     const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
     if (user.length === 0)
     {
@@ -52,33 +49,15 @@ const [isLoading, setIsLoading] = useState(true);
   }
 };
 
-// const getChannelId = async () =>{
-//   try{
-//       const req = {
-//           url: "/chat/conversation/get_channel/"+uuid+'/',
-//           method: 'GET'
-//       }
-//       const resp = await mailman(req)
-//       const id:number = resp.data.channel_id;
-//       if (id)
-//           setChannelId(id);
-//   }
-//   catch (error){
-
-
-//   }
-// }
-
-// useEffect to handle the loading state
 useEffect(() => {
-  // Fetch the data when the component mounts
+
   fetchUserData().finally(() => {
-    // Add a delay of 1.2 seconds before setting isLoading to false
+
     const timer = setTimeout(() => {
       setIsLoading(true);
     }, 500);
 
-    // Cleanup timer
+
     return () => clearTimeout(timer);
   });
 }, [uuid]); 
@@ -92,7 +71,7 @@ useEffect(() => {
       setProfileData(userContextConsumer?.userData)
   }
  },[uuid])
-  console.log(profileData);
+
   return (
     <div className="animate-pulse">
       <div className="lg:mb-0 pb-20 font-poppins 2xl:my-[20px] p-3 lg:ml-[70px] dashboard-container md:h-[1700px] xl:h-[1200px] 2xl:h-[1150px] text-white w-[90%] lg:w-[calc(100%-160px)] my-[20px] 2xl:p-10 2xl:pt-0 lg:mx-[50px] absolute top-[80px] left-[50%] -translate-x-[50%] lg:-translate-x-0 lg:left-[80px] grid md:grid-cols-12 md:grid-rows-12 xl:grid-cols-12 xl:grid-rows-12 2xl:grid-cols-12 2xl:grid-rows-12 gap-4">

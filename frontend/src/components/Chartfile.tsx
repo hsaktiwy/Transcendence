@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button"
-
- import { Bar, BarChart,XAxis } from "recharts"
+import { Bar, BarChart,XAxis } from "recharts"
 
  
 import { ChartConfig, ChartContainer } from "@/components/ui/chart"

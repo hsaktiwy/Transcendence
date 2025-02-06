@@ -2,14 +2,13 @@ import React, { useState, createContext, useEffect } from "react";
 import mailman from "@/utils/AxiosFetcher";
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { error, log } from "console";
 import { toast } from "react-toastify";
 export interface LoginDataInterface{
     email: string,
     password: string
 }
 export interface VerifyTFAInterface{
-    user: string,
+    user: string | undefined,
     otp_code: string
 }
 export interface signUpDataInterface{
@@ -110,13 +109,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                     method: 'GET',
                     withCredentials: true,
                 }
-                const resp = await mailman(request)
-                // if (loggedIn !== undefined && loggedIn === true){
-                //     setLoggedIn(false)
-                //     toast.info('User Logged out')
-                // }
-                
-                
+                await mailman(request)
             }
             catch (error){
                 toast.error('error occured')

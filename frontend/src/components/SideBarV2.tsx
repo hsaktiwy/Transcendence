@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link } from 'react-router-dom'
 import { UserContext } from "./UserContext";
 import { GiSettingsKnobs } from "react-icons/gi";
@@ -10,7 +10,6 @@ import { FiUser } from "react-icons/fi";
 
 
 function SideBarV2(){
-    const [showSideBar, setShowSideBar] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
     const authContextConsumer  = useContext(AuthContext)
     const WsContextConsumer  = useContext(WebSocketContext)
@@ -50,7 +49,8 @@ function SideBarV2(){
                     type: "NOTIFICATION_STATE",
                     state: "offline"
                 }
-                socket?.current.send(JSON.stringify(stateObj))
+                if (socket.current)
+                    socket.current.send(JSON.stringify(stateObj))
                 authContextConsumer.setLoggedIn(false)
                 toast.info('User Logged Out')
                 

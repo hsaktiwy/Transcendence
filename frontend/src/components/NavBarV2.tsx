@@ -3,8 +3,6 @@ import { IoSearchOutline } from "react-icons/io5";
 import { UserContext } from "./UserContext";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { TbMessage } from "react-icons/tb";
-import NavBarModal from "./NavBarModal";
-import {axiosPath} from "../utils/Constants"
 import NavBarDrop from "./NavbarDrop.tsx";
 import Search from "./Search/Search.tsx";
 import NotificationDropDown from "./Notification/NotificationDropDown.tsx";
@@ -14,7 +12,6 @@ import MessageNotificationsDropDown from "./Notification/MessageNotificationsDro
 
 function NavBarV2(){
     const [isSearchBarActive, setSearchBar] = useState<boolean>(false)
-    const [openModal, setOpenModal] = useState<boolean>(false)
     const [search, setSearch] = useState<string>("")
     const [focus, setFocus] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
@@ -66,7 +63,7 @@ function NavBarV2(){
     return(
         <>
         {
-            openModal ?  <NavBarModal type='allo' setOpenModal={setOpenModal} /> :
+            
             
             <div className={` h-[60px]  w-[calc(100%-20px)] lg:w-[calc(100%-160px)] 2xl:w-[calc(90%)]  mx-[20px]  lg:mx-[4%] 2xl:mx-[3%] my-[10px] text-white absolute top-0 left-0 lg:left-[80px] flex ${isSearchBarActive ? 'justify-start ' : 'justify-between'} lg:justify-between items-center`}>
                 <div id="nav-search-bar" className={`relative ${isSearchBarActive ? 'w-[100%]' : 'w-[40%]'} lg:w-[40%] `} >

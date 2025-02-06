@@ -1,10 +1,10 @@
-import React from "react";
+
 
 import { AuthContext } from "@/components/AuhtenticationContext";
 import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-import LandingPage2 from "@/components/Landing/LandingPage2";
+
 
 function RedirectRoute()
 {

@@ -1,4 +1,4 @@
 #!/bin/sh
 npm install --force
 
-npm run dev
+npm run build

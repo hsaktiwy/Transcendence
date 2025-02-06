@@ -1,7 +1,7 @@
-import React from "react";
+
 import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
-import CardBorder from "../../../public/cardBorder.png"
+
 import TargetImage from "/target-front-color.png"
 import ChatImage from "/chaticon.png"
 import TropheyImage from "/img.png"

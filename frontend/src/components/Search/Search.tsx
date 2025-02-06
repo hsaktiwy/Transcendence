@@ -1,5 +1,5 @@
 import mailman from "@/utils/AxiosFetcher";
-import { stringify } from "querystring";
+
 import { useEffect, useState } from "react";
 import SearchDisplay from "./SearchDisplay";
 interface props{
@@ -26,14 +26,12 @@ function Search(info:props) {
     const [loading, setLoading] = useState<boolean>(true)
 
 
-    // i want to use use effect to search for users that matched the string i will gave
+
     useEffect(()=>{
         const GetMatchs = async ()=>
         {
             try
             {
-                // i think we will need a parsing for this
-                console.log('searching ... ')
                 const request = {
                     url: '/api/user/search/',
                     method: 'GET',
@@ -65,8 +63,6 @@ function Search(info:props) {
                  
                     setLoading(false)
                 setData(userComponents)
-                console.log(resp.data)
-                // convert strings to array of searchObject
             }catch (e){
                 console.error(e)
             }

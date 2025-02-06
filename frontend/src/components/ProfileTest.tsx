@@ -1,13 +1,9 @@
-import React from "react";
 import { Link } from "react-router-dom"
 
 import './style-component.css'
-import SideBar  from'./website/components-Profile/side-bar.tsx'
-import SearchInfoProfile from './website/components-Profile/serach-infos-profile.tsx'
-import ProfileOverView from './website/components-Profile/ProfileOverView'
-import StatsComponent from './website/components-Profile/statsComponents'
+
 import Achievements from "@/components/Achievements.tsx";
-import { ChartFile } from "@/components/Chartfile.tsx";
+
 import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
 import RankFile from "./rankFile.tsx";
@@ -19,15 +15,14 @@ import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import mailman from "../utils/AxiosFetcher";
-import { NotificationPropreties } from "./UserContext";
+
 import { WebSocketContext } from "../utils/WSContext";
 import ConnectButton from "./connectButton.tsx";
 import { MatchHistory } from "./MatchHistroy.tsx";
-import { SkeletonTheme } from 'react-loading-skeleton'
-import Skeleton from 'react-loading-skeleton'
+
 import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
-import { SlLock } from "react-icons/sl";
+
 import ProfileLocked from "./blocked/Profileblocked.tsx";
 import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface } from "@/utils/interfaces.ts";
 
@@ -37,7 +32,6 @@ const ProfileTest  = () =>{
     if (!SocketContext)
         throw new Error('error')
     const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
-    const [channel_id, setChannelId] = useState<number | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(true);
     const [isblock, setIsbLock] = useState<boolean>(false);
     const [matches, setMatches] = useState<LoseWins | undefined>()
@@ -53,22 +47,7 @@ const ProfileTest  = () =>{
     throw new Error("userContext must be used within a UserProvider");
 //    const {setUserMatchHistorey} = userContextConsumer;
 
-    const getChannelId = async () =>{
-            try{
-                const req = {
-                    url: "/chat/conversation/get_channel/"+uuid+'/',
-                    method: 'GET'
-                }
-                const resp = await mailman(req)
-                const id:number = resp.data.channel_id;
-                if (id)
-                    setChannelId(id);
-            }
-            catch (error){
 
-
-            }
-    }
 
     const fetchLineChart = async () =>  
     {

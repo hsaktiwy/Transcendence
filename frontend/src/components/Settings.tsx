@@ -1,14 +1,14 @@
-import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { UserContext } from "./UserContext";
-import ChatSection from "./ChatSection";
+
 import { cookies } from "../auth/Cookie";
-import { BACKEND, axiosPath } from "../utils/Constants";
+
 import mailman from "../utils/AxiosFetcher";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import { FiEdit2 } from "react-icons/fi";
 import { toast } from "react-toastify";
-import Skeleton from "react-loading-skeleton";
+
 import { UserDataInterface } from "../utils/UserDataInterface";
 function Settings() {
 
@@ -26,7 +26,7 @@ function Settings() {
             let uploadUrl=  `/api/user/upload_pic/`
             if(e.target.id === 'CoverProfile')
                 uploadUrl = `/api/user/CoverProfile/`
-            const imageId = e.target.id
+
             const formData = new FormData();
             formData.append(e.target.id, e.target.files[0]);
             try{
