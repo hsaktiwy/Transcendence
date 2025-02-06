@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SettingsInputsDataInterface } from "./GeneralSettings";
+import { SettingsInputsDataInterface, SettingsInputsErrorInterface } from "./GeneralSettings";
 import { FiEdit2 } from "react-icons/fi";
 
 interface FormInputPropInterface {
@@ -13,25 +13,36 @@ interface FormInputPropInterface {
     setChanged: React.Dispatch<React.SetStateAction<boolean> > ,
     changed?: boolean 
     value: string,
-    inputsData?: SettingsInputsDataInterface
+    inputsData?: SettingsInputsDataInterface,
+    inputsError: SettingsInputsErrorInterface,
+    setInputError: React.Dispatch<React.SetStateAction<SettingsInputsErrorInterface> >,
 }
 const GeneralSettingsInput = (prop: FormInputPropInterface)=>{
-    const {value,name, type,label, inputsData ,pattern ,setInputsData, setChanged, changed ,errorMessage, ...inputProps} = prop
+    const {value,name, type,label, inputsData ,pattern ,setInputsData, setChanged, changed ,errorMessage, inputsError, setInputError, ...inputProps} = prop
     const [error, setError] = useState<boolean>(false)
 
     const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         const inputRegex = new RegExp(pattern)
-        if(!inputRegex.test(e.target.value.trim()) && error === false)
-            setError(true)
-        else if (inputRegex.test(e.target.value) && error === true)
-            setError(false)
+        if(!inputRegex.test(e.target.value.trim()) && error === false){
+          if (name)
+            setInputError({...inputsError, [name]: true})
+          setError(true)
+        }
+        else if (inputRegex.test(e.target.value) && error === true){
+          if (name){
+            setInputError({...inputsError, [name]: false})
+            if (inputsData)
+              setInputsData({ ...inputsData, [name]: e.target.value.trim() });
+          }
+          setError(false)
+        }
     };
    
     const onChange =(e: React.ChangeEvent<HTMLInputElement>) => {
         if(!changed)
             setChanged(true)
         if (inputsData && setInputsData && name)
-            setInputsData({ ...inputsData, [name]: e.target.value.trim() });
+            setInputsData({ ...inputsData, [name]: e.target.value });
     }
     return(
         <div className="flex items-center gap-4 justify-center flex-col sm:flex-row">

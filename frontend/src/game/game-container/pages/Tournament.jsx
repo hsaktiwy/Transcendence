@@ -1,228 +1,175 @@
-
-import React, { useEffect, useState } from 'react';
-import './style.css'
-import MatchCard from '../components/MatchCard';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PingPongBack from "../components/PingPongBack";
-import './Tournament.css'
-import HistoryCard from '../components/HistoryCard';
 import { Bracket } from 'react-brackets';
+import MatchCard from '../components/MatchCard';
+import './Tournament.css';
+import './style.css';
+import { useLocalGamesContext } from '../game/MatchContext';
+import { useEffect } from 'react';
 
-function Tournament({ src }) {
+function Tournament() {
   const navigate = useNavigate();
-
-  // const storedPlayers = localStorage.getItem('tournamentPlayers');
-  // const players = storedPlayers ? JSON.parse(storedPlayers) : null;
-  // const [reload , setReload] = useState(0)
-  // const [Matches, setMatches] = useState( {
-  //   "Semi_Final_1": { "player1": "PL1", "player2": "PL2", "winner": null, "isReadyP1": false, "isReadyP2": false, "thier_Turn": false },
-  //   "Semi_Final_2": { "player1": "PL3", "player2": "PL4", "winner": null, "isReadyP3": false, "isReadyP4": false, "thier_Turn": false },
-  //   "Final"       : { "player1": null      , "player2": null      , "winner": null, "isReadyF1": false, "isReadyF2": false, "thier_Turn": false }
-  // })
-
-  // // this must be seted somehow base idea will be using local storage
-  // const [Matches_history, setMatches_history] = useState( {
-  //   "Semi_Final_1": { "player1": "PL1", "player2": "PL2", "Score1": 0, "Score2": 0, "winner": null },
-  //   "Semi_Final_2": { "player1": "PL3", "player2": "PL4", "Score1": 0, "Score2": 0, "winner": null},
-  //   "Final"       : { "player1": null      , "player2": null      , "Score1": 0, "Score2": 0, "winner": null }
-  // })
-
-  // const [rounds, setRounds] = useState([
-  //     {
-  //       title: 'Semi Finals',
-  //       seeds: [
-  //         {
-  //           id: 1,
-  //           date: new Date().toDateString(),
-  //           teams: [
-  //             { name: 'TBD' },
-  //             { name: 'TBD' },
-  //           ],
-  //         },
-  //         {
-  //           id: 2,
-  //           date: new Date().toDateString(),
-  //           teams: [
-  //             { name: 'TBD' },
-  //             { name: 'TBD' },
-  //           ],
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       title: 'Final',
-  //       seeds: [
-  //         {
-  //           id: 3,
-  //           date: new Date().toDateString(),
-  //           teams: [
-  //             { name: 'TBD' },
-  //             { name: 'TBD' },
-  //           ],
-  //         },
-  //       ],
-  //     },
-  //   ])
+  const { LocalGamesData }    = useLocalGamesContext();
+  // const { setLocalGamesData } = useLocalGamesContext();
   
-  // const handleReady = (matchId, whichPlayer) => {
-  //   setMatches((prev) => {
-  //     const newMatch = { ...prev[matchId] };
-  //     if (whichPlayer === 'player1') {
-  //       newMatch.isReadyP1 = !newMatch.isReadyP1;
-  //     } else {
-  //       newMatch.isReadyP2 = !newMatch.isReadyP2;
-  //     }
-  //     return {
-  //       ...prev,
-  //       [matchId]: newMatch,
-  //     };
-  //   });
-  // };
+  useEffect( () => {
+      if ( LocalGamesData.gametype !== 'Tournament'
+        || LocalGamesData.player1 === null ||  LocalGamesData.player1 === undefined 
+        || LocalGamesData.player2 === null ||  LocalGamesData.player2 === undefined  
+        || LocalGamesData.player3 === null ||  LocalGamesData.player3 === undefined
+        || LocalGamesData.player4 === null ||  LocalGamesData.player4 === undefined
+      ){
+        navigate('/game/PingPong_Lobby');
+      };
+  })
 
-  // const handleStartMatch = (matchId) => {
-  //   // #region Start the match with the given matchId
-  //   console.log(`Starting match: ${matchId}`);
-  //   // localStorage.setItem("localGameType", "tournament");
-  //   localStorage.setItem("matchId", matchId);
-  //   navigate('/game/Localgame');
-  // };
+  const [Matches, setMatches] = useState({
+    Semi_Final_1: {
+      player1: LocalGamesData.player1,
+      player2: LocalGamesData.player2,
+      winner: null,
+      isReadyP1: false,
+      isReadyP2: false,
+      thier_Turn: true,
+    },
+    Semi_Final_2: {
+      player1: LocalGamesData.player3,
+      player2: LocalGamesData.player4,
+      winner: null,
+      isReadyP3: false,
+      isReadyP4: false,
+      thier_Turn: false,
+    },
+    Final: {
+      player1: 'TBD',
+      player2: 'TBD',
+      winner: null,
+      isReadyF1: false,
+      isReadyF2: false,
+      thier_Turn: false,
+    },
+  });
 
-  // // #region Get our LocalStorage item if it exists
-  // useEffect(() => {
-  //   // in case where we ? have empty info
-  //   // console.lo
-  //   setReload(reload+1)
-  //   console.log(reload)
-  //   if (!storedPlayers || !players)
-  //   {
-  //       // if we don't have players data, we should go back to the PreTournament page
-  //       navigate("/PreTournament")
-  //   }
-  //   else
-  //   {
-  //     // const 
-  //     const matches = {
-  //       "Semi_Final_1": { "player1": players.p1, "player2": players.p2, "winner": null, "isReadyP1": false, "isReadyP2": false, "thier_Turn": false },
-  //       "Semi_Final_2": { "player1": players.p3, "player2": players.p4, "winner": null, "isReadyP3": false, "isReadyP4": false, "thier_Turn": false },
-  //       "Final"       : { "player1": null      , "player2": null      , "winner": null, "isReadyF1": false, "isReadyF2": false, "thier_Turn": false }
-  //     }
+  const handleReady = (matchId, whichPlayer) => {
+    setMatches((prev) => {
+      const newMatch = { ...prev[matchId] };
+      if (whichPlayer === 'player1') {
+        newMatch.isReadyP1 = !newMatch.isReadyP1;
+      } else {
+        newMatch.isReadyP2 = !newMatch.isReadyP2;
+      }
+      return {
+        ...prev,
+        [matchId]: newMatch,
+      };
+    });
+  };
 
-      
-  //     const matches_his =  {
-  //       "Semi_Final_1": { "player1": players.p1, "player2": players.p2, "Score1": 0, "Score2": 0, "winner": null },
-  //       "Semi_Final_2": { "player1": players.p3, "player2": players.p4, "Score1": 0, "Score2": 0, "winner": null},
-  //       "Final"       : { "player1": null      , "player2": null      , "Score1": 0, "Score2": 0, "winner": null }
-  //     }
-  //     const data = localStorage.getItem('Matches_data');
-  //     const history = localStorage.getItem('Matches_history');
-  //     if (data) {
-  //       setMatches(JSON.parse(data));
-  //     }
-  //     else
-  //       localStorage.setItem('Matches_data', JSON.stringify(matches));
-  //     if (history) {
-  //       setMatches_history(JSON.parse(history));
-  //     }
-  //     else
-  //       localStorage.setItem('Matches_history', JSON.stringify(matches_his));
-  //     console.log("hmm ", Matches, Matches_history);
+  const handleStartMatch = (matchId) => {
+    console.log(`Starting match: ${matchId}`);
+    //tBC
+    navigate('/game/LocalGame');
+  };
 
-  //     setRounds([
-  //     {
-  //       title: 'Semi Finals',
-  //       seeds: [
-  //         {
-  //           id: 1,
-  //           date: new Date().toDateString(),
-  //           teams: [
-  //             { name: matches.Semi_Final_1?.player1 || 'TBD' },
-  //             { name: matches.Semi_Final_1?.player2 || 'TBD' },
-  //           ],
-  //         },
-  //         {
-  //           id: 2,
-  //           date: new Date().toDateString(),
-  //           teams: [
-  //             { name: matches.Semi_Final_2?.player1 || 'TBD' },
-  //             { name: matches.Semi_Final_2?.player2 || 'TBD' },
-  //           ],
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       title: 'Final',
-  //       seeds: [
-  //         {
-  //           id: 3,
-  //           date: new Date().toDateString(),
-  //           teams: [
-  //             { name: matches.Final?.player1 || 'TBD' },
-  //             { name: matches.Final?.player2 || 'TBD' },
-  //           ],
-  //         },
-  //       ],
-  //     },
-  //     ])
-
-  //     // this must be seted somehow base idea will be using local storage
-  //     setMatches_history(
-  //       matches_his
-  //     )
-      
-  //     setMatches(
-  //       matches
-  //     )
-  //   }
-  // }, []);
-
-  // // #region Update our LocalStorage item whenever it changes
-  // console.log("hmm ", Matches, Matches_history);
+  const rounds = [
+    {
+      title: 'Semi Finals',
+      seeds: [
+        {
+          id: 1,
+          date: new Date().toDateString(),
+          teams: [
+            { name: Matches.Semi_Final_1?.player1 || 'TBD' },
+            { name: Matches.Semi_Final_1?.player2 || 'TBD' },
+          ],
+        },
+        {
+          id: 2,
+          date: new Date().toDateString(),
+          teams: [
+            { name: Matches.Semi_Final_2?.player1 || 'TBD' },
+            { name: Matches.Semi_Final_2?.player2 || 'TBD' },
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Final',
+      seeds: [
+        {
+          id: 3,
+          date: new Date().toDateString(),
+          teams: [
+            { name: Matches.Final?.player1 || 'TBD' },
+            { name: Matches.Final?.player2 || 'TBD' },
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Winner',
+      seeds: [
+        {
+          id: 4,
+          date: new Date().toDateString(),
+          teams: [
+            { name: Matches.Final?.player1 || 'TBD' },
+            // { name: Matches.Final?.player2 || 'TBD' },
+          ],
+        },
+      ],
+    },
+  ];
 
   return (
-<>
-<div className="main-game-page-container">
-</div>
-</>
+    <div className="main-game-page-container">
+      <div className="tournament-page">
+        <div className="tournament-layout">
+          <div className="bracket-section">
+            <div className="bracket-display">
+              <center>
+                <Bracket rounds={rounds}/>
+              </center>
+            </div>
+          </div>
+
+          <div className="matches-section">
+            <div className="matches-column">
+              <h1 className="tournament-heading">MATCHES HISTORY</h1>
+            </div>
+
+            <div className="vertical-line"/>
+
+            <div className="matches-column">
+              <h1 className="tournament-heading">MATCHES QUEUE</h1>
+              
+              <MatchCard 
+                matchId="Semi_Final_1"
+                matchData={Matches.Semi_Final_1}
+                onReady={handleReady}
+                onStartMatch={handleStartMatch}
+              />
+              <MatchCard 
+                matchId="Semi_Final_2"
+                matchData={Matches.Semi_Final_2}
+                onReady={handleReady}
+                onStartMatch={handleStartMatch}
+              />
+              <MatchCard 
+                matchId="Final"
+                matchData={Matches.Final}
+                onReady={handleReady}
+                onStartMatch={handleStartMatch}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
 export default Tournament;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// {/* semi final 1*/}
-//   {/* <div className='Challenger'>
-//     <div className='White center-column'>
-//       <p>{Matches['Semi_Final_1'].player1}</p>
-//       <div className='border-1-white width-full'></div>
-//       <p>{Matches['Semi_Final_1'].player2}</p>
-//     </div>
-//     </div>
-//     <div className='Challenger'>
-//     <div className='White center-column'>
-//     <p>{Matches['Final'].player1 ? Matches['Final'].player1: "..."}</p>
-//     <div className='border-1-white width-full'></div>
-//     <p>{Matches['Final'].player2 ? Matches['Final'].player2: "..."}</p>
-//     <h3 className='yellow'>FINALS <span className='red'>[khaliha Wla lah]</span></h3>
-//     </div>
-//     </div>
-//     <div className='Challenger'>
-//     <div className='White center-column'>
-//     <p>{Matches['Semi_Final_2'].player1}</p>
-//     <div className='border-1-white width-full'></div>
-//       <p>{Matches['Semi_Final_2'].player2}</p>
-//       </div>
-//     </div> */}
+ 

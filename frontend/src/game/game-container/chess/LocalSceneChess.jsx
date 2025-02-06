@@ -11,13 +11,13 @@ import './style.css'
 import '../game/RemoteScene.css'
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js'
-import { Frame } from '../components/Frame';
+// import { Frame } from '../components/Frame';
 
 
 const LocalChessGame = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const canvasRef = useRef(null);
-    const buttonRef = useRef(null);
+    // const buttonRef = useRef(null);
 
     const [loading, setLoading] = useState(true);
 
@@ -141,7 +141,7 @@ const LocalChessGame = () => {
         
         
         GLTFLoaderr.load(
-            '/GamePub/chess-assets/models/chess_set_4k.gltf/untitled.gltf',
+            '/GamePub/chess-assets/models/chess_set_2k.gltf/chess_set.gltf',
             function ( gltf ) {
                 let item;
         
@@ -180,9 +180,9 @@ const LocalChessGame = () => {
             scene.background  = enviroment_map;
             scene.environment = enviroment_map;
             
-            scene.backgroundBlurriness = 0.5; 
-            scene.environmentIntensity = 0.01; 
-            scene.backgroundIntensity  = 0.007;
+            scene.backgroundBlurriness = 0.2; 
+            scene.environmentIntensity = 0.4; 
+            scene.backgroundIntensity  = 0.4;
         })
         
         let cinm = true;
@@ -376,11 +376,11 @@ const LocalChessGame = () => {
         
         
         ////BUttona
-        let button = null;
-        if (buttonRef.current != null){
-            button = buttonRef.current
-            button.addEventListener('click', setPlayerPov);
-        }
+        // let button = null;
+        // if (buttonRef.current != null){
+        //     button = buttonRef.current
+        //     button.addEventListener('click', setPlayerPov);
+        // }
         ///
         
         //  Animate
@@ -458,8 +458,11 @@ const LocalChessGame = () => {
     return (
         <>
             <LoadingScreen show={loading} />
-            <canvas ref={canvasRef}></canvas>
-            <button className="button" ref={buttonRef}>Press Start To Start</button>
+            <canvas style={{zIndex:97, position: 'absolute',top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%'}} ref={canvasRef}></canvas>
+            {/* <button className="button" ref={buttonRef}>Press Start To Start</button> */}
         </>
     )
 };

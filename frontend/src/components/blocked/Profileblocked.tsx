@@ -32,7 +32,7 @@ const [isLoading, setIsLoading] = useState(true);
    try {
 
     // check if the user is already existing friend
-    const user = userContextConsumer.friends.filter(friend=>(friend.login === uuid)); 
+    const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
     if (user.length === 0)
     {
       const req = {

@@ -9,6 +9,7 @@ export interface UserDataInterface {
     profile_pic:string;
     two_factor_auth: boolean;
     CoverProfile: string;
+    oauth: boolean;
 }
 export interface ProfileDataInterface {
     unique_id:string;

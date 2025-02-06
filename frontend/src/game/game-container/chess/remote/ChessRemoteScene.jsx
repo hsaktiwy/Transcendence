@@ -11,31 +11,43 @@ import './../style.css'
 import '../../game/RemoteScene.css'
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js'
-import { Frame } from '../../components/Frame';
-import { useMatchContext } from './../../game/MatchContext';
+import { useRemoteGameContext } from '../../game/MatchContext';
+
+
+
+
+// room_name: data['room_name'],
+// role     : data['role'],
+// my_user  : data['user_name'],
+// opponent : data['opponent_name'],
+// p1_id    : data['my_id'],
+// p2_id    : data['opponent_id'],
+// color    : data['color'],
+// winner   : null
 
 
 const ChessRemoteGame = () => {
     const navigate = useNavigate();
     const canvasRef = useRef(null);
-
+    
     const [loading, setLoading] = useState(true);
-
-
+    
+    
     // Remote LOgic
-    const { matchData } = useMatchContext();
+    const { setReomteGameData } = useRemoteGameContext(); //to set the winner
+    const { ReomteGameData } = useRemoteGameContext();
         
-    // console.log(matchData.roomName);
-    // console.log(matchData.myId);
-    if (!matchData.roomName || !matchData.myId || !matchData.color){
-        usenavigate('/game/ChessPreRemote');
+    // console.log(ReomteGameData.room_name);
+    // console.log(ReomteGameData.my_user);
+    if (!ReomteGameData.room_name || !ReomteGameData.my_user || !ReomteGameData.color){
+        navigate('/game/ChessPreRemote');
     };
     
     let cinm = true;
-    // console.log(matchData.color);
+    // console.log(ReomteGameData.color);
 
     let z;
-    if (matchData.color === 'white'){
+    if (ReomteGameData.color === 'white'){
         z = -0.4220
     }
     else{
@@ -45,11 +57,11 @@ const ChessRemoteGame = () => {
     useEffect(() => {
 
         // Connect to the game server using those values
-        const gameSocket = new WebSocket(`ws://localhost:8000/ws/chess/room/${matchData.roomName}/?user_id=${matchData.myId}`);
-        // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${matchData.roomName}/?user_id=${matchData.myId}`);
+        const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ws/chess/room/${ReomteGameData.room_name}`);
+        // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.my_user}`);
         
         gameSocket.onopen = () => {
-            console.log("Connected to the game room:", matchData.roomName);
+            console.log("Connected to the game room:", ReomteGameData.room_name);
             setPlayerPov();
         };
 
@@ -194,7 +206,7 @@ const ChessRemoteGame = () => {
         
         
         GLTFLoaderr.load(
-            '/GamePub/chess-assets/models/chess_set_4k.gltf/untitled.gltf',
+            '/GamePub/chess-assets/models/chess_set_2k.gltf/chess_set.gltf',
             function ( gltf ) {
                 let item;
         
@@ -364,7 +376,7 @@ const ChessRemoteGame = () => {
             // console.log("=======>", Objects.length);
             const message = {
                 type      : 'game_update',
-                my_id     : matchData.myId,
+                my_id     : ReomteGameData.my_user,
                 from      : t_from,
                 to        : t_to,      
                 name      : name,
@@ -552,7 +564,10 @@ const ChessRemoteGame = () => {
     return (
         <>
             <LoadingScreen show={loading} />
-            <canvas ref={canvasRef}></canvas>
+            <canvas style={{zIndex:97, position: 'absolute',top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%'}} ref={canvasRef}></canvas>
         </>
     )
 };

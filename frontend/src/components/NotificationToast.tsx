@@ -88,6 +88,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         const interval = setInterval(() =>{
             if (items.length)
                 removeItem(items[0].id )
+            // Math.max(2000*(1/items.length), 300)
         }, Math.max(2000*(1/items.length), 300))
             
         return () => {
@@ -114,7 +115,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                         <h1 className="font-semibold sm:text-xl">
                                             {`You have a new ${item.type==='message' ? 'Message' :'Notification' }`}
                                         </h1>
-                                        <div className="flex gap-4  items-center">
+                                        <div className="flex gap-4  items-center break-words">
                                             {
                                                 (item.type === 'friendship' || item.type === 'message') &&
                                                 <div className=" h-[35px] w-[35px] sm:h-[50px] sm:w-[50px]">
@@ -122,11 +123,12 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                                     <img src={`${import.meta.env.VITE_axiosPath}${item.sender.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                                 </div>
                                             }
-                                            <p className="text-white/80">
-                                                {item.content.length > 50 ? `${item.content.substring(0,50)}...` : item.content}
+                                            <p className="text-white/80 break-words">
+                                                {item.content.length > 20 ? `${item.content.substring(0,20)}...` : item.content}
                                             </p>
                                         </div>
                                     </div>
+                                    {/* <div className="absolute bottom-0 right-0 h-[2px] bg-red-500  rounded-xl animate-progress transition-all " style={{ animationDuration: `${Math.max(2000*(1/items.length), 300)/1000}s` }}></div> */}
 
                                 </div>
                             </Link>

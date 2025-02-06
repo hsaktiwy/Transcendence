@@ -17,6 +17,7 @@ import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
 import { formatDate2 } from "./NavBarModal";
+import { toast } from "react-toastify";
 
 
 export const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
@@ -46,7 +47,6 @@ function ChatSession(){
     const BlockStatusCheck = async ()=>
     {
         try{
-            console.log("unique untell i die :",chatContext.active?.user2.unique_id)
             const req = {
                 url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.unique_id,
                 method: 'GET',
@@ -55,18 +55,17 @@ function ChatSession(){
             const resp = await mailman(req)
             const  responce:boolean = resp.data['status']
             setStatus((responce) ? 'UnBlock' : 'Block')
-            // console.log(resp)
         }
         catch(err)
         {
-            console.log("Block status ", err)
+            toast.error("Something went wrong")
         }
     }
 
     useEffect(()=>{
         setRCount((re)=>(re+1))
-        BlockStatusCheck()
-    },[userContext.action, chatContext.active])
+        // BlockStatusCheck()
+    },[userContext.action])
     //amine
     
     
@@ -167,7 +166,6 @@ function ChatSession(){
                 channel: chatContext.active?.channelId,
                 first_index: (chatContext.active?.messages && chatContext.active?.messages.length) ? chatContext.active?.messages[0].id: -1
             }
-            // console.log(JSON.stringify(req))
             SocketContext.socket?.current.send(JSON.stringify(req))
             chatContext.active?.new_message==0
             chatContext.setConvs((prevConvs) => {
@@ -177,10 +175,11 @@ function ChatSession(){
                 : conv
                 );
             });
+            userContext.setnotifications(prev => prev.filter(notif=>notif.channel_id !== chatContext.active?.channelId))
         }
         catch (e)
         {
-            console.log("Error in the ready message sheck : "+e)
+            toast.error("something went wrong")
         }
     }
 
@@ -208,7 +207,6 @@ function ChatSession(){
                 );
             });
             setUpdate(true)
-            // console.log(chatContext.active);
         }
     }, []);
 
@@ -228,7 +226,6 @@ function ChatSession(){
         {
             const extracting = 'update/' + chatContext.active?.channelId + '/' + import.meta.env.VITE_MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
             const url = import.meta.env.VITE_CONVERSATION + extracting
-            // console.log(url)
             const request = {
                 url: url,
                 method: 'GET',
@@ -240,15 +237,9 @@ function ChatSession(){
                 next_packet_number : number
                 is_next_packet: number
             }
-            console.log("()(()()())",response)
             const old_messages:conversation_type  = response.data as conversation_type
-            console.log("old messages", old_messages)
-            console.log("last packet in the chatcontext : ",  chatContext.active?.last_packet, old_messages.next_packet_number)
             if ( chatContext.active && old_messages && chatContext.active?.last_packet < old_messages.next_packet_number)
             {
-                console.log("hmm ? ")
-                // console.log(old_messages)
-                // console.log(chatContext.active)
                 if (containerRef.current)
                     containerRef.current.scrollTop = chatContext.active.scrollTop;
                 chatContext.setActive((prevConv) => (prevConv && {
@@ -276,7 +267,6 @@ function ChatSession(){
         {
             console.log(error)
         }
-        // console.log(chatContext.active)
     }
     useEffect(()=>
     {
@@ -303,9 +293,13 @@ function ChatSession(){
     {
         console.log("render time:", rcount)
     },[rcount])
+    useEffect(()=>
+    {
+            console.log("activeeeee")
+    },[chatContext.active])
     //
     return(
-            <div  className={`  rounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
+            <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
             `}>
                 <div id="conversation-header-container" className="border-b border-white/20 ">
                     <div id="conversation-header" className="text-white grid grid-cols-4 px-4 py-[2px]">
@@ -324,7 +318,10 @@ function ChatSession(){
                                     chatContext.setShowProfile(true)
                                 }}>
                                     <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
-                                    <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.login}`}</p>
+                                    <div className=" flex gap-3 items-center">
+                                        <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.login}`} </p>
+                                        {/* <div className={`rounded-full h-[6px] w-[6px] ${chatContext.active?.user2.state === 'none' ? 'bg-transparent' : chatContext.active?.user2.state === 'online' ? 'bg-green-500' : 'bg-red-500'}`}></div> */}
+                                    </div>
                                 </div>
                             </div>
                             <div id='conv-header-menu ' className="drop relative col-span-1  flex justify-self-end items-center text-[24px]">
@@ -384,18 +381,18 @@ function ChatSession(){
                     </div>
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
                 </div>
-                    <div ref={containerRef} onScroll={handleContainerScroll} className=" text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden ">
-                    {/* #{loading ? <MessageLoading/> : <></>} */}
+                        {/* <div className="h-full w-full top-0 left-0  basis-[85%] backdrop-filter backdrop-blur-md"></div> */}
+                    <div ref={containerRef} onScroll={handleContainerScroll} className=" text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden">
                     {
                         chatContext.active?.messages?.map((msg, index): React.ReactNode => {
                             return(
                                 <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender?.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
-                                <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] aspect-square rounded-full object-cover rounded-full cursor-pointer" onClick={()=>{
+                                <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] aspect-square object-cover rounded-full cursor-pointer" onClick={()=>{
                                     setOpenDrop(false)
                                     chatContext.setShowProfile(true)
                                 }}/>
-                                <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? 'bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg flex flex-col justify-between min-w-[90px]`}>
-                                    <p>{msg?.content}</p>
+                                <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? ' bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg flex flex-col justify-between min-w-[90px]`}>
+                                    <p className="break-words">{msg?.content}</p>
                                     <p className=" text-right text-white/50 text-[13px]">{formatDate2(msg?.timestamp)}</p>
                                 </div>
                             </div>
