@@ -349,7 +349,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         data.sender.state = data.state
         const friend  = data.sender as ProfileDataInterface
         friend.state = data.state
-        const tmpFriends = friends.filter(friendElm=> friend.login !== friendElm.login)
+        const tmpFriends = friends.filter(friendElm=> friend.unique_id !== friendElm.unique_id)
         tmpFriends.push(friend)
         setFriends(tmpFriends)
     }

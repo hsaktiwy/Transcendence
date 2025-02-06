@@ -8,6 +8,7 @@ import {axiosPath} from "../utils/Constants"
 import NavBarDrop from "./NavbarDrop.tsx";
 import Search from "./Search/Search.tsx";
 import NotificationDropDown from "./Notification/NotificationDropDown.tsx";
+import MessageNotificationsDropDown from "./Notification/MessageNotificationsDropDown.tsx";
  
 
 
@@ -20,8 +21,10 @@ function NavBarV2(){
     const searchRef = useRef<HTMLDivElement>(null);
     const [drop, setDrop] = useState<boolean>(false)
     const [notificationDrop, setNotificationDrop] = useState<boolean>(false)
+    const [messagesDrop, setMessagesDrop] = useState<boolean>(false)
     const dropContainerRef = useRef<HTMLDivElement>(null)
     const notificationContainerRef = useRef<HTMLDivElement>(null)
+    const messagesContainerRef = useRef<HTMLDivElement>(null)
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>)=>
     {
         if (searchRef.current && !searchRef.current.contains(event.relatedTarget))
@@ -46,18 +49,20 @@ function NavBarV2(){
       }, []);
     useEffect(() => {
         const handleClickOutDrop = (event: MouseEvent) => {
-         
         if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node) && drop)
             setDrop(false)
         else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
-            setNotificationDrop(false)   
-        };
-    
+            setNotificationDrop(false)
+        else if (messagesContainerRef.current && !messagesContainerRef.current.contains(event.target as Node) && messagesDrop){
+            console.log("seeed l9lawi")
+            setMessagesDrop(false)
+        }
+    }
         document.addEventListener("click", handleClickOutDrop);
         return () => {
           document.removeEventListener("click", handleClickOutDrop);
         };
-      }, [drop, notificationDrop]);
+      }, [drop, notificationDrop, messagesDrop]);
     return(
         <>
         {
@@ -105,10 +110,16 @@ function NavBarV2(){
                                 </span>
                                 <NotificationDropDown display={notificationDrop}/>
                             </div>
-                            <div className="cursor-pointer hover:text-white duration-100 transition-all">
+                            <div ref={messagesContainerRef} className=" relative cursor-pointer hover:text-white duration-100 transition-all" onClick={() =>{
+                                setMessagesDrop(!messagesDrop)
+                            }}>
+                                <div className={` ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'message').length > 0 ? 'flex' : 'hidden'} text-sm font-poppins font-semibold  justify-center  rounded-full h-[18px] w-[18px] bg-red-600 text-white  top-[50%] right-0 absolute`}>
+                                    {userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'message').length }
+                                </div>
                                 <span className="text-3xl">
                                     <TbMessage/>
                                 </span>
+                                <MessageNotificationsDropDown display={messagesDrop}/>
                             </div>
                             <div ref={dropContainerRef} className="w-[30px] h-[30px] cursor-pointer relative " onClick={()=> setDrop(!drop)} >
                                 <img src={`${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full aspect-square rounded-full object-cover " />

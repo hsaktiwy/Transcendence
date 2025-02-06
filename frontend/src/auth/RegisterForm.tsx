@@ -6,7 +6,7 @@ import LoadingIndecator from '@/components/Loading';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
-import { userNameError, emailError, passError } from './signUpError';
+import { userNameError, emailError, passError, signupError } from './signUpError';
 import FormInput from './Registration/RegisterInput';
 import { toast } from 'react-toastify';
 
@@ -56,18 +56,18 @@ const RegisterForm = () =>{
         {
           name: "firstName",
           type: "text",
-          errorMessage: "First name should be 3-50 characters",
+          errorMessage: "First Name should be 3-50 characters long and contain only letters and spaces.",
           label: "First Name",
-          pattern: "^.{3,50}$",
+          pattern: "^(?=.{3,50}$)[A-Za-z]+([ '-][A-Za-z]+)*$",
           required: true,
           inputsData: inputsData
         },
         {
           name: "lastName",
           type: "text",
-          errorMessage: "Last name should be 3-50 characters",
+          errorMessage: "Last Name should be 3-50 characters long and contain only letters and spaces.",
           label: "Last Name",
-          pattern: "^.{3,50}$",
+          pattern: "^(?=.{3,50}$)[A-Za-z]+([ '-][A-Za-z]+)*$",
           required: true,
           inputsData: inputsData
         },
@@ -83,9 +83,9 @@ const RegisterForm = () =>{
         {
           name: "password",
           type: "password",
-          errorMessage: "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
+          errorMessage: "Password should be 8-20 characters long and include at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.",
           label: "Password",
-          pattern: "^.{3,50}$",
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
           required: true,
           inputsData: inputsData
         },
@@ -116,14 +116,7 @@ const RegisterForm = () =>{
             setRegistred(true)
         }
         catch (err) {
-            interface signupError {
-                firstName: string[]
-                lastName: string[],
-                login: string[],
-                email: string[],
-                password: string[],
-                password2: string[]
-            }
+
             const axiosError = err as AxiosError
             const axiosErrorMessage = axiosError.response?.data as signupError
             if (axiosErrorMessage.login)

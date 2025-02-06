@@ -1,5 +1,5 @@
 
-// export default Winner;
+// export default winner;
 
 import React, { useEffect, useState, UserContext } from "react";
 import "./Winner.css";
@@ -22,7 +22,7 @@ import { useLocalGamesContext } from '../game/MatchContext';
 const Winner = () => {
 
   const navigate = useNavigate();
-  let Winner = '';
+  let winner = '';
   
   // Remote LOgic
   const { ReomteGameData } = useRemoteGameContext();
@@ -30,7 +30,7 @@ const Winner = () => {
   
   
   useEffect( () => {
-      if ((ReomteGameData.Winner === null || ReomteGameData.Winner === undefined)
+      if ((ReomteGameData.winner === null || ReomteGameData.winner === undefined)
         && (LocalGamesData.gametype === null  || LocalGamesData.gametype === undefined)
       ){
         navigate('/game/PingPong_Lobby');
@@ -39,14 +39,14 @@ const Winner = () => {
     }
   )
   
-  console.log("===> Remote Winner : ", ReomteGameData.Winner);
-  console.log("===> Local  Winner : ", LocalGamesData.Winner);
+  console.log("===> Remote winner : ", ReomteGameData.winner);
+  console.log("===> Local  winner : ", LocalGamesData.winner);
 
-  if ((ReomteGameData !== null && ReomteGameData !== undefined) && (ReomteGameData.Winner !== null && ReomteGameData.Winner !== undefined)){
-    Winner = ReomteGameData.Winner;
+  if ((ReomteGameData !== null && ReomteGameData !== undefined) && (ReomteGameData.winner !== null && ReomteGameData.winner !== undefined)){
+    winner = ReomteGameData.winner;
   }
-  else if ((LocalGamesData !== null && LocalGamesData !== undefined) && (LocalGamesData.Winner !== null && LocalGamesData.Winner !== undefined)){
-    Winner = LocalGamesData.Winner;
+  else if ((LocalGamesData !== null && LocalGamesData !== undefined) && (LocalGamesData.winner !== null && LocalGamesData.winner !== undefined)){
+    winner = LocalGamesData.winner;
   }
 
 
@@ -57,7 +57,7 @@ const Winner = () => {
   <div className="main-game-page-container">
         <div className="game-options-container-w">
           <div className="game-options-header-w Text-wt">
-            <h1>Winner</h1>
+            <h1>winner</h1>
           </div>
           
           <div className="players-container-w Text-tt">

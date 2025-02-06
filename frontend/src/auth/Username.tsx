@@ -37,11 +37,13 @@ const Username = (prop: SetUsernameProps) => {
             }
             const resp = await mailman(req)
             console.log(resp)
-            if(resp.status === 200)
+            if(resp.status === 200){
                 setNeedLogin(false)
+
+            }
         }
         catch(error){
-            toast.error("Something went wrong! Try again")
+            toast.error("Invalid username or already exists! Try again")
         }
 
     }
@@ -57,9 +59,6 @@ const Username = (prop: SetUsernameProps) => {
         if (AuthContextConsummer.loggedIn === true)
             Navigate('/')
     }, [AuthContextConsummer.loggedIn, Navigate])
-
-    const [hide, setHide] = useState<boolean>(true)
-    const [passFoucs, setPassFocus] = useState<boolean>(false)
     const FormFade = () => {
         return (
             {

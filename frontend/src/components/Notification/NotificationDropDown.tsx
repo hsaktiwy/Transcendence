@@ -103,44 +103,6 @@ const NotificationDropDown = (info: prop) =>{
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     const LOGO = 'https://static.vecteezy.com/system/resources/previews/013/959/227/non_2x/table-tennis-fire-logosilhouette-ping-pong-club-line-art-logos-or-icons-illustration-vector.jpg'
-//     let usersDataArr= useRef<senderInterface[]>([])
-//     const fetchRequestSenderData =  async (items:  NotificationPropreties[]) =>{
-//         for(const item of items){
-//             if (!usersDataArr.current.find(user => item.sender === user.login)){
-//                 try{
-//                     const req = {
-//                         url: `/api/users/${item.sender}/`,
-//                         method: 'GET',
-//                     }
-//                     const resp = await mailman(req)
-//                     console.log(resp)
-//                     const userData: senderInterface = resp.data
-//                     usersDataArr.current.push(userData)
-//                 }
-//                 catch (err){
-//                     console.error(err)
-//                 }
-//             }
-
-//         }
-
-//     setdatafetched(true)
-// }
-
-
-
-// useEffect(() =>{
-//     fetchRequestSenderData(userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message' && item.type !== 'system'))
-// },[])
-    function getFirstWord(inputString:string) {
-        if (typeof inputString !== 'string' || !inputString.trim()) {
-            return 'Invalid input'; // Handle non-string or empty input
-        }
-
-        // Split the string by spaces and return the first non-empty element
-        const words = inputString.trim().split(/\s+/);
-        return words[0];
-    }
     let linkProfile = ''
     const removeNotification = async (notification: NotificationPropreties) =>{
         try{
@@ -161,10 +123,7 @@ const NotificationDropDown = (info: prop) =>{
     }
     return(
         <ul
-      
-        data-popover="notifications-menu"
-        data-popover-placement="bottom"
-        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124] transition-all duration-10s animate-fade-down  rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
+        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124]   rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
         >
         {
             userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').length > 0 ? 

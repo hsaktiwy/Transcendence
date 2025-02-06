@@ -43,6 +43,7 @@ const Login = () => {
             password: password
         }
         console.log(data)
+        const toastId = toast.loading("Loading");
         const resp = await AuthContextConsummer.LoginAction(data)
         if ('errorType' in resp) {
             interface tmp {
@@ -50,19 +51,21 @@ const Login = () => {
             }
             const tmpError = resp.errorType as tmp
             if(tmpError['non_field_errors'] !== undefined)
-                toast.error(tmpError['non_field_errors'][0])
+                toast.update(toastId, { render: tmpError['non_field_errors'][0], type: "error", isLoading: false, autoClose: 3000 });
             console.log(resp.errorType)
         }
         else {
-            if (resp.message === 'username needed')
+            if (resp.message === 'username needed'){
+                toast.update(toastId, { render: 'Please Enter a valid username', type: "info", isLoading: false, autoClose: 3000 });
                 setNeedLogin(true)
+            }
             else if (resp.message === 'tfa needed'){
+                toast.update(toastId, { render: 'Please Enter the TFA OTP', type: "info", isLoading: false, autoClose: 3000 });
                 const tfaResp = resp as LoginTFAResponse
                 setTfaUser(tfaResp.user)
             }
             else{
-                toast.success(resp.message)
-                console.log(resp)
+                toast.update(toastId, { render: resp.message, type: "success", isLoading: false, autoClose: 3000 });
                 AuthContextConsummer.setLoggedIn(true)
             }
             // Navigate('/')
@@ -110,11 +113,13 @@ const Login = () => {
                     }
                     else if (resp.data.user)
                         setTfaUser(resp.data.user)
-                    else
-                        location.reload();
+                    else{
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        AuthContextConsummer.setLoggedIn(true)
+                        // Navigate('/')
+                    }
+                        // location.reload();
                 }
-                window.history.replaceState({}, document.title, window.location.pathname);
-                // Navigate('/')
 
             }
             catch (error) {
@@ -135,8 +140,8 @@ const Login = () => {
       
             const searchParams = new URLSearchParams(window.location.search);
             const tmpCode = searchParams.get('code');
-            if (tmpCode)
-                setCode(tmpCode)
+            // if (tmpCode)
+            //     setCode(tmpCode)
             console.log(`1234   ${code}`)
     
             // if (code) {
@@ -171,8 +176,9 @@ const Login = () => {
             //     })
             //     .catch(error => console.error('Error:', error));
             // }
-            loginwith42(code)
-    }, [AuthContextConsummer.loggedIn]);
+            if (tmpCode)
+                loginwith42(tmpCode)
+    }, []);
     const [hide, setHide] = useState<boolean>(true)
     const [passFoucs, setPassFocus] = useState<boolean>(false)
     const FormFade = () => {
@@ -227,6 +233,7 @@ const Login = () => {
                                 <div className="mb-6 relative ">
                                     <label htmlFor="password" className="block text-white font-bold mb-2">Password:</label>
                                     <input
+                                        autoComplete='off'
                                         type={hide  ? 'password' : 'text'}
                                         id="password"
                                         value={password}

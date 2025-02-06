@@ -32,6 +32,7 @@ Pillow
 pyjwt
 requests
 pyotp
+gunicorn
 qrcode[pil]
 psycopg2>=2.9,<3.0
 python-dotenv>=0.18,<1.0

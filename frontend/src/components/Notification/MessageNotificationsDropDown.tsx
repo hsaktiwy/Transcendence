@@ -1,0 +1,186 @@
+import React from "react";
+import { useContext, useRef, useState,useEffect } from "react";
+import { Navigate, Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
+import { IoCloseOutline } from "react-icons/io5";
+import { RiNotification2Line } from "react-icons/ri";
+import { IoPersonAddOutline } from "react-icons/io5";
+import { RiGamepadLine } from "react-icons/ri";
+import { BiMessageSquareDetail } from "react-icons/bi";
+import { NotificationPropreties } from "../UserContext";
+// import { import.meta.env.VITE_axiosPath, BACKEND } from "../../utils/Constants";
+import mailman from "../../utils/AxiosFetcher";
+import { PiMaskSadLight } from "react-icons/pi";
+import { Loading__ } from "@/auth/Login";
+import { RiInbox2Line } from "react-icons/ri";
+import { toast } from "react-toastify";
+interface prop {
+    display: boolean
+}
+export function formatDate2(dateString: Date | string) {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInMs = now.getTime() - date.getTime();
+    
+    // If the date is less than 1 minute ago
+    if (diffInMs < 60000) {
+        return 'just now';
+    }
+
+    // If the date is within the last 24 hours
+    const diffInHours = diffInMs / (1000 * 60 * 60);
+    if (diffInHours < 24) {
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+
+    // For dates older than 24 hours, format as dd/mm/yyyy hh:mm
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+export function formatDate(date: Date | string): string {
+    const now = new Date();
+    const inputDate = new Date(date);
+    const diffMs = now.getTime() - inputDate.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60)); 
+    const diffHrs = Math.floor(diffMins / 60); 
+    const diffDays = Math.floor(diffHrs / 24); 
+
+    if (diffDays === 0) {
+        if (diffHrs < 1) {
+            if (diffMins < 1) {
+                return 'just now';
+            } else {
+                return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+            }
+        } else {
+            return `${diffHrs} hour${diffHrs > 1 ? 's' : ''} ago`;
+        }
+    } else if (diffDays === 1) {
+        return 'yesterday';
+    } else {
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        return inputDate.toLocaleDateString(undefined, options);
+    }
+}
+
+export interface senderInterface {
+    login: string;
+    firstName: string;
+    lastName: string;
+    profile_pic: string;
+    email: string;
+    state: string;
+    last_visit: string;
+   
+
+}
+interface typeInterface{
+    'system': JSX.Element;
+    'friendship': JSX.Element,
+    'gameInvitation': JSX.Element,
+    'tournament': JSX.Element,
+    'message': JSX.Element,
+}
+
+export const notifType: typeInterface = {
+    'system': <RiNotification2Line/>,
+    'friendship': <IoPersonAddOutline/>,
+    'gameInvitation': <RiGamepadLine/>,
+    'tournament': <RiGamepadLine/>,
+    'message': <BiMessageSquareDetail/>,
+}
+const MessageNotificationsDropDown = (info: prop) =>{
+    // const [dataFetched, setdatafetched] = useState<boolean>(false)
+    const userContextConsumer = useContext(UserContext)
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
+    const LOGO = 'https://static.vecteezy.com/system/resources/previews/013/959/227/non_2x/table-tennis-fire-logosilhouette-ping-pong-club-line-art-logos-or-icons-illustration-vector.jpg'
+    function getFirstWord(inputString:string) {
+        if (typeof inputString !== 'string' || !inputString.trim()) {
+            return 'Invalid input'; // Handle non-string or empty input
+        }
+
+        // Split the string by spaces and return the first non-empty element
+        const words = inputString.trim().split(/\s+/);
+        return words[0];
+    }
+    let linkToChat = ''
+    const removeNotification = async (notification: NotificationPropreties) =>{
+        try{
+                const req = {
+                    url: `/profile/notification/${notification.id}/`,
+                    method: 'DELETE',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req)
+                if (resp.status === 204)
+                    userContextConsumer.setnotifications(prev => prev.filter(notif=>notif.id !== notification.id))
+                
+            
+        }
+        catch(e){
+            toast.error("Error occured")
+        }
+    }
+    return(
+        <ul
+        className={`${info.display ? 'flex' : 'hidden'}  ${userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'message').length === 0 && 'justify-center'} absolute -right-[10rem] md:-right-4  top-[40px] h-[250px] w-[290px] bg-gradient-to-br from-[#2a3236] to-[#1e2124]   rounded-xl z-50 text-white font-poppins overflow-auto  flex-col items-center py-4 px-6  gap-6 border border-white/30`}
+        >
+        {
+            userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'message').length > 0 ? 
+            (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type === 'message').map((item, index) =>{
+                        
+                        linkToChat = `/chat/`;
+                        return (
+                            
+                         
+                                <Link to={`${linkToChat}` } state={{channel_id : item.channel_id}} 
+                                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f] break-words"
+                                key={index + 1} onClick={() =>{
+                                    removeNotification(item)
+                                }}
+                                >
+                                    
+                                    <img
+                                    alt="notif-sender-pic"
+                                    src={item.type==='message' ? import.meta.env.VITE_axiosPath + item.sender.profile_pic : LOGO}
+                                    className="relative inline-block h-10 w-10 aspect-square rounded-full object-cover object-center"
+                                    />
+                                    <div className="flex flex-col gap-1 ml-4">
+                                    <p className="text-slate-100 font-medium break-words">
+                                        {item.content.length > 20 ? `${item.content.substring(0,20)}...` : item.content}
+                                    </p>
+                                    <p className="text-slate-500 text-sm flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1 text-slate-400">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clipRule="evenodd" />
+                                        </svg>
+
+                                        {formatDate(item.created)}
+                                    </p>
+                                    </div>
+                                </Link>     
+                        
+        
+                        )
+                   
+
+            }))
+            : <ul className="justify-self-center flex flex-col justify-center items-center text-slate-100 gap-5">
+                <span className="text-4xl">
+                    <RiInbox2Line/>
+                </span>
+                <h1 className=" text-slate-100/80 font-semibold text-lg">No Notifications yet !</h1>
+             </ul>
+            }
+        </ul>
+    )
+}
+export default MessageNotificationsDropDown
