@@ -1,20 +1,16 @@
-import React, { useContext, useState , useEffect} from "react";
-import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
-import { Action, ActionType, RadarChartInterFace} from "@/utils/interfaces";
+import { useContext, useState , useEffect} from "react";
+import {ChatSectionContext} from "../utils/ChatContext"
+import { RadarChartInterFace} from "@/utils/interfaces";
 import { IoCloseSharp } from "react-icons/io5";
-import { BsTrophy } from "react-icons/bs";
-import { PiPingPongFill } from "react-icons/pi";
-import { IoMdStats } from "react-icons/io";
-import { IoPersonRemoveOutline } from "react-icons/io5";
-import { MdOutlineBlock } from "react-icons/md";
+
 import { VscGame } from "react-icons/vsc";
-import { User } from "../utils/ChatContext";
+
 import { UserContext } from '../components/UserContext';
 import mailman from "@/utils/AxiosFetcher";
 import { RadarChartFile } from "./RadarChartFile";
-import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
+
 import { FiUser } from "react-icons/fi";
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Achievements from "./Achievements";
 
 
@@ -24,7 +20,6 @@ function ChatFriendInfo(){
     const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
-    const {username} = useParams();
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
     const [Status, setStatus] = useState<string>("Block")
     if (!chatContext || !userContext)
@@ -55,7 +50,8 @@ function ChatFriendInfo(){
             }
             const resp = await mailman(req)
             const  responce:boolean = resp.data['status']
-            setStatus((responce) ? 'UnBlock' : 'Block')
+            if (Status.length)
+                setStatus((responce) ? 'UnBlock' : 'Block')
             console.log(resp)
         }
         catch(err)
@@ -64,8 +60,7 @@ function ChatFriendInfo(){
         }
     }
 
-    const [achievementsData, setAchievementsData] = useState<Achievements[]>([]);
-    const [loading, setLoading] = useState<boolean>(true); // Add a loading state
+
     const uuid = chatContext.active?.user2.unique_id
 
     // console.log('unique id  is  here -->>>>>>>>',  uuid);
@@ -98,7 +93,7 @@ function ChatFriendInfo(){
                     <img src={chatContext.active && backendPath + chatContext.active.user2.profile_pic} alt="" className="aspect-square rounded-full object-cover w-28 h-28"  />
                     <h1 className=" mt-4 font-semibold text-xl">{chatContext.active && chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</h1>
                     <p className="text-gray-400">{chatContext.active &&  "@" + chatContext.active.user2.login}</p>
-                    <div className=" w-full p-3 my-2 flex flex-col rounded-xl py-2 bg-black/30 rounded-xl shadow-ms justify-center items-center ">
+                    <div className=" w-full p-3 my-2 flex flex-col rounded-xl py-2 bg-black/30  shadow-ms justify-center items-center ">
                         <h2 className=""><span>{chatContext.active && user2_level.toFixed(2)} Level</span></h2>
                         <div className={` relative my-3 w-full h-2 bg-white/80 rounded-full after:content-[''] after:absolute after:top-0 after:left-0 after:bg-[#5E97A9] after:${chatContext.active && 
                             'w-[' + ((user2_level - (Math.floor(user2_level))) * 100).toFixed().toString() + '%]'} after:h-full after:rounded-full`}>
@@ -125,47 +120,6 @@ function ChatFriendInfo(){
 
                     <Achievements  uuid={uuid}/>
                 </div>
-                {/* <div className="px-5">
-                    <ScrollArea className="p-5 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl w-full overflow-x-auto gap-4 flex">
-                    <div className="rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md p-3  h-32 w-32  xl:h-48 xl:w-48 ">
-                <div className="h-3/5 ">
-                    <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
-                    <h1 className="text-3xl xxl:text-5xl font-medium text-[#5E97A9]">42</h1>
-                    <h1 className="text-lg 2xltext-xl font-medium">Wins</h1>
-                    </div>
-                </div>
-                <div className="h-2/5 flex justify-center items-center">
-                    <div className="w-[65%] h-[100%] flex gap-3 flex-col justify-center items-center">
-                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
-                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
-                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
-                    </div>
-                    <div className="w-[35%] h-[100%] flex justify-center items-center">
-                    <img src="../images/emoji_trophy.svg" />
-                    </div>
-                </div>
-                </div>
-                <div className="  rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-md p-3  h-32 w-32  xl:h-48 xl:w-48 ">
-                <div className="h-3/5 ">
-                    <div className="h-full bg-[#2B2F32] rounded-xl w-[65%] flex flex-col justify-center items-center">
-                    <h1 className="text-3xl xxl:text-5xl font-medium text-[#5E97A9]">42</h1>
-                    <h1 className="text-lg 2xltext-xl font-medium">Wins</h1>
-                    </div>
-                </div>
-                <div className="h-2/5 flex justify-center items-center">
-                    <div className="w-[65%] h-[100%] flex gap-3 flex-col justify-center items-center">
-                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
-                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
-                    <div className="w-[80%] border-b-[2px] border rounded-full xxl:border-b-[3px]"></div>
-                    </div>
-                    <div className="w-[35%] h-[100%] flex justify-center items-center">
-                    <img src="../images/emoji_trophy.svg" />
-                    </div>
-                </div>
-                </div>
-                    </ScrollArea>
-                </div> */}
-
                 <div className=" p-5 z-10 ">
                     <div className=" bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl p-5">
                            <RadarChartFile radarchartData={radarchartData || { wins: 0, lose: 0, _wins: 0, _lose: 0 }} />

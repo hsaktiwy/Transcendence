@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea} from "@/components/ui/scroll-area"
 
 
 function SkeletonDashboard() {
@@ -175,7 +175,7 @@ function SkeletonDashboard() {
       </div>
     </div>
       <div className="row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
-      <div className="rounded-2xl  overflow-y-auto p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] xl:h-96 h-full p-4">
+      <div className="rounded-2xl  overflow-y-auto p-4 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] xl:h-96 h-full ">
         {/* Title Placeholder */}
         <div className="mb-4">
           <Skeleton height={24} width="60%" />

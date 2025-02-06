@@ -1,20 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import ChatSession from "./ChatSession";
 import Conversations from "./Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "../utils/ChatContext"
-import {init_conv, initialized, received} from "../utils/ConversationsList"
-import { useParams } from "react-router-dom";
+import {init_conv} from "../utils/ConversationsList"
 import ChatFriendInfo from "./ChatFriendInfo";
 import NoActiveChat from "./NoActiveChat";
 import LoadingIndecator from "./Loading";
 import ChatModal from "./ChatModal";
-import { WebSocketContext, WebSocketProvider } from "../utils/WSContext";
-import { createContext } from "react";
+import { WebSocketContext } from "../utils/WSContext";
+
 import { NotificationPropreties, UserContext } from "./UserContext";
 import { useLocation } from "react-router-dom";
 import { ProfileDataInterface } from "@/utils/UserDataInterface";
 import mailman from "@/utils/AxiosFetcher";
-import { Underline } from "lucide-react";
+
 
 function ChatSection(){
     const location = useLocation()
@@ -32,7 +31,7 @@ function ChatSection(){
         throw new Error("userContext must be used within a UserProvider");
     if (!SocketContext)
         throw new Error('error')
-    const {AddChannel,RemoveChannel, socket} = SocketContext
+    const {AddChannel,RemoveChannel} = SocketContext
     const updateConvsState = () =>{
         if (convs && convs.length){
             const {friends} = userContextConsumer
@@ -62,16 +61,7 @@ function ChatSection(){
         console.log("dada")
         updateConvsState()
     }, [userContextConsumer.friends])
-    // useEffect(()=>{
-    //     if (active && convs && convs?.filter(conv=>conv.user2.id===active?.user2.id).length > 0)
-    //         setActive((prev)=>{
-    //                     if (!prev)
-    //                         return undefined
-    //                     const newUserState = convs?.filter(conv=>conv.user2.id===prev?.user2.id)[0].user2
-    //                     return({...prev, user2: newUserState})
-    //                 }
-    //         )
-    // }, [convs])
+
     const UpdateConvs = (data:any)=>
     {
         console.log('Update convs ...')
@@ -82,23 +72,27 @@ function ChatSection(){
             isread: false,
             timestamp: data.timestamp
         };
-        // Assuming chatContext.setConvs is a state update function
-        const channelId = data.channel;
-        setConvs((prevConvs: Conversation[]) => {
-            const updatedConvs = prevConvs.map(conv =>
-                conv.channelId === channelId
-                    ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received], new_message: 1 }
-                    : conv
-            );
-            updatedConvs.sort((a, b)=>{
-                const DateA = new Date(a.LastUpdate) 
-                const DateB = new Date(b.LastUpdate)
-                console.log(DateA)
-                console.log(DateB)
-                return DateB - DateA;
-            })
-            console.log('Updated convs:', updatedConvs);
-            return updatedConvs
+        
+        const channelId:number = data.channel;
+        setConvs((prevConvs) => {
+            if (prevConvs){
+                const updatedConvs = prevConvs.map((conv) =>{
+                    const last_update:string = data.LastUpdate
+                   if (conv.channelId === channelId)
+                        return { ...conv, LastUpdate: last_update ,messages: [...conv.messages, message_received], new_message: 1 as 0 | 1 }
+                    else
+                        return conv
+    
+                }
+                );
+                updatedConvs.sort((a, b)=>{
+                    const DateA = new Date(a.LastUpdate) 
+                    const DateB = new Date(b.LastUpdate)
+                    return DateB.getTime() - DateA.getTime();
+                })
+                return updatedConvs
+            }
+            return prevConvs
         })
     }
     const get_conversation = async (channel_id:number)=>{

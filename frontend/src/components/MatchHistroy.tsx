@@ -1,76 +1,24 @@
 
-import React, { useContext, useEffect, useState }  from "react";
+import React from "react";
 
 
-import mailman from "../utils/AxiosFetcher";
 
-import { UserContext } from "./UserContext";
 import { MatchHistoryDataInterface } from "@/utils/interfaces";
 
 
 interface MatchHistoryProps {
   data: MatchHistoryDataInterface[];
-  username:string
+  username:string | undefined
 }
 
  
 export function MatchHistory({ data, username }: MatchHistoryProps) {
-
-
-  console.log('dataaaa match history : ->>', data);
-  console.log('Username:', username); // Now properly logged
-  const [isPlayed, setIsPlayed] = useState<boolean>(false);
-  
-  // const fetchUserData = async () =>{
-  //   try {
-  //   const req = {
-  //     url: `/game/get_matches/PONG`,
-  //     method: 'GET',
-  //   };
-  //   const resp = await mailman(req);
-  //   console.log('first resp ->>', resp)
-  // }
-  // catch (err) {
-  //   console.error(err);
-  // }
-// }
-
-  //  const userContextConsumer = useContext(UserContext)
-  //  if (!userContextConsumer)
-  //   throw new Error("userContext must be used within a UserProvider");
-
-    // const {userData} = userContextConsumer
-    // console.log('usermatch hitrory user 3adi->>', username);
-    // console.log('usermatch hitrory userMatchHistory okda ->>', userMatchHistory);
-
-
-      // const fetchUserMatchHistory = async () => {
-      //   try {
-      //     const req = {
-      //       url: `/game/get_matches/PONG`,
-      //       method: 'GET',
-      //     };
-      //     const resp = await mailman(req);
-      //     setUserMatchHistory(resp.data);
-      //     console.log('user data  mheere pleasww->>>', resp);
-      //   } catch (error) {
-      //     console.error('Error fetching match history:', error);
-      //   }
-      // };
       const didUserWin = (game: any, username:string): boolean => {
         const isUserP1 = username === game.user_p1.login;
         const isUserP2 = username === game.user_p2.login;
       
         return (isUserP1 && game.score_p1 > game.score_p2) || (isUserP2 && game.score_p2 > game.score_p1);
       };
-      
-      
-      // // Call the function
-      // fetchUserMatchHistory();
-      useEffect(()=>{
-        // if(userMatchHistory.length)
-        //     setIsPlayed(true);
-      }, [])
     return (
   <>
        {data.length == 0 ? (<div className="text-2xl  h-full w-full  rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-lg  font-semibold flex flex-col justify-center items-center p-4">
@@ -108,7 +56,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                           <div className="  w-full  border-t border-[#5E97A9] rounded-full my-3 mt-1"></div>
                           <div className="h-40 xxl:h-60 overflow-y-auto px-5">
                           {data.map((game: any, index: any) => {
-                              const userWon = didUserWin(game, username); // Determine if the user won
+                              const userWon = didUserWin(game, username!); // Determine if the user won
 
                               return (
                                 <React.Fragment key={game.id}>

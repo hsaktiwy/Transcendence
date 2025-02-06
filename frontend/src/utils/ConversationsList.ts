@@ -6,7 +6,6 @@ import mailman from "./AxiosFetcher";
 export const init_conv = async (setLoading:React.Dispatch<React.SetStateAction<boolean>>,setActive:React.Dispatch<React.SetStateAction<Conversation | undefined>>, setConv:React.Dispatch<React.SetStateAction<Conversation[] | undefined>> , channel_id : number | undefined) =>
 {
   console.log("channel____id     ",channel_id)
-    let convs : Conversation[]
     let initialized:boolean = false
     let received:boolean = false
   console.log("bool" + initialized)

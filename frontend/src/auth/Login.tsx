@@ -27,7 +27,7 @@ const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [uuid, setUuid] = useState<string>('');
     const [oauth, setOauth] = useState<boolean>(false);
-    const [code, setCode] = useState<string>('');
+    const [code, _setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
@@ -205,7 +205,7 @@ const Login = () => {
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
 
                 <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
-                    {/* <ThreeScene/> */}
+
                     
                         {tfaUser === undefined  && needLogin === undefined ? 
                             <motion.form 
@@ -277,7 +277,7 @@ const Login = () => {
                     
 
                 </div> 
-                // <ThreeScene/>
+  
             
 
     );
