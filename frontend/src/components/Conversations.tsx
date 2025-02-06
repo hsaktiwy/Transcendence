@@ -24,7 +24,7 @@ return(
             <div className="messages-header-container   font-semibold  text-white flex flex-col   gap-4 py-4">
                 <h1 className=" ml-8 text-2xl">Messages</h1>
                 <div className="p-4 font-light relative">
-                    <input type="text" placeholder="Search" className=" px-3 py-3 bg-transparent w-full border border-white/20 rounded-full outline-none z-10" />
+                    <input type="text" placeholder="Search" className=" px-5 py-3 bg-transparent w-full border border-white/20 rounded-full outline-none z-10" />
                     <div className="absolute  mx-auto left-[50%] -translate-x-[50%] w-[90%] min-h-[100px] rounded-b-3xl z-0">
                         
                     </div>
