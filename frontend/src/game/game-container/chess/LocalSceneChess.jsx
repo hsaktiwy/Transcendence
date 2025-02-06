@@ -174,16 +174,16 @@ const LocalChessGame = () => {
         // })
         
         // enviroment map
-        const rgbeLoader = new RGBELoader(loadingManager);
-        rgbeLoader.load('/GamePub/chess-assets/models/neon_photostudio_2k.hdr', (enviroment_map) => {
-            enviroment_map.mapping = THREE.EquirectangularReflectionMapping
-            scene.background  = enviroment_map;
-            scene.environment = enviroment_map;
+        // const rgbeLoader = new RGBELoader(loadingManager);
+        // rgbeLoader.load('/GamePub/chess-assets/models/neon_photostudio_2k.hdr', (enviroment_map) => {
+        //     enviroment_map.mapping = THREE.EquirectangularReflectionMapping
+        //     scene.background  = enviroment_map;
+        //     scene.environment = enviroment_map;
             
-            scene.backgroundBlurriness = 0.2; 
-            scene.environmentIntensity = 0.4; 
-            scene.backgroundIntensity  = 0.4;
-        })
+        //     scene.backgroundBlurriness = 0.2; 
+        //     scene.environmentIntensity = 0.4; 
+        //     scene.backgroundIntensity  = 0.4;
+        // })
         
         let cinm = true;
         
@@ -311,8 +311,9 @@ const LocalChessGame = () => {
             }
         
             try {
-                let result = engine_validator.move({from : fromNotation, to: toNotation});
+                let result = engine_validator.move({from : fromNotation, to: toNotation}); //Try catch (yes it throws!)
                 console.log('==> Game judgemet : ', result);
+                console.log(result.ascii(),"\n\n");
                 if (result){
                     console.log('Valid Move !')
         
@@ -323,10 +324,10 @@ const LocalChessGame = () => {
                             console.log("Cptured Piece Found : ", capturedPiece.name);
                             scene.remove(capturedPiece);
                             objects = objects.filter(obj => obj !== capturedPiece); // tbu
-                            capture_sound.play(); // Sound for capture
+                            // capture_sound.play(); // Sound for capture
                         }
                     }
-                    move_sound.play();
+                    // move_sound.play();
                     pos.x =  -((cords[0] > 0 ? cords[0] - 1: cords[0]) * SQUARE_DIAMETER) - SQUARE_RADIUS;
                     pos.z =   ((cords[1] > 0 ? cords[1] - 1: cords[1]) * SQUARE_DIAMETER) + SQUARE_RADIUS;
                     gsap.to(camera.position, {
@@ -337,14 +338,14 @@ const LocalChessGame = () => {
                 }
                 else {
                     console.log('InValid Move !')
-                    illegal_sound.play();
+                    // illegal_sound.play();
                     pos.x = init_pos_x;
                     pos.z = init_pos_y;
                     return ;
                 }   
             } catch (error) {
                 console.log('InValid Move !')
-                illegal_sound.play();
+                // illegal_sound.play();
                 pos.x = init_pos_x;
                 pos.z = init_pos_y;
                 return ;
@@ -449,8 +450,8 @@ const LocalChessGame = () => {
                 scene.remove(child);
             }
 
-            hit_sound.pause();
-            hit_sound.src = "";
+            // hit_sound.pause();
+            // hit_sound.src = "";
         };
 
     }, []);
