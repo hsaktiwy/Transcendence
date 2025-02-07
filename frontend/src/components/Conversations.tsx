@@ -1,7 +1,7 @@
 import React, { useContext} from "react";
 import {ChatSectionContext, Message} from "../utils/ChatContext"
 import { UserContext } from "./UserContext";
-import { formatDate2 } from "./NavBarModal";
+import { formatDate2 } from "@/utils/textFromatting";
 import EmptyConversationList from "./EmptyConversationList";
 
 function Conversations(){

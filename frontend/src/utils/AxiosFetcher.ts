@@ -37,7 +37,7 @@ mailman.interceptors.response.use(
                 
             try{
                 const req:string = import.meta.env.VITE_axiosPath+"/api/user/refresh_token/"
-                const refreshToken = await axios.get(req, {
+                await axios.get(req, {
                     withCredentials: true,
                 })
                 return mailman(originalRequest);

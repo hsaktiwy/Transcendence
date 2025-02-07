@@ -99,7 +99,7 @@ const RegisterForm = () =>{
           inputsData: inputsData
         },
       ];
-    const [loading, setLoading] = useState<boolean>(false);
+
     const [registred, setRegistred] = useState<boolean>(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

@@ -1,10 +1,9 @@
-import * as React from "react"
+
 import { useContext, useState } from "react"
 // import { import.meta.env.VITE_axiosPath } from "@/utils/Constants"
 import { UserContext } from "./UserContext"
 import { Link } from "react-router-dom"
-import { SkeletonTheme } from 'react-loading-skeleton'
-import Skeleton from 'react-loading-skeleton'
+
 import 'react-loading-skeleton/dist/skeleton.css'
 import { ProfileDataInterface } from "@/utils/UserDataInterface"
 
@@ -16,29 +15,8 @@ function OnlineFriends() {
     
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredFriends, setFilteredFriends] = useState<ProfileDataInterface[]>([]);
-    
-    // const friends = [
-    //     {
-    //         login: "user1",
-    //         firstName: "user",
-    //         lastName: "nickname",
-    //         profile_pic: "/media/user2/geto.jpg",
-    //     },
-    //     {
-    //         login: "user2",
-    //         firstName: "user2",
-    //         lastName: "nickname2",
-    //         profile_pic: "/media/user3/5bc9f3ef6549c64e76cf66bc0bbebf8e.jpg",
-    //     },
-    //     {
-    //         login: "hachahbo",
-    //         firstName: "hamza",
-    //         lastName: "chahboune",
-    //         profile_pic: "/media/user2/geto.jpg",
-    //     },
-    // ];
 
-    const handleSearch = (e) => {
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.toLowerCase();
         setSearchTerm(value);
 

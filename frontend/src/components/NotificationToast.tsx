@@ -1,19 +1,15 @@
-import React, { useEffect, useRef } from "react";
-
-import { useState, useContext } from "react";
+import React, { useEffect } from "react";
+import { useContext } from "react";
 import { NotificationPropreties } from "./UserContext";
 import { UserContext } from "./UserContext";
 import { RiNotification2Line } from "react-icons/ri";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
-import { axiosPath, BACKEND } from "../utils/Constants";
-import mailman from "../utils/AxiosFetcher";
-import { Link, useNavigate } from "react-router-dom";
-import { IoCloseOutline } from "react-icons/io5";
-import ChatSection from "./ChatSection";
+import { Link } from "react-router-dom";
 
-interface senderInterface {
+
+export interface senderInterface {
     login: string;
     firstName: string;
     lastName: string;
@@ -43,9 +39,9 @@ const notifType: typeInterface = {
 const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
 
     // const [remove, setRemove] = useState<boolean[]>([])
-    const [dataFetched, setdatafetched] = useState<boolean>(false)
+
     const userContextConsumer = useContext(UserContext)
-    const navigate = useNavigate()
+
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     
@@ -83,12 +79,9 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     // },[])
     useEffect(() =>{
 
-        // const requests = items.filter(item => item.type === 'friendship')
-        // fetchRequestSenderData(requests)
         const interval = setInterval(() =>{
             if (items.length)
                 removeItem(items[0].id )
-            // Math.max(2000*(1/items.length), 300)
         }, Math.max(2000*(1/items.length), 300))
             
         return () => {
@@ -102,7 +95,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
                         return(
-                            <Link to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : '/chat'} state={{ channel_id: item.channel_id } } onClick={() =>{
+                            <Link key={index} to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : '/chat'} state={{ channel_id: item.channel_id } } onClick={() =>{
                                 removeItem(item.id)}}>
             
                                 <div  className={`  relative duration-200 transition-all    hover:scale-[1.02]  sm:hover:scale-105  cursor-pointer shadow-[0px_20px_77px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-full sm:w-[500px] h-[120px]  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm rounded-lg flex text-white `}>
@@ -128,8 +121,6 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                             </p>
                                         </div>
                                     </div>
-                                    {/* <div className="absolute bottom-0 right-0 h-[2px] bg-red-500  rounded-xl animate-progress transition-all " style={{ animationDuration: `${Math.max(2000*(1/items.length), 300)/1000}s` }}></div> */}
-
                                 </div>
                             </Link>
                         )

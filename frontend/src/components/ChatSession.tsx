@@ -16,7 +16,7 @@ import { WebSocketContext } from "../utils/WSContext";
 import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
-import { formatDate2 } from "./NavBarModal";
+import { formatDate2 } from "@/utils/textFromatting";
 import { toast } from "react-toastify";
 
 
@@ -166,7 +166,8 @@ function ChatSession(){
                 channel: chatContext.active?.channelId,
                 first_index: (chatContext.active?.messages && chatContext.active?.messages.length) ? chatContext.active?.messages[0].id: -1
             }
-            SocketContext.socket?.current.send(JSON.stringify(req))
+            if (SocketContext.socket.current)
+                SocketContext.socket?.current.send(JSON.stringify(req))
             chatContext.active?.new_message==0
             chatContext.setConvs((prevConvs) => {
             return prevConvs?.map((conv) =>
