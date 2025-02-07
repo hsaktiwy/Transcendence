@@ -63,7 +63,8 @@ def matcha(room):
 
 
 def get_or_create_room(user, consumer, Rooms):
-    if (user.state == MyUser.IN_SEARCH and already_in_room(user, Rooms)):
+    if (user.state == MyUser.IN_SEARCH and (already_in_room(user, Rooms) != None)):
+        print(f"=> user {user.login} already in room !")
         return
     #find_room
     for room in Rooms:
@@ -88,9 +89,6 @@ def cleaner(Rooms):
 class ApiConsumer(WebsocketConsumer):
 
     def connect(self):
-        # # clean the PPong_Rooms, ...
-        cleaner(PPong_Rooms)
-        self.accept()
 
         user = self.scope['user']
 
@@ -99,12 +97,12 @@ class ApiConsumer(WebsocketConsumer):
 
         if (user.state == MyUser.IN_GAME or user.state == MyUser.IN_SEARCH):     #tbc
             print("=>", f"User {user.login} already Playing or Looking for li 7wih!")
+            self.close()
             return
 
-        # user.state = MyUser.ONLINE #TBM
-        # user.save()
-        # return
-
+        # # clean the PPong_Rooms, ...
+        cleaner(PPong_Rooms)
+        self.accept()
         user.state = MyUser.IN_SEARCH #TBM
         user.save()
 
@@ -125,9 +123,14 @@ class ApiConsumer(WebsocketConsumer):
         #ser 3a t9awed, matsiftlich
 
     def disconnect(self, close_code):
+        if close_code == 1006: #connection rejected, the session already opened
+            return
+
+
         user = self.scope['user']
 
-        print('=> user ', user.login, ', disconnected !')
+        
+        print('=> user ', user.login, ', disconnected ! close_code:', close_code)
         if (user.state == MyUser.IN_SEARCH):
             room = already_in_room(user, PPong_Rooms)
             if room :
@@ -162,17 +165,17 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         user = self.scope['user']
         room = find_room_name(user, PPong_Rooms)
 
+        if room:
+            if (len(room) >= 1):
+                self.room_name = room[0]
+                self.room_group_name = f"game_room_{self.room_name}"
 
-        if (len(room) >= 1):
-            self.room_name = room[0]
-            self.room_group_name = f"game_room_{self.room_name}"
-
-            await self.channel_layer.group_add(
-                self.room_group_name,
-                self.channel_name
-            )
-            # Accept the WebSocket connection
-            await self.accept()
+                await self.channel_layer.group_add(
+                    self.room_group_name,
+                    self.channel_name
+                )
+                # Accept the WebSocket connection
+                await self.accept()
 
     async def disconnect(self, close_code):
         # On disconnect, remove from the group
