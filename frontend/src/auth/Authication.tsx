@@ -7,7 +7,7 @@ import Login  from './Login'
 
 
 
-import { Toaster} from 'sonner'
+
 
 import LandingPage2 from '@/components/Landing/LandingPage2';
 
@@ -19,9 +19,7 @@ function Auth(children:childrenInterface)
     
     return (
                 <>
-                    <Toaster position="top-right" richColors expand={true}  closeButton={true} toastOptions={{
-                        className: "bg-black/50 backdrop-filter backdrop-blur-sm text-white "
-                    }}/>
+                    
                     <ToastContainer
                         position="top-right"
                         autoClose={2000}
