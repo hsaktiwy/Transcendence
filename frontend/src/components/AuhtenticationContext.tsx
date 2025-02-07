@@ -124,6 +124,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
+                console.log("wala > ", resp)
                 if(resp.data['message'] && resp.data['message'] === 'user already logged in' && loggedIn === undefined)
                     setLoggedIn(true)
                 else if (resp.data['message'] && resp.data['message'] === 'User logged in successfuly' && loggedIn === undefined)
@@ -134,6 +135,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
 
             }
             catch(error){
+                console.log("failing", error)
                 interface errorInterface{
                     detail?:string
                 }

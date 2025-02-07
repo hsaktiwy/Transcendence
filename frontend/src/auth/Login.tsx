@@ -115,10 +115,10 @@ const Login = () => {
                         setTfaUser(resp.data.user)
                     else{
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        AuthContextConsummer.setLoggedIn(true)
+                        // AuthContextConsummer.setLoggedIn(true)
                         // Navigate('/')
+                        location.reload();
                     }
-                        // location.reload();
                 }
 
             }
@@ -140,9 +140,9 @@ const Login = () => {
       
             const searchParams = new URLSearchParams(window.location.search);
             const tmpCode = searchParams.get('code');
-            // if (tmpCode)
-            //     setCode(tmpCode)
-            console.log(`1234   ${code}`)
+            if (tmpCode)
+                _setCode(tmpCode)
+            console.log(`1234   ${tmpCode}`)
     
             // if (code) {
     
