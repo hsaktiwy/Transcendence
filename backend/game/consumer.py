@@ -242,7 +242,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                                 score_p1=7,
                                 score_p2=0
                             )
-                            data = {"type" : "Forfait"}
+                            data = {"type" : "Forfait"}  #Forfait
                             await self.channel_layer.group_send(
                                 self.room_group_name,
                                 {
@@ -701,8 +701,17 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                     print('==> Room to delete         :', room[0])
                     print('==> Number of rooms after  :', len(Chess_Rooms))
                     Show_Rooms(Chess_Rooms)
-                    user_id1 = event['payload']['paddle']['x']
-                    user_id2 = event['payload']['paddle']['y']
+
+                    # my_id     : ReomteGameData.p1_id,
+                    # p1_id     : ReomteGameData.p1_id,
+                    # p2_id     : ReomteGameData.p2_id,
+                    # room_name : ReomteGameData.room_name, 
+
+                    print('infos :', event['payload'])
+                    user_id1 = event['payload']['p1_id']
+                    user_id2 = event['payload']['p2_id']
+                    score_1  = int(event['payload']['p1_score'])
+                    score_2  = int(event['payload']['p2_score'])
 
                     user  = await get_user_by_unique_id(user_id1)
                     # print('==>', user.login)
@@ -710,10 +719,10 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                     profile1 = await get_profile(user)
                     profile2 = await get_profile(user2)
 
-                    # print('==>', user2.login)
+                    # # print('==>', user2.login)
 
-                    score_1 = int(event['payload']['ball']['x'])
-                    score_2 = int(event['payload']['ball']['y'])
+                    # score_1 = int(event['payload']['ball']['x'])
+                    # score_2 = int(event['payload']['ball']['y'])
 
                     if user and user2:
                         # Decide winner vs loser
@@ -742,8 +751,8 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                             user_p2=user2,
                             winner=t_winner,
                             loser=t_loser,
-                            score_p1=1,
-                            score_p2=0
+                            score_p1=score_1,
+                            score_p2=score_2
                         )
         
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):

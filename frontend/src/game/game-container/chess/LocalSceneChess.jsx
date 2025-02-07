@@ -174,16 +174,16 @@ const LocalChessGame = () => {
         // })
         
         // enviroment map
-        // const rgbeLoader = new RGBELoader(loadingManager);
-        // rgbeLoader.load('/GamePub/chess-assets/models/neon_photostudio_2k.hdr', (enviroment_map) => {
-        //     enviroment_map.mapping = THREE.EquirectangularReflectionMapping
-        //     scene.background  = enviroment_map;
-        //     scene.environment = enviroment_map;
+        const rgbeLoader = new RGBELoader(loadingManager);
+        rgbeLoader.load('/GamePub/chess-assets/models/neon_photostudio_2k.hdr', (enviroment_map) => {
+            enviroment_map.mapping = THREE.EquirectangularReflectionMapping
+            scene.background  = enviroment_map;
+            scene.environment = enviroment_map;
             
-        //     scene.backgroundBlurriness = 0.2; 
-        //     scene.environmentIntensity = 0.4; 
-        //     scene.backgroundIntensity  = 0.4;
-        // })
+            scene.backgroundBlurriness = 0.2; 
+            scene.environmentIntensity = 0.4; 
+            scene.backgroundIntensity  = 0.4;
+        })
         
         let cinm = true;
         
@@ -313,7 +313,7 @@ const LocalChessGame = () => {
             try {
                 let result = engine_validator.move({from : fromNotation, to: toNotation}); //Try catch (yes it throws!)
                 console.log('==> Game judgemet : ', result);
-                console.log(result.ascii(),"\n\n");
+                console.log(engine_validator.ascii(),"\n\n");
                 if (result){
                     console.log('Valid Move !')
         
