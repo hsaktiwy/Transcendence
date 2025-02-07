@@ -859,6 +859,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                     }
                 )
         except Exception as e:
+            pass
             # print(f"Error while receiving/sending message: {e}")
 
 
