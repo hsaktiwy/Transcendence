@@ -1,11 +1,11 @@
-import * as React from "react"
+
  
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { SlLock } from "react-icons/sl";
+import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+
 import mailman from "@/utils/AxiosFetcher";
 
 export interface Artwork {
@@ -30,7 +30,7 @@ interface Prop {
 function Achievements({ uuid }: Prop) {
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
   const [achievementsData, setAchievementsData] = useState<Achievements[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Add a loading state
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchAchievements = async () => {
     try {
@@ -42,10 +42,11 @@ function Achievements({ uuid }: Prop) {
       const array: Achievements[] = resp.data.data as Achievements[];
       console.log('data ->>>>>>\n', resp.data.data)
       setAchievementsData(array);
-      setLoading(false); // Set loading to false after data is fetched
+      if (loading)
+        setLoading(false); 
     } catch (e) {
       console.log("Error in Achievement", e);
-      setLoading(false); // Set loading to false even in case of an error
+      setLoading(false);
     }
   };
 
@@ -53,15 +54,9 @@ function Achievements({ uuid }: Prop) {
     if (uuid) {
       fetchAchievements();
     }
-  }, [uuid]); // Fetch achievements when uuid changes
+  }, [uuid]); 
 
-  // Debug: Check achievementsData and loading state
-  useEffect(() => {
-    console.log("Updated achievements:", achievementsData);
-    if (achievementsData.length === 0) {
-      console.log("No achievements available.");
-    }
-  }, [achievementsData]); // Logs achievements data when it changes
+
 
   return (
     <>
@@ -104,12 +99,8 @@ function Achievements({ uuid }: Prop) {
                 <img src={`../achievement/${achievement.icon}.svg`} className="w-10 text-[#5E97A9]" alt="Paddle" />
               </div>
             </div>
-            {/* <div className="absolute w-full h-full bg-black/30 backdrop-blur-md rounded-xl flex justify-center items-center text-white text-3xl">
-              <SlLock/>
-            </div> */}
           </div>
 
-          {/* Back Side */}
           <div
             className="absolute shadow-md right-2 top-6 gap-2 w-full h-full rounded-xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] flex flex-col items-center justify-center text-white text-xl font-semibold"
             style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}

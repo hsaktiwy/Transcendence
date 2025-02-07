@@ -1,8 +1,6 @@
-// Login.tsx
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
-// import { user_id } from '../utils/Constants';
 import { toast } from 'react-toastify'
 import { AuthContext} from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
@@ -83,9 +81,6 @@ const Username = (prop: SetUsernameProps) => {
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
 
                 <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
-                    {/* <ThreeScene/> */}
-                    
-                     
                             <motion.form 
                                 variants={FormFade()}
                                 initial="formInitial"
@@ -132,7 +127,6 @@ const Username = (prop: SetUsernameProps) => {
                     
 
                 </div> 
-                // <ThreeScene/>
             
 
     );

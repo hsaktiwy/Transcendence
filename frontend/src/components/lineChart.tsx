@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import { LinechartData } from "@/utils/interfaces"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"

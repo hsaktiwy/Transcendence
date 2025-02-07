@@ -1,19 +1,17 @@
-import React, { ReactNode, useContext, useEffect } from 'react';
-import NavBar from "./components/NavBar";
-import Sidebar from './components/Sidebar';
+import  { useContext} from 'react';
+
+
 import SideBarV2 from './components/SideBarV2';
-import NavarV2 from './components/NavBarV2';
+
 import NavBarV2 from './components/NavBarV2';
-import ChatModal from './components/ChatModal';
-import { Toaster, toast } from 'sonner'
+
+
 import { Outlet } from 'react-router-dom';
 import { UserContext } from "./components/UserContext";
 import NotificationToast from './components/NotificationToast';
 import { AuthContext } from './components/AuhtenticationContext';
-import LandingPage2 from './components/Landing/LandingPage2';
-interface LayoutProps {
-  children: ReactNode;
-}
+
+
 
 const Layout = () => {
   const userContextConsumer = useContext(UserContext)

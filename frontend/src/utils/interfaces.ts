@@ -39,14 +39,14 @@ export interface channelType {
 export interface WebSocketContextType {
     AddChannel: (channelName: string, callback: CallbackType) => void; // ADD CALLBACK function that will gave us the ability to change the  targeted component data
     RemoveChannel: (channelName: string) => void;
-    socket: React.MutableRefObject<WebSocket> | undefined
+    socket: React.MutableRefObject<WebSocket | undefined>
 }
 
-export const defaultContextValue: WebSocketContextType = {
-    AddChannel: () => {},
-    RemoveChannel: () => {},
-    socket: undefined,
-};
+// export const defaultContextValue: WebSocketContextType = {
+//     AddChannel: () => {},
+//     RemoveChannel: () => {},
+//     socket: undefined,
+// };
 
 export interface LoseWins
 {

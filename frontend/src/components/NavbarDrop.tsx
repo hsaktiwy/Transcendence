@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import  { useContext } from "react";
 import { FiUser } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CgLogOut } from "react-icons/cg";
@@ -42,7 +42,8 @@ const NavBarDrop = (info: prop) =>{
                     type: "NOTIFICATION_STATE",
                     state: "offline"
                 }
-                socket?.current.send(JSON.stringify(stateObj))
+                if (socket.current)
+                    socket?.current.send(JSON.stringify(stateObj))
                 authContextConsumer.setLoggedIn(false)
                 toast.info('User Logged Out')
 

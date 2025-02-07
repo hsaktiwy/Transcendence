@@ -1,7 +1,6 @@
-import React from "react";
-import { useContext, useRef, useState,useEffect } from "react";
-import {ChatSectionContext, ContextType, Conversation, Message} from "../utils/ChatContext"
-import { Navigate, Link } from "react-router-dom";
+import { useContext,  } from "react";
+import {ChatSectionContext, Conversation} from "../utils/ChatContext"
+
 import { UserContext } from "./UserContext";
 import { ActionType } from "@/utils/interfaces";
 import mailman from "@/utils/AxiosFetcher";
@@ -36,7 +35,14 @@ function ChatModal(){
                     })))
                     // update the main one
                     chatContext.setConvs((prevConvs) =>{
-                        return (prevConvs && prevConvs?.map((conv)=>(conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel ? {...conv, messages:[], status:1} : conv))))
+                        if (prevConvs)
+                            return (prevConvs.map((conv)=>{
+                                if (conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel))
+                                    return {...conv, messages:[], status:1}
+                                else
+                                    return conv
+                            }))
+                        return prevConvs
                     })
                 }
                 else if (action == 'unblock')

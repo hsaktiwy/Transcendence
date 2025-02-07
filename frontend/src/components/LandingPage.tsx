@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 
-import {motion, useScroll} from 'framer-motion';
+import {motion} from 'framer-motion';
 
 
 function LandingPage(){
@@ -10,10 +10,7 @@ function LandingPage(){
     const feature3 = useRef<HTMLDivElement>(null)
     const feature4 = useRef<HTMLDivElement>(null)
 
-    const { scrollYProgress} = useScroll({
-        target: [feature1, feature2, feature3, feature4],
-        offset: ["0 1", "1.33 1"]
-    })
+ 
     return(
         <div className="   px-[20px] sm:px-[100px] min-h-[100vh] py-4 bg-gradient-to-b from-[#070320] to-[#1a3340] font-poppins ">
             <div className="  min-h-[100vh] overflow-hidden">
@@ -113,19 +110,7 @@ function LandingPage(){
 
                     </div>
             </motion.div>
-            {/* <div className="h-[300vh]">
-                <div className="ranking-container ">
-                    <div className=" text-center text-white flex flex-col gap-8">
-                        <h1 className="text-5xl font-bold tracking-wider">Chase the Crown <span className="text-6xl ">🏆</span></h1>
-                        <p className="text-3xl tracking-widest text-white/70">Climb the ranks and showcase your skills!</p>
-                    </div>
-                    <div className="mt-[150px] ml-[180px] tracking-widest   flex flex-col gap-10 ">
-                        <h2 className="text-4xl font-semibold text-white">Rise to the Top</h2>
-                        <p className="w-[25%] text-xl text-white/40">See how you stack up against the competition! Our Leaderboards showcase the top players from around the world in both Ping Pong and Chess. Whether you're aiming to be the fastest reflexes on the table or the sharpest mind on the board, the leaderboard is your path to glory.</p>
-                    </div>
-                </div>
 
-            </div> */}
 
         </div>
     )

@@ -1,12 +1,10 @@
-import React, {useEffect, createContext, useRef, useContext} from 'react'
+import {useEffect, createContext, useRef, useContext} from 'react'
 import {channelType, WebSocketContextType, childrenInterface, friendship} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 import { AuthContext } from '@/components/AuhtenticationContext'
-import { channel } from 'diagnostics_channel'
 
 
-let inc: number = 222222 // desable the id that amine use later else we will use this 
 // type CallbackType = (message: any) => void
 export const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined)
 
@@ -155,11 +153,11 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
       }
     }
     
-    const ReconnectSocket = ()=>
-    {
-          const delay = 1000 // Exponential backoff, max delay 30s
-          setTimeout(() => ConnectSocket(), delay)
-    }
+    // const ReconnectSocket = ()=>
+    // {
+    //       const delay = 1000 // Exponential backoff, max delay 30s
+    //       setTimeout(() => ConnectSocket(), delay)
+    // }
   
     useEffect(() => {
 

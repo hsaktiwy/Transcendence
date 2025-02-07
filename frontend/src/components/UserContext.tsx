@@ -1,16 +1,16 @@
-import React, { createContext, useEffect, useRef } from "react";
+import React, { createContext, useEffect } from "react";
 import { UserDataInterface,ProfileDataInterface } from "../utils/UserDataInterface";
 import { useContext, useState } from "react";
-import { cookies } from "../auth/Cookie";
-import { BACKEND } from "../utils/Constants";
+
+
 import mailman from "../utils/AxiosFetcher";
-import { Action, ActionType, friendship, MatchHistoryDataInterface, MiniNotification} from "@/utils/interfaces";
+import { Action, friendship, MatchHistoryDataInterface, MiniNotification} from "@/utils/interfaces";
 import { toast } from "react-toastify";
-import NotificationToast from "./NotificationToast";
+
 import { WebSocketContext } from "../utils/WSContext";
 import { AuthContext } from "./AuhtenticationContext";
 import LoadingIndecator from "./Loading";
-import { backendPath } from "./ChatSession";
+
 import { useLocation, useNavigate } from "react-router-dom";
 
 export interface NotificationPropreties{
@@ -30,11 +30,7 @@ export interface NotificationStatePropreties{
 }
 
 
-const getProfilePicPath = (str:string) =>{
-    if (str.startsWith('/media/'))
-        return backendPath+str
-    return str
-}
+
 interface UserContextInterface{
     // id: number | undefined;
     // setUserId: React.Dispatch<React.SetStateAction<number | undefined> >;
@@ -49,8 +45,6 @@ interface UserContextInterface{
     newNotification: NotificationPropreties[];
     setNewNotification: React.Dispatch<React.SetStateAction<NotificationPropreties[] > >;
     notificationHandler: (data: NotificationPropreties) => void;
-    notificationReaded: boolean;
-    setNotificationReaded: React.Dispatch<React.SetStateAction<boolean> >;
     action: Action | undefined;
     setAction:  React.Dispatch<React.SetStateAction<Action |  undefined> >;
     friendRequestSent: FriendRequestInterface[];
@@ -106,14 +100,12 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [friendRequestReceived, setFriendRequestReceived] = useState<FriendRequestInterface[]>([])
     const [notifications, setnotifications] = useState<NotificationPropreties[]>([])
     const [newNotification, setNewNotification] = useState<NotificationPropreties[]>([])
-    const [notificationReaded, setNotificationReaded] = useState<boolean>(false);
     const [action, setAction] = useState<Action |  undefined>(undefined)
     const [friends, setFriends] = useState<ProfileDataInterface[]>([])
     const [ready, setReady] = useState<boolean>(false)
     const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
     const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     const [userRank, setUserRank] = useState<rankInterface[]>([]);
-    const [convsUpdate, setConvsUpdate] = useState<boolean>(false)
     const location = useLocation()
 
   
@@ -392,7 +384,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         if (AuthContextConsummer?.loggedIn){
             fetchNotification()
         }
-    },[AuthContextConsummer?.loggedIn, notificationReaded])
+    },[AuthContextConsummer?.loggedIn])
 
     
     const ajami = async() =>
@@ -419,7 +411,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {ready  ? children : <LoadingIndecator/>}
             {/* { children } */}
