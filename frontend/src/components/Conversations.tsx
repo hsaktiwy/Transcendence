@@ -77,7 +77,6 @@ return(
                     }) 
                 }
                 </div> : <EmptyConversationList/>
-
             }
     </div>
 )
