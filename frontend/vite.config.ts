@@ -19,6 +19,22 @@ export default defineConfig({
   },
 
   build: {
-    sourcemap: true
+    sourcemap: true,
+    minify: false, 
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes("node_modules")) {
+                if (id.includes("react")) return "vendor-react";
+                if (id.includes("lodash")) return "vendor-lodash";
+                if (id.includes("framer-motion")) return "vendor-framer-motion";
+                if (id.includes("axios")) return "vendor-axios";
+                return "vendor-other"; // Remaining vendors
+              }
+            },
+          },
+        },
+    
   }
 })
