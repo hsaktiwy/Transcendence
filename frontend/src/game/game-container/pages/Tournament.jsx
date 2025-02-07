@@ -69,18 +69,15 @@ function Tournament() {
   const handleStartMatch = (matchId) => {
     console.log(`Starting match: ${matchId}`);
 
-  // const handleLaunch = () => {    
-  //     setLocalGamesData({
-  //       gametype: 'Tournament', // Local, Multiplayer, Tournament 
-  //       player1: player1Name,
-  //       player2: player2Name,
-  //       player3: player3Name,
-  //       player4: player4Name,
-  //       Winner : null,
-  //     });
-  //     navigate('/game/Tournament');
-  // };
-    //tBC
+    setLocalGamesData({
+      gametype: 'Tournament', // Local, Multiplayer, Tournament 
+      // player1: player1Name,
+      // player2: player2Name,
+      // player3: player3Name,
+      // player4: player4Name,
+      // Winner : null,
+    });
+    
     navigate('/game/LocalGame');
   };
 

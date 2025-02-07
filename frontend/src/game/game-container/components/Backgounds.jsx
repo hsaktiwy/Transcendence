@@ -52,7 +52,7 @@ function Backgrounds() {
           </div> */}
 
 
-        {/* <div className="main-game-page-container"> */}
+        {/* <div className="main-game-page-container">
           <div className={show ? "teams-container" : "hidden-v"} >
             <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
               <center>
@@ -67,7 +67,7 @@ function Backgrounds() {
               <PingPongPreview />
             </div>
           </div>
-        {/* </div> */}
+        </div> */}
     </>
   );
 }
