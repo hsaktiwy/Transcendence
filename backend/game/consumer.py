@@ -192,8 +192,10 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                         loser =  await get_user_by_unique_id(room[2][0].unique_id)#MyUser.objects.filter(unique_id=room[2][0].unique_id).first()
                         winner = await get_user_by_unique_id(room[1][0].unique_id)#MyUser.objects.filter(unique_id=room[1][0].unique_id).first()
 
-                    # remove_room(room[0], PPong_Rooms)
+                if len(room) == 3:
+                    room.append('Forfait')
                     print("=> room seted", room[0] ,"Forfait.")
+
                     try:
                         loser_profile   = await get_profile(loser)#ProfileStatus.objects.get(id_user_fk=loser)
                         winner_profile  = await get_profile(winner)#ProfileStatus.objects.get(id_user_fk=winner)
