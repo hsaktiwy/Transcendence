@@ -29,7 +29,7 @@ const ChessWinner = () => {
     
     useEffect( () => {
         if ((ReomteGameData.winner === null || ReomteGameData.winner === undefined)
-          && (LocalGamesData.gametype === null  || LocalGamesData.gametype === undefined)
+          // && (LocalGamesData.gametype === null  || LocalGamesData.gametype === undefined)
         ){
           navigate('/game/Chess_Lobby');
         };
@@ -68,7 +68,7 @@ const ChessWinner = () => {
                 default_icon='/GamePub/bottouns/default_offline.svg'
                 hovered_icon='/GamePub/bottouns/hovered_offline.svg'
                 onClick={() => {
-                  navigate('/game/PingPong_Lobby')
+                  navigate('/game/Chess_Lobby')
                 }}
               />
               {/* <Frame

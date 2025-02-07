@@ -82,7 +82,7 @@ const ChessRemoteGame = () => {
                     winnner = 'You Won'
                     
                 }else {
-                    winnner = 'Zamel'
+                    winnner = 'Nta Zamel'
                 }
                 setReomteGameData({
                     // room_name: data['room_name'],
@@ -92,7 +92,7 @@ const ChessRemoteGame = () => {
                     // p1_id    : data['my_id'],
                     // p2_id    : data['opponent_id'],
                     // color    : data['color'],
-                    winner      : ReomteGameData.winner
+                    winner      : winnner + ' WON !'
                 });    
                 navigate('/game/ChessWinner')
             }
@@ -451,21 +451,12 @@ const ChessRemoteGame = () => {
                 console.log(engine_validator.ascii(),"\n\n");
                 if (result){
                     //Sending Packing
-                    sendGameUpdate(name, fromNotation, toNotation);
-
+                    
                     console.log('Valid Move !')
 
                     
                     if (engine_validator.isGameOver()) {
-                        // room_name: data['room_name'],
-                        // role     : data['role'],
-                        // my_user  : data['user_name'],
-                        // opponent : data['opponent_name'],
-                        // p1_id    : data['my_id'],
-                        // p2_id    : data['opponent_id'],
-                        // color    : data['color'],
-                        // winner   : null
-                        score_1 = 0
+                        let score_1 = 0
                         const message = {
                             type      : 'Game_end',
                             my_id     : ReomteGameData.p1_id,
@@ -474,24 +465,27 @@ const ChessRemoteGame = () => {
                             room_name : ReomteGameData.room_name,
                             p1_score  :score_1,
                             p2_score  :score_1
-
+                            
                         };
                         let winning_color = ''
                         if (engine_validator.isCheckmate()) {
                             winning_color = engine_validator.turn() === 'w' ? 'black' : 'white';
                             console.log("Checkmate! Winning side:", winning_color);
-                            message.winner = winning_color;
+                            setReomteGameData({
+                                winner  : winning_color + ' WON !'
+                            });  
+                            // message.winner = winning_color;
                             // ReomteGameData.winner = winning_color;
-                            if (ReomteGameData.winner >= winning_color){
+                            if (ReomteGameData.winner == winning_color){
                                 message.p1_score = 1
                             }
                             else{
                                 message.p2_score = 1
                             }
                             setReomteGameData({
-                                winner  : winning_color
+                                winner  : winning_color + ' WON !'
                             });                             
-                          
+                            
                         } else if (engine_validator.isDraw()) {
                             console.log("It's a draw!");
                             // message.name = -1;
@@ -506,8 +500,9 @@ const ChessRemoteGame = () => {
                             gameSocket.send(JSON.stringify(message));
                         console.log("==> Game officially done! the winner is ", winning_color);
                         navigate('/game/ChessWinner')
-                      }
-
+                    }
+                    
+                    sendGameUpdate(name, fromNotation, toNotation);
 
                     ///Capturing
                     if (result.captured){
@@ -650,6 +645,7 @@ const ChessRemoteGame = () => {
 
             hit_sound.pause();
             hit_sound.src = "";
+            gameSocket.close()
         };
 
     }, []);
