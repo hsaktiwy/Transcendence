@@ -79,9 +79,12 @@ const ChessRemoteGame = () => {
              if (data['type'] === 'Game_end'){
                 // ReomteGameData.winner = 'YOU WON Forfait'
                 if (ReomteGameData.winner === ReomteGameData.color){
-                    winnner = 'You Won'
-                    
-                }else {
+                    winnner = 'You Won'   
+                }
+                else if (ReomteGameData.winner === 'Draw'){
+                    winnner = 'Draw'
+                }
+                else {
                     winnner = 'Nta Zamel'
                 }
                 setReomteGameData({
@@ -92,7 +95,7 @@ const ChessRemoteGame = () => {
                     // p1_id    : data['my_id'],
                     // p2_id    : data['opponent_id'],
                     // color    : data['color'],
-                    winner      : winnner + ' WON !'
+                    winner      : winnner 
                 });    
                 navigate('/game/ChessWinner')
             }
