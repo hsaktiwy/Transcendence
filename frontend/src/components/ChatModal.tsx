@@ -12,28 +12,24 @@ function ChatModal(){
     const DoAction = async ()=>
     {
         try{
-            if ( userContext?.action?.type != ActionType.NONE)
+            if (userContext?.action?.type != ActionType.NONE)
             {
                 const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": (userContext?.action?.type == ActionType.UNFRIEND ? "unfriend" :'none'))
                 const req = {
                     url: "friendship/"+action+"/"+userContext?.action?.Target_User_UniqueId,
-                    method: "GET",
+                    method: "POST",
                     withCredentials: true,
                 }
-                const resp = await mailman(req)
-                console.log(resp)
+                await mailman(req)
                 userContext.setAction({type:ActionType.NONE, Target_User_UniqueId:undefined,ConversationChannel:undefined})
                 chatContext.setOpenModal(false)
-                // LOOP OVER ALL THE USERS and get the user that hold our messages and then change the status to like 1
                 if (action == 'block')
                 {
-                    // update the active 
                     chatContext.setActive((prevActive) => (prevActive && ({
                         ...prevActive,
                         status: 1,
                         messages: []
                     })))
-                    // update the main one
                     chatContext.setConvs((prevConvs) =>{
                         if (prevConvs)
                             return (prevConvs.map((conv)=>{
@@ -47,8 +43,6 @@ function ChatModal(){
                 }
                 else if (action == 'unblock')
                 {
-                    console.log('action : ' + action)
-                    // get the old messages
                     try{
                         const req = {
                             url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/',
@@ -57,7 +51,6 @@ function ChatModal(){
                         }
                         const rep  = await mailman(req)
                         const fetched_conv:Conversation =  rep.data.conv as Conversation
-                        console.log(fetched_conv)
                         chatContext.setActive(fetched_conv)
                         chatContext.setConvs((prevConvs) =>{
                             if (!prevConvs) return [fetched_conv] as Conversation[]

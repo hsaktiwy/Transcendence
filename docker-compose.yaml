@@ -70,6 +70,9 @@ services:
       - daphne_django
       - gunicorn_django
       - frontend
+    volumes:
+          - ./backend/media:/app/media
+          - ./backend/static:/app/static
     ports:
       - "4444:443"
     networks:

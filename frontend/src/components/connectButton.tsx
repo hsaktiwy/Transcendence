@@ -62,7 +62,7 @@ function ConnectButton(prop: buttonInterface) {
       try{
         const req = {
           url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+uuid,
-          method: "GET",
+          method: "POST",
           withCredentials: true,
         }
         await mailman(req)
@@ -254,7 +254,8 @@ function ConnectButton(prop: buttonInterface) {
           {
             const req = {
               url: `/friendship/request/status/set/accept/${friend_req_id}`,
-              method: 'GET',
+              method: 'POST',
+              withCredentials:true
             }
             await mailman(req)
             userContextConsumer?.fetchFriends()
@@ -283,10 +284,10 @@ function ConnectButton(prop: buttonInterface) {
           {
             const req = {
               url: `/friendship/request/status/set/cancel/${friend_req_id}`,
-              method: 'GET',
+              method: 'DELETE',
+              withCredentials:true
             }
-            const resp = await mailman(req)
-            console.log(resp.data)
+            await mailman(req)
             const notification = {
               type: 'NOTIFICATION_UNCONNECT',
               to : uuid,
@@ -312,11 +313,10 @@ function ConnectButton(prop: buttonInterface) {
         {
           const req = {
             url: "friendship/unfriend/"+uuid,
-            method: "GET",
+            method: "POST",
             withCredentials: true,
           }
-          const resp = await mailman(req)
-          console.log(resp.data)
+          await mailman(req)
           userContextConsumer?.fetchFriends()
           const notification = {
             type: 'NOTIFICATION_UNCONNECT',

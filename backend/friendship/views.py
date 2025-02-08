@@ -50,7 +50,7 @@ def random_quote():
     return f"{character} says: \"{quote}\""
 ##################################################################
 
-@api_view(['GET'])
+@api_view(['POST'])
 def AcceptFriendRequest(request, id):
 	try:
 		print('hmmm--')
@@ -79,7 +79,7 @@ def AcceptFriendRequest(request, id):
 	except Exception as e:
 		return Response({'Error': 'Something went wrong?' + str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def BlockUser(request, unique_id):
 	try:
 		blocked_user = MyUser.objects.get(unique_id=unique_id)
@@ -102,7 +102,7 @@ def BlockUser(request, unique_id):
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def UnBlockUser(request, unique_id):
 	try:
 		blocked_user = MyUser.objects.get(unique_id=unique_id)
@@ -114,7 +114,7 @@ def UnBlockUser(request, unique_id):
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def UnFriendUser(request, unique_id):
 	try:
 		# intented solution you can postman this even whne you are blocked (my logic my rules contact hsaktiwy )
@@ -210,10 +210,10 @@ def FriendRequestStatus(request, uuid):
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+@api_view(['DELETE'])
 def CancelFriendRequest(request, id):
 	try:
-		myuser = request.user
+		# myuser = request.user
 		friendrequest = FriendRequest.objects.filter(id=id)
 		if len(friendrequest) > 0:
 			friendrequest.first().delete()
