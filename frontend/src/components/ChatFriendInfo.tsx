@@ -140,10 +140,14 @@ function ChatFriendInfo(){
                                     </span>
                                 </Link>
                                 <div className="cursor-pointer hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center">
-                                    <span className="text-xl flex items-center gap-1">
-                                        <VscGame />
-                                        <p className="text-white/70 text-sm">Challenge</p>
-                                    </span>
+                                    
+                                    {/*SETTTING THE USER CONTEXT TO INVITE*/}
+                                    <Link to={`/game/PreRemote`} >
+                                        <span className="text-xl flex items-center gap-1">
+                                            <VscGame />
+                                            <p className="text-white/70 text-sm">Challenge</p>
+                                        </span>
+                                    </Link>
                                 </div>
                             </div>
                         </div>                
