@@ -627,26 +627,28 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                     # print("=> room seted", room[0] ,"Forfait.")
 
                     try:
-                        winner_profile   = await get_profile(loser)#ProfileStatus.objects.get(id_user_fk=loser) //SWITCH TEMPORALRLY
+                        winner_profile   =  await get_profile(loser)#ProfileStatus.objects.get(id_user_fk=loser) //SWITCH TEMPORALRLY
                         loser_profile    =  await get_profile(winner)#ProfileStatus.objects.get(id_user_fk=winner)
                         if loser and winner:
                             if (loser_profile and winner_profile):
-                                loser_profile.lose += 1
                                 winner_profile.wins += 1
                                 winner_profile.total_games += 1
-                                loser_profile.total_games  += 1                    
-                                await sync_to_async(loser_profile.save)()
-                                await sync_to_async(winner_profile.save)()
 
-                            await create_game(
-                                type='CHESS',
-                                user_p1=winner,
-                                user_p2=loser,
-                                winner=winner,
-                                loser=loser,
-                                score_p1=1,
-                                score_p2=0
-                            )
+                                loser_profile.lose += 1
+                                loser_profile.total_games  += 1                    
+                                
+                                await sync_to_async(winner_profile.save)()
+                                await sync_to_async(loser_profile.save)()
+
+                                await create_game(
+                                    type='CHESS',
+                                    user_p1=winner,
+                                    user_p2=loser,
+                                    winner=winner,
+                                    loser=loser,
+                                    score_p1=1,
+                                    score_p2=0
+                                )
                             data = {"type" : "Forfait"}
                             await self.channel_layer.group_send(
                                 self.room_group_name,
@@ -699,64 +701,71 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                         room.append('Ended')
                         # print("=> room seted", room[0] ,"Ended.")
 
-                    # remove_room(room[0], Chess_Rooms)
-                    # print('==> Number of rooms before :', len(Chess_Rooms))
-                    # print('==> player saving in db    :', event['payload'].get('role'))
-                    # print('==> Room to delete         :', room[0])
-                    # print('==> Number of rooms after  :', len(Chess_Rooms))
-                    # Show_Rooms(Chess_Rooms)
-
-                    # my_id     : ReomteGameData.p1_id,
-                    # p1_id     : ReomteGameData.p1_id,
-                    # p2_id     : ReomteGameData.p2_id,
-                    # room_name : ReomteGameData.room_name, 
-
-                    # print('infos :', event['payload'])
                     user_id1 = event['payload']['p1_id']
                     user_id2 = event['payload']['p2_id']
                     score_1  = int(event['payload']['p1_score'])
                     score_2  = int(event['payload']['p2_score'])
 
                     user  = await get_user_by_unique_id(user_id1)
-                    # print('==>', user.login)
                     user2 = await get_user_by_unique_id(user_id2)
-                    # print('==>', user2.login)
-                    profile1 = await get_profile(user)
-                    profile2 = await get_profile(user2)
 
 
-                    # score_1 = int(event['payload']['ball']['x'])
-                    # score_2 = int(event['payload']['ball']['y'])
 
                     if user and user2:
                         # Decide winner vs loser
-                        if score_1 > score_2:
+                        if score_1 == score_2: #draw
+                            winner_profile = await get_profile(user)
+                            loser_profile  = await get_profile(user2)
+
+                            if (winner_profile and loser_profile):
+                                # winner_profile.wins += 1
+                                # loser_profile.lose += 1
+                                loser_profile.draw = True
+                                winner_profile.total_games += 1                  
+                                loser_profile.total_games += 1
+                                
+                                await sync_to_async(winner_profile.save)()
+                                await sync_to_async(loser_profile.save)()
+
+                                await create_game(
+                                    type='CHESS',
+                                    user_p1=user,
+                                    user_p2=user2,
+                                    winner=user,
+                                    loser=user2,
+                                    score_p1=0,
+                                    score_p2=0
+                                )
+                            # print('game setted to draw')
+
+                        elif score_1 > score_2:
                             t_winner, t_loser = user, user2
-                            if (profile1 and profile2):
-                                profile1.wins += 1
-                                profile2.lose += 1
-                        else:
+                        elif score_1 < score_2:
                             t_winner, t_loser = user2, user
-                            if (profile1 and profile2):
-                                profile2.wins += 1
-                                profile1.lose += 1
 
-                        if (profile1 and profile2):
-                            profile1.total_games += 1                  
-                            profile2.total_games += 1
-                            await sync_to_async(profile1.save)()
-                            await sync_to_async(profile2.save)()
+                            winner_profile = await get_profile(t_winner)
+                            loser_profile  = await get_profile(t_loser)
 
+                            if (winner_profile and loser_profile):
+                                winner_profile.wins += 1
+                                winner_profile.total_games += 1                  
+                                
+                                loser_profile.lose += 1
+                                loser_profile.total_games += 1
+                                
+                                await sync_to_async(winner_profile.save)()
+                                await sync_to_async(loser_profile.save)()
 
-                        await create_game(
-                            type='CHESS',
-                            user_p1=user,
-                            user_p2=user2,
-                            winner=t_winner,
-                            loser=t_loser,
-                            score_p1=score_1, #SWITCH TEMPORALRLY
-                            score_p2=score_1
-                        )
+                                await create_game(
+                                    type='CHESS',
+                                    user_p1=t_winner,
+                                    user_p2=t_loser,
+                                    winner=t_winner,
+                                    loser=t_loser,
+                                    score_p1=score_1, #SWITCH TEMPORALRLY
+                                    score_p2=score_2
+                                )
+
         
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):
             return
