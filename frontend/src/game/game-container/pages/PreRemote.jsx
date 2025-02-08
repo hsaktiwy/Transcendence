@@ -16,6 +16,7 @@ const PreRemote = () => {
   const [matchSocket, setMatchSocket] = useState(null);
 
   const { setReomteGameData } = useRemoteGameContext();
+  const { ReomteGameData } = useRemoteGameContext();
   
 
   const user = useContext(UserContext)
@@ -27,7 +28,15 @@ const PreRemote = () => {
   const UserId = user?.userData?.state;
 
   console.log("==> USERNAME : <", username, ">, image : <", image, ">, id : <", UserId, ">");
-  
+
+  let INVITE_TEXT = '';
+  let show = false;
+  console.log('===> is from game invite : ', ReomteGameData.form_game_invite);
+  if (ReomteGameData.form_game_invite === true){
+      INVITE_TEXT = ReomteGameData.invitee + ' VS ' + ReomteGameData.invited
+      show = true
+    //sending user's and it's opponent (invitee) infos to the backend and inform it it's not a normal matchmaking (setting room's status to INVITE_ROOM) 
+  }
 
   const startMatchmaking = () => {
     setIsSearching(true);
@@ -92,6 +101,7 @@ const PreRemote = () => {
   useEffect(() => {
     // Cleanup socket on component unmount
     return () => {
+      setReomteGameData({hello:'hello'})
       if (matchSocket) {
         matchSocket.close();
       }
@@ -111,7 +121,12 @@ const PreRemote = () => {
           <p>TAP ON THE NAME OR AVATAR TO CHANGE IT.</p>
         </div>
         <center>
-          <div className="players-container-r">
+        {show && (<center>
+          <div className='game-options-header-r text-wrapper' >
+            <h1>{INVITE_TEXT}</h1></div>
+        </center>)}
+        
+        {!show && (<div className="players-container-r">
             <div className="buttona-r">
               {!isSearching ? (
                 <Frame
@@ -129,7 +144,7 @@ const PreRemote = () => {
                 />
               )}
             </div>
-          </div>
+          </div>)}
         </center>
         
       </div>

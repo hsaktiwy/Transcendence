@@ -21,8 +21,21 @@ import { SlLock } from "react-icons/sl";
 import ChatInfoBlocked  from "./blocked/ChatInfoBlocked"
 
 
+import { useRemoteGameContext } from '../game/game-container/game/MatchContext.jsx';
 
-function ChatFriendInfo(){
+    ////---------------------------
+    function ChatFriendInfo(){
+        const { setReomteGameData } = useRemoteGameContext();
+        
+        const handleChallengeClick = () => {
+            setReomteGameData({
+                form_game_invite: true,
+                invitee: 'You  ',
+                invited: 'Invitee'
+            });
+        };
+    ////---------------------------
+
     const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
@@ -67,7 +80,7 @@ function ChatFriendInfo(){
             console.log("Block status ", err)
         }
     }
-
+        
     const [achievementsData, setAchievementsData] = useState<Achievements[]>([]);
     const [loading, setLoading] = useState<boolean>(true); // Add a loading state
     const uuid = chatContext.active?.user2.unique_id
@@ -142,8 +155,8 @@ function ChatFriendInfo(){
                                 <div className="cursor-pointer hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center">
                                     
                                     {/*SETTTING THE USER CONTEXT TO INVITE*/}
-                                     
-                                    <Link to={`/game/PreRemote`} >
+
+                                    <Link to={`/game/PreRemote`} onClick={handleChallengeClick} >
                                         <span className="text-xl flex items-center gap-1">
                                             <VscGame />
                                             <p className="text-white/70 text-sm">Challenge</p>
