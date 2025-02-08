@@ -33,8 +33,8 @@ const PreRemote = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
-    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
-    console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/');
+    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
+    console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
       console.log("Matchmaking WebSocket Connected");

@@ -164,14 +164,14 @@ const RegisterForm = () =>{
     },[inputsData])
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
-                <div className={`flex flex-col items-center 2xl:items-end justify-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
+                <div className={`flex flex-col items-center justify-center min-h-screen font-poppins text-white relative`}>
                     <motion.form 
                         variants={FormFade()}
                         initial="formInitial"
                         animate="formAnimate"
                         onSubmit={handleSubmit}
-                        className=" p-6 rounded-lg shadow-lg max-w-screen-sm lg:w-[600px]  ">
-                        <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
+                        className=" p-10  shadow-lg max-w-screen-sm lg:w-[600px]  bg-white/10 backdrop-filter backdrop-sm border border-white/20 rounded-3xl">
+                        <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center text-center'>
                             <h1 >Hey! Happy to see you here</h1>
                             <p className='text-lg font-normal '>Create your account now</p>
                         </div>

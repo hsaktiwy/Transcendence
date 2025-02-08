@@ -11,6 +11,7 @@ export interface UserDataInterface {
     CoverProfile: string;
     oauth: boolean;
 }
+
 export interface ProfileDataInterface {
     unique_id:string;
     login:string;
