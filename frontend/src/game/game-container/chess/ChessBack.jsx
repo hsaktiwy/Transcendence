@@ -113,7 +113,7 @@ const ChessGameBack = () => {
         
         
         GLTFLoaderr.load(
-            '/GamePub/chess-assets/models/chess_set_2k.gltf/chess_set_2k.gltf',
+            '/GamePub/chess-assets/models/chess_set_2k.gltf/chess_set.gltf',
             function ( gltf ) {
                 let item;
         
@@ -171,13 +171,13 @@ const ChessGameBack = () => {
             const deltaTime = elapsedTime - previousTime
             previousTime = elapsedTime
         
-            cameraAngle += 0.007;
-            cameraHeight += 0.0007;
+            cameraAngle += 0.005;
+            cameraHeight += 0.0005;
             camera.position.x = Math.cos(cameraAngle) * (cameraRadius - cameraHeight);
             camera.position.z = Math.sin(cameraAngle) * (cameraRadius - cameraHeight);
             camera.position.y = cameraHeight;
             
-            if (cameraHeight > 2.3) cameraHeight = 0.9;
+            if (cameraHeight > 1.7) cameraHeight = 0.9;
     
             camera.lookAt(0, 0, 0);
         
