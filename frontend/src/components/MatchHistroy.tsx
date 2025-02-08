@@ -64,7 +64,9 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
         const isUserP1 = username === game.user_p1.login;
         const isUserP2 = username === game.user_p2.login;
     
-        if (game.score_p1 === game.score_p2) return 'draw'; // Handle draw case
+        if (game.score_p1 === game.score_p2) 
+          return 'draw'; // Handle draw case
+        // console.log('username  ->>>', username)
         if ((isUserP1 && game.score_p1 > game.score_p2) || (isUserP2 && game.score_p2 > game.score_p1)) {
             return 'win';
         }
@@ -187,7 +189,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                             ) : findUser === 'userDown' && game.type === "CHESS" ? (
                                               matchResult === 'win' ? 'Win' : matchResult === 'lose' ? 'Lose' : 'Draw'
                                             ) : (
-                                              game.score_p1
+                                              game.score_p2
                                             )}
                                           </div>
                                       </div>
