@@ -103,6 +103,13 @@ class ApiConsumer(WebsocketConsumer):
             self.close()
             return
 
+        #INVITE_PROCESS
+        #create a room set it to Invited state queue the first player till the second joins / the force sync is mandatory
+        #check if it's invited match 
+        #socket-route/invite/second-player-unique-id
+        
+        #INVITE_PROCESS
+
         # # clean the PPong_Rooms, ...
         cleaner(PPong_Rooms)
         self.accept()
