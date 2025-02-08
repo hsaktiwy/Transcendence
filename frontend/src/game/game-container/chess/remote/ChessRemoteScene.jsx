@@ -78,10 +78,10 @@ const ChessRemoteGame = () => {
             let winnner = ''
              if (data['type'] === 'Game_end'){
                 // ReomteGameData.winner = 'YOU WON Forfait'
-                if (ReomteGameData.winner === ReomteGameData.color){
+                if (data['winner'] === ReomteGameData.color){
                     winnner = 'You Won'   
                 }
-                else if (ReomteGameData.winner === 'Draw'){
+                else if (data['winner'] === 'Draw'){
                     winnner = 'Draw'
                 }
                 else {
@@ -479,7 +479,7 @@ const ChessRemoteGame = () => {
                             });  
                             // message.winner = winning_color;
                             // ReomteGameData.winner = winning_color;
-                            if (ReomteGameData.winner == winning_color){
+                            if (ReomteGameData.winner === winning_color){
                                 message.p1_score = 1
                             }
                             else{
