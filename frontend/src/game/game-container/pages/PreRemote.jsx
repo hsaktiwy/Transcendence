@@ -101,7 +101,7 @@ const PreRemote = () => {
   useEffect(() => {
     // Cleanup socket on component unmount
     return () => {
-      setReomteGameData({hello:'hello'})
+      // setReomteGameData({hello:'hello'})
       if (matchSocket) {
         matchSocket.close();
       }
