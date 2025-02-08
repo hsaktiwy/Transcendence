@@ -10,7 +10,7 @@ import { MatchHistoryDataInterface } from "@/utils/interfaces";
 
 interface MatchHistoryProps {
   data: MatchHistoryDataInterface[];
-  username:string
+  username:string | undefined
 }
 
  
@@ -18,6 +18,9 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
 
 
   console.log('dataaaa match history : ->>', data);
+  
+  // if(data)
+  //   type = data[0].type;
   console.log('Username:', username); // Now properly logged
   const [isPlayed, setIsPlayed] = useState<boolean>(false);
   
@@ -57,14 +60,22 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
       //     console.error('Error fetching match history:', error);
       //   }
       // };
-      const didUserWin = (game: any, username:string): boolean => {
+      const getMatchResult = (game: any, username: string | undefined): 'win' | 'lose' | 'draw' => {
         const isUserP1 = username === game.user_p1.login;
         const isUserP2 = username === game.user_p2.login;
-      
-        return (isUserP1 && game.score_p1 > game.score_p2) || (isUserP2 && game.score_p2 > game.score_p1);
-      };
-      
-      
+    
+        if (game.score_p1 === game.score_p2) return 'draw'; // Handle draw case
+        if ((isUserP1 && game.score_p1 > game.score_p2) || (isUserP2 && game.score_p2 > game.score_p1)) {
+            return 'win';
+        }
+        return 'lose';
+    };
+    const findTheUSer = (game:any, username:string | undefined) =>
+    {
+      if(username === game.user_p1.login)
+        return('userUP');
+      return('userDown');
+    } 
       // // Call the function
       // fetchUserMatchHistory();
       useEffect(()=>{
@@ -89,6 +100,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
           </div>
        </div>)  :
             (<div className="text-2xl h-full w-full rounded-2xl rounded-t-none  shadow-lg font-semibold flex flex-col justify-center items-center p-4 overflow-auto">
+                      
                     <div className="p-3  w-full h-full grid grid-rows-6 ">
                       <div className="row-span-2  px-6 flex items-center justify-between w-full">
                           <div className="flex items-center justify-center flex-col gap-3">
@@ -108,17 +120,18 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                           <div className="  w-full  border-t border-[#5E97A9] rounded-full my-3 mt-1"></div>
                           <div className="h-40 xxl:h-60 overflow-y-auto px-5">
                           {data.map((game: any, index: any) => {
-                              const userWon = didUserWin(game, username); // Determine if the user won
-
+                              const matchResult = getMatchResult(game, username); // Determine if the user won
+                              const findUser = findTheUSer(game, username)
                               return (
                                 <React.Fragment key={game.id}>
                                   <div className="w-full mb-4 flex items-center bg-gradient-to-bl from-[#242b2f] to-[#1b1e1f] gap-4 shadow-lg rounded-lg py-4">
                                     {/* Conditional Gradient for Win/Loss */}
-                                    <div
-                                      className={`bg-gradient-to-b ${
-                                        userWon ? 'from-[#84D679] via-[#598752] to-[#2D392C]' : 'from-[#E45959] via-[#875252] to-[#392C2C]'
-                                      } w-1 h-16 rounded-r-lg`}
-                                    ></div>
+                                    <div className={`bg-gradient-to-b ${
+                                          matchResult === 'win' ? 'from-[#84D679] via-[#598752] to-[#2D392C]' :
+                                          matchResult === 'lose' ? 'from-[#E45959] via-[#875252] to-[#392C2C]' :
+                                          'from-[#E5C359] via-[#877852] to-[#39332C]' // Yellow for draw
+                                        } w-1 h-16 rounded-r-lg`}
+                                      ></div>
 
                                     {/* Player 1 Details */}
                                     <div className="w-full mr-4">
@@ -138,7 +151,15 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                             </h1>
                                           </div>
                                         </div>
-                                        <div>{game.score_p1}</div>
+                                        <div>
+                                            {findUser !== 'userUP' && game.type === "CHESS" ? (
+                                              matchResult === 'win' ? 'Lose' : matchResult === 'lose' ? 'Win' : 'Draw'
+                                            ) : findUser === 'userUP' && game.type === "CHESS" ? (
+                                              matchResult === 'win' ? 'Win' : matchResult === 'lose' ? 'Lose' : 'Draw'
+                                            ) : (
+                                              game.score_p1
+                                            )}
+                                          </div>
                                       </div>
 
                                       <div className="w-full border-t border-[#5E97A9] rounded-full my-4"></div>
@@ -160,7 +181,15 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                             </h1>
                                           </div>
                                         </div>
-                                        <div>{game.score_p2}</div>
+                                        <div>
+                                            {findUser !== 'userDown' && game.type === "CHESS" ? (
+                                              matchResult === 'win' ? 'Lose' : matchResult === 'lose' ? 'Win' : 'Draw'
+                                            ) : findUser === 'userDown' && game.type === "CHESS" ? (
+                                              matchResult === 'win' ? 'Win' : matchResult === 'lose' ? 'Lose' : 'Draw'
+                                            ) : (
+                                              game.score_p1
+                                            )}
+                                          </div>
                                       </div>
                                     </div>
                                   </div>
