@@ -631,10 +631,10 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                         loser_profile    =  await get_profile(winner)#ProfileStatus.objects.get(id_user_fk=winner)
                         if loser and winner:
                             if (loser_profile and winner_profile):
-                                winner_profile.wins += 1
+                                winner_profile._wins += 1
                                 winner_profile.total_games += 1
 
-                                loser_profile.lose += 1
+                                loser_profile._lose += 1
                                 loser_profile.total_games  += 1                    
                                 
                                 await sync_to_async(winner_profile.save)()
@@ -720,7 +720,7 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                             if (winner_profile and loser_profile):
                                 # winner_profile.wins += 1
                                 # loser_profile.lose += 1
-                                loser_profile.draw = True
+                                # loser_profile.draw = True
                                 winner_profile.total_games += 1                  
                                 loser_profile.total_games += 1
                                 
@@ -747,10 +747,10 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                             loser_profile  = await get_profile(t_loser)
 
                             if (winner_profile and loser_profile):
-                                winner_profile.wins += 1
+                                winner_profile._wins += 1
                                 winner_profile.total_games += 1                  
                                 
-                                loser_profile.lose += 1
+                                loser_profile._lose += 1
                                 loser_profile.total_games += 1
                                 
                                 await sync_to_async(winner_profile.save)()
