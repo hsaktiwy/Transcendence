@@ -18,7 +18,7 @@ function MatchHistory({
       <div className="players-info">
 
         <div className="player-block">
-          <div className="player-name">{player1}</div>
+          {/* <div className="player-name">{player1}</div> */}
           {/* <button 
             className={isReadyP1 ? 'ready-button' : 'join-button'}
             onClick={() => handleReady('player1')}
@@ -36,18 +36,18 @@ function MatchHistory({
           >
             {isReadyP2 ? 'Ready' : 'Join'}
           </button> */}
-          <div className="player-name">{player2}</div>
+          {/* <div className="player-name">{player2}</div> */}
         </div>
       </div>
 
-      {bothReady && (
+      {/* {bothReady && (
         <button
           className="start-match-button"
           onClick={() => onStartMatch(matchId)}
         >
           Start Match
         </button>
-      )}
+      )} */}
     </div>
   );
 }

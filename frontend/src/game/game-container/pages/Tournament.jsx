@@ -159,35 +159,34 @@ function Tournament() {
           <div className="matches-section">
             <div className="matches-column">
               <h1 className="tournament-heading">MATCHES HISTORY</h1>
-              <MatchHistory 
-                matchId="Semi_Final_1"
-                matchData={Matches.Semi_Final_1}
-              />
+                <MatchHistory 
+                  matchId="Semi_Final"
+                  matchData={Matches.Final}
+                />
             </div>
 
             <div className="vertical-line"/>
 
             <div className="matches-column">
               <h1 className="tournament-heading">MATCHES QUEUE</h1>
-              
-              <MatchCard 
-                matchId="Semi_Final_1"
-                matchData={Matches.Semi_Final_1}
-                onReady={handleReady}
-                onStartMatch={handleStartMatch}
-              />
-              <MatchCard 
-                matchId="Semi_Final_2"
-                matchData={Matches.Semi_Final_2}
-                onReady={handleReady}
-                onStartMatch={handleStartMatch}
-              />
-              <MatchCard 
-                matchId="Final"
-                matchData={Matches.Final}
-                onReady={handleReady}
-                onStartMatch={handleStartMatch}
-              />
+                <MatchCard 
+                  matchId="Semi_Final_1"
+                  matchData={Matches.Semi_Final_1}
+                  onReady={handleReady}
+                  onStartMatch={handleStartMatch}
+                />
+                <MatchCard 
+                  matchId="Semi_Final_2"
+                  matchData={Matches.Semi_Final_2}
+                  onReady={handleReady}
+                  onStartMatch={handleStartMatch}
+                />
+                <MatchCard 
+                  matchId="Final"
+                  matchData={Matches.Final}
+                  onReady={handleReady}
+                  onStartMatch={handleStartMatch}
+                />
             </div>
           </div>
         </div>
