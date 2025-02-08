@@ -45,7 +45,7 @@ services:
   frontend:
     build: frontend/.
     container_name: frontend
-    restart: always
+    restart : on-failure
     volumes:
       - ./frontend:/app
     env_file:
@@ -73,6 +73,7 @@ services:
     volumes:
           - ./backend/media:/app/media
           - ./backend/static:/app/static
+          - ./frontend/dist:/app/dist
     ports:
       - "4444:443"
     networks:
