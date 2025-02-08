@@ -38,11 +38,7 @@ function ConnectButton(prop: buttonInterface) {
     if (!SocketContext)
         throw new Error('error')
   const {AddChannel,RemoveChannel} = SocketContext
-  // const handleAcceptClick = () => {
-  //   setIsOpen(true);
-  //   setStatus("accepted");
-  // };
-  
+
   const getChannelId = async () =>{
       try{
           const req = {
@@ -70,8 +66,6 @@ function ConnectButton(prop: buttonInterface) {
           withCredentials: true,
         }
         await mailman(req)
-        // userContextConsumer?.blockList.push()
-        // console.log('hana ->>>>>', resp)
         const user = prop.user as ProfileDataInterface
         if (!isblock)
         {
@@ -119,7 +113,6 @@ function ConnectButton(prop: buttonInterface) {
         const  responce:boolean = resp.data['status']
         setIsbLock(responce)
         setBtn_block(responce ? 'UnBlock' : 'Block');
-        // console.log('block  status  heere  ->>>>', resp.data);
         if(resp.data['blocker'] ===  userContextConsumer?.userData?.unique_id)
         {
             setBloker(true);
@@ -149,8 +142,6 @@ function ConnectButton(prop: buttonInterface) {
         if (responce)
           await getChannelId()
         console.log(resp)
-        // if  (responce)
-        // {
         const req2 = {
           url:'friendship/status/'+ uuid,
           method: 'GET',

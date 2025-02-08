@@ -124,6 +124,8 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
+                console.log(location.pathname)
+                console.log("wala > ", resp)
                 if(resp.data['message'] && resp.data['message'] === 'user already logged in' && loggedIn === undefined)
                     setLoggedIn(true)
                 else if (resp.data['message'] && resp.data['message'] === 'User logged in successfuly' && loggedIn === undefined)
@@ -134,6 +136,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
 
             }
             catch(error){
+                console.log("failing", error)
                 interface errorInterface{
                     detail?:string
                 }
@@ -146,8 +149,10 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     useEffect(()=>{
         if (loggedIn === false)
             logout()
-        else if(loggedIn === true && (location.pathname === '/login' || location.pathname === '/login/'))
+        else if(loggedIn === true && (location.pathname === '/login' || location.pathname === '/login/')){
+            console.log("dkhoooooool")
             Navigate('/')
+        }
 
     }, [loggedIn])
     useEffect (() =>{

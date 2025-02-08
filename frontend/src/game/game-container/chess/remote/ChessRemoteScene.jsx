@@ -57,7 +57,7 @@ const ChessRemoteGame = () => {
     useEffect(() => {
 
         // Connect to the game server using those values
-        const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/chess/room/${ReomteGameData.room_name}`);
+        const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ws/chess/room/${ReomteGameData.room_name}`);
         // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.my_user}`);
         
         gameSocket.onopen = () => {

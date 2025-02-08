@@ -97,6 +97,7 @@ def BlockUser(request, unique_id):
 				friendship.first().delete()
 			if len(f_request) > 0:
 				f_request.first().delete()
+			
 		return Response({'message': 'User '+unique_id+' in the Block List', 'status': 'blocked'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
