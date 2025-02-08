@@ -175,24 +175,27 @@
   .main-game-page-container {
     /* border: 2px solid red; */
     /* top: 20px; */
-    margin-top: 30px;
+    margin-top: 3vh;
     width: calc(100% - 130px - 10px);
-    height: 100vh;
-    margin-left: 130px;
+    height: 95vh;
+    margin-left: 135px;
     /* position: relative; */
     /* margin: 0; */
     /* padding: 0; */
     position: fixed;
     /* top: 0; */
     /* left: 0; */
-    /* outline: none; */
+    outline: none;
     overflow: hidden;
   }
   
   @media screen and (max-width: 1024px) {
     .main-game-page-container {
-        /* border: 5px solid rgb(223, 60, 60); */
-        margin-left: 0; /* Remove left margin completely */
-        width: 100%; /* Full width */
+      /* border: 5px solid rgb(223, 60, 60); */
+      margin-left: 0; /* Remove left margin completely */
+      width: 100%; /* Full width */
+      margin-top: 3vh;
+      height: 90vh;
+
     }
 }

@@ -769,24 +769,52 @@ const LocalGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
+            console.log('====> Getted Info : ', LocalGamesData.type );
+            if (LocalGamesData.type == 'Tournament'){
+                console.log('====> ON tournament');
+                if (playerScore === 7){
+                    setLocalGamesData({
+                        gametype: 'Tournament', // Local, Multiplayer, Tournament 
+                        // player1: null,
+                        // player2: null,
+                        // player3: null,
+                        // player4: null,
+                        TBD1    :LocalGamesData.player1,
+                        Winner  : LocalGamesData.player1
+                    });    
+                }
+                else {
+                    setLocalGamesData({
+                        gametype: 'Tournament', // Local, Multiplayer, Tournament 
+                        // player1: null,
+                        // player2: null,
+                        // player3: null,
+                        // player4: null,
+                        TBD1    :LocalGamesData.player2,
+                        Winner  : LocalGamesData.player2
+                    });     
+                }
+
+                navigate("/game/Tournament")
+            }
 
             if (playerScore === 7){
                 setLocalGamesData({
-                    gametype: 'local', // Local, Multiplayer, Tournament 
-                    player1: null,
-                    player2: null,
-                    player3: null,
-                    player4: null,
+                    gametype: 'Tournament', // Local, Multiplayer, Tournament 
+                    // player1: null,
+                    // player2: null,
+                    // player3: null,
+                    // player4: null,
                     Winner  : LocalGamesData.player1
                 });    
             }
             else {
                 setLocalGamesData({
-                    gametype: 'local', // Local, Multiplayer, Tournament 
-                    player1: null,
-                    player2: null,
-                    player3: null,
-                    player4: null,
+                    gametype: 'Tournament', // Local, Multiplayer, Tournament 
+                    // player1: null,
+                    // player2: null,
+                    // player3: null,
+                    // player4: null,
                     Winner  : LocalGamesData.player2
                 });     
             }

@@ -10,7 +10,8 @@ import { useEffect } from 'react';
 function Tournament() {
   const navigate = useNavigate();
   const { LocalGamesData }    = useLocalGamesContext();
-  // const { setLocalGamesData } = useLocalGamesContext();
+  const { setLocalGamesData } = useLocalGamesContext();
+
   
   useEffect( () => {
       if ( LocalGamesData.gametype !== 'Tournament'
@@ -41,8 +42,8 @@ function Tournament() {
       thier_Turn: false,
     },
     Final: {
-      player1: 'TBD',
-      player2: 'TBD',
+      player1: LocalGamesData.TBD1,
+      player2: LocalGamesData.TBD2,
       winner: null,
       isReadyF1: false,
       isReadyF2: false,
@@ -67,7 +68,16 @@ function Tournament() {
 
   const handleStartMatch = (matchId) => {
     console.log(`Starting match: ${matchId}`);
-    //tBC
+
+    setLocalGamesData({
+      gametype: 'Tournament', // Local, Multiplayer, Tournament 
+      // player1: player1Name,
+      // player2: player2Name,
+      // player3: player3Name,
+      // player4: player4Name,
+      // Winner : null,
+    });
+    
     navigate('/game/LocalGame');
   };
 
