@@ -88,11 +88,27 @@ const RemoteGame = () => {
             
             // console.log("=> Type received :", data['type']);
             
-            if (data['type'] == 'Game_State'){
-                console.log("=> The brodcaster :", data['my_id']);
-                console.log("   => Says        :", data['message'], '\n');
-            }
-            if (data['type'] == 'paddle_update' || data['type'] == 'Game_end'){
+            // if (data['type'] == 'Game_State'){
+            //     console.log("=> The brodcaster :", data['my_id']);
+            //     console.log("   => Says        :", data['message'], '\n');
+            // }
+            if (data['type'] == 'paddle_update' || data['type'] == 'Game_end'|| data['type'] == 'Forfait'){
+                // console.log('========> wa ladaafaafafjkjerkjkjrkjr', data);
+                if(data['type'] == 'Forfait'){
+                    
+                    setReomteGameData({
+                        // room_name: null,
+                        // role     : null,
+                        // my_user  : null,
+                        // opponent : null,
+                        // p1_id    : null,
+                        // p2_id    : null,
+                        winner  : ReomteGameData.my_user + ' FORFAIT'
+                    }); 
+                    setAiScore(0);
+                    setPlayerScore(0);
+                    navigate('/game/Winner');
+                }
                 
                 Aix               = data['paddle']['x'];
                 Aiy               = data['paddle']['y'];
@@ -107,7 +123,46 @@ const RemoteGame = () => {
                 state             = Boolean(data['ball']['state']);
 
                 OppmouseDirection = Number(data['ball']['mousedirection']);
-    
+
+                // if (data['type'] == 'Game_end'){
+
+                //     const message = {
+                //         type: 'Game_end',
+                //         role:  ReomteGameData.role,
+                //         my_id: ReomteGameData.p1_id,
+                //         paddle: {
+                //             x: ReomteGameData.p1_id,
+                //             y: ReomteGameData.p2_id,      
+                //         },
+                //         ball: {
+                //             c: 1,
+                            
+                //             x:  playerScore,
+                //             y:  aiScore,
+                //             z:  1,
+            
+                //             mousedirection: 1,
+            
+                //             status: Objects[Objects.length - 1]?.created_by_me ?? false,
+                //             state : true
+                //         }
+                //     };
+                //     if (playerScore === 7){
+                //         setReomteGameData({
+                //             winner  : ReomteGameData.my_user
+                //         });    
+                //         message.ball.mousedirection = 1;
+                //     }
+                //     else {
+                //         setReomteGameData({
+                //             winner  : ReomteGameData.opponent
+                //         });     
+                //         message.ball.mousedirection = 2;
+                //     }
+                //         if (docket && docket.readyState === 1)
+                //             docket.send(JSON.stringify(message));
+        
+                // }
 
                 // console.log("==> STATE : ", state);
                 if (state === true){
@@ -135,6 +190,7 @@ const RemoteGame = () => {
                     }
                     setAiScore(0);
                     setPlayerScore(0);
+                    console.log(ReomteGameData.my_user, ' Im quitting !')
                     navigate('/game/Winner');
                 }
 
@@ -608,6 +664,7 @@ const RemoteGame = () => {
             const message = {
                 type: 'paddle_update',
                 my_id: ReomteGameData.p1_id,
+                // role:  ReomteGameData.role,
                 paddle: {
                     x: mouse.x,
                     y: mouse.y,      
@@ -817,6 +874,8 @@ const RemoteGame = () => {
 
         const message = {
             type: 'Game_end',
+            role:  ReomteGameData.role,
+            room_name: ReomteGameData.room_name,
             my_id: ReomteGameData.p1_id,
             paddle: {
                 x: ReomteGameData.p1_id,
@@ -852,7 +911,8 @@ const RemoteGame = () => {
         
         setPlayerScore(0);
         setAiScore(0);
-        navigate('/game/winner');
+        //sleep a bit to send updates before disconnecting and forfait the game
+        navigate('/game/Winner');
 
         return(docket.close());
     }

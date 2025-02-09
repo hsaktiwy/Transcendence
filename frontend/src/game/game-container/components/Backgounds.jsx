@@ -52,21 +52,22 @@ function Backgrounds() {
           </div> */}
 
 
-        <div className={show ? "teams-container" : "hidden-v"} >
-          <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
-            <center>
-              <h1>Le7ya's Game</h1>
-            </center>
-            <ChessPreview />
+        {/* <div className="main-game-page-container">
+          <div className={show ? "teams-container" : "hidden-v"} >
+            <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
+              <center>
+                <h1>Le7ya's Game</h1>
+              </center>
+              <ChessPreview />
+            </div>
+            <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
+              <center>
+                <h1>Ping Pong</h1>
+              </center>
+              <PingPongPreview />
+            </div>
           </div>
-          <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
-            <center>
-              <h1>Ping Pong</h1>
-            </center>
-            <PingPongPreview />
-          </div>
-        </div>
-
+        </div> */}
     </>
   );
 }
