@@ -71,18 +71,51 @@ const ChessRemoteGame = () => {
             
             // console.log("=> Type received :", data['type']);
             
-            if (data['type'] == 'Game_State'){
+            if (data['type'] === 'Game_State'){
                 console.log("=> The brodcaster :", data['my_id']);
                 console.log("   => Says        :", data['message'], '\n');
             }
-            if (data['type'] == 'game_update'){
+            let winnner = ''
+             if (data['type'] === 'Game_end'){
+                // ReomteGameData.winner = 'YOU WON Forfait'
+                if (data['winner'] === ReomteGameData.color){
+                    winnner = 'You Won'   
+                }
+                else if (data['winner'] === 'Draw'){
+                    winnner = 'Draw'
+                }
+                else {
+                    winnner = 'Nta Zamel'
+                }
+                setReomteGameData({
+                    // room_name: data['room_name'],
+                    // role     : data['role'],
+                    // my_user  : data['user_name'],
+                    // opponent : data['opponent_name'],
+                    // p1_id    : data['my_id'],
+                    // p2_id    : data['opponent_id'],
+                    // color    : data['color'],
+                    winner      : winnner 
+                });    
+                navigate('/game/ChessWinner')
+            }
+            
+            
+            if (data['type'] === 'Forfait'){
+                setReomteGameData({
+                    winner  : 'YOU WON Forfait'
+                });    
+                navigate('/game/ChessWinner')
+            }
+            
+            if (data['type'] === 'game_update'){
                 console.log("Recived => ");
                 console.log("          : ", data['name']);
                 console.log("          : ", data['from']);
                 console.log("          : ", data['to']);
                 Executor(data['name'], data['from'], data['to']);
-
-
+                
+                
             };
 
 
@@ -374,9 +407,17 @@ const ChessRemoteGame = () => {
         ///Send Updates
         const sendGameUpdate = (name, t_from, t_to) => {
             // console.log("=======>", Objects.length);
+            // room_name: data['room_name'],
+            // role     : data['role'],
+            // my_user  : data['user_name'],
+            // opponent : data['opponent_name'],
+            // p1_id    : data['my_id'],
+            // p2_id    : data['opponent_id'],
+            // color    : data['color'],
+            // winner   : null
             const message = {
                 type      : 'game_update',
-                my_id     : ReomteGameData.my_user,
+                my_id     : ReomteGameData.p1_id,
                 from      : t_from,
                 to        : t_to,      
                 name      : name,
@@ -410,12 +451,62 @@ const ChessRemoteGame = () => {
             try {
                 let result = engine_validator.move({from : fromNotation, to: toNotation});
                 console.log('==> Game judgemet : ', result);
+                console.log(engine_validator.ascii(),"\n\n");
                 if (result){
                     //Sending Packing
+                    
+                    console.log('Valid Move !')
+
+                    
+                    if (engine_validator.isGameOver()) {
+                        let score_1 = 0
+                        const message = {
+                            type      : 'Game_end',
+                            my_id     : ReomteGameData.p1_id,
+                            p1_id     : ReomteGameData.p1_id,
+                            p2_id     : ReomteGameData.p2_id,
+                            room_name : ReomteGameData.room_name,
+                            p1_score  :score_1,
+                            p2_score  :score_1
+                            
+                        };
+                        let winning_color = ''
+                        if (engine_validator.isCheckmate()) {
+                            winning_color = engine_validator.turn() === 'w' ? 'black' : 'white';
+                            console.log("Checkmate! Winning side:", winning_color);
+                            setReomteGameData({
+                                winner  : winning_color + ' WON !'
+                            });  
+                            // message.winner = winning_color;
+                            // ReomteGameData.winner = winning_color;
+                            if (ReomteGameData.winner === winning_color){
+                                message.p1_score = 1
+                            }
+                            else{
+                                message.p2_score = 1
+                            }
+                            setReomteGameData({
+                                winner  : winning_color + ' WON !'
+                            });                             
+                            
+                        } else if (engine_validator.isDraw()) {
+                            console.log("It's a draw!");
+                            // message.name = -1;
+                            message.winner = 'Draw'
+                            // ReomteGameData.winner = 'Draw'
+                            setReomteGameData({
+                                winner  : 'Draw'
+                            });    
+                            
+                        }
+                        if (gameSocket.readyState === 1)
+                            gameSocket.send(JSON.stringify(message));
+                        console.log("==> Game officially done! the winner is ", winning_color);
+                        navigate('/game/ChessWinner')
+                    }
+                    
                     sendGameUpdate(name, fromNotation, toNotation);
 
-                    console.log('Valid Move !')
-        
                     ///Capturing
                     if (result.captured){
                         const capturedPiece = findCapturedPiece(name, toNotation);
@@ -423,23 +514,23 @@ const ChessRemoteGame = () => {
                             console.log("Cptured Piece Found : ", capturedPiece.name);
                             scene.remove(capturedPiece);
                             objects = objects.filter(obj => obj !== capturedPiece); // tbu
-                            capture_sound.play(); // Sound for capture
+                            // capture_sound.play(); // Sound for capture
                         }
                     }
-                    move_sound.play();
+                    // move_sound.play();
                     pos.x =  -((cords[0] > 0 ? cords[0] - 1: cords[0]) * SQUARE_DIAMETER) - SQUARE_RADIUS;
                     pos.z =   ((cords[1] > 0 ? cords[1] - 1: cords[1]) * SQUARE_DIAMETER) + SQUARE_RADIUS;
                 }
                 else {
                     console.log('InValid Move !')
-                    illegal_sound.play();
+                    // illegal_sound.play();
                     pos.x = init_pos_x;
                     pos.z = init_pos_y;
                     return ;
                 }   
             } catch (error) {
                 console.log('InValid Move !')
-                illegal_sound.play();
+                // illegal_sound.play();
                 pos.x = init_pos_x;
                 pos.z = init_pos_y;
                 return ;
@@ -460,14 +551,14 @@ const ChessRemoteGame = () => {
         }
 
         function Executor(name, from, to){
-            let result = engine_validator.move({from : from, to: to});
+            let result = engine_validator.move({from : from, to: to}); //Try catch (yes it throws!)
             if (result.captured){
                 const capturedPiece = findCapturedPiece(name, to);
                 if (capturedPiece) {
                     console.log("Cptured Piece Found : ", capturedPiece.name);
                     scene.remove(capturedPiece);
                     objects = objects.filter(obj => obj !== capturedPiece); // tbu
-                    capture_sound.play(); // Sound for capture
+                    // capture_sound.play(); // Sound for capture
                 }
             }
             const affectedPiece = findaffectedPiece(name)
@@ -557,6 +648,7 @@ const ChessRemoteGame = () => {
 
             hit_sound.pause();
             hit_sound.src = "";
+            gameSocket.close()
         };
 
     }, []);

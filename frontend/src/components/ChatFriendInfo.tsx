@@ -14,14 +14,30 @@ import { Link } from 'react-router-dom'
 import Achievements from "./Achievements";
 
 
+import ChatInfoBlocked  from "./blocked/ChatInfoBlocked"
 
+//@ts-ignore
+import { useRemoteGameContext } from '../game/game-container/game/MatchContext.jsx';
 
-function ChatFriendInfo(){
+    ////---------------------------
+    function ChatFriendInfo(){
+        const { setReomteGameData } = useRemoteGameContext();
+        
+        const handleChallengeClick = () => {
+            setReomteGameData({
+                form_game_invite: true,
+                invitee: 'You  ',
+                invited: 'Invitee'
+            });
+        };
+    ////---------------------------
+
     const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
+    const [isblock, setIsbLock] = useState<boolean>(false);
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
-    const [Status, setStatus] = useState<string>("Block")
+    const [_Status, setStatus] = useState<string>("Block")
     if (!chatContext || !userContext)
      throw new Error('error')
     const user2_level:number = (Math.random() * 10)
@@ -50,16 +66,16 @@ function ChatFriendInfo(){
             }
             const resp = await mailman(req)
             const  responce:boolean = resp.data['status']
-            if (Status.length)
-                setStatus((responce) ? 'UnBlock' : 'Block')
+            setIsbLock(responce);
+            setStatus((responce) ? 'UnBlock' : 'Block')
+            console.log(resp)
         }
         catch(err)
         {
             console.log("Block status ", err)
         }
     }
-
-
+        
     const uuid = chatContext.active?.user2.unique_id
 
     // console.log('unique id  is  here -->>>>>>>>',  uuid);
@@ -70,6 +86,7 @@ function ChatFriendInfo(){
     },[userContext.action, chatContext.active,  /*radarchartData*/])
 
     return(
+        <>          
         <div className={`rounded-l-xl lg:rounded-l-none rounded-r-3xl border-r-0 lg:border-l-[1px] border-white/20 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
             {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
             <div className=" bg-black/35  w-full  overflow-auto relative   ">
@@ -84,47 +101,83 @@ function ChatFriendInfo(){
                 </div>
                     {/* <div className="bg-white w-[100%] h-[1px] lg:mt-[28px] rounded-full"></div> */}
             </div>
-            <div id="friend-info" className=" m-4 mt-8 relative  bg-gradient-to-br from-[#283137] to-[#242729]  rounded-lg flex flex-col justify-center "
-                         style={{ backgroundImage: `url(${chatContext.active && backendPath + chatContext.active.user2.CoverProfile})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                <div className="absolute inset-0 bg-black/50  rounded-lg pointer-events-none"></div>
-                <div className=" p-4 profile-info-header z-10 flex flex-col justify-center items-center">
-                    <img src={chatContext.active && backendPath + chatContext.active.user2.profile_pic} alt="" className="aspect-square rounded-full object-cover w-28 h-28"  />
-                    <h1 className=" mt-4 font-semibold text-xl">{chatContext.active && chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</h1>
-                    <p className="text-gray-400">{chatContext.active &&  "@" + chatContext.active.user2.login}</p>
-                    <div className=" w-full p-3 my-2 flex flex-col rounded-xl py-2 bg-black/30  shadow-ms justify-center items-center ">
-                        <h2 className=""><span>{chatContext.active && user2_level.toFixed(2)} Level</span></h2>
-                        <div className={` relative my-3 w-full h-2 bg-white/80 rounded-full after:content-[''] after:absolute after:top-0 after:left-0 after:bg-[#5E97A9] after:${chatContext.active && 
-                            'w-[' + ((user2_level - (Math.floor(user2_level))) * 100).toFixed().toString() + '%]'} after:h-full after:rounded-full`}>
-                        </div>
-                    </div>
-                    <div className="flex gap-8 mt-4 flex-wrap items-center justify-center ">
-                        <Link to={`/profile/${chatContext.active?.user2.unique_id}`} className="cursor-pointer  hover:scale-110 duration-150 px-4  py-2 bg-black/30 rounded-xl  w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center" >
-                            <span className="text-xl flex items-center gap-1">
-                                <FiUser/>
-                                <span className="text-white/70 text-sm">Profile</span>
-                            </span>
-                        </Link>
-                        <div className="cursor-pointer  hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center">
-                        <span className="text-xl flex items-center gap-1">
-                                <VscGame/>
-                                <p className="text-white/70 text-sm">Challenge</p>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="">
-                <div className="px-3  h-52">
+            {
+                isblock ? <ChatInfoBlocked/> : 
+                <>
+                    <div id="friend-info" className="relative m-4 mt-8 bg-gradient-to-br from-[#283137] to-[#242729] rounded-lg flex flex-col justify-center"
+                        style={{
+                            backgroundImage: chatContext.active ? `url(${backendPath + chatContext.active.user2.CoverProfile})` : '',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                        }}>
+                        
+                        {/* Background Overlay */}
+                        <div className="absolute inset-0 bg-black/50 rounded-lg pointer-events-none"></div>
 
-                    <Achievements  uuid={uuid}/>
-                </div>
-                <div className=" p-5 z-10 ">
-                    <div className=" bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl p-5">
-                           <RadarChartFile radarchartData={radarchartData || { wins: 0, lose: 0, _wins: 0, _lose: 0 }} />
+                        <div className="p-4 profile-info-header z-10 flex flex-col justify-center items-center">
+                            <img src={chatContext.active ? backendPath + chatContext.active.user2.profile_pic : ''} 
+                                alt="" 
+                                className="aspect-square rounded-full object-cover w-28 h-28" />
+
+                            <h1 className="mt-4 font-semibold text-xl">
+                                {chatContext.active ? `${chatContext.active.user2.firstName} ${chatContext.active.user2.lastName}` : ''}
+                            </h1>
+
+                            <div className="w-full p-3 my-2 flex flex-col rounded-xl py-2 bg-black/30 shadow-ms justify-center items-center">
+                                <p className="text-gray-400">
+                                    {chatContext.active ? `@${chatContext.active.user2.login}` : ''}
+                                </p>
+                                <h2>
+                                    <span>{chatContext.active ? `${user2_level.toFixed(2)} Level` : ''}</span>
+                                </h2>
+                                <div className="relative my-3 w-full h-2 bg-white/80 rounded-full">
+                                    <div className="absolute top-0 left-0 bg-[#5E97A9] h-full rounded-full" 
+                                        style={{ width: chatContext.active ? `${((user2_level - Math.floor(user2_level)) * 100).toFixed()}%` : '0%' }}>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-8 mt-4 flex-wrap items-center justify-center">
+                                <Link to={`/profile/${chatContext.active?.user2.unique_id}`} 
+                                    className="cursor-pointer hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center">
+                                    <span className="text-xl flex items-center gap-1">
+                                        <FiUser />
+                                        <span className="text-white/70 text-sm">Profile</span>
+                                    </span>
+                                </Link>
+                                <div className="cursor-pointer hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center">
+                                    
+                                    {/*SETTTING THE USER CONTEXT TO INVITE*/}
+
+                                    <Link to={`/game/PreRemote`} onClick={handleChallengeClick} >
+                                        <span className="text-xl flex items-center gap-1">
+                                            <VscGame />
+                                            <p className="text-white/70 text-sm">Challenge</p>
+                                        </span>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>                
                     </div>
-                </div>  
-            </div>
+
+                    <div className="">
+                    <div className="mx-3 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl overflow-x-auto whitespace-nowrap flex justify-center items-center px-4">
+                        <div className="flex gap-4">
+                            <Achievements uuid={uuid} />
+                        </div>
+                    </div>
+
+
+                        <div className=" p-5 z-10 ">
+                            <div className=" bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl p-5">
+                                <RadarChartFile radarchartData={radarchartData || { wins: 0, lose: 0, _wins: 0, _lose: 0 }} />
+                            </div>
+                        </div>  
+                    </div>
+                </>
+            }
         </div>
+
+        </>
     )
 }
 

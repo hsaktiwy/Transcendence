@@ -62,7 +62,7 @@ const Winner = () => {
           
           <div className="players-container-w Text-tt">
             {/* Add your game content here */}
-            <h1 >{Winner}</h1>
+            <h1 >{winner}</h1>
           </div>
           <div className="button-container-w">
             <Frame

@@ -21,6 +21,8 @@ const PreTournament = () => {
   const [player4Name, setPlayer4Name] = useState('');
 
   const { setLocalGamesData } = useLocalGamesContext();
+  const { LocalGamesData } = useLocalGamesContext();
+
   const handleLaunch = () => {    
       setLocalGamesData({
         gametype: 'Tournament', // Local, Multiplayer, Tournament 
@@ -28,7 +30,9 @@ const PreTournament = () => {
         player2: player2Name,
         player3: player3Name,
         player4: player4Name,
-        Winner : null,
+        TBD1   : null,
+        TBD2   : null,
+        Winner : null
       });
       navigate('/game/Tournament');
   };

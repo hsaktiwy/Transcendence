@@ -53,16 +53,18 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email_validator = EmailValidator(message="It should be a valid email address!")
     ONLINE    = 'online'
     IN_GAME   = 'in_game'
+    IN_SEARCH = 'in_search'
     READY     = 'ready'
-    ALREADYIN = 'alreadyin'
+    ALREADYIN = 'already_in'
     END_GAME  = 'end_game'
     OFFLINE   = 'offline'
     
     STATE_CHOICES = [
         (ONLINE,  'Online'),
         (IN_GAME, 'In Game'),
+        (IN_SEARCH, 'In Search'),
         (END_GAME,'End Game'),
-        (ALREADYIN,'alreadyin'),
+        (ALREADYIN,'Already In'),
         (READY,   'Ready'),
         (OFFLINE, 'Offline'),
     ]

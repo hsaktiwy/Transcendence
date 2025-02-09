@@ -60,7 +60,7 @@ function Achievements({ uuid }: Prop) {
 
   return (
     <>
-     <ScrollArea className="w-full overflow-x-auto whitespace-nowrap rounded-md">
+     <ScrollArea className="w-full overflow-x-auto h-40 xxl:h-56 whitespace-nowrap rounded-md">
   <div className="flex gap-4 justify-center">
     {achievementsData.map((achievement, index) => (
       <motion.div

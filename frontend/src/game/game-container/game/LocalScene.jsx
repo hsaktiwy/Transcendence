@@ -769,29 +769,39 @@ const LocalGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
-
-            if (playerScore === 7){
-                setLocalGamesData({
-                    gametype: 'local', // Local, Multiplayer, Tournament 
-                    player1: null,
-                    player2: null,
-                    player3: null,
-                    player4: null,
-                    Winner  : LocalGamesData.player1
-                });    
+            console.log('====> Getted Info : ', LocalGamesData);
+            if (LocalGamesData.gametype == 'Tournament'){
+                console.log('====> ON tournamentooooooo');
+                if (playerScore === 7){
+                    if (LocalGamesData.TBD1 && LocalGamesData.TBD2){
+                        LocalGamesData.winner = LocalGamesData.TBD1;
+                    }
+                    else if (LocalGamesData.TBD1){
+                        LocalGamesData.TBD2   = LocalGamesData.player1;
+                    }else{
+                        LocalGamesData.TBD1   = LocalGamesData.player1;
+                    }
+                }
+                else {
+                    if (LocalGamesData.TBD1 && LocalGamesData.TBD2){
+                        LocalGamesData.winner = LocalGamesData.TBD2;
+                    }
+                    else if (LocalGamesData.TBD1){
+                        LocalGamesData.TBD2   = LocalGamesData.player2;
+                    }else{
+                        LocalGamesData.TBD1   = LocalGamesData.player2;
+                    }
+                }
+                
+                setLocalGamesData(
+                    LocalGamesData
+                );    
+                navigate("/game/Tournament");
             }
-            else {
-                setLocalGamesData({
-                    gametype: 'local', // Local, Multiplayer, Tournament 
-                    player1: null,
-                    player2: null,
-                    player3: null,
-                    player4: null,
-                    Winner  : LocalGamesData.player2
-                });     
+            else{
+                navigate("/game/Winner")
             }
 
-            navigate("/game/Winner")
         }
       }, [playerScore, aiScore]);
 
