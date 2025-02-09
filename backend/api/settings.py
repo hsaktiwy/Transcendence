@@ -31,7 +31,7 @@ JWT_SECRET_KEY = os.getenv('DJANGO_JWT_SECRET_KEY')#'4484877278439867979ffd7ecc7
 ACCESS_TOKEN_LIFETIME = 10
 REFRESH_TOKEN_LIFETIME = 7
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # settings.py
 

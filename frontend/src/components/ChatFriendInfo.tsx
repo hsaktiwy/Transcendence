@@ -52,7 +52,6 @@ function ChatFriendInfo(){
             const  responce:boolean = resp.data['status']
             if (Status.length)
                 setStatus((responce) ? 'UnBlock' : 'Block')
-            console.log(resp)
         }
         catch(err)
         {
@@ -68,7 +67,6 @@ function ChatFriendInfo(){
     useEffect(()=>{
         BlockStatusCheck()
         fetchMatches()
-        console.log('data fetched ',  radarchartData)
     },[userContext.action, chatContext.active,  /*radarchartData*/])
 
     return(
