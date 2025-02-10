@@ -46,10 +46,10 @@ function OnlineFriends() {
                                     </div>
                                     <p className="font-medium text-sm text-white/60 px-3 break-words text-center">No friends, no drama. Enjoy the peace! ...or add some friends.</p>
                                     <div className='chat-direction'>
-                                        <div className='chat-button'>
-                                            <img style={{width: '20px'}} className="size-image" src="/images/chat_bubble.svg" />
+                                        {/* <div className='chat-button  h-36'>
+                                            <img style={{width: '20px'}} className="" src="/images/chat_bubble.svg" />
                                                 <h3 style={{fontWeight: '400', margin:'0px 4px', fontSize: '12px'}}>Add friends</h3>
-                                        </div>
+                                        </div> */}
                                     </div>
                                             
                                 </div>

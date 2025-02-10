@@ -5,6 +5,9 @@ services:
     env_file:
       - .env
     restart: always
+    # WHY THIS PIORTS IS HERE ? (NO NEED FOR IT : HSAKTIWY QUESTION)
+    # ports:
+    #   - "5432:5432"
     networks:
       - transendence
   gunicorn_django:
@@ -42,11 +45,15 @@ services:
     restart : always
     volumes:
       - ./frontend:/app
+      - ./backend/media:/app/media
+      - ./backend/static:/app/static
     env_file:
       - .env
     depends_on:
       - daphne_django
       - gunicorn_django
+    ports:
+      - "4444:443"
     networks:
       - transendence
   redis:
@@ -57,24 +64,7 @@ services:
       - transendence
     depends_on:
       - postgres-db
-  nginx:
-    build: nginx/.
-    container_name: nginx
-    restart: always
-    env_file:
-      - .env
-    depends_on:
-      - daphne_django
-      - gunicorn_django
-      - frontend
-    volumes:
-          - ./backend/media:/app/media
-          - ./backend/static:/app/static
-          # - ./frontend/dist:/app/dist
-    ports:
-      - "4444:443"
-    networks:
-      - transendence
+
 networks:
   transendence:
     name: transendence
