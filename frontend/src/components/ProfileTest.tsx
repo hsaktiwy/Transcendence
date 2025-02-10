@@ -24,7 +24,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 
 import ProfileLocked from "./blocked/Profileblocked.tsx";
-import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface } from "@/utils/interfaces.ts";
+import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface, UserRankResponse } from "@/utils/interfaces.ts";
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
@@ -37,6 +37,8 @@ const ProfileTest  = () =>{
     const [matches, setMatches] = useState<LoseWins | undefined>()
     const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
+    const [level, setLevel] = useState<UserRankResponse | undefined>();
+
     // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     // const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
     
@@ -68,7 +70,22 @@ const ProfileTest  = () =>{
         catch (err){
             console.error("dddddd======????",err)
     }}
-
+    const fetchLevle = async () =>
+        {
+            try{
+                const req = {
+                    url: `/profile/get_rank_user/${uuid}/`,
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req);
+                setLevel(resp.data);
+                console.log('hiiiiii from here  rank of user -->>>>> ', resp.data);
+            }
+            catch (err){
+                console.error("dddddd======????",err)
+            }
+        }
     const fetchMatches = async () =>
     {
         try{
@@ -110,7 +127,7 @@ const ProfileTest  = () =>{
     };
     useEffect(()=>
     {
-        console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
+        // console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
 
     }, [userMatchHistory])
     
@@ -147,6 +164,7 @@ const ProfileTest  = () =>{
     }
   };
 
+
   const BlockStatusCheck = async ()=>
     {
         try{
@@ -166,7 +184,7 @@ const ProfileTest  = () =>{
     }
     const waitData=  async() =>
         {
-            
+            await fetchLevle();
             await fetchLineChart();
             await fetchMatches();
             await getMatchHistoryData(matchHistoryType);
@@ -196,7 +214,10 @@ const ProfileTest  = () =>{
         waitData()
     }
    },[uuid, userContextConsumer.blockList, matchHistoryType])
+//    console.log('print user data ->>>>>>>>>>> here her here !!', profileData);
    useEffect(()=>{
+
+
    },[])
 
     return(
@@ -227,21 +248,42 @@ const ProfileTest  = () =>{
                         <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 2xl:col-span-10">
                                 <div className="flex relative items-cente justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                                     <div className="w-full  h-full  grid grid-rows-2 ">
-                                            <div className="relative bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 "
-                                            style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})`,}}>
-                                            <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
-                                                <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
-                                                    <div className="  h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
-                                                        <div className=" text-xl text-white font-semibold xxl:text-lg ">{profileData?.login}</div>
+                                    <div
+                                        className="relative bg-cover bg-center shadow-md px-5 lg:px-10 rounded-3xl grid grid-rows-1 transition-all duration-300 ease-in-out"
+                                        style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})` }}
+                                        >
+                                            {/* Dark overlay for the background, stays behind the content */}
+                                            <div className="absolute  inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all duration-300 ease-in-out rounded-3xl"></div>
+                                            
+                                            {/* Content */}
+                                            <div className="relative  z-10">
+                                                <div className="h-20 hidden  sm:flex items-center xxl:items-end ">
+                                                <div className="h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
+                                                    <div className="text-xl text-white font-semibold xxl:text-lg">{profileData?.login}</div>
+                                                </div>
+                                                </div>
+
+                                                <div className="flex flex-col mt-7 xxl:mt-12  justify-center items-center ">
+                                                <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
+                                                <div className="h-3 w-[100%] bg-[#444444] rounded-full">
+                                                    <div
+                                                            style={{
+                                                                width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%` // Reset at every level
+                                                            }}
+                                                            className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
+                                                            /> 
+
+                                                    </div>
+                                                    <div className="w-full text-right">
+                                                        <div className="text-xs font-bold text mr-3">
+                                                        {level?.xp}xp
+                                                        <span className="text-[9px]"> / </span>
+                                                        {(Math.floor(level?.level ?? 0) + 1) * 1000}xp
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            <div className=" flex flex-col justify-center  items-center mb-7">
-                                                <h1 className="text-2xl font-semibold xxl:text-3xl">7.5 Level</h1>
-                                                <div className="h-3 w-[100%]  bg-[#444444] rounded-full">
-                                                    <div className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"></div>
-                                                </div>
                                             </div>
-                                        </div>
+                                            </div>
                                         <Achievements uuid={uuid}/>
                                     </div>    
                                    
