@@ -30,8 +30,12 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
         const handleChallengeClick = () => {
             setReomteGameData({
                 form_game_invite: true,
-                invitee: 'You  ',
-                invited: 'Invitee'
+                inviter_login: inviter?.login,
+                invited_login: invited?.login,
+                inviter_image: inviter?.profile_pic,
+                invited_image: invited?.profile_pic,
+                inviter_id   : inviter?.unique_id,
+                invited_id   : invited?.unique_id,
             });
         };
     ////---------------------------
@@ -39,6 +43,10 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
     const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
+
+    const inviter = chatContext?.active?.user1;
+    const invited = chatContext?.active?.user2;
+    
     const [isblock, setIsbLock] = useState<boolean>(false);
     const {username} = useParams();
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
