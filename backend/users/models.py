@@ -73,6 +73,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     login = models.CharField(max_length=20, unique=True, blank=True, null=True, validators=[username_validator])
     firstName = models.CharField(max_length=50,validators=[name_validator])
     lastName = models.CharField(max_length=50, validators=[name_validator])
+    level = models.FloatField(default=0.0)  # Level
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address", validators=[email_validator])
     two_factor_auth = models.BooleanField(default=False)
     two_factor_auth_code = models.CharField(max_length=32, default=pyotp.random_base32)

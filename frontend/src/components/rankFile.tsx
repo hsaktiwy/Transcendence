@@ -16,7 +16,7 @@ function RankFile() {
         throw new Error("userContext must be used within a UserProvider");
     const {userRank} = userContextConsumer;
     const currentUser = userRank?.find(user => user.user.login === userContextConsumer?.userData?.login);
-    
+    console.log('hiii from user rank ', currentUser)
     useEffect(()=>{
         if(userRank.length)
             console.log('user Rank is here ->>', userRank);
@@ -38,7 +38,7 @@ function RankFile() {
                                         {userRank?.map((user, index) => (
                                             <div key={user.user.email} className="w-full m-1">
                                             <div className="h-16 gap-3 md:px-5 flex items-center">
-                                                <h1 className="text-xl md:text-base font-medium">#{index + 1}</h1>
+                                                <h1 className="text-xl md:text-base font-medium">#{user.profile.rank}</h1>
                                                 <div className="min-w-32 w-[100%] h-full flex items-center">
                                                 <img className="w-11 aspect-square rounded-full object-cover " src={`${import.meta.env.VITE_axiosPath}${user.user.profile_pic}`} alt={user.user.login} />
                                                 <div className="mx-3">
@@ -46,7 +46,7 @@ function RankFile() {
                                                     <h1 className="font-normal opacity-80 text-xs text-left">@{user.user.login}</h1>
                                                 </div>
                                                 </div>
-                                                <div className="hidden xxl:block text-sm"> lvl {user.profile.level}</div>
+                                                <div className="hidden xxl:block text-sm"> lvl {user.profile.level.toFixed(2)}</div>
                                             </div>
                                             <div className="border-rank my-1 w-full bg-[#5E97A9] h-[1px] rounded-full"></div>
                                             </div>
@@ -62,7 +62,7 @@ function RankFile() {
                                                     <h1 className="font-normal opacity-80 text-xs text-left">@{currentUser?.user.login}</h1>
                                                 </div>
                                                 </div>
-                                                <div className="hidden xxl:block text-sm"> {currentUser?.profile.level}</div>
+                                                <div className="hidden xxl:block text-sm"> {currentUser?.profile.level.toFixed(2)}</div>
                                             </div>
                                         </div>
                                     </div>
