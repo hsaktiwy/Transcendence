@@ -44,8 +44,10 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         {
           try {
             const { type, ...data } = JSON.parse(message.data);
+            console.log(type, data)
             if (type === 'send_message'){
               if (data.ConversationType == 'Message') {
+                console.log("hmm", type, data)
                 const message_received: Message = {
                     id: data.message_id,
                     sender: data.user,

@@ -12,9 +12,6 @@ fclean: clean
 	docker system prune -af
 	docker volume prune -f
 
-clean_docker:
-	docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
-
 re: fclean all
 
 .PHONY: re fclean all clean
