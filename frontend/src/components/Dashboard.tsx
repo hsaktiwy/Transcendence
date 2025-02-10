@@ -25,7 +25,7 @@ import SkeletonDashboard from "./Skeletons/SkeletoneDashboard.tsx";
 import { WebSocketContext } from "@/utils/WSContext.tsx";
 import mailman from "@/utils/AxiosFetcher.ts";
 import { useParams } from "react-router-dom";
-import { LinechartData, LoseWins, RadarChartInterFace } from "@/utils/interfaces.ts";
+import { LinechartData, LoseWins, RadarChartInterFace,  } from "@/utils/interfaces.ts";
 
 Chart.register(CategoryScale);
 
@@ -65,6 +65,7 @@ const Data = [
 function Dashboard(){
 
   const userContextConsumer = useContext(UserContext);
+  // const 
   const wsConsumer = useContext(WebSocketContext)
   const [isLoading, setIsLoading] = useState(true);
   const [matches, setMatches] = useState<LoseWins | undefined>()
@@ -73,6 +74,7 @@ function Dashboard(){
   
 
   const uuid = userContextConsumer?.userData?.unique_id;
+  const level = userContextConsumer?.level
   console.log('hiii user name', userContextConsumer?.userData?.login);
   const fetchLineChart = async () =>
     {
@@ -183,31 +185,46 @@ function Dashboard(){
               <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                   <div className=" text-white  w-full ">
                           <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]   shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
-                                                          <div className="w-full h-full  grid grid-rows-2 ">
-                                                          <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
-                                                              style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
-                                                          <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
-                                                                  <div className=" h-20  flex items-center 2xl:items-end ">
-                                                                          <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
-                                                                              {/* <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-xl"></div> */}
-                                                                              <div className="relative text-lg text-white font-medium">
-                                                                                {`Hello ${userContextConsumer.userData?.firstName}`} 
-                                                                                
-                                                                              </div>
-                                                                            </div>
+                              <div className="w-full h-full  grid grid-rows-2 ">
+                              <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
+                                  style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
+                              <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
+                                      <div className=" h-20  flex items-center 2xl:items-end ">
+                                              <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
+                                                  {/* <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-xl"></div> */}
+                                                  <div className="relative text-lg text-white font-medium">
+                                                    {`Hello ${userContextConsumer.userData?.firstName}`} 
+                                                    
+                                                  </div>
+                                                </div>
 
-                                                                      </div>
-                                                                      <div className=" flex flex-col justify-center  items-center mb-7">
-                                                                          <h1 className="text-2xl font-medium 2xl:font-semibold 2xl:text-3xl">7.5 Level</h1>
-                                                                          <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
-                                                                              <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                                          <Achievements uuid={uuid}/>
-                                                          </div>    
-                                                      </div>
                                           </div>
+                                          
+                                          <div className="flex flex-col  justify-center items-center ">
+                                              <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
+                                              <div className="h-3 w-[100%] bg-[#444444] rounded-full">
+                                              <div
+                                                      style={{
+                                                          width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%` // Reset at every level
+                                                      }}
+                                                      className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
+                                                      /> 
+
+                                              </div>
+                                              <div className="w-full text-right">
+                                                <div className="text-xs font-bold text mr-3">
+                                                  {level?.xp}xp
+                                                  <span className="text-[9px]"> / </span>
+                                                  {(Math.floor(level?.level ?? 0) + 1) * 1000}xp
+                                                </div>
+                                              </div>
+
+                                          </div>
+                                      </div>
+                                              <Achievements uuid={uuid}/>
+                              </div>    
+                          </div>
+                  </div>
               </div>
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">

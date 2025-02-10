@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { cookies } from "../auth/Cookie";
 import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
-import { Action, ActionType, friendship, MatchHistoryDataInterface, MiniNotification} from "@/utils/interfaces";
+import { Action, ActionType, friendship, MatchHistoryDataInterface, MiniNotification, UserRankResponse} from "@/utils/interfaces";
 import { toast } from "react-toastify";
 import NotificationToast from "./NotificationToast";
 import { WebSocketContext } from "../utils/WSContext";
@@ -67,6 +67,8 @@ interface UserContextInterface{
     setUserMatchHistory: React.Dispatch<React.SetStateAction<MatchHistoryDataInterface[]> >;
     userRank: rankInterface[];
     setUserRank:React.Dispatch<React.SetStateAction<rankInterface[]> >;
+    level :UserRankResponse  | undefined;
+    setLevel:React.Dispatch<React.SetStateAction<UserRankResponse  | undefined> >;
 
     
 }
@@ -113,6 +115,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     const [blockList, setBlockList] = useState<ProfileDataInterface[]>([])
     const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     const [userRank, setUserRank] = useState<rankInterface[]>([]);
+    const [level, setLevel] = useState<UserRankResponse | undefined>();
+    
     const [convsUpdate, setConvsUpdate] = useState<boolean>(false)
     const location = useLocation()
 
@@ -123,6 +127,21 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             toast.error(data.content)
 
     }
+    const fetchLevle = async () =>
+        {
+            try{
+                const req = {
+                    url: `/profile/get_rank_user/${userData?.unique_id}/`,
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req);
+                setLevel(resp.data);
+            }
+            catch (err){
+                console.error("dddddd======????",err)
+            }
+        }
     const rankData = async() =>
     {
         try{
@@ -403,7 +422,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         await fetchReceivedFriendRequest()
         await fetchSentFriendRequest()
         await fetchBlockList()
-
+        await fetchLevle()
         await rankData()
         setReady(true)
     }
@@ -420,7 +439,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
-        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank}}>
+        <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, notificationReaded, setNotificationReaded, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank, level, setLevel}}>
             {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {ready  ? children : <LoadingIndecator/>}
             {/* { children } */}

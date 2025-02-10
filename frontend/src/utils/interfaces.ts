@@ -93,3 +93,13 @@ export interface UserRankResponse {
     level: number;  
 
 }
+export interface ProfileRank
+{
+    rank:number;
+    level:number;
+}
+export interface rankInterface
+{
+    profile:ProfileRank;
+    user:ProfileDataInterface;
+}
