@@ -18,6 +18,7 @@ const PreRemote = () => {
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
   
+  const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
 
   const user = useContext(UserContext)
 
@@ -33,10 +34,70 @@ const PreRemote = () => {
   let show = false;
   console.log('===> is from game invite : ', ReomteGameData.form_game_invite);
   if (ReomteGameData.form_game_invite === true){
-      INVITE_TEXT = ReomteGameData.invitee + ' VS ' + ReomteGameData.invited
+      INVITE_TEXT = ReomteGameData.inviter_login + ' VS ' + ReomteGameData.invited_login
       show = true
     //sending user's and it's opponent (invitee) infos to the backend and inform it it's not a normal matchmaking (setting room's status to INVITE_ROOM) retreive the room name in the frontend
     //fire a notification to the invited with th room name
+    
+    ///initiate the connection to the consumer telling it about the game
+      
+      // Create WebSocket connection
+
+      useEffect(()=>{
+          const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+          console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+          
+          socket.onopen = () => {
+            console.log("Matchmaking WebSocket Connected");
+          };
+          
+          socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            if (data['type'] === 'match_found') {
+              console.log("=> Match Found:");
+              console.log("   => room_name     :", data['room_name']);
+              console.log("   => my_role       :", data['role']);
+              console.log("   => user_name     :", data['user_name']);
+              console.log("   => opponent_name :", data['opponent_name']);
+              console.log("   => my_id         :", data['my_id']);
+              console.log("   => opponent_id   :", data['opponent_id']);
+              
+              
+              // Update Reomte context
+              setReomteGameData({
+                room_name: data['room_name'],
+                role     : data['role'],
+                my_user  : data['user_name'],
+                opponent : data['opponent_name'],
+                p1_id    : data['my_id'],
+                p2_id    : data['opponent_id'],
+                winner   : null
+              });
+              // Close the socket and navigate to RemoteGame
+              socket.close();
+              navigate('/game/RemoteGame');
+            }
+          };
+          
+          // socket.onerror = (error) => {
+          //   console.error("WebSocket Error:", error);
+          //   setIsSearching(false);
+          // };
+          
+          // socket.onclose = () => {
+          //   console.log("Matchmaking WebSocket Closed");
+          // };
+          
+          setMatchSocket(socket);
+        ///------- 
+
+      }, [])
+
+
+  }
+  else{
+    show = false
   }
 
   const startMatchmaking = () => {
@@ -122,10 +183,29 @@ const PreRemote = () => {
           <p>TAP ON THE NAME OR AVATAR TO CHANGE IT.</p>
         </div>
         <center>
-        {show && (<center>
-          <div className='game-options-header-r text-wrapper' >
-            <h1>{INVITE_TEXT}</h1></div>
-        </center>)}
+        {show && (
+          <div>
+            <div className="invite-header">
+              <h1 style={{fontSize:'35px'}} >{INVITE_TEXT}</h1>
+              <p>Waiting for you friend to join ...</p>
+            </div>
+            <div className="players-container-r">
+              <div className="circle-image">
+                <img
+                  src={backendPath + ReomteGameData.inviter_image}
+                  alt="Inviter"
+                  />
+              </div>
+              <span className="versus">VS</span>
+              <div className="circle-image">
+                <img
+                  src={backendPath + ReomteGameData.invited_image}
+                  alt="Invited"
+                  />
+              </div>
+            </div>
+          </div>
+        )}
         
         {!show && (<div className="players-container-r">
             <div className="buttona-r">
