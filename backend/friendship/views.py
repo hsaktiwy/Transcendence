@@ -1,54 +1,12 @@
-from django.http import HttpResponse
 from django.db.models import Q
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from .models import FriendShip, FriendRequest, RelationShipStatus, BlockList
-from .serializers import FriendshipSerializer, FriendRequestSerializer, BlockListSerializer
+from .serializers import FriendRequestSerializer, BlockListSerializer
 from users.models import MyUser
-from conversations.models import Message
-
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view
 from conversations.models  import Channel
 from users.serializers import PublicUserSerializer
-# # Create your views here.
-
-class FriendRequestList(generics.ListAPIView):
-	permission_classes = [AllowAny]
-	serializer_class = FriendshipSerializer
-	def get_sentedRequest(self):
-		user_id = self.kwargs['user_id']
-		# Get all pending friend requests related to the user
-		return FriendShip.objects
-
-import random
-
-# Jhin and Jinx quotes
-jhin_quotes = [
-    "Art requires a certain... cruelty.",
-    "In carnage, I bloom, like a flower in the dawn.",
-    "I will make you beautiful.",
-    "Behind every mask... is another mask."
-]
-
-jinx_quotes = [
-    "Pow! Ha ha ha!",
-    "I'm crazy! Got a doctor's note.",
-    "Rules are made to be broken... like buildings! Or people!",
-    "Time to put on my dancing shoes!"
-]
-
-# Randomize between Jhin or Jinx, then select a random quote
-def random_quote():
-    character = random.choice(["Jhin", "Jinx"])
-    if character == "Jhin":
-        quote = random.choice(jhin_quotes)
-    else:
-        quote = random.choice(jinx_quotes)
-
-    return f"{character} says: \"{quote}\""
-##################################################################
 
 @api_view(['POST'])
 def AcceptFriendRequest(request, id):
@@ -74,7 +32,6 @@ def AcceptFriendRequest(request, id):
 			channel = Channel.objects.create()
 			channel.users.add(friend_request.sender)
 			channel.users.add(friend_request.receiver)
-			# message = Message.objects.create(sender=friend_request.sender, id_channel_fk=channel, content=random_quote())
 		return Response({'message': 'Accept request sent'}, status=status.HTTP_200_OK)
 	except Exception as e:
 		return Response({'Error': 'Something went wrong?' + str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -84,6 +41,11 @@ def BlockUser(request, unique_id):
 	try:
 		blocked_user = MyUser.objects.get(unique_id=unique_id)
 		myuser = request.user
+		# first let check if i m already blocked
+		blocked_user_list,create  = BlockList.objects.get_or_create(user=blocked_user)
+		check  = blocked_user_list.block_users.filter(id=myuser.id).exists()
+		if check:
+			return Response({'message': 'User '+unique_id+' already blocking you', 'status': 'unblocked'}, status=status.HTTP_200_OK)
 		list, create = BlockList.objects.get_or_create(user=myuser)
 		check = list.block_users.filter(id=blocked_user.id).exists()
 		if (not check):
@@ -97,7 +59,7 @@ def BlockUser(request, unique_id):
 				friendship.first().delete()
 			if len(f_request) > 0:
 				f_request.first().delete()
-			
+
 		return Response({'message': 'User '+unique_id+' in the Block List', 'status': 'blocked'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
@@ -220,17 +182,7 @@ def CancelFriendRequest(request, id):
 		return Response({'status': 'Done'}, status=status.HTTP_200_OK)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
-# class FriendRequestSentList(generics.ListAPIView):
-#     serializer_class = FriendRequestSerializer
-#     def get_queryset(self):
-#         user=self.request.user
-#         return FriendRequest.objects.filter(sender=user, status='pending')
 
-# class FriendRequestReceivedList(generics.ListAPIView):
-#     serializer_class = FriendRequestSerializer
-#     def get_queryset(self):
-#         user=self.request.user
-#         return FriendRequest.objects.filter(receiver=user, status='pending')
 @api_view(['GET'])
 def FriendRequestReceivedList(request):
 	try:
@@ -274,12 +226,6 @@ def FriendsList(request):
 		return Response(serialized_data.data, status=status.HTTP_200_OK)
 	except Exception as e:
 		return Response({'Error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
-	# try:
-	# 	user = request.user
-	# 	FriendRequests = FriendRequest.objects.filter(sender=user)
-
-	# except:
-	# 	return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def GetBlockList(request):

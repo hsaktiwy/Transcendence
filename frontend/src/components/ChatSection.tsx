@@ -129,7 +129,7 @@ function ChatSection(){
         // if (data)
         // {
         const channel_id = data.channel_id
-        // console.log('wa hafida ', convs, channel_id)
+        console.log('wa hafida ', convs, channel_id)
         if (convs)
         {
             if (convs?.filter(conv => conv.channelId === channel_id).length === 0)

@@ -82,8 +82,8 @@ MIDDLEWARE = [
     # 'api.utils.JWTAuthHTTPMiddlware',
     'silk.middleware.SilkyMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
-    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.test_____test.DebuginMidleware'
 ]
 
 
