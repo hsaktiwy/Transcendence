@@ -18,6 +18,7 @@ const PreRemote = () => {
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
   
+  const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
 
   const user = useContext(UserContext)
 
@@ -33,10 +34,14 @@ const PreRemote = () => {
   let show = false;
   console.log('===> is from game invite : ', ReomteGameData.form_game_invite);
   if (ReomteGameData.form_game_invite === true){
-      INVITE_TEXT = ReomteGameData.invitee + ' VS ' + ReomteGameData.invited
+      INVITE_TEXT = ReomteGameData.inviter_login + ' VS ' + ReomteGameData.invited_login
       show = true
     //sending user's and it's opponent (invitee) infos to the backend and inform it it's not a normal matchmaking (setting room's status to INVITE_ROOM) retreive the room name in the frontend
     //fire a notification to the invited with th room name
+      
+  }
+  else{
+    show = false
   }
 
   const startMatchmaking = () => {
@@ -122,10 +127,29 @@ const PreRemote = () => {
           <p>TAP ON THE NAME OR AVATAR TO CHANGE IT.</p>
         </div>
         <center>
-        {show && (<center>
-          <div className='game-options-header-r text-wrapper' >
-            <h1>{INVITE_TEXT}</h1></div>
-        </center>)}
+        {show && (
+          <div>
+            <div className="invite-header">
+              <h1 style={{fontSize:'35px'}} >{INVITE_TEXT}</h1>
+              <p>Waiting for you friend to join ...</p>
+            </div>
+            <div className="players-container-r">
+              <div className="circle-image">
+                <img
+                  src={backendPath + ReomteGameData.inviter_image}
+                  alt="Inviter"
+                  />
+              </div>
+              <span className="versus">VS</span>
+              <div className="circle-image">
+                <img
+                  src={backendPath + ReomteGameData.invited_image}
+                  alt="Invited"
+                  />
+              </div>
+            </div>
+          </div>
+        )}
         
         {!show && (<div className="players-container-r">
             <div className="buttona-r">
