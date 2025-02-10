@@ -29,7 +29,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 import { SlLock } from "react-icons/sl";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
-import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface, UserRankResponse } from "@/utils/interfaces.ts";
+import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface, UserRankResponse, rankInterface } from "@/utils/interfaces.ts";
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
@@ -44,6 +44,7 @@ const ProfileTest  = () =>{
     const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
     const [level, setLevel] = useState<UserRankResponse | undefined>();
+
     // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     // const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
     
@@ -184,6 +185,7 @@ const ProfileTest  = () =>{
     }
   };
 
+
   const BlockStatusCheck = async ()=>
     {
         try{
@@ -271,35 +273,38 @@ const ProfileTest  = () =>{
                                         className="relative bg-cover bg-center shadow-md px-5 lg:px-10 rounded-3xl grid grid-rows-1 transition-all duration-300 ease-in-out"
                                         style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})` }}
                                         >
-  {/* Dark overlay for the background, stays behind the content */}
-  <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all duration-300 ease-in-out rounded-3xl"></div>
-  
-  {/* Content */}
-  <div className="relative z-10">
-    <div className="h-20 hidden sm:flex items-center xxl:items-end ">
-      <div className="h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
-        <div className="text-xl text-white font-semibold xxl:text-lg">{profileData?.login}</div>
-      </div>
-    </div>
+                                            {/* Dark overlay for the background, stays behind the content */}
+                                            <div className="absolute  inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all duration-300 ease-in-out rounded-3xl"></div>
+                                            
+                                            {/* Content */}
+                                            <div className="relative  z-10">
+                                                <div className="h-20 hidden  sm:flex items-center xxl:items-end ">
+                                                <div className="h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
+                                                    <div className="text-xl text-white font-semibold xxl:text-lg">{profileData?.login}</div>
+                                                </div>
+                                                </div>
 
-    <div className="flex flex-col justify-center items-center mb-7">
-      <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
-      <div className="h-3 w-[100%] bg-[#444444] rounded-full">
-        <div
-          style={{
-            width: `${((level?.level ?? 0 - Math.floor(level?.level ?? 0)) * 100).toFixed()}%`
-          }}
-          className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
-        />
-      </div>
-      <div className="w-full text-right">
-        <div className="text-xs font-bold text mr-3">
-          {level?.xp}xp<span className="text-[9px]"> / </span>1000
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+                                                <div className="flex flex-col mt-7 xxl:mt-12  justify-center items-center ">
+                                                <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
+                                                <div className="h-3 w-[100%] bg-[#444444] rounded-full">
+                                                    <div
+                                                            style={{
+                                                                width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%` // Reset at every level
+                                                            }}
+                                                            className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
+                                                            /> 
+
+                                                    </div>
+                                                    <div className="w-full text-right">
+                                                        <div className="text-xs font-bold text mr-3">
+                                                        {level?.xp}xp
+                                                        <span className="text-[9px]"> / </span>
+                                                        {(Math.floor(level?.level ?? 0) + 1) * 1000}xp
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
                                         <Achievements uuid={uuid}/>
                                     </div>    
                                    

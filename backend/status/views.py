@@ -8,7 +8,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.utils import timezone
 from datetime import timedelta
-from game.models import Game  # Replace with your actual model import path
+from game.models import Game
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 # Create your views here.
@@ -44,36 +46,53 @@ def get_Win_Lose(request,uuid):
     except:
         return Response({'error': 'somthing went wrong'}, status=400)
 
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+
+
+
 # from .models import ProfileStatus, MyUser
 
 @api_view(['GET'])
 def get_Rank_User(request, uuid):
     try:
-        user = get_object_or_404(MyUser, unique_id=uuid)
-
+        user = MyUser.objects.get(unique_id=uuid)
         profile_status = get_object_or_404(ProfileStatus, id_user_fk=user)
 
-        xp = (profile_status.wins * 100)
-        xp += (profile_status._wins * 50)
-        xp -= profile_status.lose * 50
-        xp -= profile_status._lose * 25
-        if(xp < 0):
-            xp = 0
-        profile_status.level = xp / 1000
-        profile_status.save()
+        # Fetch the latest match
+        last_match = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).order_by('-time').first()
+
+        if not last_match:
+            return Response({'error': 'No matches found'}, status=400)
+
+        # Check if this match is already processed
+        if profile_status.last_match_id == last_match.id:
+            return Response({  # No update if match was already counted
+                'user_id': str(user.unique_id),
+                'xp': profile_status.xp,
+                'level': profile_status.level
+            }, status=200)
+
+        # Update XP only if the match is new
+        if last_match.winner == user:
+            profile_status.xp += 100  # Won the match
+        else:
+            profile_status.xp -= 50  # Lost the match
+
+        profile_status.xp = max(profile_status.xp, 0)  # Ensure XP is not negative
+        profile_status.level = profile_status.xp / 1000
+
+        # Store the last processed match
+        profile_status.last_match_id = last_match.id
+        profile_status.save(update_fields=['xp', 'level', 'last_match_id'])
 
         return Response({
             'user_id': str(user.unique_id),
-            'wins': profile_status.wins,
-            'xp': xp,
+            'xp': profile_status.xp,
             'level': profile_status.level
         }, status=200)
 
     except Exception as e:
         return Response({'error': str(e)}, status=400)
+
 
 @api_view(['GET'])
 def get_top_rank(request):
@@ -160,6 +179,8 @@ def get_achievements(request, uuid):
         profile_status = get_object_or_404(ProfileStatus, id_user_fk=user)
 
         # Get user achievements
+        
+        # last_match = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).order_by('-time').first()
         achievements = Achievements.objects.filter(id_user_fk=user)
         achievements_data = AchievementsSerializer(achievements, many=True).data
 

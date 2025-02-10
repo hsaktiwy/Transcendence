@@ -67,7 +67,7 @@ const App = () =>
   
   <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
     <BrowserRouter>
-      <Backgrounds/>
+      {/* <Backgrounds/> */}
         <AuthProvider>
           <Auth>
             <WebSocketProvider>

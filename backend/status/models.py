@@ -47,7 +47,10 @@ class ProfileStatus(models.Model):
     _wins = models.IntegerField(default=0)
     _lose = models.IntegerField(default=0)
     rank = models.IntegerField()
+    xp = models.IntegerField(default=0)
     level = models.FloatField(default=0.0)
+    last_match_id = models.IntegerField(null=True, blank=True)  # Track last processed match
+
 
 
 
@@ -100,7 +103,7 @@ class Achievements(models.Model):
     icon = models.CharField(max_length=30, null=True, blank=True) 
 
     def save(self , *arg, **kargs):
-        print("Achievements save: ", self, arg, kargs)
+        print("Achievements here ->>>>>> save: ", self, arg, kargs)
         if (self.type and not self.description):
             self.icon = ACHIEVEMENT_ICONS.get(self.type, 'firstPaddle')
             self.title = ACHIEVEMENT_TITLE.get(self.type,"No Title available.")

@@ -50,7 +50,7 @@ function Achievements({ uuid }: Prop) {
       };
       const resp = await mailman(req);
       // const array: Achievements[] = resp.data as Achievements[];
-      console.log('data ->>>>>>\n', resp.data)
+      console.log('data achivement ->>>>>>\n', resp.data)
       setAchievementsData(resp.data.achievements);
       setWins(resp.data.wins);
     } catch (e) {
@@ -64,17 +64,10 @@ function Achievements({ uuid }: Prop) {
         
         if(wins >= game_numbers)
           return (game_numbers)
-        // else if(wins <=)
       }
 
       return 0
   }
-  const splitDescription = (text: string, wordCount: number) => {
-    const words = text.split(" ");
-    const firstPart = words.slice(0, wordCount).join(" ");
-    const restPart = words.slice(wordCount).join(" ");
-    return { firstPart, restPart };
-  };
 
 
   useEffect(() => {
@@ -152,9 +145,9 @@ function Achievements({ uuid }: Prop) {
               
               <div className="flex flex-col justify-center items-center">
                 <img src={`../achievement/${achievement.icon}.svg`} className="w-10 text-[#5E97A9]" alt="Paddle" />
-                <div className="text-sm text-center xl:text-lg font-semibold mt-2">
+                <div className="text-sm text-center xxl:text-lg font-semibold mt-2">
                   <p>{achievement.title}</p>
-                  <p className="text-gray-500 text-sm   w-full text-center px-2 break-words">{achievement.description}</p>
+                  <p className="text-gray-500 text-[9px]  xxl:text-sm w-full text-center px-2 break-words">{achievement.description}</p>
                 </div>
               </div>
             </div>
