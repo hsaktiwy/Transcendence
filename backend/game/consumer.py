@@ -387,17 +387,17 @@ def create_game(type, user_p1, user_p2, winner, loser, score_p1, score_p2):
 
 
 # def Show_Rooms(Rooms):
-    print("\n==> All rooms :")
-    # for room in Rooms:
-    #     if len(room) >= 1:
-            print("  => room :", room[0])
-    #         for _ in range(len(room) - 1):
-    #             if type(room[_ + 1]) == list:
-                    print("   => player :", room[_ + 1][0].login, "\t\tstate :", room[_ + 1][0].state)
-    #             else:
-                    print("   => state  :", room[_ + 1])
+    # print("\n==> All rooms :")
+    # # for room in Rooms:
+    # #     if len(room) >= 1:
+    #         print("  => room :", room[0])
+    # #         for _ in range(len(room) - 1):
+    # #             if type(room[_ + 1]) == list:
+    #                 print("   => player :", room[_ + 1][0].login, "\t\tstate :", room[_ + 1][0].state)
+    # #             else:
+    #                 print("   => state  :", room[_ + 1])
                 
-    print("==> End Printing room names.\n\n")
+    # print("==> End Printing room names.\n\n")
 
 def remove_room(room_name, Rooms):
     for i, room in enumerate(Rooms):
