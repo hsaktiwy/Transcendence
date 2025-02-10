@@ -35,7 +35,8 @@ const PreRemote = () => {
   if (ReomteGameData.form_game_invite === true){
       INVITE_TEXT = ReomteGameData.invitee + ' VS ' + ReomteGameData.invited
       show = true
-    //sending user's and it's opponent (invitee) infos to the backend and inform it it's not a normal matchmaking (setting room's status to INVITE_ROOM) 
+    //sending user's and it's opponent (invitee) infos to the backend and inform it it's not a normal matchmaking (setting room's status to INVITE_ROOM) retreive the room name in the frontend
+    //fire a notification to the invited with th room name
   }
 
   const startMatchmaking = () => {
