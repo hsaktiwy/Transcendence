@@ -107,6 +107,50 @@ class ApiConsumer(WebsocketConsumer):
         #create a room set it to Invited state queue the first player till the second joins / the force sync is mandatory
         #check if it's invited match 
         #socket-route/invite/second-player-unique-id
+
+        path = self.scope['path']  # e.g. '/api/server-endpoint-socket/invite/XYZ-123'
+
+        if path.endswith('/'):
+            path = path[:-1]
+
+        parts = path.split('/')
+        #['', 'api', 'server-endpoint-socket', 'invite', 'XYZ-123']
+
+        invited_id = None
+
+        # Check if the next-to-last piece is 'invite'
+        # for part in parts:
+        #     print('====>', part)
+
+        if len(parts) == 4 and parts[-2] == 'invite':
+            invited_id = parts[-1]
+            print("Invite mode. Unique ID:", invited_id)
+            self.accept()
+            opponent =  MyUser.objects.filter(unique_id=invited_id).first()
+            #send the match_found to both the players
+            # self.send(json.dumps({
+            #     'type': 'match_found',
+            #     'role': 'p1',
+            #     'my_id': opponent.unique_id,
+            #     'room_name': 'Bit_n3as',
+            #     'opponent_id': invited_id,
+            #     'color': 'white',
+
+            #     'user_name' : user.login,
+            #     'opponent_name':opponent.login,
+            # }, default=str))
+
+            #send to the second player
+            return
+        else:
+            print("No invite segment in the path.")
+            pass 
+
+
+        # matcha()
+
+
+
         
         #INVITE_PROCESS
 
