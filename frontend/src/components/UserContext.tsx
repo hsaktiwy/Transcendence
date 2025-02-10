@@ -132,6 +132,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                method: 'GET',
            };
            const resp = await mailman(req);
+           console.log('resp data rank ->>', resp.data)
            if(resp.data.profiles)
             setUserRank(resp.data.profiles);
         }

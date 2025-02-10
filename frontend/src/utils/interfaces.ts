@@ -84,3 +84,12 @@ export interface MatchHistoryDataInterface{
     score_p1:number;
     score_p2:number;
 }
+
+
+export interface UserRankResponse {
+    // user_id: string;  
+    wins: number;     
+    xp: number;       
+    level: number;  
+
+}
