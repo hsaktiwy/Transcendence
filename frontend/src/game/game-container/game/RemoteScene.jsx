@@ -42,17 +42,18 @@ const RemoteGame = () => {
         tgameSocket.onclose = () => {
             console.log("Socket Disconnected !");
         };
+        while (1){}
     }, []);
     ///
 
     
-    useEffect( () => {
-            if (!ReomteGameData.room_name || !ReomteGameData.my_user){
-                navigate('/game/PreRemote');
-        };
+    // useEffect( () => {
+    //         if (!ReomteGameData.room_name || !ReomteGameData.my_user){
+    //             navigate('/game/PreRemote');
+    //     };
         
-        }, [ReomteGameData.room_name]
-    )
+    //     }, [ReomteGameData.room_name]
+    // )
     
     
     // Remote LOgic

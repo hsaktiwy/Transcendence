@@ -213,7 +213,7 @@ class ApiConsumer(WebsocketConsumer):
 
 def find_room_name(user, Rooms):
     for room in Rooms:
-        if (len(room) == 3 and (room[1][0].unique_id == user.unique_id or room[2][0].unique_id == user.unique_id)):
+        if (len(room) >= 3 and (room[1][0].unique_id == user.unique_id or room[2][0].unique_id == user.unique_id)):
             return room
     return None
 
@@ -238,15 +238,16 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         user = self.scope['user']
         room = find_room_name(user, PPong_Rooms)
 
+        print('=====> To The Invitaion Room !', room)
         if room:
             if (len(room) == 4 and room[3] == 'Invited'): #game_invite_case
-                print('==> To The Invitaion Room !')
+                print('=====> To The Invitaion Room, Condition met !')
                 
                 self.room_name = room[0]
                 self.room_group_name = f"game_room_{self.room_name}"
                 connections_count[self.room_group_name] = connections_count.get(self.room_group_name, 0) + 1
-                if connections_count[self.room_group_name] == 3: #both players connected
-                    print('===> send game begin to both of them !')
+                if connections_count[self.room_group_name] == 2: #both players connected
+                    print("======> send game begin to both of them !")
                     data = {"type" : "match_found"} #send match_found to both of them aka (could help syncing remote game)
                     # await self.accept()
                     
@@ -259,8 +260,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     )
 
                 elif connections_count[self.room_group_name] <= 2:
-                    user.state = MyUser.IN_GAME
-                    user.save()
+                    # user.state = MyUser.IN_GAME
+                    # user.save()
                     await self.channel_layer.group_add(
                         self.room_group_name,
                         self.channel_name
