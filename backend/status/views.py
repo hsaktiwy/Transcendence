@@ -63,24 +63,28 @@ def get_Rank_User(request, uuid):
         if not last_match:
             return Response({'error': 'No matches found'}, status=400)
 
-        # Check if this match is already processed
         if profile_status.last_match_id == last_match.id:
-            return Response({  # No update if match was already counted
+            return Response({  
                 'user_id': str(user.unique_id),
                 'xp': profile_status.xp,
                 'level': profile_status.level
             }, status=200)
 
-        # Update XP only if the match is new
-        if last_match.winner == user:
-            profile_status.xp += 100  # Won the match
-        else:
-            profile_status.xp -= 50  # Lost the match
+        match (last_match.winner == user, last_match.type):
+            case (True, 'PONG'):
+                profile_status.xp += 100
+            case (True, 'CHESS'):
+                profile_status.xp += 50
+            case (False, 'PONG'):
+                profile_status.xp -= 50
+            case _:
+                profile_status.xp -= 25
 
-        profile_status.xp = max(profile_status.xp, 0)  # Ensure XP is not negative
+
+
+        profile_status.xp = max(profile_status.xp, 0)
         profile_status.level = profile_status.xp / 1000
 
-        # Store the last processed match
         profile_status.last_match_id = last_match.id
         profile_status.save(update_fields=['xp', 'level', 'last_match_id'])
 

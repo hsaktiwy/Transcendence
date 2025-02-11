@@ -25,7 +25,7 @@ import SkeletonDashboard from "./Skeletons/SkeletoneDashboard.tsx";
 import { WebSocketContext } from "@/utils/WSContext.tsx";
 import mailman from "@/utils/AxiosFetcher.ts";
 import { useParams } from "react-router-dom";
-import { LinechartData, LoseWins, RadarChartInterFace,  } from "@/utils/interfaces.ts";
+import { LinechartData, LoseWins, RadarChartInterFace, twoGames, UserRankResponse,  } from "@/utils/interfaces.ts";
 
 Chart.register(CategoryScale);
 
@@ -74,8 +74,8 @@ function Dashboard(){
   
 
   const uuid = userContextConsumer?.userData?.unique_id;
-  const level = userContextConsumer?.level
-  console.log('hiii user name', userContextConsumer?.userData?.login);
+  // const level = userContextConsumer?.level
+  // console.log('hiii user name here', level);
   const fetchLineChart = async () =>
     {
         try{
@@ -98,30 +98,20 @@ function Dashboard(){
             console.error("dddddd======????",err)
     }}
 
-    const [matchHistoryType, setMatchHistoryType] = useState("PONG");
-    const [userMatchHistory, setUserMatchHistory] = useState([]);
+    const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
   
-    // Function to fetch match history data
-    const getMatchHistoryData = async (type: any) => {
+    const getMatchHistoryData = async () => {
       const req = {
-        url: `/game/get_matches/${uuid}/${type}`,
+        url: `/game/get_matches/${uuid}/`,
         method: "GET",
       };
       const resp = await mailman(req);
-      if (resp.data.Game) setUserMatchHistory(resp.data.Game);
-        // console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
+      if (resp.data)
+      {
+        setUserMatchHistory(resp.data);
+
+      }
     };
-  
-    // Function to switch match type
-    const switchMatchHistoryType = (type :any) => {
-      setMatchHistoryType(type);
-      getMatchHistoryData(type);
-    };
-  
-    // Fetch initial data when component mounts
-    useEffect(() => {
-      getMatchHistoryData(matchHistoryType);
-    }, []);
     
    const fetchMatches = async () =>
     {
@@ -140,17 +130,37 @@ function Dashboard(){
             console.error("dddddd======????",err)
         }
     }
+        const [level, setLevel] = useState<UserRankResponse | undefined>();
+    
+        const fetchLevle = async () =>
+            {
+                try{
+                    const req = {
+                        url: `/profile/get_rank_user/${uuid}/`,
+                        method: 'GET',
+                        withCredentials: true,
+                    }
+                    const resp = await mailman(req);
+                    if(resp.data)
+                        setLevel(resp.data);
+                }
+                catch (err){
+                    console.error("dddddd======????",err)
+                }
+            }
   
+    const waitData=  async() =>
+      {
+          await fetchLineChart();
+          await fetchMatches();
+          await getMatchHistoryData();
+          await fetchLevle();
+          setIsLoading(false)
+      } 
   useEffect(() => {
-    fetchLineChart()
-    fetchMatches()
-    // Add a delay of 2 seconds before changing isLoading to false
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
+    waitData()
     // Cleanup the timer to avoid memory leaks
-    return () => clearTimeout(timer);
-  }, []);
+  }, [level]);
   if (!userContextConsumer || !wsConsumer)
     throw new Error("userContext must be used within a UserProvider");
 
@@ -229,29 +239,6 @@ function Dashboard(){
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
               <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-md shadow-3xl shadow-[#22333869]">
-                  <div className="flex ">
-                  {["PONG", "CHESS"].map((type) => (
-                      <button
-                      key={type}
-                      className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                          matchHistoryType === type
-                          ? ""
-                          : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                      } hover:text-[#5E97A9]`}
-                      onClick={() => switchMatchHistoryType(type)}
-                      >
-                      <div>
-                          {
-                              type == "PONG" ?        
-                                  <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                    :
-                                    <div><img className="w-6" src="../strategy.png"/></div>
-                      }
-                      </div>
-                      {type}
-                      </button>
-                  ))}
-                  </div>
                   <MatchHistory data={userMatchHistory} username={userContextConsumer?.userData?.login} />
               </div>
         </div>
@@ -275,29 +262,6 @@ function Dashboard(){
         </div>
         <div className="xl:pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
         <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-md shadow-3xl shadow-[#22333869]">
-                  <div className="flex ">
-                  {["PONG", "CHESS"].map((type) => (
-                      <button
-                      key={type}
-                      className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                          matchHistoryType === type
-                          ? ""
-                          : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                      } hover:text-[#5E97A9]`}
-                      onClick={() => switchMatchHistoryType(type)}
-                      >
-                      <div>
-                          {
-                              type == "PONG" ?        
-                                  <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                    :
-                                    <div><img className="w-6" src="../strategy.png"/></div>
-                      }
-                      </div>
-                      {type}
-                      </button>
-                  ))}
-                  </div>
                   <MatchHistory data={userMatchHistory} username={userContextConsumer?.userData?.login} />
               </div>
         </div>
