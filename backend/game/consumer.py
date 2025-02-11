@@ -248,6 +248,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 if connections_count[self.room_group_name] == 3: #both players connected
                     print('===> send game begin to both of them !')
                     data = {"type" : "match_found"} #send match_found to both of them aka (could help syncing remote game)
+                    # await self.accept()
+                    
                     await self.channel_layer.group_send(
                         self.room_group_name,
                         {
@@ -263,7 +265,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                         self.room_group_name,
                         self.channel_name
                     )
-                    # print(f"======> from group channels user ", user.login, "joind the group ! visit count :", connections_count[self.room_group_name])
+                    print(f"======> from group channels user ", user.login, "joind the group ! visit count :", connections_count[self.room_group_name])
                     # Accept the WebSocket connection #check this above
                     await self.accept()
                 else:
