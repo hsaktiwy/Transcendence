@@ -139,9 +139,7 @@ function OnlineFriends() {
                                 )
                                 }
                             })
-                        }
-                            
-                            
+                        } 
                         </div>
                         {
                             userContext?.friends.length && 
