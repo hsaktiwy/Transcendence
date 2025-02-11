@@ -29,15 +29,30 @@ const RemoteGame = () => {
     const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
 
+    ////tbr
+    useEffect( () => {
+        
+        console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
+        
+        const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
+        
+        tgameSocket.onopen = () => {
+            console.log("Connected to the game room:", Bit_n3as);
+        };
+        tgameSocket.onclose = () => {
+            console.log("Socket Disconnected !");
+        };
+    }, []);
+    ///
+
     
-  useEffect( () => {
-        if (!ReomteGameData.room_name || !ReomteGameData.my_user){
-            navigate('/game/PreRemote');
-    };
-    
-    }, [ReomteGameData.room_name]
-  )
-    
+    useEffect( () => {
+            if (!ReomteGameData.room_name || !ReomteGameData.my_user){
+                navigate('/game/PreRemote');
+        };
+        
+        }, [ReomteGameData.room_name]
+    )
     
     
     // Remote LOgic
@@ -67,6 +82,7 @@ const RemoteGame = () => {
     useEffect(() => {
         
         // Connect to the game server using those values
+        // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
         const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${ReomteGameData.room_name}`);
         // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
         
