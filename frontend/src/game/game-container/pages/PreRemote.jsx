@@ -54,8 +54,8 @@ const PreRemote = () => {
           socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
             
-            if (data['type'] === 'match_found') {
-              console.log("=> Match Found:");
+            if (data['type'] === 'room_created') {
+              console.log("=> room_created:");
               console.log("   => room_name     :", data['room_name']);
               console.log("   => my_role       :", data['role']);
               console.log("   => user_name     :", data['user_name']);
@@ -63,7 +63,14 @@ const PreRemote = () => {
               console.log("   => my_id         :", data['my_id']);
               console.log("   => opponent_id   :", data['opponent_id']);
               
+              //send notification the opponent, sending (room_name, ...)
+              //send_notif // room_name: data['room_name']
               
+            }
+            
+            else if (data['type'] === 'match_found') {
+              console.log('====> match begin ...');
+
               // Update Reomte context
               setReomteGameData({
                 room_name: data['room_name'],
@@ -74,6 +81,7 @@ const PreRemote = () => {
                 p2_id    : data['opponent_id'],
                 winner   : null
               });
+              
               // Close the socket and navigate to RemoteGame
               socket.close();
               navigate('/game/RemoteGame');
@@ -126,7 +134,8 @@ const PreRemote = () => {
         
         // Update Reomte context
         setReomteGameData({
-          room_name: data['room_name'],
+          room_name: 'Bit_n3as',
+          // room_name: data['room_name'],
           role     : data['role'],
           my_user  : data['user_name'],
           opponent : data['opponent_name'],
@@ -184,12 +193,12 @@ const PreRemote = () => {
         </div>
         <center>
         {show && (
-          <div>
-            <div className="invite-header">
-              <h1 style={{fontSize:'35px'}} >{INVITE_TEXT}</h1>
-              <p>Waiting for you friend to join ...</p>
-            </div>
+          <>
             <div className="players-container-r">
+              <div className="invite-header">
+                <h1 style={{fontSize:'35px'}} >{INVITE_TEXT}</h1>
+                <p>Waiting for you friend to join ...</p>
+              </div>
               <div className="circle-image">
                 <img
                   src={backendPath + ReomteGameData.inviter_image}
@@ -204,7 +213,7 @@ const PreRemote = () => {
                   />
               </div>
             </div>
-          </div>
+          </>
         )}
         
         {!show && (<div className="players-container-r">
