@@ -37,6 +37,7 @@
   height: 300px;
   background: rgba(255, 255, 255, 0.164);
   border-radius: 12px;
+  /* flex-direction: column; */
 }
 
 .buttona-r {
@@ -56,7 +57,7 @@
 }
 
 .invite-header {
-  margin-bottom: 1rem; /* optional; controls spacing below heading */
+  /* margin-bottom: 1rem; optional; controls spacing below heading */
   text-align: center;
 }
 
@@ -71,7 +72,7 @@
   height: 120px;
   border-radius: 50%;
   /* padding: 50px; */
-  margin: 10%;
+  margin: 6%;
   overflow: hidden;/* ensures the image is clipped to a circle*/
 }
 

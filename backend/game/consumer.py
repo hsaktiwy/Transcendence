@@ -125,20 +125,30 @@ class ApiConsumer(WebsocketConsumer):
         if len(parts) == 4 and parts[-2] == 'invite':
             invited_id = parts[-1]
             print("Invite mode. Unique ID:", invited_id)
+            # user.state = MyUser.IN_GAME #debbug
+            # user.save()
             self.accept()
             opponent =  MyUser.objects.filter(unique_id=invited_id).first()
-            #send the match_found to both the players
-            # self.send(json.dumps({
-            #     'type': 'match_found',
-            #     'role': 'p1',
-            #     'my_id': opponent.unique_id,
-            #     'room_name': 'Bit_n3as',
-            #     'opponent_id': invited_id,
-            #     'color': 'white',
+            # opponent.state = MyUser.INVITED #see if that would protect from potential problem 
+            # opponent.save()
+                
+            new_room_name = 'Bit_n3as'#str(random_room_name())  # create a short random room name
+            new_room = [new_room_name, [user, self], [opponent, 'TBR'], 'Invited']
+            PPong_Rooms.append(new_room)
+            Show_Rooms(PPong_Rooms)
+            
+            # send the match_found to both the players
+            self.send(json.dumps({
+                'type': 'room_created',
+                'role': 'p1',
+                'my_id': opponent.unique_id,
+                'room_name': new_room_name,
+                'opponent_id': invited_id,
+                'color': 'white',
 
-            #     'user_name' : user.login,
-            #     'opponent_name':opponent.login,
-            # }, default=str))
+                'user_name' : user.login,
+                'opponent_name':opponent.login,
+            }, default=str))
 
             #send to the second player
             return
@@ -229,7 +239,39 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         room = find_room_name(user, PPong_Rooms)
 
         if room:
-            if (len(room) >= 1): 
+            if (len(room) == 4 and room[3] == 'Invited'): #game_invite_case
+                print('==> To The Invitaion Room !')
+                
+                self.room_name = room[0]
+                self.room_group_name = f"game_room_{self.room_name}"
+                connections_count[self.room_group_name] = connections_count.get(self.room_group_name, 0) + 1
+                if connections_count[self.room_group_name] == 3: #both players connected
+                    print('===> send game begin to both of them !')
+                    data = {"type" : "match_found"} #send match_found to both of them aka (could help syncing remote game)
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'broadcast_event',
+                            'payload': data
+                        }
+                    )
+
+                elif connections_count[self.room_group_name] <= 2:
+                    user.state = MyUser.IN_GAME
+                    user.save()
+                    await self.channel_layer.group_add(
+                        self.room_group_name,
+                        self.channel_name
+                    )
+                    # print(f"======> from group channels user ", user.login, "joind the group ! visit count :", connections_count[self.room_group_name])
+                    # Accept the WebSocket connection #check this above
+                    await self.accept()
+                else:
+                    await self.close()
+
+
+
+            elif (len(room) >= 1): 
                 self.room_name = room[0]
                 self.room_group_name = f"game_room_{self.room_name}"
                 # async with connections_count_lock:
@@ -430,18 +472,18 @@ def create_game(type, user_p1, user_p2, winner, loser, score_p1, score_p2):
     )
 
 
-# def Show_Rooms(Rooms):
-    # print("\n==> All rooms :")
-    # # for room in Rooms:
-    # #     if len(room) >= 1:
-    #         print("  => room :", room[0])
-    # #         for _ in range(len(room) - 1):
-    # #             if type(room[_ + 1]) == list:
-    #                 print("   => player :", room[_ + 1][0].login, "\t\tstate :", room[_ + 1][0].state)
-    # #             else:
-    #                 print("   => state  :", room[_ + 1])
+def Show_Rooms(Rooms):
+    print("\n==> All rooms :")
+    for room in Rooms:
+        if len(room) >= 1:
+            print("  => room :", room[0])
+            for _ in range(len(room) - 1):
+                if type(room[_ + 1]) == list:
+                    print("   => player :", room[_ + 1][0].login, "\t\tstate :", room[_ + 1][0].state)
+                else:
+                    print("   => state  :", room[_ + 1])
                 
-    # print("==> End Printing room names.\n\n")
+    print("==> End Printing room names.\n\n")
 
 def remove_room(room_name, Rooms):
     for i, room in enumerate(Rooms):
