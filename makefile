@@ -1,10 +1,13 @@
 # Created At: 2020-09-06 11:00:00
 CMD = docker-compose
 
-all : run
+all :
+	@echo "Try to run  : make [prod] [dev] [clean] [fclean] [re]"
 
-run:
-	$(CMD) up --build
+prod:
+	$(CMD) -f docker-compose.prod.yaml up --build
+dev:
+	$(CMD) -f docker-compose.dev.yaml up --build
 clean:
 	$(CMD) down
 
