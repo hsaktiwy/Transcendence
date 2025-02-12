@@ -24,7 +24,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 
 import ProfileLocked from "./blocked/Profileblocked.tsx";
-import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface, UserRankResponse } from "@/utils/interfaces.ts";
+import { LoseWins, LinechartData, RadarChartInterFace, UserRankResponse,twoGames } from "@/utils/interfaces.ts";
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
@@ -103,33 +103,31 @@ const ProfileTest  = () =>{
         }
     }
 
-    const [matchHistoryType, setMatchHistoryType] = useState("PONG");
-    const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
+    const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
   
-    // Function to fetch match history data
-    const getMatchHistoryData = async (type: any) => {
+    const getMatchHistoryData = async () => {
       const req = {
-        url: `/game/get_matches/${uuid}/${type}`,
+        url: `/game/get_matches/${uuid}/`,
         method: "GET",
       };
       const resp = await mailman(req);
-    //   console.log('heeeree reso data', resp.data.Game)
-      if (resp.data.Game)
+      if (resp.data)
       {
-          setUserMatchHistory(resp.data.Game);
+        setUserMatchHistory(resp.data);
+
       }
     };
     
     // Function to switch match type
-    const switchMatchHistoryType = (type :any) => {
-        setMatchHistoryType(type);
-        getMatchHistoryData(type);
-    };
-    useEffect(()=>
-    {
-        // console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
+    // const switchMatchHistoryType = (type :any) => {
+    //     setMatchHistoryType(type);
+    //     getMatchHistoryData(type);
+    // };
+    // useEffect(()=>
+    // {
+    //     // console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
 
-    }, [userMatchHistory])
+    // }, [userMatchHistory])
     
     // Fetch initial data when component mounts
     // useEffect(() => {
@@ -187,7 +185,7 @@ const ProfileTest  = () =>{
             await fetchLevle();
             await fetchLineChart();
             await fetchMatches();
-            await getMatchHistoryData(matchHistoryType);
+            await getMatchHistoryData();
             setIsLoading(false)
         } 
 
@@ -205,7 +203,6 @@ const ProfileTest  = () =>{
           });
           BlockStatusCheck();
           waitData();
-          
     }
     else
     {
@@ -213,12 +210,7 @@ const ProfileTest  = () =>{
         setProfileData(userContextConsumer?.userData)
         waitData()
     }
-   },[uuid, userContextConsumer.blockList, matchHistoryType])
-//    console.log('print user data ->>>>>>>>>>> here her here !!', profileData);
-   useEffect(()=>{
-
-
-   },[])
+   },[uuid, userContextConsumer.blockList])
 
     return(
         <>
@@ -293,7 +285,7 @@ const ProfileTest  = () =>{
                         <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 relative rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-3xl shadow-[#22333869] h-full w-full">
                                 <div className="w-full h-full flex flex-col">
                                     {/* Tab Navigation */}
-                                    <div className="flex ">
+                                    {/* <div className="flex ">
                                     {["PONG", "CHESS"].map((type) => (
                                         <button
                                         key={type}
@@ -315,8 +307,8 @@ const ProfileTest  = () =>{
                                         {type}
                                         </button>
                                     ))}
-                                    </div>
-                                    <MatchHistory data={userMatchHistory} username={profileData?.login} />
+                                    </div> */}
+                                    <MatchHistory data={userMatchHistory} username={profileData?.login} /> 
                                 </div>
                             </div>
 
@@ -343,7 +335,7 @@ const ProfileTest  = () =>{
 
                             <div className="w-full h-full flex flex-col">
                                     {/* Tab Navigation */}
-                                    <div className="flex ">
+                                    {/* <div className="flex ">
                                     {["PONG", "CHESS"].map((type) => (
                                         <button
                                         key={type}
@@ -365,7 +357,7 @@ const ProfileTest  = () =>{
                                         {type}
                                         </button>
                                     ))}
-                                    </div>
+                                    </div> */}
                                     <MatchHistory data={userMatchHistory} username={profileData?.login} />
                                 </div>
                         </div>

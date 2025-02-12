@@ -88,7 +88,6 @@ def LoginWithOAuth42(request):
             return Response({'error': 'Failed to retrieve access token'}, status=400)
         
         access_token = response.json().get('access_token')
-        print(access_token)
         headers = {
             'Authorization': f'Bearer {access_token}',
         }
@@ -336,7 +335,7 @@ class UploadProfilePicture(APIView):
             if serializer.is_valid():
                 if not user.isDefaultImage():
                     os.remove('media/' + user.profile_pic.name)  
-                serializer.save()
+                serializer.update(instance=user, validated_data=serializer.validated_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -352,7 +351,7 @@ def UploadCoverProfile(request):
         if serializer.is_valid():
             if not user.isDefaultCoverImage():
                 os.remove('media/' + user.CoverProfile.name)  
-            serializer.save()
+            serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
