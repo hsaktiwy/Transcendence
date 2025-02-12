@@ -36,10 +36,12 @@ class UserSerializer(serializers.ModelSerializer):
         old_password = validated_data.get('old_password', None)
         new_password = validated_data.get('password', None)
         confirm_password = validated_data.get('password2', None)
-
-        # If oldPassword, newPassword, and confirmPassword are provided
+        auth_set = {'oauth', 'two_factor_auth'}
+        images_set = {'CoverProfile', 'profile_pic'}
+        if images_set & validated_data.keys() and auth_set & validated_data.keys():
+            for field in auth_set:
+                validated_data.pop(field, None)
         if old_password and new_password and confirm_password:
-            # Check if the old password matches the current password
             if not instance.check_password(old_password):
                 raise serializers.ValidationError({"old_password": "Old password is incorrect."})
             elif new_password == old_password:

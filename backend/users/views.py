@@ -191,7 +191,7 @@ class getAuthenticatedUser(APIView):
     def patch(self, request):
         user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
-        print('from view  ')
+        print('from view pppp ')
         if serializer.is_valid():
             user = serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
@@ -330,7 +330,7 @@ class CheckAuth(APIView):
 class UploadProfilePicture(APIView):
     def patch(self, request, *args, **kwargs):
         try:
-            user = get_object_or_404(MyUser, login=request.user.login)
+            user = request.user
             serializer = UserSerializer(instance=user, data=request.data)
             if serializer.is_valid():
                 if not user.isDefaultImage():
@@ -346,7 +346,7 @@ class UploadProfilePicture(APIView):
 @api_view(['PATCH'])
 def UploadCoverProfile(request):
     try:
-        user = get_object_or_404(MyUser, login=request.user.login)
+        user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             if not user.isDefaultCoverImage():
