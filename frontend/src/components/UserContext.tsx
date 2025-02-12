@@ -367,9 +367,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         tmpFriends.push(friend)
         setFriends(tmpFriends)
     }
-    useEffect(()=>{
-        console.log('shabeeek ',friends)
-    }, [friends])
+
     useEffect(() =>{
         console.log(location.pathname)
         if (ready)

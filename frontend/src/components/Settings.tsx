@@ -29,6 +29,7 @@ function Settings() {
 
             const formData = new FormData();
             formData.append(e.target.id, e.target.files[0]);
+
             try{
                 
 
@@ -45,6 +46,7 @@ function Settings() {
                 const response =  await mailman(req)
                 if (response.status === 200)
                 {
+                    console.log(response.data)
                     const newUserData = response.data as UserDataInterface
                     if (e.target.id !== 'CoverProfile'){
                         toast.success('Profile picture changed succesfully')
