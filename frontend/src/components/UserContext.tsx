@@ -119,21 +119,23 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             toast.error(data.content)
 
     }
-    const fetchLevle = async () =>
-        {
-            try{
-                const req = {
-                    url: `/profile/get_rank_user/${userData?.unique_id}/`,
-                    method: 'GET',
-                    withCredentials: true,
-                }
-                const resp = await mailman(req);
-                setLevel(resp.data);
-            }
-            catch (err){
-                console.error("dddddd======????",err)
-            }
-        }
+    
+    // const fetchLevle = async () =>
+    //     {
+    //         try{
+    //             const req = {
+    //                 url: `/profile/get_rank_user/${userData?.unique_id}/`,
+    //                 method: 'GET',
+    //                 withCredentials: true,
+    //             }
+    //             const resp = await mailman(req);
+    //             if(resp.data)
+    //                 setLevel(resp.data);
+    //         }
+    //         catch (err){
+    //             console.error("dddddd======????",err)
+    //         }
+    //     }
     const rankData = async() =>
     {
         try{
@@ -414,7 +416,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         await fetchReceivedFriendRequest()
         await fetchSentFriendRequest()
         await fetchBlockList()
-        await fetchLevle()
+        // await fetchLevle()
         await rankData()
         setReady(true)
     }

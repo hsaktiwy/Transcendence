@@ -51,8 +51,8 @@ function RankFile() {
                                                                 <h1 className="font-semibold text-left mb-2 md:text-2xl">Rank</h1>
                                                                 <div className="border-rank  w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
-                                                        <ScrollArea className="h-full w-full overflow-y-auto rounded-md">
-                                        {userRank?.map((user,index) => (
+                                    <ScrollArea className="h-full w-full overflow-y-auto rounded-md pb-12">
+                                        {userRank?.map((user, index) => (
                                             <div key={index+1} className="w-full m-1">
                                             <div className="h-16 gap-3 md:px-5 flex items-center">
                                                 <h1 className="text-xl md:text-base font-medium">#{user.profile.rank}</h1>

@@ -72,15 +72,32 @@ class ChangeGameStatus(APIView):
 
 
 
+
 @api_view(['GET'])
-def get_match_history(request, uuid, type):
+def get_match_history(request, uuid):
     try:
         user = MyUser.objects.get(unique_id=uuid)
-        # get all games depending on the type and related to our user
-        games = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).filter(type=type).order_by('time')
-        # reverce the ascending order to descending
-        games = games.reverse()
-        last_matches = GameSerializer(games[:5], many=True)
-        return Response({'Game': last_matches.data}, status=200)
+
+        # Get the last 5 PONG games
+        pong_games = Game.objects.filter(
+            Q(user_p1=user) | Q(user_p2=user),
+            type='PONG'
+        ).order_by('-time')[:5]
+
+        # Get the last 5 CHESS games
+        chess_games = Game.objects.filter(
+            Q(user_p1=user) | Q(user_p2=user),
+            type='CHESS'
+        ).order_by('-time')[:5]
+
+        # Serialize the data
+        pong_matches = GameSerializer(pong_games, many=True)
+        chess_matches = GameSerializer(chess_games, many=True)
+
+        return Response({
+            'Pong': pong_matches.data,
+            'Chess': chess_matches.data
+        }, status=200)
+
     except Exception as e:
-        return Response({'error': e}, status=400)
+        return Response({'error': str(e)}, status=400)
