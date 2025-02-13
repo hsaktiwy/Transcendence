@@ -29,23 +29,6 @@ const RemoteGame = () => {
     const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
 
-    ////tbr
-    // useEffect( () => {
-        
-    //     console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
-        
-    //     const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
-        
-    //     tgameSocket.onopen = () => {
-    //         console.log("Connected to the game room:", 'Bit_n3as');
-    //     };
-    //     tgameSocket.onclose = () => {
-    //         console.log("Socket Disconnected !");
-    //     };
-    //     // while (1){}
-    // }, []);
-    ///
-
     
     useEffect( () => {
         console.log(ReomteGameData.room_name, ReomteGameData.my_user);

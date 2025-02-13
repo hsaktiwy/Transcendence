@@ -141,8 +141,8 @@ const PreRemote = () => {
         
         // Update Reomte context
         setReomteGameData({
-          room_name: 'Bit_n3as',
-          // room_name: data['room_name'],
+          // room_name: 'Bit_n3as',
+          room_name: data['room_name'],
           role     : data['role'],
           my_user  : data['user_name'],
           opponent : data['opponent_name'],
