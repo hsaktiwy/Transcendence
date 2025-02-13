@@ -82,15 +82,15 @@ def get_or_create_room(user, consumer, Rooms):
 
 def cleaner(Rooms):
     #delete Hanging rooms
-    # for i, room in enumerate(Rooms):
-    #     if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
-    #         # print('==> delete hanging room :', room[0], "it's state :", room[3])
-    #         Rooms.pop(i)
-
     for i, room in enumerate(Rooms):
-    # if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
-        # print('==> delete hanging room :', room[0], "it's state :", room[3])
-        Rooms.pop(i)
+        if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
+            # print('==> delete hanging room :', room[0], "it's state :", room[3])
+            Rooms.pop(i)
+
+    # for i, room in enumerate(Rooms):
+    # # if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
+    #     # print('==> delete hanging room :', room[0], "it's state :", room[3])
+    #     Rooms.pop(i)
 
 class ApiConsumer(WebsocketConsumer):
 
@@ -112,7 +112,7 @@ class ApiConsumer(WebsocketConsumer):
         #create a room set it to Invited state queue the first player till the second joins / the force sync is mandatory
         #check if it's invited match 
         #socket-route/invite/second-player-unique-id
-        cleaner(PPong_Rooms)
+        # cleaner(PPong_Rooms)
 
         path = self.scope['path']  # e.g. '/api/server-endpoint-socket/invite/XYZ-123'
 
