@@ -44,6 +44,8 @@ const PreRemote = () => {
       // Create WebSocket connection
 
       useEffect(()=>{
+        if (ReomteGameData.form_game_invite === true){
+
           const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
           console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
           
@@ -53,6 +55,7 @@ const PreRemote = () => {
           
           socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
+            console.log("==> message received from the backend !");
             
             if (data['type'] === 'room_created') {
               console.log("=> room_created:");
@@ -65,41 +68,45 @@ const PreRemote = () => {
               
               //send notification the opponent, sending (room_name, ...)
               //send_notif // room_name: data['room_name']
-              
-            }
-            
-            else if (data['type'] === 'match_found') {
-              console.log('====> match begin ...');
 
-              // Update Reomte context
-              setReomteGameData({
-                room_name: data['room_name'],
-                role     : data['role'],
-                my_user  : data['user_name'],
-                opponent : data['opponent_name'],
-                p1_id    : data['my_id'],
-                p2_id    : data['opponent_id'],
-                winner   : null
-              });
+              // useEffect( () => {
+        
+              console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
               
-              // Close the socket and navigate to RemoteGame
-              socket.close();
-              navigate('/game/RemoteGame');
-            }
-          };
-          
-          // socket.onerror = (error) => {
-          //   console.error("WebSocket Error:", error);
-          //   setIsSearching(false);
-          // };
-          
-          // socket.onclose = () => {
-          //   console.log("Matchmaking WebSocket Closed");
-          // };
-          
-          setMatchSocket(socket);
-        ///------- 
+              const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
+              
+              tgameSocket.onopen = () => {
+                  console.log("Connected to the game room:", 'Bit_n3as');
+              };
+              tgameSocket.onclose = () => {
+                  console.log("Socket Disconnected !");
+                };
+              tgameSocket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data['type'] === 'match_found') {
+                  console.log('====> match begin ...');
 
+                  // Update Reomte context
+                  setReomteGameData({
+                    room_name: data['room_name'],
+                    // role     : data['role'],
+                    // my_user  : data['user_name'],
+                    // opponent : data['opponent_name'],
+                    // p1_id    : data['my_id'],
+                    // p2_id    : data['opponent_id'],
+                    // winner   : null
+                  });
+                  
+                  // Close the socket and navigate to RemoteGame
+                  socket.close();
+                  tgameSocket.close()
+                  navigate('/game/RemoteGame');
+                }
+              }
+            };
+          }
+          // setMatchSocket(socket);
+        }
       }, [])
 
 
