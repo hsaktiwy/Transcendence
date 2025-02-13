@@ -96,7 +96,9 @@ class ApiConsumer(WebsocketConsumer):
 
     def connect(self):
 
-        user = self.scope['user']
+        user = get_user_by_unique_id_sync(self.scope['user'].unique_id)
+        if not user:
+            return
 
         # print("=> user connected to official route :", user.login)
         # print("=>", f"Client {user.unique_id}, {user.login} Connected !, state :", user.state)
@@ -197,7 +199,10 @@ class ApiConsumer(WebsocketConsumer):
             return
 
 
-        user = self.scope['user']
+        # user = self.scope['user']
+        user = get_user_by_unique_id_sync(self.scope['user'].unique_id)
+        if not user:
+            return
 
         
         # print('=> user ', user.login, ', disconnected ! close_code:', close_code)
@@ -241,7 +246,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
 
-        user = self.scope['user']
+        user = await get_user_by_unique_id(self.scope['user'].unique_id)
+        if not user:
+            return
         room = find_room_name(user, PPong_Rooms)
 
         if room:
@@ -306,7 +313,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         if close_code == 1006: #connection rejected, the session already opened
             return
 
-        user = self.scope['user']
+        user = await get_user_by_unique_id(self.scope['user'].unique_id)
+        if not user:
+            return
 
         # print(f'===> Player {user.login} quitting !')
         room = find_room_name(user, PPong_Rooms)
@@ -389,7 +398,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
     async def broadcast_event(self, event):
         if event['payload'].get('type') == 'Game_end': #check that shit
-            user = self.scope['user']
+            user = await get_user_by_unique_id(self.scope['user'].unique_id)
+            if not user:
+                return
             room = find_room_name(user, PPong_Rooms)
             # print('==> is the room ??', room)
             if room:
@@ -468,6 +479,9 @@ def get_profile(user):
 def get_user_by_unique_id(unique_id):
     return MyUser.objects.filter(unique_id=unique_id).first()
 
+def get_user_by_unique_id_sync(unique_id):
+    return MyUser.objects.filter(unique_id=unique_id).first()
+
 @sync_to_async
 def create_game(type, user_p1, user_p2, winner, loser, score_p1, score_p2):
     return Game.objects.create(
@@ -523,6 +537,12 @@ def remove_room(room_name, Rooms):
 
 
 
+
+
+
+
+
+
 #FOR CHESS
 Chess_Rooms = []
 # Rooms.append(["Room_name", [user1, consumer],[user2, consumer])
@@ -531,7 +551,9 @@ Chess_Rooms = []
 class ApiChessConsumer(WebsocketConsumer):
     def connect(self):
 
-        user = self.scope['user']
+        user = get_user_by_unique_id_sync(self.scope['user'].unique_id)
+        if not user:
+            return
 
         # print("=> user connected to official route :", user.login)
         # print("=>", f"Client {user.unique_id}, {user.login} Connected !, state :", user.state)
@@ -570,7 +592,9 @@ class ApiChessConsumer(WebsocketConsumer):
             return
 
 
-        user = self.scope['user']
+        user = get_user_by_unique_id_sync(self.scope['user'].unique_id)
+        if not user:
+            return
 
         
         # print('=> user ', user.login, ', disconnected ! close_code:', close_code)
@@ -603,7 +627,9 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
 
-        user = self.scope['user']
+        user = await get_user_by_unique_id(self.scope['user'].unique_id)
+        if not user:
+            return
         room = find_room_name(user, Chess_Rooms)
 
         if room:
@@ -633,7 +659,9 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
         if close_code == 1006: #connection rejected, the session already opened
             return
 
-        user = self.scope['user']
+        user = await get_user_by_unique_id(self.scope['user'].unique_id)
+        if not user:
+            return
 
         # print(f'===> Player {user.login} quitting !')
         room = find_room_name(user, Chess_Rooms)
@@ -718,7 +746,9 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
     async def broadcast_event_chess(self, event):
         if event['payload'].get('type') == 'Game_end': #check that shit
-            user = self.scope['user']
+            user = await get_user_by_unique_id(self.scope['user'].unique_id)
+            if not user:
+                return
             room = find_room_name(user, Chess_Rooms)
             # print('==> is the room ??', room)
             if room:
@@ -797,36 +827,5 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
             return
 
         await self.send(json.dumps(event['payload']))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
