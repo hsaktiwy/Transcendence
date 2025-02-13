@@ -82,10 +82,15 @@ def get_or_create_room(user, consumer, Rooms):
 
 def cleaner(Rooms):
     #delete Hanging rooms
+    # for i, room in enumerate(Rooms):
+    #     if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
+    #         # print('==> delete hanging room :', room[0], "it's state :", room[3])
+    #         Rooms.pop(i)
+
     for i, room in enumerate(Rooms):
-        if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
-            # print('==> delete hanging room :', room[0], "it's state :", room[3])
-            Rooms.pop(i)
+    # if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
+        # print('==> delete hanging room :', room[0], "it's state :", room[3])
+        Rooms.pop(i)
 
 class ApiConsumer(WebsocketConsumer):
 
@@ -107,6 +112,7 @@ class ApiConsumer(WebsocketConsumer):
         #create a room set it to Invited state queue the first player till the second joins / the force sync is mandatory
         #check if it's invited match 
         #socket-route/invite/second-player-unique-id
+        cleaner(PPong_Rooms)
 
         path = self.scope['path']  # e.g. '/api/server-endpoint-socket/invite/XYZ-123'
 
@@ -238,10 +244,10 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         user = self.scope['user']
         room = find_room_name(user, PPong_Rooms)
 
-        print('=====> To The Invitaion Room !', room)
         if room:
             if (len(room) == 4 and room[3] == 'Invited'): #game_invite_case
-                print('=====> To The Invitaion Room, Condition met !')
+                print('=====> To The Invitaion Room !', room[0])
+                # print('=====> To The Invitaion Room, Condition met !')
                 
                 self.room_name = room[0]
                 self.room_group_name = f"game_room_{self.room_name}"
