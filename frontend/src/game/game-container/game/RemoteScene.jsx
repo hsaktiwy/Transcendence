@@ -47,13 +47,15 @@ const RemoteGame = () => {
     ///
 
     
-    // useEffect( () => {
-    //         if (!ReomteGameData.room_name || !ReomteGameData.my_user){
-    //             navigate('/game/PreRemote');
-    //     };
+    useEffect( () => {
+        console.log(ReomteGameData.room_name, ReomteGameData.my_user);
         
-    //     }, [ReomteGameData.room_name]
-    // )
+            if (!ReomteGameData.room_name || !ReomteGameData.my_user){
+                navigate('/game/PreRemote');
+        };
+        
+        }, [ReomteGameData.room_name]
+    )
     
     
     // Remote LOgic

@@ -90,7 +90,7 @@ const PreRemote = () => {
                   setReomteGameData({
                     room_name: data['room_name'],
                     // role     : data['role'],
-                    // my_user  : data['user_name'],
+                    my_user  : data['user_name'],
                     // opponent : data['opponent_name'],
                     // p1_id    : data['my_id'],
                     // p2_id    : data['opponent_id'],
@@ -107,7 +107,7 @@ const PreRemote = () => {
           }
           // setMatchSocket(socket);
         }
-      }, [])
+      }, [ReomteGameData.form_game_invite])
 
 
   }

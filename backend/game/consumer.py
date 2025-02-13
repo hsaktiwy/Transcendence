@@ -32,35 +32,38 @@ def matcha(room):
         p1_user, p1_consumer = room[1]
         p2_user, p2_consumer = room[2]
 
-        p1_user.state = MyUser.IN_GAME  #sync to asyn #to be modified
-        p1_user.save()
 
-        p2_user.state = MyUser.IN_GAME
-        p2_user.save()
+        p1_user = get_user_by_unique_id_sync(p1_user.unique_id)
+        p2_user = get_user_by_unique_id_sync(p2_user.unique_id)
 
-        p1_consumer.send(json.dumps({
-            'type': 'match_found',
-            'role': 'p1',
-            'my_id': p1_user.unique_id,
-            'room_name': room[0],
-            'opponent_id': p2_user.unique_id,
-            'color': 'white',
+        if (p1_user and p2_user):
+            p1_user.state = MyUser.IN_GAME
+            p2_user.state = MyUser.IN_GAME
+            p1_user.save()
+            p2_user.save()
+            p1_consumer.send(json.dumps({
+                'type': 'match_found',
+                'role': 'p1',
+                'my_id': p1_user.unique_id,
+                'room_name': room[0],
+                'opponent_id': p2_user.unique_id,
+                'color': 'white',
 
-            'user_name' : p1_user.login,
-            'opponent_name': p2_user.login,
-        }, default=str))
+                'user_name' : p1_user.login,
+                'opponent_name': p2_user.login,
+            }, default=str))
 
-        p2_consumer.send(json.dumps({
-            'type': 'match_found',
-            'role': 'p2',
-            'my_id': p2_user.unique_id,
-            'room_name': room[0],
-            'opponent_id': p1_user.unique_id,
-            'color': 'black',
-            
-            'user_name' : p2_user.login,
-            'opponent_name': p1_user.login,
-        }, default=str))
+            p2_consumer.send(json.dumps({
+                'type': 'match_found',
+                'role': 'p2',
+                'my_id': p2_user.unique_id,
+                'room_name': room[0],
+                'opponent_id': p1_user.unique_id,
+                'color': 'black',
+                
+                'user_name' : p2_user.login,
+                'opponent_name': p1_user.login,
+            }, default=str))
 
 
 def get_or_create_room(user, consumer, Rooms):
@@ -95,7 +98,8 @@ def cleaner(Rooms):
 class ApiConsumer(WebsocketConsumer):
 
     def connect(self):
-
+        # user = self.scope['user']
+        
         user = get_user_by_unique_id_sync(self.scope['user'].unique_id)
         if not user:
             return
@@ -140,7 +144,7 @@ class ApiConsumer(WebsocketConsumer):
             # opponent.state = MyUser.INVITED #see if that would protect from potential problem 
             # opponent.save()
                 
-            new_room_name = 'Bit_n3as'#str(random_room_name())  # create a short random room name
+            new_room_name = str(random_room_name())  # create a short random room name
             new_room = [new_room_name, [user, self], [opponent, 'TBR'], 'Invited']
             PPong_Rooms.append(new_room)
             Show_Rooms(PPong_Rooms)
@@ -261,7 +265,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 connections_count[self.room_group_name] = connections_count.get(self.room_group_name, 0) + 1
                 if connections_count[self.room_group_name] == 2: #both players connected
                     print("======> send game begin to both of them !")
-                    data = {"type" : "match_found"} #send match_found to both of them aka (could help syncing remote game)
+                    data = {"type" : "match_found", "room_name" : room[0], "user_name" : user.login} #send match_found to both of them aka (could help syncing remote game)
                     # await self.accept()
                     
                     await self.channel_layer.group_send(
