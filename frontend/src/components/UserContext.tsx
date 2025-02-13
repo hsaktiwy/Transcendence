@@ -22,6 +22,7 @@ export interface NotificationPropreties{
     friend_request_id: number;
     is_readed: boolean;
     sender: ProfileDataInterface
+    room_name?: string 
 }
 export interface NotificationStatePropreties{
     type: string,
@@ -330,6 +331,18 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
             
     }
+    const gameInviteHandler = (data: NotificationPropreties) => {
+
+        data.content = `${data.sender.login} Invite You`
+        setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
+        setNewNotification(prev => [...prev, data])
+        // if (data.type === 'friendship')
+        // {
+            // fetchReceivedFriendRequest()
+            // fetchSentFriendRequest()
+            // fetchFriends()
+        // }      
+    }
     const updateFriendList = (user: ProfileDataInterface) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
     }
@@ -365,6 +378,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             SocketContext.AddChannel('UPDATE_FRIEND_LIST', updateFriendList)
             SocketContext.AddChannel('UPDATE_FRIENDSHIP', updateFriendShip)
             SocketContext.AddChannel('NOTIFICATION_ACCEPT_FRIEND', notificationHandler)
+            SocketContext.AddChannel('NOTIFICATION_GAME_INVITE', gameInviteHandler)
             if (location.pathname !== '/chat/' && location.pathname !== '/chat')
                 SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
             SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
@@ -377,6 +391,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         }
         return () => {
+            SocketContext.RemoveChannel('NOTIFICATION_GAME_INVITE')
             SocketContext.RemoveChannel('UPDATE_FRIEND_LIST')
             SocketContext.RemoveChannel('UPDATE_FRIENDSHIP')
             SocketContext.RemoveChannel('NOTIFICATION_ADD_FRIEND')

@@ -13,7 +13,7 @@ import Hud from '../components/Hud'
 import './RemoteScene.css'
 
 import Scoreboard from '../components/Scoreboard';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useRemoteGameContext } from '../game/MatchContext';
 
@@ -28,18 +28,24 @@ const RemoteGame = () => {
     // Remote LOgic
     const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
+    const {room_name, my_user} = useParams()
+    
+    // useEffect( () => {
+    //     console.log(ReomteGameData.room_name, ReomteGameData.my_user);
 
-    
-    useEffect( () => {
-        console.log(ReomteGameData.room_name, ReomteGameData.my_user);
+    //         if (!ReomteGameData.room_name || !ReomteGameData.my_user){
+    //             navigate('/game/PreRemote');
+    //     };
         
-            if (!ReomteGameData.room_name || !ReomteGameData.my_user){
-                navigate('/game/PreRemote');
-        };
-        
-        }, [ReomteGameData.room_name]
-    )
-    
+    //     }, [ReomteGameData.room_name]
+    // )
+    useEffect(()=>{
+        if (!ReomteGameData.room_name || !ReomteGameData.my_user)
+        {
+            if (room_name && my_user)
+                setReomteGameData({room_name:room_name, my_user:my_user})
+        }
+    },[])
     
     // Remote LOgic
     

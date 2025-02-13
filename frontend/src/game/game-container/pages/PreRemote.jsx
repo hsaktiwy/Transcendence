@@ -8,18 +8,18 @@ import { useNavigate } from "react-router-dom";
 import { useRemoteGameContext } from '../game/MatchContext';
 
 import { UserContext } from '../../../components/UserContext'
+import { WebSocketContext } from '../../../utils/WSContext';
 
 
 const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
-
+  const webSContext = useContext(WebSocketContext);
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
   
   const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
-
   const user = useContext(UserContext)
 
   const username = user?.userData?.login;
@@ -46,14 +46,14 @@ const PreRemote = () => {
       useEffect(()=>{
         if (ReomteGameData.form_game_invite === true){
 
-          const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+          const tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
           console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
           
-          socket.onopen = () => {
+          tmpsocket.onopen = () => {
             console.log("Matchmaking WebSocket Connected");
           };
           
-          socket.onmessage = (event) => {
+          tmpsocket.onmessage = (event) => {
             const data = JSON.parse(event.data);
             console.log("==> message received from the backend !");
             
@@ -68,7 +68,16 @@ const PreRemote = () => {
               
               //send notification the opponent, sending (room_name, ...)
               //send_notif // room_name: data['room_name']
-
+              const req = {
+                type:  "GAME_INVITE",
+                room_name: data['room_name'],
+                receiver : data['opponent_id'],
+              }
+              console.log(JSON.stringify(req))
+              if (webSContext && webSContext.socket)
+              {
+                webSContext.socket.current.send(JSON.stringify(req))
+              }
               // useEffect( () => {
         
               console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
@@ -98,7 +107,7 @@ const PreRemote = () => {
                   });
                   
                   // Close the socket and navigate to RemoteGame
-                  socket.close();
+                  tmpsocket.close();
                   tgameSocket.close()
                   navigate('/game/RemoteGame');
                 }
