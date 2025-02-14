@@ -149,7 +149,7 @@ function ChatSession(){
     {
         setRCount((re)=>(re+1))
         AddChannel('CHATROOM', UpdateCurrentConvs)
-        BlockStatusCheck()
+        // BlockStatusCheck()
         return () => {
             // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
@@ -296,8 +296,13 @@ function ChatSession(){
     },[rcount])
     useEffect(()=>
     {
-            console.log("activeeeee")
-    },[chatContext.active])
+        console.log(openDrop)
+        if (openDrop == true)
+        {
+            console.log("hhm ")
+            BlockStatusCheck()
+        }
+    },[openDrop])
     //
     return(
             <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800

@@ -9,7 +9,9 @@ prod:
 dev:
 	$(CMD) -f docker-compose.dev.yaml up --build
 clean:
-	$(CMD) down
+	$(CMD) -f docker-compose.dev.yaml down
+	$(CMD) -f docker-compose.prod.yaml down
+
 
 fclean: clean
 	docker system prune -af
