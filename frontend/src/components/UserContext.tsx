@@ -336,6 +336,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         data.content = `${data.sender.login} Invite You`
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%> ", data.room_name)
         // if (data.type === 'friendship')
         // {
             // fetchReceivedFriendRequest()
