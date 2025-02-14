@@ -80,12 +80,14 @@ const PreRemote = () => {
               }
               // useEffect( () => {
         
-              console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
+              console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/' + data['room_name']);
               
-              const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
+              const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/' + data['room_name']);
               
               tgameSocket.onopen = () => {
-                  console.log("Connected to the game room:", 'Bit_n3as');
+                  console.log("Connected to the game room:", data['room_name']);
+                  setMatchSocket(tgameSocket);
+
               };
               tgameSocket.onclose = () => {
                   console.log("Socket Disconnected !");
@@ -97,9 +99,11 @@ const PreRemote = () => {
 
                   // Update Reomte context
                   setReomteGameData({
-                    room_name: data['room_name'],
+                    room_name  : data['room_name'],
                     // role     : data['role'],
-                    my_user  : data['user_name'],
+                    my_user    : data['user_name'],
+                    inviting   : true,
+                    gameSocket : tgameSocket,
                     // opponent : data['opponent_name'],
                     // p1_id    : data['my_id'],
                     // p2_id    : data['opponent_id'],
@@ -108,7 +112,7 @@ const PreRemote = () => {
                   
                   // Close the socket and navigate to RemoteGame
                   tmpsocket.close();
-                  tgameSocket.close()
+                  // tgameSocket.close()
                   navigate('/game/RemoteGame');
                 }
               }

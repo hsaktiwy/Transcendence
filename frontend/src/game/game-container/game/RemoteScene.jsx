@@ -13,7 +13,7 @@ import Hud from '../components/Hud'
 import './RemoteScene.css'
 
 import Scoreboard from '../components/Scoreboard';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate} from 'react-router-dom';
 
 import { useRemoteGameContext } from '../game/MatchContext';
 
@@ -28,7 +28,7 @@ const RemoteGame = () => {
     // Remote LOgic
     const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
-    const {room_name, my_user} = useParams()
+    const location = useLocation()
     
     // useEffect( () => {
     //     console.log(ReomteGameData.room_name, ReomteGameData.my_user);
@@ -39,13 +39,18 @@ const RemoteGame = () => {
         
     //     }, [ReomteGameData.room_name]
     // )
-    useEffect(()=>{
-        if (!ReomteGameData.room_name || !ReomteGameData.my_user)
-        {
-            if (room_name && my_user)
-                setReomteGameData({room_name:room_name, my_user:my_user})
-        }
-    },[])
+
+
+    // useEffect(()=>{
+    //     if (location.state)
+    //         console.log(location.state.room_name, location.state.my_user)
+    //     if (!ReomteGameData.room_name || !ReomteGameData.my_user)
+    //     {
+    //         console.log()
+    //         if (location.state.room_name && location.state.my_user)
+    //             setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:my_user})
+    //     }
+    // },[])
     
     // Remote LOgic
     
@@ -72,16 +77,39 @@ const RemoteGame = () => {
 
     
     useEffect(() => {
+        let gameSocket = null;
+        console.log('INVITTER : ', ReomteGameData.inviting, '  ', ReomteGameData.gameSocket );
+        if (location.state)
+            console.log(location.state.room_name, location.state.my_user)
+        if ((!ReomteGameData.room_name || !ReomteGameData.my_user) && location.state.room_name && location.state.my_user){
+            // setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:location.state.my_user})
+
+            gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${location.state.room_name}`);
+            // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
+            
+            gameSocket.onopen = () => {
+                console.log("Connected to the game room:", ReomteGameData.room_name);
+                setdocket(gameSocket);
+            };
+
+        }
         
-        // Connect to the game server using those values
-        // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
-        const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${ReomteGameData.room_name}`);
-        // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
-        
-        gameSocket.onopen = () => {
-            console.log("Connected to the game room:", ReomteGameData.room_name);
+        else if (!ReomteGameData.inviting && !ReomteGameData.gameSocket){
+            // Connect to the game server using those values
+            // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
+            gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${ReomteGameData.room_name}`);
+            // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
+            
+            gameSocket.onopen = () => {
+                console.log("Connected to the game room:", ReomteGameData.room_name);
+                setdocket(gameSocket);
+            };
+            
+        }
+        else if (ReomteGameData.room_name){
+            gameSocket = ReomteGameData.gameSocket;
             setdocket(gameSocket);
-        };
+        }
   
         const scene = new THREE.Scene();
 
@@ -90,7 +118,7 @@ const RemoteGame = () => {
         const kmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); 
         const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
 //
-
+        if (gameSocket){
         gameSocket.onmessage = (event) => {
             const data = JSON.parse(event.data);
             
@@ -132,67 +160,16 @@ const RemoteGame = () => {
 
                 OppmouseDirection = Number(data['ball']['mousedirection']);
 
-                // if (data['type'] == 'Game_end'){
-
-                //     const message = {
-                //         type: 'Game_end',
-                //         role:  ReomteGameData.role,
-                //         my_id: ReomteGameData.p1_id,
-                //         paddle: {
-                //             x: ReomteGameData.p1_id,
-                //             y: ReomteGameData.p2_id,      
-                //         },
-                //         ball: {
-                //             c: 1,
-                            
-                //             x:  playerScore,
-                //             y:  aiScore,
-                //             z:  1,
-            
-                //             mousedirection: 1,
-            
-                //             status: Objects[Objects.length - 1]?.created_by_me ?? false,
-                //             state : true
-                //         }
-                //     };
-                //     if (playerScore === 7){
-                //         setReomteGameData({
-                //             winner  : ReomteGameData.my_user
-                //         });    
-                //         message.ball.mousedirection = 1;
-                //     }
-                //     else {
-                //         setReomteGameData({
-                //             winner  : ReomteGameData.opponent
-                //         });     
-                //         message.ball.mousedirection = 2;
-                //     }
-                //         if (docket && docket.readyState === 1)
-                //             docket.send(JSON.stringify(message));
-        
-                // }
-
-                // console.log("==> STATE : ", state);
                 if (state === true){
                     if (OppmouseDirection === 1){
                         setReomteGameData({
-                            // room_name: null,
-                            // role     : null,
-                            // my_user  : null,
-                            // opponent : null,
-                            // p1_id    : null,
-                            // p2_id    : null,
+
                             winner  : ReomteGameData.opponent
                         });
                     }
                     else {
                         setReomteGameData({
-                            // room_name: null,
-                            // role     : null,
-                            // my_user  : null,
-                            // opponent : null,
-                            // p1_id    : null,
-                            // p2_id    : null,
+          
                             winner  : ReomteGameData.my_user
                         });        
                     }
@@ -220,6 +197,7 @@ const RemoteGame = () => {
     
     
         };        
+    };        
         ////=>////
 
         // Physics properties (perfect values)
@@ -690,7 +668,7 @@ const RemoteGame = () => {
                     state : end_state
                 }
             };
-            if (gameSocket.readyState === 1)
+            if (gameSocket && gameSocket.readyState === 1)
                 gameSocket.send(JSON.stringify(message));
         };
 
