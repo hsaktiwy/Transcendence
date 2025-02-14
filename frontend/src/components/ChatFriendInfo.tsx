@@ -83,7 +83,7 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
     useEffect(()=>{
         BlockStatusCheck()
         fetchMatches()
-    },[userContext.action, chatContext.active,  /*radarchartData*/])
+    },[/*userContext.action, chatContext.active,*/  /*radarchartData*/])
 
     return(
         <>          
