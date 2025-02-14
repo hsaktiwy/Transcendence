@@ -382,11 +382,11 @@ class Enable2faView(APIView):
                 user.two_factor_auth = True
                 user.save()
                 return Response({
-                    'message' : 'Two Factory Authentication enabled succefully'
+                    'message' : 'Two Factor Authentication enabled succefully'
                 }, status=200)
             else:
                 return Response({
-                    'message' : 'Two Factory Authentication already enabled'
+                    'message' : 'Two Factor Authentication already enabled'
                 }, status=200)
         return Response({
             'message' : 'Invalid OTP'
@@ -442,7 +442,6 @@ def LogoutView(request):
 @permission_classes([AllowAny])
 def SetUsername(request):
         try:
-            print(request.data)
             email = request.data.get('email')
             user = MyUser.objects.get(email=email)
             if user.login is not None and user.login != "":

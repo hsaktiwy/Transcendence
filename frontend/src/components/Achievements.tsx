@@ -8,6 +8,7 @@ import { useEffect } from "react";
 
 import mailman from "@/utils/AxiosFetcher";
 import { SlLock } from "react-icons/sl";
+import { toast } from "react-toastify";
 
 export interface Artwork {
   artist: string
@@ -49,12 +50,10 @@ function Achievements({ uuid }: Prop) {
         method: "GET",
       };
       const resp = await mailman(req);
-      // const array: Achievements[] = resp.data as Achievements[];
-      console.log('data achivement ->>>>>>\n', resp.data)
       setAchievementsData(resp.data.achievements);
       setWins(resp.data.wins);
     } catch (e) {
-      console.log("Error in Achievement", e);
+     toast.error("error occured")
     }
   };
   const isGetTheAchievement = (game_numbers:number) =>

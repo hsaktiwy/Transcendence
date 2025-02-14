@@ -49,34 +49,6 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         const newItems = items.filter(item => item.id !== itemId)
         userContextConsumer?.setNewNotification(newItems)
     }
-    // let usersDataArr= useRef<senderInterface[]>([])
-    // const fetchRequestSenderData =  async (items:  NotificationPropreties[]) =>{
-    //         for(const item of items){
-    //             if (!usersDataArr.current.find(user => item.sender === user.login)){
-    //                 try{
-    //                     const req = {
-    //                         url: `/api/users/${item.sender}/`,
-    //                         method: 'GET',
-    //                     }
-    //                     const resp = await mailman(req)
-    //                     const userData: senderInterface = resp.data
-    //                     usersDataArr.current.push(userData)
-    //                     console.log("wewewe ====???? ",usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic)
-    //                 }
-    //                 catch (err){
-    //                     console.error("dddddd======????",err)
-    //                 }
-    //             }
-
-    //         }
-
-    //     setdatafetched(true)
-
-    // }
-    // useEffect(() =>{
-    //     const requests = items.filter(item => item.type === 'friendship' || item.type === 'message' )
-    //     fetchRequestSenderData(requests)
-    // },[])
     useEffect(() =>{
 
         const interval = setInterval(() =>{
@@ -89,10 +61,6 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         }
     }, [items])
 
-    // setReomteGameData({
-    //     room_name: data['room_name'],
-    //     my_user  : data['user_name'],
-    //   });
 
     return(
 

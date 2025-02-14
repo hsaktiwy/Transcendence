@@ -80,10 +80,9 @@ const ProfileTest  = () =>{
                 }
                 const resp = await mailman(req);
                 setLevel(resp.data);
-                console.log('hiiiiii from here  rank of user -->>>>> ', resp.data);
             }
             catch (err){
-                console.error("dddddd======????",err)
+                console.error(err)
             }
         }
     const fetchMatches = async () =>
@@ -117,22 +116,7 @@ const ProfileTest  = () =>{
 
       }
     };
-    
-    // Function to switch match type
-    // const switchMatchHistoryType = (type :any) => {
-    //     setMatchHistoryType(type);
-    //     getMatchHistoryData(type);
-    // };
-    // useEffect(()=>
-    // {
-    //     // console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
 
-    // }, [userMatchHistory])
-    
-    // Fetch initial data when component mounts
-    // useEffect(() => {
-    //     getMatchHistoryData(matchHistoryType);
-    //   }, [matchHistoryType]);  // <-- Now it will refetch when switching tabs
       
    const fetchUserData = async () =>{
     try{
@@ -147,13 +131,11 @@ const ProfileTest  = () =>{
                 }
                 
                 const resp = await mailman(req)
-                console.log(resp)
                 const respData: ProfileDataInterface = resp.data
                 setProfileData(respData)
         }
         else{
             setProfileData(user[0])
-            // await getChannelId()
         }
     }
     catch (err){
@@ -176,7 +158,7 @@ const ProfileTest  = () =>{
         }
         catch(err)
         {
-            console.log("Block status ", err)
+            console.log(err)
         }
     }
     const waitData=  async() =>

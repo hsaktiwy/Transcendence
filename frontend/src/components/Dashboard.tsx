@@ -35,8 +35,6 @@ function Dashboard(){
   
 
   const uuid = userContextConsumer?.userData?.unique_id;
-  // const level = userContextConsumer?.level
-  // console.log('hiii user name here', level);
   const fetchLineChart = async () =>
     {
         try{
@@ -46,17 +44,14 @@ function Dashboard(){
                 withCredentials: true,
             }
             const resp = await mailman(req);
-            console.log('matches  is here  ma hree : \n', resp.data);
             const fetchedData: LinechartData = {
                 user: resp.data.user,
                 weekly_match_data: resp.data.weekly_match_data, // This should already be an array
             };
             setLineChartData(fetchedData);
-            console.log('hiiii mhere', lineChartData);
-            // setMatches(resp.data);
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
     }}
 
     const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
@@ -83,12 +78,11 @@ function Dashboard(){
                 withCredentials: true,
             }
             const resp = await mailman(req);
-            console.log('print win and lose mheree pleas : \n', resp.data);
             setMatches(resp.data);
             setRadarChartData(resp.data);
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
         }
     }
         const [level, setLevel] = useState<UserRankResponse | undefined>();

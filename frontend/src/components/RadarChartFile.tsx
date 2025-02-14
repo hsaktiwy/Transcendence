@@ -37,9 +37,6 @@ const chartConfig = {
 
 export function RadarChartFile(props: { radarchartData: RadarChartInterFace }) {
   
-  console.log('hiiii from rada chart ->>', props.radarchartData.wins)
-  // console.log('zbii hana  ->>', prop.matches?.wins)
-  // const zbi = 12
   const chartData = [
     { matches: "w", game: props.radarchartData.wins},
     { matches: "Lo", game: props.radarchartData.lose },

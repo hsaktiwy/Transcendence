@@ -146,7 +146,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                method: 'GET',
            };
            const resp = await mailman(req);
-           console.log('resp data rank ->>', resp.data)
            if(resp.data.profiles)
             setUserRank(resp.data.profiles);
         }
@@ -182,12 +181,11 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
             const respData: UserDataInterface = resp.data
             setUserData(respData)
-            console.log('hana->>',resp.data)
             setProfilePicChanged(false)
             
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
         }
 
     }
@@ -202,13 +200,12 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             const resp = await mailman(req)
             if (resp.data.length > 0){
                 const data : FriendRequestInterface[] = resp.data
-                console.log("sent friend req ",resp.data)
                 setFriendRequestSent(data)
             }
             
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
         }
     }
     const fetchReceivedFriendRequest = async () =>{
@@ -222,12 +219,11 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             const resp = await mailman(req)
             if (resp.data.length > 0){
                 const data : FriendRequestInterface[] = resp.data
-                console.log("received friend req ",resp.data)
                 setFriendRequestReceived(data)
             }
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
         }
     }
     const getNewContent = (content: string, username: string) =>{
@@ -261,7 +257,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                         tmp_senders.push(notif.sender)
                     }
                     catch (err){
-                        console.error("error while fetching sender data ======????",err)
+                        console.error(err)
                     }
                 }
                 else{
@@ -285,7 +281,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
             let notificationData : NotificationPropreties[] = resp.data
             notificationData = await getNotificationData(notificationData)
-            console.log(notificationData)
             setnotifications(notificationData.sort((a, b)=> b.id - a.id))
             
         }
@@ -304,11 +299,10 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 }
                 const resp = await mailman(req)
                 const friendsList: ProfileDataInterface[] = resp.data
-                console.log(friendsList)
                 setFriends(friendsList)
             }
             catch (err){
-                console.error("dddddd======????",err)
+                console.error(err)
             }
     
     }
@@ -323,11 +317,10 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             const resp = await mailman(req)
             const BlockList: ProfileDataInterface[] = resp.data
             setBlockList(BlockList)
-            console.log(resp.data)
 
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
         }
 
 }
@@ -349,13 +342,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
 
         data.content = `${data.sender.login} Invite You`
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
-        setNewNotification(prev => [...prev, data])
-        // if (data.type === 'friendship')
-        // {
-            // fetchReceivedFriendRequest()
-            // fetchSentFriendRequest()
-            // fetchFriends()
-        // }      
+        setNewNotification(prev => [...prev, data])   
     }
     const updateFriendList = (user: ProfileDataInterface) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
@@ -371,8 +358,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             AuthContextConsummer?.setLoggedIn(false)
             Navigate('/home')
         }
-
-        console.log(friends)
         data.sender.state = data.state
         const friend  = data.sender as ProfileDataInterface
         friend.state = data.state
@@ -382,7 +367,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     }
 
     useEffect(() =>{
-        console.log(location.pathname)
         if (ready)
         {
             matchHistoryData()
@@ -395,11 +379,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 SocketContext.AddChannel('NOTIFICATION_MESSAGE', notificationHandler)
             SocketContext.AddChannel('NOTIFICATION_STATE', friendStateHandler)
             SocketContext.AddChannel('NOTIFICATION', PureNotification)
-            // const stateObj = {
-            //     type: "NOTIFICATION_STATE",
-            //     state: "online"
-            // }
-            // SocketContext.socket?.current.send(JSON.stringify(stateObj))
 
         }
         return () => {
@@ -429,27 +408,18 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         await fetchReceivedFriendRequest()
         await fetchSentFriendRequest()
         await fetchBlockList()
-        // await fetchLevle()
         await rankData()
         setReady(true)
     }
     useEffect(() =>{
         if (AuthContextConsummer?.loggedIn){
-            // fetchUserData()
-     
-            // fetchFriends()
-            // fetchReceivedFriendRequest()
-            // fetchSentFriendRequest()
-            // setReady(true)
             ajami();
             
         }
     }, [AuthContextConsummer?.loggedIn])
     return(
         <UserContext.Provider value={{userData, setUserData, profilePicChanged, setProfilePicChanged, coverPicChanged,setCoverPicChanged,notifications, setnotifications, newNotification, setNewNotification, notificationHandler, action, setAction, friendRequestSent, setFriendRequestSent, friendRequestReceived, setFriendRequestReceived, fetchNotification, friends, setFriends, fetchFriends, blockList, setBlockList, userMatchHistory, setUserMatchHistory, userRank, setUserRank, level, setLevel}}>
-            {/* { newNotification.length > 0 && <NotificationToast items={newNotification}/>} */}
             {ready  ? children : <LoadingIndecator/>}
-            {/* { children } */}
         </UserContext.Provider>
     )
 }

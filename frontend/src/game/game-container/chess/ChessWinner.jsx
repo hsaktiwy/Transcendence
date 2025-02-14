@@ -37,9 +37,6 @@ const ChessWinner = () => {
       }
     )
     
-    console.log("===> Remote winner : ", ReomteGameData.winner);
-    console.log("===> Local  winner : ", LocalGamesData.winner);
-  
     if ((ReomteGameData !== null && ReomteGameData !== undefined) && (ReomteGameData.winner !== null && ReomteGameData.winner !== undefined)){
       winner = ReomteGameData.winner;
     }

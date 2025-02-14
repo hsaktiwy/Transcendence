@@ -46,7 +46,6 @@ function Settings() {
                 const response =  await mailman(req)
                 if (response.status === 200)
                 {
-                    console.log(response.data)
                     const newUserData = response.data as UserDataInterface
                     if (e.target.id !== 'CoverProfile'){
                         toast.success('Profile picture changed succesfully')
@@ -74,9 +73,7 @@ function Settings() {
                             <FiEdit2/>
                         </div>
                         <img src={`${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile}`} alt="user-pic" className="rounded-xl object-cover h-full w-full"/>
-                        <input id='CoverProfile' type="file" accept='image/*' onClick={(e: any)=>{
-                            console.log(typeof(e.target.id))
-                        }} onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50  border-black w-full h-full rounded-xl" />
+                        <input id='CoverProfile' type="file" accept='image/*' onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50  border-black w-full h-full rounded-xl" />
                     </div>
                 <div className="relative h-[300px] bg-black/25 rounded-xl left-0 top-0 bg-"></div>
                     <div className=" z-20 group user-pic cursor-pointer h-[160px] w-[160px] absolute top-[200px]  left-[50%] -translate-x-[50%] rounded-full  after:content-[''] after:absolute after:h-[160px] after:w-[160px] after:rounded-full   after:top-0 after:left-[50%] after:-translate-x-[50%] after:border-[5px] after:border-white after:bg-transparent after:hover:bg-black/45 ">
