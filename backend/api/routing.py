@@ -1,6 +1,6 @@
 from django.urls import re_path
 from . import consumers
-from game.consumer import ApiConsumer,GameRoomConsumer, ApiChessConsumer, GameChessRoomConsumer
+from game.consumer import ApiConsumer,GameRoomConsumer #, ApiChessConsumer, GameChessRoomConsumer
 
 websocket_urlpatterns = [
     re_path(r'ws/chat/', consumers.ChatConsumer.as_asgi()),
@@ -9,7 +9,7 @@ websocket_urlpatterns = [
     re_path(r'server-endpoint-socket/', ApiConsumer.as_asgi()),
     re_path(r'ping-pong/room/(?P<room_name>\w+)$', GameRoomConsumer.as_asgi()),
 
-    re_path(r'server-endpoint-socket-chess/$', ApiChessConsumer.as_asgi()),
-    re_path(r'chess/room/(?P<room_name>\w+)$', GameChessRoomConsumer.as_asgi()),
+    # re_path(r'server-endpoint-socket-chess/$', ApiChessConsumer.as_asgi()),
+    # re_path(r'chess/room/(?P<room_name>\w+)$', GameChessRoomConsumer.as_asgi()),
     
 ]
