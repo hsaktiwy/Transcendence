@@ -11,4 +11,5 @@ websocket_urlpatterns = [
 
     re_path(r'ws/server-endpoint-socket-chess/$', ApiChessConsumer.as_asgi()),
     re_path(r'ws/chess/room/(?P<room_name>\w+)$', GameChessRoomConsumer.as_asgi()),
+    re_path(r"^ws/.*$", consumers.NoMatchConsumer.as_asgi()),
 ]
