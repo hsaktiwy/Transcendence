@@ -280,29 +280,33 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 self.room_name = room[0]
                 self.room_group_name = f"game_room_{self.room_name}"
                 connections_count[self.room_group_name] = connections_count.get(self.room_group_name, 0) + 1
-                if connections_count[self.room_group_name] == 2: #both players connected
-                    print("======> send game begin to both of them !")
-                    data = {"type" : "match_found", "room_name" : room[0], "user_name" : user.login} #send match_found to both of them aka (could help syncing remote game)
-                    # await self.accept()
-                    
-                    await self.channel_layer.group_send(
-                        self.room_group_name,
-                        {
-                            'type': 'broadcast_event',
-                            'payload': data
-                        }
-                    )
 
-                elif connections_count[self.room_group_name] <= 2:
+                if connections_count[self.room_group_name] <= 2:
                     # user.state = MyUser.IN_GAME
                     # user.save()
+                    await self.accept()
+                    
                     await self.channel_layer.group_add(
                         self.room_group_name,
                         self.channel_name
                     )
+
+                    if user.unique_id == room[2][0].unique_id: #send to the inviter that the game begins
+                        data = {"type" : "match_found", "room_name" : room[0], "user_name" : user.login} #send match_found to both of them aka (could help syncing remote game)
+                        ######
+                        # await self.accept()
+                        
+                        await self.channel_layer.group_send(
+                            self.room_group_name,
+                            {
+                                'type': 'broadcast_event',
+                                'payload': data
+                            }
+                        )
+                        
+                    ####
                     print(f"======> from group channels user ", user.login, "joind the group ! VISIT COUNT :", connections_count[self.room_group_name])
                     # Accept the WebSocket connection #check this above
-                    await self.accept()
                 else:
                     await self.close()
 
