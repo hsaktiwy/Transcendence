@@ -72,6 +72,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f'error  : {e}')
             return 0, None, None, None,# None
+    def game_invite_notification(self, _receiver, _sender, room_name):
+        try:
+            receiver = MyUser.objects.filter(unique_id=_receiver).first()
+            not_content = f'{_sender.unique_id} GAMEINVITE to {receiver.unique_id} room {room_name}'
+            notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='gameInvitation', friend_request_id=-1)
+            return 1, notification, receiver.id
+        except Exception as e:
+            print(f'error  : {e}')
+            return 0, None, None, None,# None
+
     def create_message_notification(self, receiver, sender, message, channel_id):
         try:
             user = MyUser.objects.filter(unique_id=receiver).first()
@@ -327,6 +337,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print(self.scope.get('session'))
             user = self.scope['user']
             message_json = json.loads(text_data)
+            # print(message_json)
             if message_json['type'] == 'MESSAGE':
                 message = message_json['message']
                 room = message_json['channel']
@@ -448,7 +459,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'action': message_json['type'],
                         'sender': SerializedSender,
                 }
-                # print()
                 if message_json.get('status'):
                     dictResp['status'] = message_json['status']
                 await self.channel_layer.group_send(
@@ -468,6 +478,32 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 channel_id = int(message_json['channel'])
                 # update the message status in the range
                 await sync_to_async(self.set_messages_isread_to_true)(user, channel_id, first_index)
+            elif message_json['type'] == "GAME_INVITE":
+                receiver = message_json['receiver']
+                room_name = message_json['room_name']
+                success,notification, receiver_id= await sync_to_async(self.game_invite_notification)(receiver, user, room_name)
+                # await self.add_group(channel, user)
+                group_name = f'notification_user_{receiver_id}'
+                print("{{{{{{{{{{{{{{{{{{{{{{{sucess "+ str(success)+" }}}}}}}}}}}}}}}}}}}}}}}")
+                if (success == 0):
+                    return 
+                notificationSerialized = await sync_to_async(self.get_SerializedNotification)(notification)
+                SerializedSender = await sync_to_async(self.get_sender)(user)
+                await self.channel_layer.group_send(
+                    group_name,
+                    {
+                        'type': notificationSerialized['type'],
+                        'id': notificationSerialized['id'],
+                        'content': notificationSerialized['content'],
+                        'created': notificationSerialized['created'],
+                        'channel_id' : -1,
+                        'friend_request_id' : -1,
+                        'friend_req_status' : 'accepted',
+                        'is_readed': notificationSerialized['is_readed'],
+                        'sender': SerializedSender,
+                        'room_name': room_name,
+                    }
+                )
             else:
                 print(f"Unknown message type: {message_json['type']}")
             # game session, games [,]
@@ -509,5 +545,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=message)
 
     async def state(self, event):
+        message = json.dumps(event)
+        await self.send(text_data=message)
+
+    async def gameInvitation(self, event):
         message = json.dumps(event)
         await self.send(text_data=message)

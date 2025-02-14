@@ -8,18 +8,18 @@ import { useNavigate } from "react-router-dom";
 import { useRemoteGameContext } from '../game/MatchContext';
 
 import { UserContext } from '../../../components/UserContext'
+import { WebSocketContext } from '../../../utils/WSContext';
 
 
 const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
-
+  const webSContext = useContext(WebSocketContext);
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
   
   const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
-
   const user = useContext(UserContext)
 
   const username = user?.userData?.login;
@@ -44,18 +44,21 @@ const PreRemote = () => {
       // Create WebSocket connection
 
       useEffect(()=>{
-          const socket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+        if (ReomteGameData.form_game_invite === true){
+
+          const tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
           console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
           
-          socket.onopen = () => {
+          tmpsocket.onopen = () => {
             console.log("Matchmaking WebSocket Connected");
           };
           
-          socket.onmessage = (event) => {
+          tmpsocket.onmessage = (event) => {
             const data = JSON.parse(event.data);
+            console.log("==> message received from the backend !");
             
-            if (data['type'] === 'match_found') {
-              console.log("=> Match Found:");
+            if (data['type'] === 'room_created') {
+              console.log("=> room_created:");
               console.log("   => room_name     :", data['room_name']);
               console.log("   => my_role       :", data['role']);
               console.log("   => user_name     :", data['user_name']);
@@ -63,36 +66,57 @@ const PreRemote = () => {
               console.log("   => my_id         :", data['my_id']);
               console.log("   => opponent_id   :", data['opponent_id']);
               
-              
-              // Update Reomte context
-              setReomteGameData({
+              //send notification the opponent, sending (room_name, ...)
+              //send_notif // room_name: data['room_name']
+              const req = {
+                type:  "GAME_INVITE",
                 room_name: data['room_name'],
-                role     : data['role'],
-                my_user  : data['user_name'],
-                opponent : data['opponent_name'],
-                p1_id    : data['my_id'],
-                p2_id    : data['opponent_id'],
-                winner   : null
-              });
-              // Close the socket and navigate to RemoteGame
-              socket.close();
-              navigate('/game/RemoteGame');
-            }
-          };
-          
-          // socket.onerror = (error) => {
-          //   console.error("WebSocket Error:", error);
-          //   setIsSearching(false);
-          // };
-          
-          // socket.onclose = () => {
-          //   console.log("Matchmaking WebSocket Closed");
-          // };
-          
-          setMatchSocket(socket);
-        ///------- 
+                receiver : data['opponent_id'],
+              }
+              console.log(JSON.stringify(req))
+              if (webSContext && webSContext.socket)
+              {
+                webSContext.socket.current.send(JSON.stringify(req))
+              }
+              // useEffect( () => {
+        
+              console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
+              
+              const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/Bit_n3as');
+              
+              tgameSocket.onopen = () => {
+                  console.log("Connected to the game room:", 'Bit_n3as');
+              };
+              tgameSocket.onclose = () => {
+                  console.log("Socket Disconnected !");
+                };
+              tgameSocket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data['type'] === 'match_found') {
+                  console.log('====> match begin ...');
 
-      }, [])
+                  // Update Reomte context
+                  setReomteGameData({
+                    room_name: data['room_name'],
+                    // role     : data['role'],
+                    my_user  : data['user_name'],
+                    // opponent : data['opponent_name'],
+                    // p1_id    : data['my_id'],
+                    // p2_id    : data['opponent_id'],
+                    // winner   : null
+                  });
+                  
+                  // Close the socket and navigate to RemoteGame
+                  tmpsocket.close();
+                  tgameSocket.close()
+                  navigate('/game/RemoteGame');
+                }
+              }
+            };
+          }
+          // setMatchSocket(socket);
+        }
+      }, [ReomteGameData.form_game_invite])
 
 
   }
@@ -126,6 +150,7 @@ const PreRemote = () => {
         
         // Update Reomte context
         setReomteGameData({
+          // room_name: 'Bit_n3as',
           room_name: data['room_name'],
           role     : data['role'],
           my_user  : data['user_name'],
@@ -184,12 +209,12 @@ const PreRemote = () => {
         </div>
         <center>
         {show && (
-          <div>
-            <div className="invite-header">
-              <h1 style={{fontSize:'35px'}} >{INVITE_TEXT}</h1>
-              <p>Waiting for you friend to join ...</p>
-            </div>
+          <>
             <div className="players-container-r">
+              <div className="invite-header">
+                <h1 style={{fontSize:'35px'}} >{INVITE_TEXT}</h1>
+                <p>Waiting for you friend to join ...</p>
+              </div>
               <div className="circle-image">
                 <img
                   src={backendPath + ReomteGameData.inviter_image}
@@ -204,7 +229,7 @@ const PreRemote = () => {
                   />
               </div>
             </div>
-          </div>
+          </>
         )}
         
         {!show && (<div className="players-container-r">

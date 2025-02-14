@@ -44,7 +44,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         {
           try {
             const { type, ...data } = JSON.parse(message.data);
-            console.log(type, data)
+            console.log("_______________________________>", message)
             if (type === 'send_message'){
               if (data.ConversationType == 'Message') {
                 console.log("hmm", type, data)
@@ -78,6 +78,15 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                   if (channels.current['FriendRequestAccepted'])
                     channels.current['FriendRequestAccepted'](notifData)
                 }
+              }
+            }
+
+            if (type === 'gameInvitation')
+            {
+              if(channels.current['NOTIFICATION_GAME_INVITE'])
+              {
+                const notifData =  JSON.parse(message.data);
+                channels.current['NOTIFICATION_GAME_INVITE'](notifData)
               }
             }
             if (type === 'profile_notif')
