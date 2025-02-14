@@ -158,7 +158,8 @@ function Dashboard(){
           setIsLoading(false)
       } 
   useEffect(() => {
-    waitData()
+    if(!level)
+        waitData()
     // Cleanup the timer to avoid memory leaks
   }, [level]);
   if (!userContextConsumer || !wsConsumer)
