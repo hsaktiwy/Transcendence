@@ -62,6 +62,7 @@ import MainGamePage from './game/game-container/pages/MainGamePage.jsx';
 import ChessPreLocal from './game/game-container/chess/ChessPreLocal.jsx';
 
 import ChessWinner from './game/game-container/chess/ChessWinner.jsx';
+import PageNotFound from './components/NotFound.js'
 
 // import Backgrounds from './game/game-container/components/Backgounds.jsx';
 
@@ -113,8 +114,8 @@ const App = () =>
                       <Route path='/game/ChessWinner' element={<ChessWinner />}/>
                       
                       </Route>
-
-                      <Route path='*' element={<LoadingIndecator/>}/>
+                      <Route path='*' element={<PageNotFound/>}/>
+                      <Route path='/404' element={<PageNotFound/>}/>
                     </Routes>
                   </LocalGamesProvider>
                 </RemoteGameProvider>

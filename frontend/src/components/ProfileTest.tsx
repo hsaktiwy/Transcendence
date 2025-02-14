@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import './style-component.css'
 
@@ -38,7 +38,7 @@ const ProfileTest  = () =>{
     const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
     const [level, setLevel] = useState<UserRankResponse | undefined>();
-
+    const Navigate = useNavigate()
     // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     // const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
     
@@ -140,17 +140,16 @@ const ProfileTest  = () =>{
         if (user.length === 0)
         {
             setIsLoading(true);
-            const req = {
-                url: `/api/users/${uuid}/`,
-                method: 'GET',
-            }
-            
-            const resp = await mailman(req)
-            const respData: ProfileDataInterface = resp.data
-    
-            setProfileData(respData)
-            // setIsLoading(false);
-            // await getChannelId()
+ 
+                const req = {
+                    url: `/api/users/${uuid}/`,
+                    method: 'GET',
+                }
+                
+                const resp = await mailman(req)
+                console.log(resp)
+                const respData: ProfileDataInterface = resp.data
+                setProfileData(respData)
         }
         else{
             setProfileData(user[0])
@@ -158,7 +157,7 @@ const ProfileTest  = () =>{
         }
     }
     catch (err){
-        console.error("dddddd======????",err)
+        Navigate('/404')
     }
   };
 
