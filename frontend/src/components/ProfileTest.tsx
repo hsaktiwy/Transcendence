@@ -45,15 +45,10 @@ const ProfileTest  = () =>{
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
     const [level, setLevel] = useState<UserRankResponse | undefined>();
 
-    // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
-    // const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
-    
-
    const {uuid} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
-//    const {setUserMatchHistorey} = userContextConsumer;
 
     const getChannelId = async () =>{
             try{
@@ -86,7 +81,6 @@ const ProfileTest  = () =>{
                 weekly_match_data: resp.data.weekly_match_data, // This should already be an array
             };
             setLineChartData(fetchedData);
-            // setMatches(resp.data);
         }
         catch (err){
             console.error("dddddd======????",err)
@@ -138,23 +132,6 @@ const ProfileTest  = () =>{
 
       }
     };
-    
-    // Function to switch match type
-    // const switchMatchHistoryType = (type :any) => {
-    //     setMatchHistoryType(type);
-    //     getMatchHistoryData(type);
-    // };
-    // useEffect(()=>
-    // {
-    //     // console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
-
-    // }, [userMatchHistory])
-    
-    // Fetch initial data when component mounts
-    // useEffect(() => {
-    //     getMatchHistoryData(matchHistoryType);
-    //   }, [matchHistoryType]);  // <-- Now it will refetch when switching tabs
-      
    const fetchUserData = async () =>{
     try{
         const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
@@ -170,12 +147,9 @@ const ProfileTest  = () =>{
             const respData: ProfileDataInterface = resp.data
     
             setProfileData(respData)
-            // setIsLoading(false);
-            // await getChannelId()
         }
         else{
             setProfileData(user[0])
-            // await getChannelId()
         }
     }
     catch (err){
@@ -214,12 +188,10 @@ const ProfileTest  = () =>{
    useEffect(() =>{
     if (userContextConsumer?.userData?.unique_id !== uuid){
         fetchUserData().finally(() => {
-            // Add a delay of 1.2 seconds before setting isLoading to false
             const timer = setTimeout(() => {
               setIsLoading(false);
             }, 600);
       
-            // Cleanup timer
             return () => clearTimeout(timer);
           });
           BlockStatusCheck();
@@ -305,30 +277,6 @@ const ProfileTest  = () =>{
                         </div>
                         <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 relative rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-3xl shadow-[#22333869] h-full w-full">
                                 <div className="w-full h-full flex flex-col">
-                                    {/* Tab Navigation */}
-                                    {/* <div className="flex ">
-                                    {["PONG", "CHESS"].map((type) => (
-                                        <button
-                                        key={type}
-                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                                            matchHistoryType === type
-                                            ? " rounded-b-none"
-                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                                        } hover:text-[#5E97A9]`}
-                                        onClick={() => switchMatchHistoryType(type)}
-                                        >
-                                        <div>
-                                            {
-                                                type == "PONG" ?        
-                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                                     :
-                                                     <div><img className="w-6" src="../strategy.png"/></div>
-                                        }
-                                        </div>
-                                        {type}
-                                        </button>
-                                    ))}
-                                    </div> */}
                                     <MatchHistory data={userMatchHistory} username={profileData?.login} /> 
                                 </div>
                             </div>
@@ -354,31 +302,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full">
 
-                            <div className="w-full h-full flex flex-col">
-                                    {/* Tab Navigation */}
-                                    {/* <div className="flex ">
-                                    {["PONG", "CHESS"].map((type) => (
-                                        <button
-                                        key={type}
-                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                                            matchHistoryType === type
-                                            ? " rounded-b-none"
-                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                                        } hover:text-[#5E97A9]`}
-                                        onClick={() => switchMatchHistoryType(type)}
-                                        >
-                                        <div>
-                                            {
-                                                type == "PONG" ?        
-                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                                     :
-                                                     <div><img className="w-6" src="../strategy.png"/></div>
-                                        }
-                                        </div>
-                                        {type}
-                                        </button>
-                                    ))}
-                                    </div> */}
+                            <div className="w-full h-full flex flex-col">                                   
                                     <MatchHistory data={userMatchHistory} username={profileData?.login} />
                                 </div>
                         </div>
