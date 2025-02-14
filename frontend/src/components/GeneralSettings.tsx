@@ -101,7 +101,6 @@ function GeneralSettings(){
         }
         else if (Object.values(inputsError).includes(true))
         {
-          console.log(inputsError)
           toast.error("Please correct the required fields")
         }
         else{

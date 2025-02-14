@@ -14,13 +14,6 @@ interface MatchHistoryProps {
 
  
 export function MatchHistory({ data, username }: MatchHistoryProps) {
-
-
-  console.log('dataaaa match history : ->>', data);
-  
-
-
-  
   const [matchHistoryType, setMatchHistoryType] = useState<"PONG" | "CHESS">("PONG");
 
   const switchMatchHistoryType = (type: "PONG" | "CHESS") => {
@@ -33,7 +26,6 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
     
         if (game.score_p1 === game.score_p2) 
           return 'draw'; // Handle draw case
-        // console.log('username  ->>>', username)
         if ((isUserP1 && game.score_p1 > game.score_p2) || (isUserP2 && game.score_p2 > game.score_p1)) {
             return 'win';
         }
@@ -45,12 +37,6 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
         return('userUP');
       return('userDown');
     } 
-      // // Call the function
-      // fetchUserMatchHistory();
-      useEffect(()=>{
-        // if(userMatchHistory.length)
-        //     setIsPlayed(true);
-      }, [])
       return (
         <>
           {!data ? (

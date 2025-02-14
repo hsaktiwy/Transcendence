@@ -58,13 +58,11 @@ function ChatSection(){
         }
     }
     useEffect(()=>{
-        console.log("dada")
         updateConvsState()
     }, [userContextConsumer.friends])
 
     const UpdateConvs = (data:any)=>
     {
-        console.log('Update convs ...')
         const message_received: Message = {
             id: data.message_id,
             sender: data.user,
@@ -105,8 +103,6 @@ function ChatSection(){
             }
             const rep  = await mailman(req)
             const fetched_conv:Conversation =  rep.data.conv as Conversation
-            // console.log(fetched_conv)
-            // console.log('conv', convs)
             if (convs != undefined)
             {
                 let list_conv:Conversation[] = [fetched_conv, ...convs]
@@ -117,19 +113,13 @@ function ChatSection(){
                 let list_conv:Conversation[] = [fetched_conv]
                 setConvs(list_conv)
             }
-            // console.log('list conv', list_conv)
-            
         }
         catch(e){
-            console.log('Error : in ChatModel get {'+ 'chat/conversation/'+channel_id+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/' +'} :\n')
             console.log(e)
         }
     }
     const Update_chat_notif = (data:NotificationPropreties)=>{
-        // if (data)
-        // {
         const channel_id = data.channel_id
-        console.log('wa hafida ', convs, channel_id)
         if (convs)
         {
             if (convs?.filter(conv => conv.channelId === channel_id).length === 0)
@@ -137,7 +127,6 @@ function ChatSection(){
         }
         else
             get_conversation(channel_id)
-        // }
     }
     useEffect(() =>{
         if (loading == false)
@@ -157,7 +146,6 @@ function ChatSection(){
   
     useEffect(()=>
     {
-        console.log('hekkkk')
        
         if (location?.state?.channel_id)
         {
@@ -168,11 +156,6 @@ function ChatSection(){
         }
         else
             init_conv(setLoading,setActive, setConvs, channelId);
-        console.log("wala ", convs)
-
-        // create a function that will update the general data
-        // updateConvsState()
-       
     }, [])
 
     return(

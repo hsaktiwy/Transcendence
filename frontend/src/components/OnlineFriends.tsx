@@ -32,7 +32,6 @@ function OnlineFriends() {
         }
 
     };
-    console.log('here-->', userContext?.friends)
   return (
     <>
         <div className='onlineFriends-div  pt-5 h-full '>
@@ -63,7 +62,6 @@ function OnlineFriends() {
                                 value={searchTerm}
                                 onChange={handleSearch}
                             />
-                            {/* Dropdown only appears if searchTerm exists */}
                             {searchTerm && filteredFriends.length > 0 && (
                                <div className="mt-1 bg-gradient-to-br from-[#2a3236] to-[#1e2124] p-2 rounded-lg shadow-lg max-h-40 overflow-y-auto">
                                {filteredFriends.slice(0, 5).map((friend) => (

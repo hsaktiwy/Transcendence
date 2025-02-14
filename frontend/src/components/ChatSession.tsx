@@ -134,9 +134,7 @@ function ChatSession(){
     }
     // hamza
     const UpdateCurrentConvs = useCallback((message_received: Message , __channelId: number) => {
-        console.log(__channelId, chatContext.active?.channelId)
         if (__channelId === chatContext.active?.channelId) {
-            console.log('messagr received:  ', message_received)
             chatContext.setActive((prevActive) => prevActive && ({
             ...prevActive,
             new_message: 1,
@@ -214,7 +212,6 @@ function ChatSession(){
 
     useEffect(()=>
     {
-        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ active ", chatContext.active?.channelId)
         setRCount((re)=>(re+1))
         if (chatContext.active?.new_message == 1)
             SendWebSocketToDefine()
@@ -289,16 +286,6 @@ function ChatSession(){
         }
     }
 
-    // testing purpose
-    useEffect(()=>
-    {
-        console.log("render time:", rcount)
-    },[rcount])
-    useEffect(()=>
-    {
-            console.log("activeeeee")
-    },[chatContext.active])
-    //
     return(
             <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
             `}>

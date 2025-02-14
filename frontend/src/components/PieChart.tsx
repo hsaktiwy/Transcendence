@@ -34,14 +34,6 @@ interface prop{
   matches:  LoseWins | undefined
 }
 export function PieChartFile(prop: prop) {
-
-
-    // const userContextConsumer = useContext(UserContext);
-    // if (!userContextConsumer)
-    //   throw new Error("userContext must be used within a UserProvider");
-  
-    // const {matches} = userContextConsumer;
-    console.log('from pie chartt anan here ->>> ', prop);
     const chartData = [
       { browser: "Win", Matches: prop.matches?.wins, fill: "#5E97A9" },
       { browser: "Lose", Matches: prop.matches?.lose, fill: "#303C40" },
@@ -57,8 +49,6 @@ export function PieChartFile(prop: prop) {
         color: "hsl(var(--chart-5))",
       },
     } satisfies ChartConfig
-    
-    console.log('hii from pie chart :', prop.matches);
   let totalMatches = 0;
   if (prop.matches)
     totalMatches = prop.matches?.wins + prop.matches?.lose

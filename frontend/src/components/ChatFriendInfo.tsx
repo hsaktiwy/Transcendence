@@ -76,22 +76,19 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
             const  responce:boolean = resp.data['status']
             setIsbLock(responce);
             setStatus((responce) ? 'UnBlock' : 'Block')
-            console.log(resp)
         }
         catch(err)
         {
-            console.log("Block status ", err)
+            // console.log("Block status ", err)
         }
     }
         
     const uuid = chatContext.active?.user2.unique_id
-
-    // console.log('unique id  is  here -->>>>>>>>',  uuid);
     
     useEffect(()=>{
         BlockStatusCheck()
         fetchMatches()
-    },[userContext.action, chatContext.active,  /*radarchartData*/])
+    },[userContext.action, chatContext.active])
 
     return(
         <>          

@@ -27,7 +27,6 @@ function RankFile() {
                    method: 'GET',
                };
                const resp = await mailman(req);
-               console.log('resp data rank ->>', resp.data)
                if(resp.data.profiles)
                 setUserRank(resp.data.profiles);
             }
@@ -36,7 +35,6 @@ function RankFile() {
             }
         }
     const currentUser = userRank?.find(user => user.user.login === userContextConsumer?.userData?.login);
-    console.log('hiii from user rank ', currentUser)
     useEffect(()=>{
         rankData()
     },[])
