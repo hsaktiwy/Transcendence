@@ -72,6 +72,7 @@ const PreRemote = () => {
                 type:  "GAME_INVITE",
                 room_name: data['room_name'],
                 receiver : data['opponent_id'],
+                
               }
               console.log(JSON.stringify(req))
               if (webSContext && webSContext.socket)
@@ -111,7 +112,7 @@ const PreRemote = () => {
                   });
                   
                   // Close the socket and navigate to RemoteGame
-                  tmpsocket.close();
+                  // tmpsocket.close();
                   // tgameSocket.close()
                   navigate('/game/RemoteGame');
                 }
@@ -189,15 +190,15 @@ const PreRemote = () => {
     }
   };
 
-  useEffect(() => {
-    // Cleanup socket on component unmount
-    return () => {
-      // setReomteGameData({hello:'hello'})
-      if (matchSocket) {
-        matchSocket.close();
-      }
-    };
-  }, [matchSocket]);
+  // useEffect(() => {
+  //   // Cleanup socket on component unmount
+  //   return () => {
+  //     // setReomteGameData({hello:'hello'})
+  //     if (matchSocket) {
+  //       matchSocket.close();
+  //     }
+  //   };
+  // }, [matchSocket]);
 
   return (
     <>
