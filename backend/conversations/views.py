@@ -94,6 +94,12 @@ class ConversationUpdateAPIVIEW(generics.RetrieveAPIView):
 		# we will access to the channels that are related to our user,
 		# then retreave all conversation and build a json and return it to the user
 		try :
+			user = request.user
+			# check if the channel that we have container our user o if it does exist
+			channel = Channel.objects.get(id=channelId)
+			check  = channel.users.filter(id=user.id).exists()
+			if check == False:
+				return  Response({'Error' : user.login + " is not in the conversation channel "+str(channelId)}, status=status.HTTP_400_BAD_REQUEST)
 			messages = Message.objects.filter(id_channel_fk=channelId).order_by('-timestamp')
 			# first let creat the paginator object called paginator
 			print(packetSize)
