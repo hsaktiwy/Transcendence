@@ -66,13 +66,6 @@ class ChangeGameStatus(APIView):
         except KeyError as e:
             return Response({'Error': "Something went wrong : " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
-
-
-
-
-
 @api_view(['GET'])
 def get_match_history(request, uuid):
     try:
