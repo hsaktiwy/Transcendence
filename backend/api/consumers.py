@@ -511,6 +511,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def state(self, event):
         message = json.dumps(event)
         await self.send(text_data=message)
+
+
 class NoMatchConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
