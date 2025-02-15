@@ -196,7 +196,7 @@ function ConnectButton(prop: buttonInterface) {
   // add our state update to the socket channel
 
   useEffect(()=>{
-    console.log("FRIENDDDS ====>", userContextConsumer?.friends)
+    console.log("FRIENDDDS m  heeeeeerererere ->>>> ====>", userContextConsumer?.friends)
     const FriendRequestAccepted = (data:NotificationPropreties)=>{
       if (data.sender.unique_id == uuid)
       {
