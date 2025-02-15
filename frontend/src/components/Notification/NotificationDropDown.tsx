@@ -138,8 +138,8 @@ const NotificationDropDown = (info: prop) =>{
                             linkProfile = '/game/RemoteGame'
                             sstatus = {  
                                 room_name: item.room_name,
-                                p1_id: item.receiver_id,
-                                p2_id: item.sender_id,
+                                p1_id: userContextConsumer.userData?.unique_id,
+                                p2_id: item.sender.unique_id,
                                 my_user:userContextConsumer.userData?.login,
                                 opponent: item.sender?.login
                             }

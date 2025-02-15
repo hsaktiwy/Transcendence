@@ -13,6 +13,12 @@ def random_room_name(length=8):
     letters_and_digits = string.ascii_lowercase + string.digits
     return ''.join(random.choices(letters_and_digits, k=length))
 
+def find_room_name(user, Rooms):
+    for room in Rooms:
+        if (len(room) >= 2 and (room[1][0].unique_id == user.unique_id)) or (len(room) >= 3 and (room[2][0].unique_id == user.unique_id)):
+            return room
+    return None
+
 PPong_Rooms = []
 
 def matcha(room):
@@ -94,7 +100,9 @@ class ApiConsumer(WebsocketConsumer):
             return
 
         # if (user.state == MyUser.IN_GAME or user.state == MyUser.IN_SEARCH):
+        print('===> WTF R U DOING HERE !', user.state, find_room_name(user, PPong_Rooms))
         if (user.state != MyUser.ONLINE or find_room_name(user, PPong_Rooms)):
+            print('===> WTF R U DOING HERE !', user.state, find_room_name(user, PPong_Rooms))
             self.close()
             return
 
@@ -198,13 +206,6 @@ class ApiConsumer(WebsocketConsumer):
         #idik fzeb
         #other player win forfait if the game still in play
 
-
-
-def find_room_name(user, Rooms):
-    for room in Rooms:
-        if (len(room) >= 3 and (room[1][0].unique_id == user.unique_id or room[2][0].unique_id == user.unique_id)):
-            return room
-    return None
 
 connections_count = {}
 #{"room_name":count, "room_name2":count2, ...}
