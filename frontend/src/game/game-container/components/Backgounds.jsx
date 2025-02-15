@@ -29,6 +29,7 @@ function Backgrounds() {
     '/game/PreMultiplayer',
     '/game/PreTournament',
     '/game/PreRemote',
+    '/game/PreInvite',
     '/game/Winner'
   ].includes(location.pathname)
   

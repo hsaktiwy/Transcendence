@@ -501,6 +501,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'friend_req_status' : 'accepted',
                         'is_readed': notificationSerialized['is_readed'],
                         'sender': SerializedSender,
+                        'sender_id': user.id,
+                        'receiver_id': receiver_id,
                         'room_name': room_name,
                     }
                 )

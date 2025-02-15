@@ -50,7 +50,8 @@ const RemoteGame = () => {
         if (!ReomteGameData.room_name || !ReomteGameData.my_user)
         {
             if (location.state.room_name && location.state.my_user){
-                setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:location.state.my_user, p2_id:location.state.my_user})
+                console.log("???????????????????????????????????????????????",location.state)
+                setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:location.state.p1_id, p2_id: location.state.p2_id, opponent: location.state.opponent}) //p2_id:location.state.my_user
             }
         }
         setDataReady(true);

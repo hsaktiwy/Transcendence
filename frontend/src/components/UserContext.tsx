@@ -21,8 +21,10 @@ export interface NotificationPropreties{
     channel_id: number;
     friend_request_id: number;
     is_readed: boolean;
-    sender: ProfileDataInterface
-    room_name?: string 
+    sender: ProfileDataInterface;
+    room_name?: string;
+    sender_id?: Number;
+    receiver_id?:Number;
 }
 export interface NotificationStatePropreties{
     type: string,

@@ -164,7 +164,7 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
                                     
                                     {/*SETTTING THE USER CONTEXT TO INVITE*/}
 
-                                    <Link to={`/game/PreRemote`} onClick={handleChallengeClick} >
+                                    <Link to={`/game/PreInvite`} onClick={handleChallengeClick} >
                                         <span className="text-xl flex items-center gap-1">
                                             <VscGame />
                                             <p className="text-white/70 text-sm">Challenge</p>
