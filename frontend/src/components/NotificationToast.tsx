@@ -111,8 +111,8 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",item)
                         const sstatus = item.type === 'gameInvitation' ?  
                             {   room_name: item.room_name,
-                                p1_id: item.receiver_id,
-                                p2_id: item.sender_id,
+                                p1_id: userContextConsumer.userData?.unique_id,
+                                p2_id: item.sender.unique_id,
                                 my_user:userContextConsumer.userData?.login,
                                 opponent: item.sender?.login
                             } : {channel_id: item.channel_id }
