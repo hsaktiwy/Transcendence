@@ -10,6 +10,7 @@ import { WebSocketContext } from '../../../utils/WSContext';
 const PreInvite = () => {
   const navigate = useNavigate();
   const webSContext = useContext(WebSocketContext);
+  const [docket, setDocket] = useState(null)
 
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
@@ -23,22 +24,27 @@ const PreInvite = () => {
   
   
   useEffect(()=>{
-        console.log("==>> Reneredddd ! ", ReomteGameData.form_game_invite);
+      console.log("==>> Reneredddd ! ", ReomteGameData.form_game_invite);
+        let tmpsocket = null
         if (ReomteGameData.form_game_invite === true){
             INVITE_TEXT = ReomteGameData.inviter_login + ' VS ' + ReomteGameData.invited_login
             show = true
-            const tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+            tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
             console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
             
             tmpsocket.onopen = () => {
                 console.log("Inviting WebSocket Connected");
+                // setDocket(tmpsocket)
             };
-            
+            tmpsocket.onclose = () => {
+                console.log("==> Inviting Socket Disconnected !");
+            };
             tmpsocket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 console.log("==> message received from the backend !");
                 
                 if (data['type'] === 'room_created') {
+                // tmpsocket.close()
                 console.log("=> room_created:");
                 console.log("   => room_name     :", data['room_name']);
                 console.log("   => my_role       :", data['role']);
@@ -77,6 +83,7 @@ const PreInvite = () => {
                 }
                 
                 
+                
                 console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/' + data['room_name']);
                 
                 const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/' + data['room_name']);
@@ -86,7 +93,7 @@ const PreInvite = () => {
                     
                 };
                 tgameSocket.onclose = () => {
-                    console.log("Socket Disconnected !");
+                    console.log("==> ", data['room_name'], " room Socket Disconnected !");
                 };
                 tgameSocket.onmessage = (event) => {
                     const data = JSON.parse(event.data);
@@ -98,11 +105,13 @@ const PreInvite = () => {
                         
                         // Update Reomte context
                         
-                    setReomteGameData(
-                        ReomteGameData
-                    );
-                    tmpsocket.close()
-                    navigate('/game/RemoteGame');
+                        setReomteGameData(
+                            ReomteGameData
+                        );
+                    if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
+                        tmpsocket.close()
+                    }
+                        navigate('/game/RemoteGame');
                     }
                 }
                 };
@@ -112,6 +121,12 @@ const PreInvite = () => {
             show = false
             navigate('/game/PingPong_Lobby')
         }
+
+        return(() => {
+            if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
+                tmpsocket.close()
+            }
+        })
 
     }, [ReomteGameData.form_game_invite])
 

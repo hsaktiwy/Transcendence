@@ -190,17 +190,24 @@ class ApiConsumer(WebsocketConsumer):
             return
 
         # print('=> user ', user.login, ', disconnected ! close_code:', close_code)
+        room = find_room_name(user, PPong_Rooms)
         if (user.state == MyUser.IN_SEARCH):
-            room = find_room_name(user, PPong_Rooms)
             if room :
                 remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
                 print('=> user ', user.login, ', removed with it\'s room ', room[0], '!')
             user = sync__get_user(user.unique_id)
             user.state = MyUser.ONLINE #baghi 3a y3ich
             user.save()
-        elif (user.state == MyUser.IN_GAME):
+        elif (user.state == MyUser.IN_GAME and sync__get_user(room[2][0].unique_id).state == MyUser.ONLINE):
+            # print(user.state, sync__get_user(room[2][0].unique_id).state, room[3])
+            if room and len(room) >= 4 and room[3] == 'Invited':
+                remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
+                user = sync__get_user(user.unique_id)
+                user.state = MyUser.ONLINE #baghi 3a y3ich
+                user.save()
+            else:
             # print('=> user ', user.login, ', quitting matchmaking!')
-            pass
+                pass
 
         # Show_Rooms(PPong_Rooms)
         #idik fzeb
@@ -244,7 +251,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 self.room_group_name = f"game_room_{self.room_name}"
                 connections_count[self.room_group_name] = connections_count.get(self.room_group_name, 0) + 1
 
-                if connections_count[self.room_group_name] :#<= 2:
+                if connections_count[self.room_group_name] <= 2:
                     await self.accept()
 
                     user = await async_get_user(user.unique_id)
@@ -376,8 +383,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         await sync_to_async(user.save)()
         # # clean the PPong_Rooms, ...
         # remove_room()
-        if connections_count.get(self.room_group_name):
-            connections_count.pop(self.room_group_name)
+        # if connections_count.get(self.room_group_name):
+        #     connections_count.pop(self.room_group_name)
+        print(connections_count) #to check the invite users
         Show_Rooms(PPong_Rooms)
 
     async def receive(self, text_data):
