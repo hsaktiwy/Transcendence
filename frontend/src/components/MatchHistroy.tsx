@@ -6,6 +6,7 @@ import mailman from "../utils/AxiosFetcher";
 
 import { UserContext } from "./UserContext";
 import { MatchHistoryDataInterface, twoGames } from "@/utils/interfaces";
+import { Link } from "react-router-dom";
 
 
 interface MatchHistoryProps {
@@ -96,7 +97,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                           <div>
                               <div className="p-3 w-full h-full grid grid-rows-6 overflow-hidden">
                               <div className="row-span-2 px-6 flex items-center font-semibold justify-between w-full">
-                                <div className="flex items-center justify-center flex-col gap-3">
+                                <Link to={`/profile/${data.Pong[0].user_p1.unique_id}`} className="flex  items-center justify-center flex-col gap-3">
                                   <img
                                     className="size-14 lg:size-18 xxl:size-24 rounded-full aspect-square object-cover"
                                     src={`${import.meta.env.VITE_axiosPath}${data.Pong[0].user_p1.profile_pic}` || ""}
@@ -105,13 +106,13 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                   <div className="text-base font-medium xxl:text-base">
                                     {data.Pong[0].user_p1.firstName}
                                   </div>
-                                </div>
+                                </Link>
                                 <div>
                                   <h1 className="text-3xl xxl:text-3xl">
                                     {data.Pong[0].score_p1} - {data.Pong[0].score_p2}
                                   </h1>
                                 </div>
-                                <div className="flex items-center justify-center flex-col gap-3">
+                                <Link to={`/profile/${data.Pong[0].user_p2.unique_id}`} className="flex items-center justify-center flex-col gap-3">
                                   <img
                                     className="size-14 lg:size-18 xxl:size-24 rounded-full aspect-square object-cover"
                                     src={`${import.meta.env.VITE_axiosPath}${data.Pong[0].user_p2.profile_pic}`}
@@ -120,7 +121,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                   <div className="text-base font-medium xxl:text-base">
                                     {data.Pong[0].user_p2.firstName}
                                   </div>
-                                </div>
+                                </Link>
                               </div>
                           <div className="  row-span-4  pt-2 ">
                            <h1 className="text-base   text-gray-400 font-medium   "> Last 5 matches</h1>
@@ -142,7 +143,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
 
                                     {/* Player 1 Details */}
                                     <div className="w-full mr-4">
-                                      <div className="flex items-center">
+                                      <Link to={`/profile/${game.user_p1.unique_id}`} className="flex items-center">
                                         <div className="min-w-32 w-[100%] h-full  flex items-center">
                                           <img
                                             className="w-11 aspect-square rounded-full object-cover"
@@ -167,12 +168,12 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                               game.score_p1
                                             )}
                                           </div>
-                                      </div>
+                                      </Link>
 
                                       <div className="w-full border-t border-[#5E97A9] rounded-full my-4"></div>
 
                                       {/* Player 2 Details */}
-                                      <div className="flex items-center">
+                                      <Link to={`/profile/${game.user_p2.unique_id}`} className="flex items-center">
                                         <div className="min-w-32 w-[100%] h-full flex items-center">
                                           <img
                                             className="w-11 aspect-square rounded-full object-cover"
@@ -197,7 +198,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                               game.score_p2
                                             )}
                                           </div>
-                                      </div>
+                                      </Link>
                                     </div>
                                   </div>
 

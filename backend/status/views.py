@@ -101,8 +101,10 @@ def get_top_rank(request):
         user = request.user
         ranked_profiles = ProfileStatus.objects.all().order_by('-level')
 
-        serialized_profiles = RankProfileSerializer(ranked_profiles, many=True)
-
+        serialized_profiles = RankProfileSerializer(ranked_profiles, many=True)\
+        
+        if not ranked_profiles.exists():
+            return Response({'message': 'No ranked profiles found'}, status=404)
         profiles_list = []
         for profile in serialized_profiles.data:
             try:
