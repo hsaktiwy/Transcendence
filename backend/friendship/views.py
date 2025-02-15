@@ -11,8 +11,9 @@ from users.serializers import PublicUserSerializer
 @api_view(['POST'])
 def AcceptFriendRequest(request, id):
 	try:
-		print('hmmm--')
 		friend_request = FriendRequest.objects.get(id=id)
+		if friend_request.receiver != request.user:
+			return Response({'message': 'friend request not related to this user'}, status=401)
 		list1, create = BlockList.objects.get_or_create(user=friend_request.sender)
 		check1 = list1.block_users.filter(id=friend_request.receiver.id).exists()
 		list2, create = BlockList.objects.get_or_create(user=friend_request.receiver)
@@ -175,9 +176,11 @@ def FriendRequestStatus(request, uuid):
 @api_view(['DELETE'])
 def CancelFriendRequest(request, id):
 	try:
-		# myuser = request.user
+		myuser = request.user
 		friendrequest = FriendRequest.objects.filter(id=id)
 		if len(friendrequest) > 0:
+			if friendrequest.first().sender != myuser:
+				return Response({'message': 'friend request not related to this user'}, status=401)
 			friendrequest.first().delete()
 		return Response({'status': 'Done'}, status=status.HTTP_200_OK)
 	except:
@@ -229,7 +232,6 @@ def FriendsList(request):
 
 @api_view(['GET'])
 def GetBlockList(request):
-	print("allo w9")
 	try:
 		user= request.user
 		block_list = BlockList.objects.filter(user=user)

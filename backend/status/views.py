@@ -11,13 +11,18 @@ from datetime import timedelta
 from game.models import Game
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-
+from rest_framework.exceptions import NotFound
 
 # Create your views here.
 class NotificationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-	permission_classes = [IsAuthenticated]
-	queryset = Notification.objects.all()
-	serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    def get_object(self):
+        obj = super().get_object()
+        if obj.id_user_fk != self.request.user:
+            raise NotFound("Notification not found or not related to the authenticated user.")
+        return obj
 
 class NotificationAPICreate(generics.ListCreateAPIView):
 	permission_classes = [IsAuthenticated]
