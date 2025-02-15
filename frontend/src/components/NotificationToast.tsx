@@ -109,7 +109,13 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                     items.filter(item => !item.is_readed).map((item, index) =>{
                         if (item.type === 'gameInvitation')
                             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",item)
-                        const sstatus = item.type === 'gameInvitation' ?  {room_name: item.room_name, my_user:userContextConsumer.userData?.unique_id} : {channel_id: item.channel_id }
+                        const sstatus = item.type === 'gameInvitation' ?  
+                            {   room_name: item.room_name,
+                                p1_id: item.receiver_id,
+                                p2_id: item.sender_id,
+                                my_user:userContextConsumer.userData?.login,
+                                opponent: item.sender?.login
+                            } : {channel_id: item.channel_id }
                         console.log(sstatus)
                         return(
                             <Link to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : (item.type === 'gameInvitation' ? '/game/RemoteGame': '/chat')} state={sstatus} onClick={() =>{

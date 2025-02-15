@@ -20,7 +20,6 @@ def matcha(room):
         p1_user, p1_consumer = room[1]
         p2_user, p2_consumer = room[2]
 
-
         p1_user = sync__get_user(p1_user.unique_id)
         p2_user = sync__get_user(p2_user.unique_id)
 
@@ -56,10 +55,12 @@ def matcha(room):
             }, default=str))
 
 
+
 def get_or_create_room(user, consumer, Rooms):
+    cleaner(PPong_Rooms)
     user = sync__get_user(user.unique_id)
 
-    if (user.state == MyUser.IN_SEARCH and (already_in_room(user, Rooms) != None)):
+    if (user.state != MyUser.ONLINE and (find_room_name(user, Rooms))):
         # print(f"=> user {user.login} already in room !")
         return
     #find_room
@@ -80,70 +81,47 @@ def get_or_create_room(user, consumer, Rooms):
 def cleaner(Rooms):
     #delete Hanging rooms
     for i, room in enumerate(Rooms):
-        if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
-            print('==> delete hanging room :', room[0], "it's state :", room[3])
+        if (len(room) >= 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
+            print('==> deleting hanging room :', room[0], "it's state :", room[3])
             Rooms.pop(i)
 
 class ApiConsumer(WebsocketConsumer):
 
     def connect(self):
-        Show_Rooms(PPong_Rooms)
-        # cleaner(PPong_Rooms)
 
-
-        # user = self.scope['user']
-
-        
         user = sync__get_user(self.scope['user'].unique_id)
         if not user:
             return
 
-        # print("=> user connected to official route :", user.login)
-        # print("=>", f"Client {user.unique_id}, {user.login} Connected !, state :", user.state)
-        # user.state = MyUser.ONLINE #TBM
-        # user.save()
-        # return
-        if (user.state == MyUser.IN_GAME or user.state == MyUser.IN_SEARCH):     #tbc
-            # print("=>", f"User {user.login} already Playing or Looking for li 7wih!")
+        # if (user.state == MyUser.IN_GAME or user.state == MyUser.IN_SEARCH):
+        if (user.state != MyUser.ONLINE or find_room_name(user, PPong_Rooms)):
             self.close()
             return
 
         #INVITE_PROCESS
-        #create a room set it to Invited state queue the first player till the second joins / the force sync is mandatory
-        #check if it's invited match 
-        #socket-route/invite/second-player-unique-id
-        # cleaner(PPong_Rooms)
-
         path = self.scope['path']  # e.g. '/api/server-endpoint-socket/invite/XYZ-123'
-
         if path.endswith('/'):
             path = path[:-1]
-
         parts = path.split('/')
-        #['', 'api', 'server-endpoint-socket', 'invite', 'XYZ-123']
-
         invited_id = None
-
-        # Check if the next-to-last piece is 'invite'
-        # for part in parts:
-        #     print('====>', part)
 
         if len(parts) == 4 and parts[-2] == 'invite':
             invited_id = parts[-1]
             print("Invite mode. Unique ID:", invited_id)
+
+            opponent =  sync__get_user(invited_id)
+            # opponent.state = MyUser.INVITED #see if that would protect from potential problem 
+            # opponent.save()
+
+            if not opponent:
+                return
+            
+            self.accept()
+
             user = sync__get_user(user.unique_id)
             user.state = MyUser.IN_SEARCH #debbug
             user.save()
 
-            self.accept()
-            opponent =  sync__get_user(invited_id)
-            # opponent.state = MyUser.INVITED #see if that would protect from potential problem 
-            # opponent.save()
-            if not opponent:
-                user = sync__get_user(user.unique_id)
-                user.state = MyUser.ONLINE #freee
-                user.save()
-                return
             cleaner(PPong_Rooms) #tbd
             new_room_name = str(random_room_name())  # create a short random room name
             new_room = [new_room_name, [user, self], [opponent, 'TBR'], 'Invited']
@@ -161,6 +139,7 @@ class ApiConsumer(WebsocketConsumer):
 
                 'user_name' : user.login,
                 'opponent_name':opponent.login,
+
             }, default=str))
 
             return
@@ -204,10 +183,10 @@ class ApiConsumer(WebsocketConsumer):
 
         # print('=> user ', user.login, ', disconnected ! close_code:', close_code)
         if (user.state == MyUser.IN_SEARCH):
-            room = already_in_room(user, PPong_Rooms)
+            room = find_room_name(user, PPong_Rooms)
             if room :
                 remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
-                # print('=> user ', user.login, ', removed with it\'s room ', room[0], '!')
+                print('=> user ', user.login, ', removed with it\'s room ', room[0], '!')
             user = sync__get_user(user.unique_id)
             user.state = MyUser.ONLINE #baghi 3a y3ich
             user.save()
@@ -226,15 +205,6 @@ def find_room_name(user, Rooms):
         if (len(room) >= 3 and (room[1][0].unique_id == user.unique_id or room[2][0].unique_id == user.unique_id)):
             return room
     return None
-
-def already_in_room(user, Rooms):
-    for room in Rooms:
-        if (len(room) == 2 and room[1][0].unique_id == user.unique_id):
-            return room
-    return None
-
-
-
 
 connections_count = {}
 #{"room_name":count, "room_name2":count2, ...}
@@ -342,10 +312,6 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
                     print('==> delete hanging room :', room[0], ", player disconnected (maybe in invite context) !")
 
-                    # print('=> user ', user.login, ', removed with it\'s room ', room[0], '!')
-                    # user = sync__get_user(user.unique_id)
-                    # user.state = MyUser.ONLINE #baghi 3a y3ich
-                    # user.save()
             elif (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
                 loser, winner = None, None
                 if user.unique_id == room[1][0].unique_id:
