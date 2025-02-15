@@ -81,14 +81,14 @@ def cleaner(Rooms):
     #delete Hanging rooms
     for i, room in enumerate(Rooms):
         if (len(room) == 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
-            # print('==> delete hanging room :', room[0], "it's state :", room[3])
+            print('==> delete hanging room :', room[0], "it's state :", room[3])
             Rooms.pop(i)
 
 class ApiConsumer(WebsocketConsumer):
 
     def connect(self):
         Show_Rooms(PPong_Rooms)
-        cleaner(PPong_Rooms)
+        # cleaner(PPong_Rooms)
 
 
         # user = self.scope['user']
@@ -144,6 +144,7 @@ class ApiConsumer(WebsocketConsumer):
                 user.state = MyUser.ONLINE #freee
                 user.save()
                 return
+            cleaner(PPong_Rooms) #tbd
             new_room_name = str(random_room_name())  # create a short random room name
             new_room = [new_room_name, [user, self], [opponent, 'TBR'], 'Invited']
             PPong_Rooms.append(new_room)
@@ -339,6 +340,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 room = find_room_name(user, PPong_Rooms)
                 if room :
                     remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
+                    print('==> delete hanging room :', room[0], ", player disconnected (maybe in invite context) !")
+
                     # print('=> user ', user.login, ', removed with it\'s room ', room[0], '!')
                     # user = sync__get_user(user.unique_id)
                     # user.state = MyUser.ONLINE #baghi 3a y3ich
@@ -389,19 +392,22 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                                 }
                             )
                     except Exception as e:
-                        # print("Game get_profile function error :", e)
+                        print("===> AN ERROR Ocuured exeption:", e)
                         pass
+                    else:
+                        print("===> AN ERROR Ocuured :")
+
         ######################################
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
+        cleaner(PPong_Rooms)
         user = await async_get_user(user.unique_id)
         user.state = MyUser.ONLINE #baghi 3a y3ich
         await sync_to_async(user.save)()
         # # clean the PPong_Rooms, ...
-        # cleaner(PPong_Rooms)
         # remove_room()
         if connections_count.get(self.room_group_name):
             connections_count.pop(self.room_group_name)

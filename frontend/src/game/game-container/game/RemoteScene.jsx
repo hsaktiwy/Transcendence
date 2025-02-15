@@ -84,10 +84,11 @@ const RemoteGame = () => {
 
     if (dataReady == true)
     {
-        // if (!ReomteGameData.inviting && !ReomteGameData.gameSocket){
+        let gameSocket = null
+        if (!ReomteGameData.inviting && !ReomteGameData.gameSocket){
             // Connect to the game server using those values
             // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
-            const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${ReomteGameData.room_name}`);
+            gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${ReomteGameData.room_name}`);
             // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
             
             gameSocket.onopen = () => {
@@ -95,11 +96,11 @@ const RemoteGame = () => {
                 setdocket(gameSocket);
             };
             
-        // }
-        // else if (ReomteGameData.room_name){
-        //     gameSocket = ReomteGameData.gameSocket;
-        //     setdocket(gameSocket);
-        // }
+        }
+        else if (ReomteGameData.inviting && ReomteGameData.room_name){
+            gameSocket = ReomteGameData.gameSocket;
+            setdocket(gameSocket);
+        }
   
         const scene = new THREE.Scene();
 
