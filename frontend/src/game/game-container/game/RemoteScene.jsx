@@ -108,6 +108,10 @@ const RemoteGame = () => {
             setdocket(gameSocket);
         }
   
+        // if (!gameSocket || gameSocket.readyState === WebSocket.CLOSED){
+        //     console.log('==> NOT CONNECTED !');
+        //     navigate('/game/PreRemote')
+        // }
         const scene = new THREE.Scene();
 
 //
