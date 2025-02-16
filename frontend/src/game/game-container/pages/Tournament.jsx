@@ -12,7 +12,6 @@ function Tournament() {
   const navigate = useNavigate();
   const { LocalGamesData }    = useLocalGamesContext();
   const { setLocalGamesData } = useLocalGamesContext();
-
   
   // useEffect( () => {
   //     if ( LocalGamesData.gametype !== 'Tournament'
@@ -24,17 +23,17 @@ function Tournament() {
   //       navigate('/game/PingPong_Lobby');
   //     };
   // })
-  console.log('====> Getted Info : ', LocalGamesData);
+  // console.log('====> Getted Info : ', LocalGamesData);
 
   const [Matches, setMatches] = useState({
     Semi_Final_1: {
-      player1   : LocalGamesData.player1,
-      player2   : LocalGamesData.player2,
+      player1   : LocalGamesData.playerx1,
+      player2   : LocalGamesData.playerx2,
       winner    : LocalGamesData.TBD1,
       isReadyP1 : false,
       isReadyP2 : false,
-      Their_turn: true,
-      Done: false
+      Their_turn: LocalGamesData.F1_turn,
+      Done      : LocalGamesData.F1_done,
     },
     Semi_Final_2: {
       player1   : LocalGamesData.player3,
@@ -42,8 +41,8 @@ function Tournament() {
       winner    : LocalGamesData.TBD2,
       isReadyP3 : false,
       isReadyP4 : false,
-      Their_turn: false,
-      Done: false
+      Their_turn: LocalGamesData.F2_turn,
+      Done      : LocalGamesData.F2_done,
     },
     Final: {
       player1   : LocalGamesData.TBD1,
@@ -51,11 +50,17 @@ function Tournament() {
       winner    : LocalGamesData.winner,
       isReadyF1 : false,
       isReadyF2 : false,
-      Their_turn: false,
-      Done: false
+      Their_turn: LocalGamesData.FF_turn,
+      Done      : LocalGamesData.FF_done,
+
     },
   });
   
+  // if (Matches.Final.Done === true){
+  //   // navigate('/game/')
+  //   navigate("/game/Winner")
+  // }
+
   const handleReady = (matchId, whichPlayer) => {
     setMatches((prev) => {
       const newMatch = { ...prev[matchId] };
@@ -77,20 +82,41 @@ function Tournament() {
 
   const handleStartMatch = (matchId) => {
     console.log(`Starting match: ${matchId}`);
+    if (matchId === 'Semi_Final_1'){
+      LocalGamesData.player1 = LocalGamesData.playerx1;
+      LocalGamesData.player2 = LocalGamesData.playerx2;
+
+      LocalGamesData.F1_turn = false;
+      LocalGamesData.F2_turn = true;
+      LocalGamesData.F1_done = true;
+      
+      // setMatches(Matches)
+      setLocalGamesData(LocalGamesData)
+    }
     if (matchId === 'Semi_Final_2'){
       // l7maaaa9
       LocalGamesData.player1 = LocalGamesData.player3;
       LocalGamesData.player2 = LocalGamesData.player4;
+      
+      LocalGamesData.F2_turn = false;
+      LocalGamesData.FF_turn = true;
+      LocalGamesData.F2_done = true;
+      // setMatches(Matches)
       setLocalGamesData(LocalGamesData)
     }
     else if (matchId === 'Final'){
+      LocalGamesData.FF_turn = false;
+      
       LocalGamesData.player1 = LocalGamesData.TBD1;
       LocalGamesData.player2 = LocalGamesData.TBD2;
+      LocalGamesData.FF_done = true;
+      // setMatches(Matches)
       setLocalGamesData(LocalGamesData)
     }
     
 
     console.log("===> Local Data : ", LocalGamesData);
+    console.log("===> Local Data : ", Matches);
 
     navigate('/game/LocalGame');
   };
@@ -160,34 +186,43 @@ function Tournament() {
           <div className="matches-section">
             <div className="matches-column">
               <h1 className="tournament-heading">MATCHES HISTORY</h1>
-                <MatchHistory 
-                  matchId="Semi_Final"
+                {(Matches.Semi_Final_1.Done && <MatchHistory 
+                  matchId="Semi_Final_1"
+                  matchData={Matches.Semi_Final_1}
+                />)}
+                {(Matches.Semi_Final_2.Done && <MatchHistory 
+                  matchId="Semi_Final_2"
+                  matchData={Matches.Semi_Final_2}
+                />)}
+                {(Matches.Final.Done && <MatchHistory 
+                  matchId="Final"
                   matchData={Matches.Final}
-                />
+                />)}
+
             </div>
 
             <div className="vertical-line"/>
 
             <div className="matches-column">
               <h1 className="tournament-heading">MATCHES QUEUE</h1>
-                <MatchCard 
+                {(Matches.Semi_Final_1.Their_turn && <MatchCard 
                   matchId="Semi_Final_1"
                   matchData={Matches.Semi_Final_1}
                   onReady={handleReady}
                   onStartMatch={handleStartMatch}
-                />
-                <MatchCard 
+                />)}
+                {(Matches.Semi_Final_2.Their_turn && <MatchCard 
                   matchId="Semi_Final_2"
                   matchData={Matches.Semi_Final_2}
                   onReady={handleReady}
                   onStartMatch={handleStartMatch}
-                />
-                <MatchCard 
+                />)}
+                {(Matches.Final.Their_turn && <MatchCard 
                   matchId="Final"
                   matchData={Matches.Final}
                   onReady={handleReady}
                   onStartMatch={handleStartMatch}
-                />
+                />)}
             </div>
           </div>
         </div>
