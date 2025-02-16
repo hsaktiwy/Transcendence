@@ -58,65 +58,171 @@ import Backgrounds from './game/game-container/components/Backgounds.jsx';
 
 
 
-const App = () =>
-{
-  // const Components :childrenInterface = {site : <Layout>
-  //         <ChatSection/>
-  //       </Layout>}
+// const App = () =>
+// {
+//   // const Components :childrenInterface = {site : <Layout>
+//   //         <ChatSection/>
+//   //       </Layout>}
+
+//   return (
+  
+  // <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
+  //   <BrowserRouter>
+  //     {/* <Backgrounds/> */}
+  //       <AuthProvider>
+  //         <Auth>
+  //           <WebSocketProvider>
+  //             <UserProvider>
+  //               <RemoteGameProvider >
+  //                 <LocalGamesProvider>
+  //                   <Routes>
+  //                     <Route path='/'  element={ <Layout/>}>
+  //                     <Route path='/profile/:uuid' element={ <ProfileTest/>}/>
+  //                     <Route index element={ <Dashboard/>}/>
+  //                     <Route path='/chat' element={ <ChatSection/>}/>
+  //                     <Route path='/settings' element={ <Settings/>}/>
+
+  //                     <Route path='/game' element={<MainGamePage />}/>
+  //                     <Route path='/game/PingPong_Lobby' element={<Lobby />}/>
+  //                     <Route path='/game/PlayLocally_1v1' element={<PlayLocally_1v1 />}/>
+  //                     <Route path='/game/LocalGame' element={<LocalGame />}/>
+  //                     <Route path='/game/PreRemote' element={<PreRemote />}/>
+  //                     <Route path='/game/RemoteGame' element={<RemoteGame />}/>
+  //                     <Route path='/game/Winner' element={<Winner />}/>
+  //                     <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
+  //                     <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> 
+  //                     <Route path='/game/PreInvite' element={<PreInvite />}/> 
+                      
+  //                     <Route path='/game/PreTournament' element={<PreTournament />}/>
+  //                     <Route path='/game/Tournament' element={<Tournament />}/>
+
+  //                     <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
+  //                     <Route path='/game/ChessPreLocal' element={<ChessPreLocal />}/>
+  //                     <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/>
+  //                     <Route path='/game/ChessLocally' element={<LocalChessGame />}/>
+  //                     <Route path='/game/ChessRemoteGame' element={<ChessRemoteGame />}/>
+  //                     <Route path='/game/ChessWinner' element={<ChessWinner />}/>
+                      
+  //                     </Route>
+
+  //                     <Route path='*' element={<LoadingIndecator/>}/>
+  //                   </Routes>
+  //                 </LocalGamesProvider>
+  //               </RemoteGameProvider>
+  //             </UserProvider>
+  //           </WebSocketProvider>
+  //         </Auth>
+  //       </AuthProvider>
+  //     </BrowserRouter>
+  //   </SkeletonTheme>
+//     // <ThreeScene/>
+//   )
+// }
+
+
+
+
+
+
+
+
+
+
+import { UIQualityProvider, useUIQuality } from './UIQualityContext.jsx';
+import Switch from './components/Switch';
+
+
+
+
+function App() {
+  return (
+    <UIQualityProvider>
+      <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
+        <BrowserRouter>
+          <MainContent />
+        </BrowserRouter>
+      </SkeletonTheme>
+    </UIQualityProvider>
+  );
+}
+
+function MainContent() {
+  const { qualityLevel } = useUIQuality();
 
   return (
-  
-  <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
-    <BrowserRouter>
-      {/* <Backgrounds/> */}
-        <AuthProvider>
-          <Auth>
-            <WebSocketProvider>
-              <UserProvider>
-                <RemoteGameProvider >
-                  <LocalGamesProvider>
-                    <Routes>
-                      <Route path='/'  element={ <Layout/>}>
-                      <Route path='/profile/:uuid' element={ <ProfileTest/>}/>
-                      <Route index element={ <Dashboard/>}/>
-                      <Route path='/chat' element={ <ChatSection/>}/>
-                      <Route path='/settings' element={ <Settings/>}/>
+    <>
 
-                      <Route path='/game' element={<MainGamePage />}/>
-                      <Route path='/game/PingPong_Lobby' element={<Lobby />}/>
-                      <Route path='/game/PlayLocally_1v1' element={<PlayLocally_1v1 />}/>
-                      <Route path='/game/LocalGame' element={<LocalGame />}/>
-                      <Route path='/game/PreRemote' element={<PreRemote />}/>
-                      <Route path='/game/RemoteGame' element={<RemoteGame />}/>
-                      <Route path='/game/Winner' element={<Winner />}/>
-                      <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
-                      <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> 
-                      <Route path='/game/PreInvite' element={<PreInvite />}/> 
-                      
-                      <Route path='/game/PreTournament' element={<PreTournament />}/>
-                      <Route path='/game/Tournament' element={<Tournament />}/>
+      <Switch />
+      <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
+        {/* <BrowserRouter> */}
+          {/* <Backgrounds/> */}
+            {qualityLevel >= 2 && <Backgrounds />}
+            <AuthProvider>
+              <Auth>
+                <WebSocketProvider>
+                  <UserProvider>
+                    <RemoteGameProvider >
+                      <LocalGamesProvider>
+                        <Routes>
+                          <Route path='/'  element={ <Layout/>}>
+                          <Route path='/profile/:uuid' element={ <ProfileTest/>}/>
+                          <Route index element={ <Dashboard/>}/>
+                          <Route path='/chat' element={ <ChatSection/>}/>
+                          <Route path='/settings' element={ <Settings/>}/>
 
-                      <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
-                      <Route path='/game/ChessPreLocal' element={<ChessPreLocal />}/>
-                      <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/>
-                      <Route path='/game/ChessLocally' element={<LocalChessGame />}/>
-                      <Route path='/game/ChessRemoteGame' element={<ChessRemoteGame />}/>
-                      <Route path='/game/ChessWinner' element={<ChessWinner />}/>
-                      
-                      </Route>
+                          <Route path='/game' element={<MainGamePage />}/>
+                          <Route path='/game/PingPong_Lobby' element={<Lobby />}/>
+                          <Route path='/game/PlayLocally_1v1' element={<PlayLocally_1v1 />}/>
+                          <Route path='/game/LocalGame' element={<LocalGame />}/>
+                          <Route path='/game/PreRemote' element={<PreRemote />}/>
+                          <Route path='/game/RemoteGame' element={<RemoteGame />}/>
+                          <Route path='/game/Winner' element={<Winner />}/>
+                          <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
+                          <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> 
+                          <Route path='/game/PreInvite' element={<PreInvite />}/> 
+                          
+                          <Route path='/game/PreTournament' element={<PreTournament />}/>
+                          <Route path='/game/Tournament' element={<Tournament />}/>
 
-                      <Route path='*' element={<LoadingIndecator/>}/>
-                    </Routes>
-                  </LocalGamesProvider>
-                </RemoteGameProvider>
-              </UserProvider>
-            </WebSocketProvider>
-          </Auth>
-        </AuthProvider>
-      </BrowserRouter>
-    </SkeletonTheme>
-    // <ThreeScene/>
-  )
+                          <Route path='/game/Chess_Lobby' element={<ChessLobby />}/>
+                          <Route path='/game/ChessPreLocal' element={<ChessPreLocal />}/>
+                          <Route path='/game/ChessPreRemote' element={<ChessPreRemote />}/>
+                          <Route path='/game/ChessLocally' element={<LocalChessGame />}/>
+                          <Route path='/game/ChessRemoteGame' element={<ChessRemoteGame />}/>
+                          <Route path='/game/ChessWinner' element={<ChessWinner />}/>
+                          
+                          </Route>
+
+                          <Route path='*' element={<LoadingIndecator/>}/>
+                        </Routes>
+                      </LocalGamesProvider>
+                    </RemoteGameProvider>
+                  </UserProvider>
+                </WebSocketProvider>
+              </Auth>
+            </AuthProvider>
+          {/* </BrowserRouter> */}
+        </SkeletonTheme>
+
+
+
+    </>
+  );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default App
