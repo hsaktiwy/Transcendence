@@ -84,8 +84,8 @@ const PreMultiplayerGame = () => {
             onClick={() => {
               setLocalGamesData({
                 gametype: 'Local', // Local, Multiplayer, Tournament 
-                player1: "BLUE",
-                player2: "RED",
+                player1:  "BLUE",
+                player2:  "RED",
                 player3: null,
                 player4: null,
                 Winner : null
