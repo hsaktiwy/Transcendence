@@ -2,7 +2,7 @@
 CMD = docker-compose
 
 all :
-	@echo "Try to run  : make [prod] [dev] [clean_dev] [clean_prod] [fclean] [re]"
+	@echo "Try to run  : make [prod] [dev] [clean] [fclean] [re]"
 
 prod:
 	$(CMD) -f docker-compose.prod.yaml up --build

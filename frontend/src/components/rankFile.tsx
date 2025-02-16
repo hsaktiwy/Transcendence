@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { UserContext } from "./UserContext";
 import mailman from "@/utils/AxiosFetcher";
 import { rankInterface } from "@/utils/interfaces";
+import { Link } from "react-router-dom";
 // import { Separator } from "@/components/ui/separator"
 // const tags = Array.from({ length: 50 }).map(
 //   (_, i, a) => `v1.2.0-beta.${a.length - i}`
@@ -13,7 +14,7 @@ import { rankInterface } from "@/utils/interfaces";
 function RankFile() {
 
     const userContextConsumer = useContext(UserContext)
-    const [userRank, setUserRank] = useState<rankInterface[]>([]);
+    const [userRank, setUserRank] = useState<rankInterface[] | undefined>([]);
 
         
        if (!userContextConsumer)
@@ -41,6 +42,15 @@ function RankFile() {
 
     React.useEffect(()=>{}, [])    
   return (
+    <>
+        {!userRank ? (  <div className="text-2xl h-full w-full rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-lg font-semibold flex flex-col justify-center items-center p-4">
+              <div className="flex justify-center items-center rounded-xl bg-gradient-to-bl from-[#283137] to-[#242729] flex-col p-6">
+              <img className="w-10" src="/PaddelTime.svg"></img>
+
+                <h1 className="text-center m-2 text-lg">You haven't played any matches yet</h1>
+              </div>
+            </div>) : (
+
     <div className=" 2xl:col-span-2 rounded-2xl  bg-[#2B2F32]   text-center text-xl text-white h-96 sm:h-full  ">
                         <div className=" flex justify-center items-center p-4  2xl:col-span-2 rounded-2xl  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl  shadow-3xl shadow-[#22333869] rounded-text-center text-xl text-white h-full  ">
                             <div className=" relative grid-item1 col-span-3 w-full  ">
@@ -52,7 +62,7 @@ function RankFile() {
                                     <ScrollArea className="h-full w-full overflow-y-auto rounded-md pb-12">
                                         {userRank?.map((user, index) => (
                                             <div key={index+1} className="w-full m-1">
-                                            <div className="h-16 gap-3 md:px-5 flex items-center">
+                                            <Link to={`/profile/${user.user.unique_id}`} className="h-16 gap-3 md:px-5 flex items-center">
                                                 <h1 className="text-xl md:text-base font-medium">#{user.profile.rank}</h1>
                                                 <div className="min-w-32 w-[100%] h-full flex items-center">
                                                 <img className="w-11 aspect-square rounded-full object-cover " src={`${import.meta.env.VITE_axiosPath}${user.user.profile_pic}`} alt={user.user.login} />
@@ -62,7 +72,7 @@ function RankFile() {
                                                 </div>
                                                 </div>
                                                 <div className=" text-sm"> {user.profile.level.toFixed(2)} level</div>
-                                            </div>
+                                            </Link>
                                             <div className="border-rank my-1 w-full bg-[#5E97A9] h-[1px] rounded-full"></div>
                                             </div>
                                         ))}
@@ -84,6 +94,8 @@ function RankFile() {
                                 </div>
                         </div>
                 </div>
+        )}
+    </>
   )
 }
 

@@ -113,7 +113,7 @@ function Dashboard(){
           setIsLoading(false)
       } 
   useEffect(() => {
-    if (!level)
+    if(!level)
         waitData()
     // Cleanup the timer to avoid memory leaks
   }, [level]);
