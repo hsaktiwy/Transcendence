@@ -58,15 +58,23 @@ const PlayLocally_1v1 = () => {
                 default_icon='/GamePub/bottouns/default_offline.svg'
                 hovered_icon='/GamePub/bottouns/hovered_offline.svg'
                 onClick={() => {
-                  setLocalGamesData({
-                    gametype: 'Local', // Local, Multiplayer, Tournament 
-                    player1: player1Name,
-                    player2: player2Name,
-                    player3: null,
-                    player4: null,
-                    Winner : null
-                  });
-                  navigate('/game/LocalGame')
+
+                  const playerNames = [player1Name, player2Name];
+                  const areNamesValid = playerNames.every(name => (name.length <= 8 && name.length > 0 && !/\s/.test(name))) && new Set(playerNames).size === playerNames.length;
+                  
+                  if (areNamesValid) {
+                    setLocalGamesData({
+                      gametype: 'Local', // Local, Multiplayer, Tournament 
+                      player1: player1Name,
+                      player2: player2Name,
+                      player3: null,
+                      player4: null,
+                      Winner : null
+                    });
+                    navigate('/game/LocalGame')
+                  } else {
+                    alert('Error: Player names must be unique and less than or equal to 8 characters.');
+                  }
                 }}
             />
         </div>
