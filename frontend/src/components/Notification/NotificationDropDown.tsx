@@ -129,21 +129,33 @@ const NotificationDropDown = (info: prop) =>{
             (userContextConsumer.notifications.filter(item=>item.is_readed===false && item.type !== 'message').map((item, index) =>{
                         
                         linkProfile = '/';
+                        let sstatus = {}
                         if(item.type === 'friendship')
                             linkProfile = `/profile/${item.sender.unique_id}`;
+                        if (item.type === 'gameInvitation')
+                        {
+                            linkProfile = '/game/RemoteGame'
+                            sstatus = {  
+                                room_name: item.room_name,
+                                p1_id: userContextConsumer.userData?.unique_id,
+                                p2_id: item.sender.unique_id,
+                                my_user:userContextConsumer.userData?.login,
+                                opponent: item.sender?.login
+                            }
+                        }
                         return (
                             
                          
                                 <Link to={`${linkProfile}`}
                                 className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f]"
-                                key={index + 1} onClick={() =>{
+                                state={sstatus} key={index + 1} onClick={() =>{
                                     removeNotification(item)
                                 }}
                                 >
                                     
                                     <img
                                     alt="notif-sender-pic"
-                                    src={item.type==='friendship' ? import.meta.env.VITE_axiosPath + item.sender.profile_pic : LOGO}
+                                    src={item.type==='friendship' || item.type==='gameInvitation' ? import.meta.env.VITE_axiosPath + item.sender.profile_pic : LOGO}
                                     className="relative inline-block h-10 w-10 aspect-square rounded-full object-cover object-center"
                                     />
                                     <div className="flex flex-col gap-1 ml-4">

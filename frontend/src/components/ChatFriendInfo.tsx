@@ -149,11 +149,11 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
                                         <span className="text-white/70 text-sm">Profile</span>
                                     </span>
                                 </Link>
-                                <div className="cursor-pointer hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] flex flex-col text-lg justify-center items-center gap-2 text-center">
+                                <div className={`cursor-pointer hover:scale-110 duration-150 px-4 py-2 bg-black/30 rounded-xl w-[115px] ${userContext.friends.filter(friend=>friend.unique_id === chatContext.active?.user2.unique_id).length === 0 ? 'hidden' : 'flex'}  flex-col text-lg justify-center items-center gap-2 text-center`}>
                                     
                                     {/*SETTTING THE USER CONTEXT TO INVITE*/}
 
-                                    <Link to={`/game/PreRemote`} onClick={handleChallengeClick} >
+                                    <Link to={`/game/PreInvite`} onClick={handleChallengeClick}>
                                         <span className="text-xl flex items-center gap-1">
                                             <VscGame />
                                             <p className="text-white/70 text-sm">Challenge</p>

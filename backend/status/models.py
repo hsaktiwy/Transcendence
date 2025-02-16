@@ -38,6 +38,7 @@ class Notification(models.Model):
     friend_request_id = models.IntegerField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     is_readed =  models.BooleanField(default=False)
+    room_name = models.CharField(null=True, blank=True)
 
 class ProfileStatus(models.Model):
     id_user_fk =  models.ForeignKey('users.MyUser', on_delete=models.CASCADE)

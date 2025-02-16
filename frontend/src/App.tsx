@@ -40,7 +40,7 @@ import PreTournament from './game/game-container/pages/PreTournament.jsx';
 import Winner from './game/game-container/pages/Winner.jsx';
 
 import PreRemote from './game/game-container/pages/PreRemote.jsx';
-
+import PreInvite from './game/game-container/pages/PreGameInvite.jsx';
 import { RemoteGameProvider } from './game/game-container/game/MatchContext.jsx';
 
 import { LocalGamesProvider } from './game/game-container/game/MatchContext.jsx';
@@ -102,6 +102,7 @@ const App = () =>
                       <Route path='/game/Winner' element={<Winner />}/>
                       <Route path='/game/PreMultiplayer' element={<PreMultiplayerGame />}/>
                       <Route path='/game/Multiplayer' element={<MultiplayerGame />}/> 
+                      <Route path='/game/PreInvite' element={<PreInvite />}/> 
                       
                       <Route path='/game/PreTournament' element={<PreTournament />}/>
                       <Route path='/game/Tournament' element={<Tournament />}/>

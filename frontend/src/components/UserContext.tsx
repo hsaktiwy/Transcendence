@@ -21,8 +21,8 @@ export interface NotificationPropreties{
     channel_id: number;
     friend_request_id: number;
     is_readed: boolean;
-    sender: ProfileDataInterface
-    room_name?: string 
+    sender: ProfileDataInterface;
+    room_name?: string;
 }
 export interface NotificationStatePropreties{
     type: string,
@@ -278,7 +278,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-
+            console.log("aaaaa=>>>>>>, " , resp)
             let notificationData : NotificationPropreties[] = resp.data
             notificationData = await getNotificationData(notificationData)
             setnotifications(notificationData.sort((a, b)=> b.id - a.id))
@@ -340,9 +340,16 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
     }
     const gameInviteHandler = (data: NotificationPropreties) => {
 
-        data.content = `${data.sender.login} Invite You`
+        data.content = `${data.sender.login} invites you to play a pong game`
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
-        setNewNotification(prev => [...prev, data])   
+        setNewNotification(prev => [...prev, data])
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%> ", data.room_name)
+        // if (data.type === 'friendship')
+        // {
+            // fetchReceivedFriendRequest()
+            // fetchSentFriendRequest()
+            // fetchFriends()
+        // }      
     }
     const updateFriendList = (user: ProfileDataInterface) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))

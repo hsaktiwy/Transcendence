@@ -798,7 +798,13 @@ const LocalGame = () => {
                 );    
                 navigate("/game/Tournament");
             }
-            else{
+            else if (LocalGamesData.gametype == 'Multiplayer' || LocalGamesData.gametype == 'Local'){
+                if (playerScore === 7){
+                    LocalGamesData.winner = LocalGamesData.player1;
+                }
+                else{
+                    LocalGamesData.winner = LocalGamesData.player2;
+                }
                 navigate("/game/Winner")
             }
 
