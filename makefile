@@ -8,10 +8,10 @@ prod:
 	$(CMD) -f docker-compose.prod.yaml up --build
 dev:
 	$(CMD) -f docker-compose.dev.yaml up --build
-clean_dev:
+clean:
 	$(CMD) -f docker-compose.dev.yaml down
-clean_prod:
 	$(CMD) -f docker-compose.prod.yaml down
+
 
 fclean: clean_dev clean_prod
 	docker system prune -af

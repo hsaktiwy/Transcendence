@@ -221,6 +221,8 @@ function ConnectButton(prop: buttonInterface) {
 
     }
   },[])
+  
+  
   const send_friend_request = ()=>{
     const notification = {
       type: 'NOTIFICATION_ADD_FRIEND',

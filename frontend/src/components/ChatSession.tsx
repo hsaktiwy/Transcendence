@@ -42,7 +42,6 @@ function ChatSession(){
     const [Status, setStatus] = useState<string>("Block")
 
     // for testing
-    const [rcount, setRCount] = useState<number>(0)
     // end
     const BlockStatusCheck = async ()=>
     {
@@ -63,14 +62,13 @@ function ChatSession(){
     }
 
     useEffect(()=>{
-        setRCount((re)=>(re+1))
         // BlockStatusCheck()
     },[userContext.action])
     //amine
     
     
     useEffect(() =>{
-        setRCount((re)=>(re+1))
+
         // Scroll to the bottom whenever the messages array changes
         if (update && containerRef.current) {
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -79,7 +77,6 @@ function ChatSession(){
     }, [update]);
     //amine
     useEffect(() =>{
-        setRCount((re)=>(re+1))
         const handleCloseMenu = (e:any) =>
         {
             if(e.target && e.target.parentElement && e.target.parentElement.className.split(' ')[0] !== 'drop')
@@ -144,10 +141,8 @@ function ChatSession(){
         }
     }, [chatContext.active?.channelId, chatContext.setActive]);
     useEffect(()=>
-    {
-        setRCount((re)=>(re+1))
-        AddChannel('CHATROOM', UpdateCurrentConvs)
-        BlockStatusCheck()
+    {        AddChannel('CHATROOM', UpdateCurrentConvs)
+        // BlockStatusCheck()
         return () => {
             // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
@@ -183,7 +178,6 @@ function ChatSession(){
     }
 
     useEffect(() => {
-        setRCount((re)=>(re+1))
         // Scroll to the bottom whenever the messages array changes (but in our case we are interested only in
         // one the first render where chatContext.active.scrollLeft = -1 &&  chatContext.active.scrollTop = -1)
         if (chatContext.active?.status == 0 && containerRef.current && chatContext.active.scrollLeft == -1 &&  chatContext.active.scrollTop == -1) {
@@ -212,7 +206,6 @@ function ChatSession(){
 
     useEffect(()=>
     {
-        setRCount((re)=>(re+1))
         if (chatContext.active?.new_message == 1)
             SendWebSocketToDefine()
     }, [chatContext.active])
@@ -268,7 +261,6 @@ function ChatSession(){
     }
     useEffect(()=>
     {
-        setRCount((re)=>(re+1))
         const {scrollTop} =  scrollPosition
         if (chatContext.active?.status == 0 && scrollTop == 0 && chatContext.active?.is_next_packet)
         {
@@ -286,6 +278,16 @@ function ChatSession(){
         }
     }
 
+    useEffect(()=>
+    {
+        console.log(openDrop)
+        if (openDrop == true)
+        {
+            console.log("hhm ")
+            BlockStatusCheck()
+        }
+    },[openDrop])
+    //
     return(
             <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
             `}>

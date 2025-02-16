@@ -107,12 +107,16 @@ function ChatSection(){
             {
                 let list_conv:Conversation[] = [fetched_conv, ...convs]
                 setConvs(list_conv)
+                // console.log('1list conv', list_conv)
+
             }
             else
             {
                 let list_conv:Conversation[] = [fetched_conv]
                 setConvs(list_conv)
+                // console.log('2list conv', list_conv)
             }
+            
         }
         catch(e){
             console.log(e)
