@@ -40,9 +40,6 @@ function ChatSession(){
     const [scrollPosition, setScrollPosition] = useState({scrollTop: -1, scrollLeft:-1})
     const [openDrop, setOpenDrop] = useState<boolean>(false)// amine 
     const [Status, setStatus] = useState<string>("Block")
-
-    // for testing
-    // end
     const BlockStatusCheck = async ()=>
     {
         try{

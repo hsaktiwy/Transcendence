@@ -13,7 +13,7 @@ clean:
 	$(CMD) -f docker-compose.prod.yaml down
 
 
-fclean: clean_dev clean_prod
+fclean: clean
 	docker system prune -af
 	docker volume prune -f
 
