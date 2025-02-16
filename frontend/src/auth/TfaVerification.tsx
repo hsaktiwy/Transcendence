@@ -34,7 +34,6 @@ const TfaVerification:React.FC<TfaProp> = ({user}) =>{
         throw new Error("invalid scope");
     const [otp, setOtp] = useState<string>('')
     const inputOnChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) =>{
-        console.log("A")
         const target = e.target
         let targetValue = target.value
         const re = new RegExp(/^\d+$/)

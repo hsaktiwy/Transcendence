@@ -22,48 +22,49 @@ import AuthProvider from './components/AuhtenticationContext'
 
 
 
-//@ts-ignore
+
 import RemoteGame from './game/game-container/game/RemoteScene.jsx';
 // import WebSocketComponent from './game/game-container/game/Matchmaking.jsx';
-//@ts-ignore
+
 import Lobby from './game/game-container/pages/Lobby.jsx';
-//@ts-ignore
-//@ts-ignore
+
+
 import PlayLocally_1v1 from './game/game-container/pages/PLayLocally_1v1.jsx';
-//@ts-ignore
+
 import LocalGame from './game/game-container/game/LocalScene.jsx';
-//@ts-ignore
+
 import Tournament from './game/game-container/pages/Tournament.jsx';
-//@ts-ignore
+
 import PreTournament from './game/game-container/pages/PreTournament.jsx';
-//@ts-ignore
+
 import Winner from './game/game-container/pages/Winner.jsx';
-//@ts-ignore
+
 import PreRemote from './game/game-container/pages/PreRemote.jsx';
-//@ts-ignore
+
 import { RemoteGameProvider } from './game/game-container/game/MatchContext.jsx';
-//@ts-ignore
+
 import { LocalGamesProvider } from './game/game-container/game/MatchContext.jsx';
-//@ts-ignore
+
 import PreMultiplayerGame from './game/game-container/pages/PreMultiplayerGame.jsx';
-//@ts-ignore
+
 import MultiplayerGame from './game/game-container/game/Multiplayer.jsx';
-//@ts-ignore
+
 import ChessLobby from './game/game-container/chess/LobbyChess.jsx';
-//@ts-ignore
+
 import LocalChessGame from './game/game-container/chess/LocalSceneChess.jsx';
-//@ts-ignore
+
 import ChessPreRemote from './game/game-container/chess/remote/ChessPreRemote.jsx';
-//@ts-ignore
+
 import ChessRemoteGame from './game/game-container/chess/remote/ChessRemoteScene.jsx';
-//@ts-ignore
+
 import MainGamePage from './game/game-container/pages/MainGamePage.jsx';
-//@ts-ignore
+
 import ChessPreLocal from './game/game-container/chess/ChessPreLocal.jsx';
-//@ts-ignore
+
 import ChessWinner from './game/game-container/chess/ChessWinner.jsx';
-//@ts-ignore
-import Backgrounds from './game/game-container/components/Backgounds.jsx';
+import PageNotFound from './components/NotFound.js'
+
+// import Backgrounds from './game/game-container/components/Backgounds.jsx';
 
 
 
@@ -113,8 +114,8 @@ const App = () =>
                       <Route path='/game/ChessWinner' element={<ChessWinner />}/>
                       
                       </Route>
-
-                      <Route path='*' element={<LoadingIndecator/>}/>
+                      <Route path='*' element={<PageNotFound/>}/>
+                      <Route path='/404' element={<PageNotFound/>}/>
                     </Routes>
                   </LocalGamesProvider>
                 </RemoteGameProvider>

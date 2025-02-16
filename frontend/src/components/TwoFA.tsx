@@ -25,7 +25,6 @@ function TwoFA(){
                 responseType: 'blob'
             }
             const resp = await mailman(req)
-            console.log(resp)
             const qrUrl = URL.createObjectURL(resp.data);
             setQRCode(qrUrl)
         }

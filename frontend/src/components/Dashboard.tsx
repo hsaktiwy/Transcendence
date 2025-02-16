@@ -19,14 +19,14 @@ import { MatchHistory } from "./MatchHistroy.tsx";
 import SkeletonDashboard from "./Skeletons/SkeletoneDashboard.tsx";
 import { WebSocketContext } from "@/utils/WSContext.tsx";
 import mailman from "@/utils/AxiosFetcher.ts";
-
-import { LinechartData, LoseWins, RadarChartInterFace } from "@/utils/interfaces.ts";
+import { LinechartData, LoseWins, RadarChartInterFace, twoGames, UserRankResponse,  } from "@/utils/interfaces.ts";
 
 Chart.register(CategoryScale);
 
 function Dashboard(){
 
   const userContextConsumer = useContext(UserContext);
+  // const 
   const wsConsumer = useContext(WebSocketContext)
   const [isLoading, setIsLoading] = useState(true);
   const [matches, setMatches] = useState<LoseWins | undefined>()
@@ -35,7 +35,6 @@ function Dashboard(){
   
 
   const uuid = userContextConsumer?.userData?.unique_id;
-  console.log('hiii user name', userContextConsumer?.userData?.login);
   const fetchLineChart = async () =>
     {
         try{
@@ -45,43 +44,30 @@ function Dashboard(){
                 withCredentials: true,
             }
             const resp = await mailman(req);
-            console.log('matches  is here  ma hree : \n', resp.data);
             const fetchedData: LinechartData = {
                 user: resp.data.user,
                 weekly_match_data: resp.data.weekly_match_data, // This should already be an array
             };
             setLineChartData(fetchedData);
-            console.log('hiiii mhere', lineChartData);
-            // setMatches(resp.data);
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
     }}
 
-    const [matchHistoryType, setMatchHistoryType] = useState("PONG");
-    const [userMatchHistory, setUserMatchHistory] = useState([]);
+    const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
   
-    // Function to fetch match history data
-    const getMatchHistoryData = async (type: any) => {
+    const getMatchHistoryData = async () => {
       const req = {
-        url: `/game/get_matches/${uuid}/${type}`,
+        url: `/game/get_matches/${uuid}/`,
         method: "GET",
       };
       const resp = await mailman(req);
-      if (resp.data.Game) setUserMatchHistory(resp.data.Game);
-        // console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
+      if (resp.data)
+      {
+        setUserMatchHistory(resp.data);
+
+      }
     };
-  
-    // Function to switch match type
-    const switchMatchHistoryType = (type :any) => {
-      setMatchHistoryType(type);
-      getMatchHistoryData(type);
-    };
-  
-    // Fetch initial data when component mounts
-    useEffect(() => {
-      getMatchHistoryData(matchHistoryType);
-    }, []);
     
    const fetchMatches = async () =>
     {
@@ -92,25 +78,45 @@ function Dashboard(){
                 withCredentials: true,
             }
             const resp = await mailman(req);
-            console.log('print win and lose mheree pleas : \n', resp.data);
             setMatches(resp.data);
             setRadarChartData(resp.data);
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
         }
     }
+        const [level, setLevel] = useState<UserRankResponse | undefined>();
+    
+        const fetchLevle = async () =>
+            {
+                try{
+                    const req = {
+                        url: `/profile/get_rank_user/${uuid}/`,
+                        method: 'GET',
+                        withCredentials: true,
+                    }
+                    const resp = await mailman(req);
+                    if(resp.data)
+                        setLevel(resp.data);
+                }
+                catch (err){
+                    console.error("dddddd======????",err)
+                }
+            }
   
+    const waitData=  async() =>
+      {
+          await fetchLineChart();
+          await fetchMatches();
+          await getMatchHistoryData();
+          await fetchLevle();
+          setIsLoading(false)
+      } 
   useEffect(() => {
-    fetchLineChart()
-    fetchMatches()
-    // Add a delay of 2 seconds before changing isLoading to false
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
+    if (!level)
+        waitData()
     // Cleanup the timer to avoid memory leaks
-    return () => clearTimeout(timer);
-  }, []);
+  }, [level]);
   if (!userContextConsumer || !wsConsumer)
     throw new Error("userContext must be used within a UserProvider");
 
@@ -126,58 +132,50 @@ function Dashboard(){
               <div className=" rounded-lg 2xl:pt-4 flex   gap-2 w-full h-full">
                   <div className=" text-white  w-full ">
                           <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]   shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
-                                                          <div className="w-full h-full  grid grid-rows-2 ">
-                                                          <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
-                                                              style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
-                                                          <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
-                                                                  <div className=" h-20  flex items-center 2xl:items-end ">
-                                                                          <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
-                                                                              {/* <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-xl"></div> */}
-                                                                              <div className="relative text-lg text-white font-medium">
-                                                                                {`Hello ${userContextConsumer.userData?.firstName}`} 
-                                                                                
-                                                                              </div>
-                                                                            </div>
+                              <div className="w-full h-full  grid grid-rows-2 ">
+                              <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
+                                  style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
+                              <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
+                                      <div className=" h-20  flex items-center 2xl:items-end ">
+                                              <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
+                                                  {/* <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-xl"></div> */}
+                                                  <div className="relative text-lg text-white font-medium">
+                                                    {`Hello ${userContextConsumer.userData?.firstName}`} 
+                                                    
+                                                  </div>
+                                                </div>
 
-                                                                      </div>
-                                                                      <div className=" flex flex-col justify-center  items-center mb-7">
-                                                                          <h1 className="text-2xl font-medium 2xl:font-semibold 2xl:text-3xl">7.5 Level</h1>
-                                                                          <div className="h-3 w-[100%] mt-3 bg-[#444444] rounded-full">
-                                                                              <div className="h-3 w-[53%] bg-[#5E97A9] rounded-full"></div>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                                          <Achievements uuid={uuid}/>
-                                                          </div>    
-                                                      </div>
                                           </div>
+                                          
+                                          <div className="flex flex-col  justify-center items-center ">
+                                              <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
+                                              <div className="h-3 w-[100%] bg-[#444444] rounded-full">
+                                              <div
+                                                      style={{
+                                                          width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%` // Reset at every level
+                                                      }}
+                                                      className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
+                                                      /> 
+
+                                              </div>
+                                              <div className="w-full text-right">
+                                                <div className="text-xs font-bold text mr-3">
+                                                  {level?.xp}xp
+                                                  <span className="text-[9px]"> / </span>
+                                                  {(Math.floor(level?.level ?? 0) + 1) * 1000}xp
+                                                </div>
+                                              </div>
+
+                                          </div>
+                                      </div>
+                                              <Achievements uuid={uuid}/>
+                              </div>    
+                          </div>
+                  </div>
               </div>
           </div>
          <div className=" hidden xxl:block xl:col-span-4 xl:row-span-6 2xl:col-span-3 2xl:row-span-6 pt-4">
               <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-md shadow-3xl shadow-[#22333869]">
-                  <div className="flex ">
-                  {["PONG", "CHESS"].map((type) => (
-                      <button
-                      key={type}
-                      className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                          matchHistoryType === type
-                          ? ""
-                          : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                      } hover:text-[#5E97A9]`}
-                      onClick={() => switchMatchHistoryType(type)}
-                      >
-                      <div>
-                          {
-                              type == "PONG" ?        
-                                  <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                    :
-                                    <div><img className="w-6" src="../strategy.png"/></div>
-                      }
-                      </div>
-                      {type}
-                      </button>
-                  ))}
-                  </div>
                   <MatchHistory data={userMatchHistory} username={userContextConsumer?.userData?.login} />
               </div>
         </div>
@@ -201,29 +199,6 @@ function Dashboard(){
         </div>
         <div className="xl:pr-5 row-span-2 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5 2xl:hidden">
         <div className="w-full h-full flex flex-col bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] rounded-md shadow-3xl shadow-[#22333869]">
-                  <div className="flex ">
-                  {["PONG", "CHESS"].map((type) => (
-                      <button
-                      key={type}
-                      className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                          matchHistoryType === type
-                          ? ""
-                          : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                      } hover:text-[#5E97A9]`}
-                      onClick={() => switchMatchHistoryType(type)}
-                      >
-                      <div>
-                          {
-                              type == "PONG" ?        
-                                  <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                    :
-                                    <div><img className="w-6" src="../strategy.png"/></div>
-                      }
-                      </div>
-                      {type}
-                      </button>
-                  ))}
-                  </div>
                   <MatchHistory data={userMatchHistory} username={userContextConsumer?.userData?.login} />
               </div>
         </div>

@@ -29,7 +29,6 @@ const LoadingIndecator = () =>
         repeatType: "reverse" as const,
         ease : 'easeInOut'
     }
-    console.log(import .meta.env.VITE_axiosPath)
     return (
         <div className="flex justify-center items-center h-screen">
             <motion.div variants={loadingContainerVariants} initial='start' animate='end' className='loading-container flex gap-4'>

@@ -57,7 +57,6 @@ def LoginWithOAuth42(request):
             return Response({'error': 'Failed to retrieve access token'}, status=400)
         
         access_token = response.json().get('access_token')
-        print(access_token)
         headers = {
             'Authorization': f'Bearer {access_token}',
         }
@@ -146,7 +145,7 @@ class getAuthenticatedUser(APIView):
     def patch(self, request):
         user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
-        print('from view  ')
+        print('from view pppp ')
         if serializer.is_valid():
             user = serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
@@ -285,12 +284,12 @@ class CheckAuth(APIView):
 class UploadProfilePicture(APIView):
     def patch(self, request, *args, **kwargs):
         try:
-            user = get_object_or_404(MyUser, login=request.user.login)
+            user = request.user
             serializer = UserSerializer(instance=user, data=request.data)
             if serializer.is_valid():
                 if not user.isDefaultImage():
                     os.remove('media/' + user.profile_pic.name)  
-                serializer.save()
+                serializer.update(instance=user, validated_data=serializer.validated_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -301,12 +300,12 @@ class UploadProfilePicture(APIView):
 @api_view(['PATCH'])
 def UploadCoverProfile(request):
     try:
-        user = get_object_or_404(MyUser, login=request.user.login)
+        user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             if not user.isDefaultCoverImage():
                 os.remove('media/' + user.CoverProfile.name)  
-            serializer.save()
+            serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -337,11 +336,11 @@ class Enable2faView(APIView):
                 user.two_factor_auth = True
                 user.save()
                 return Response({
-                    'message' : 'Two Factory Authentication enabled succefully'
+                    'message' : 'Two Factor Authentication enabled succefully'
                 }, status=200)
             else:
                 return Response({
-                    'message' : 'Two Factory Authentication already enabled'
+                    'message' : 'Two Factor Authentication already enabled'
                 }, status=200)
         return Response({
             'message' : 'Invalid OTP'
@@ -397,7 +396,6 @@ def LogoutView(request):
 @permission_classes([AllowAny])
 def SetUsername(request):
         try:
-            print(request.data)
             email = request.data.get('email')
             user = MyUser.objects.get(email=email)
             if user.login is not None and user.login != "":

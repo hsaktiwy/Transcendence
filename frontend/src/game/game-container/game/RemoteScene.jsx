@@ -13,7 +13,7 @@ import Hud from '../components/Hud'
 import './RemoteScene.css'
 
 import Scoreboard from '../components/Scoreboard';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useRemoteGameContext } from '../game/MatchContext';
 
@@ -28,17 +28,24 @@ const RemoteGame = () => {
     // Remote LOgic
     const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
+    const {room_name, my_user} = useParams()
+    
+    // useEffect( () => {
+    //     console.log(ReomteGameData.room_name, ReomteGameData.my_user);
 
-    
-  useEffect( () => {
-        if (!ReomteGameData.room_name || !ReomteGameData.my_user){
-            navigate('/game/PreRemote');
-    };
-    
-    }, [ReomteGameData.room_name]
-  )
-    
-    
+    //         if (!ReomteGameData.room_name || !ReomteGameData.my_user){
+    //             navigate('/game/PreRemote');
+    //     };
+        
+    //     }, [ReomteGameData.room_name]
+    // )
+    useEffect(()=>{
+        if (!ReomteGameData.room_name || !ReomteGameData.my_user)
+        {
+            if (room_name && my_user)
+                setReomteGameData({room_name:room_name, my_user:my_user})
+        }
+    },[])
     
     // Remote LOgic
     
@@ -67,7 +74,8 @@ const RemoteGame = () => {
     useEffect(() => {
         
         // Connect to the game server using those values
-        const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ws/ping-pong/room/${ReomteGameData.room_name}`);
+        // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
+        const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/${ReomteGameData.room_name}`);
         // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
         
         gameSocket.onopen = () => {

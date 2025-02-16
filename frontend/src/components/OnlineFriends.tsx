@@ -32,7 +32,6 @@ function OnlineFriends() {
         }
 
     };
-    console.log('here-->', userContext?.friends)
   return (
     <>
         <div className='onlineFriends-div  pt-5 h-full '>
@@ -46,10 +45,10 @@ function OnlineFriends() {
                                     </div>
                                     <p className="font-medium text-sm text-white/60 px-3 break-words text-center">No friends, no drama. Enjoy the peace! ...or add some friends.</p>
                                     <div className='chat-direction'>
-                                        <div className='chat-button'>
-                                            <img style={{width: '20px'}} className="size-image" src="/images/chat_bubble.svg" />
+                                        {/* <div className='chat-button  h-36'>
+                                            <img style={{width: '20px'}} className="" src="/images/chat_bubble.svg" />
                                                 <h3 style={{fontWeight: '400', margin:'0px 4px', fontSize: '12px'}}>Add friends</h3>
-                                        </div>
+                                        </div> */}
                                     </div>
                                             
                                 </div>
@@ -63,7 +62,6 @@ function OnlineFriends() {
                                 value={searchTerm}
                                 onChange={handleSearch}
                             />
-                            {/* Dropdown only appears if searchTerm exists */}
                             {searchTerm && filteredFriends.length > 0 && (
                                <div className="mt-1 bg-gradient-to-br from-[#2a3236] to-[#1e2124] p-2 rounded-lg shadow-lg max-h-40 overflow-y-auto">
                                {filteredFriends.slice(0, 5).map((friend) => (
@@ -117,9 +115,7 @@ function OnlineFriends() {
                                 )
                                 }
                             })
-                        }
-                            
-                            
+                        } 
                         </div>
                         {
                             userContext?.friends.length && 

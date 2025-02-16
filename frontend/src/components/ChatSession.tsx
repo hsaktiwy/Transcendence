@@ -134,9 +134,7 @@ function ChatSession(){
     }
     // hamza
     const UpdateCurrentConvs = useCallback((message_received: Message , __channelId: number) => {
-        console.log(__channelId, chatContext.active?.channelId)
         if (__channelId === chatContext.active?.channelId) {
-            console.log('messagr received:  ', message_received)
             chatContext.setActive((prevActive) => prevActive && ({
             ...prevActive,
             new_message: 1,
@@ -214,7 +212,6 @@ function ChatSession(){
 
     useEffect(()=>
     {
-        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ active ", chatContext.active?.channelId)
         setRCount((re)=>(re+1))
         if (chatContext.active?.new_message == 1)
             SendWebSocketToDefine()

@@ -8,14 +8,21 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.utils import timezone
 from datetime import timedelta
-from game.models import Game  # Replace with your actual model import path
-
+from game.models import Game
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from rest_framework.exceptions import NotFound
 
 # Create your views here.
 class NotificationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-	permission_classes = [IsAuthenticated]
-	queryset = Notification.objects.all()
-	serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    def get_object(self):
+        obj = super().get_object()
+        if obj.id_user_fk != self.request.user:
+            raise NotFound("Notification not found or not related to the authenticated user.")
+        return obj
 
 class NotificationAPICreate(generics.ListCreateAPIView):
 	permission_classes = [IsAuthenticated]
@@ -45,33 +52,87 @@ def get_Win_Lose(request,uuid):
         return Response({'error': 'somthing went wrong'}, status=400)
 
 
+
+
+# from .models import ProfileStatus, MyUser
+
+@api_view(['GET'])
+def get_Rank_User(request, uuid):
+    try:
+        user = MyUser.objects.get(unique_id=uuid)
+        profile_status = get_object_or_404(ProfileStatus, id_user_fk=user)
+
+        # Fetch the latest match
+        last_match = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).order_by('-time').first()
+
+        if not last_match:
+            return Response({'error': 'No matches found'}, status=400)
+
+        if profile_status.last_match_id == last_match.id:
+            return Response({  
+                'user_id': str(user.unique_id),
+                'xp': profile_status.xp,
+                'level': profile_status.level
+            }, status=200)
+
+        match (last_match.winner == user, last_match.type):
+            case (True, 'PONG'):
+                profile_status.xp += 100
+            case (True, 'CHESS'):
+                profile_status.xp += 50
+            case (False, 'PONG'):
+                profile_status.xp -= 50
+            case _:
+                profile_status.xp -= 25
+
+
+
+        profile_status.xp = max(profile_status.xp, 0)
+        profile_status.level = profile_status.xp / 1000
+
+        profile_status.last_match_id = last_match.id
+        profile_status.save(update_fields=['xp', 'level', 'last_match_id'])
+
+        return Response({
+            'user_id': str(user.unique_id),
+            'xp': profile_status.xp,
+            'level': profile_status.level
+        }, status=200)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+
 @api_view(['GET'])
 def get_top_rank(request):
     try:
         user = request.user  # Current user
-        ranks = ProfileStatus.objects.all().order_by('rank')
-        packets_size = 10
-        page_number = 1 # Get the page number from query params
-        
-        paginator = Paginator(ranks, packets_size)
-        page = paginator.page(page_number)
-        serialized_page = RankProfileSerializer(page.object_list, many=True)
+        # Order profiles by level in descending order (higher level = higher rank)
+        ranked_profiles = ProfileStatus.objects.all().order_by('-level')
+
+        # Serialize profile data with ranks
+        serialized_profiles = RankProfileSerializer(ranked_profiles, many=True)
+
         profiles_list = []
+        for profile in serialized_profiles.data:
+            try:
+                # Fetch related user
+                info_user = MyUser.objects.get(id=profile['id_user_fk'])
+                serialized_user = PublicUserSerializer(info_user)
 
-        for profile in serialized_page.data:
-            # Fetch related user
-            info_user = MyUser.objects.get(id=profile['id_user_fk'])
-            serialized_user = PublicUserSerializer(info_user)
+                # Combine user and profile data
+                _update = {
+                    "user": serialized_user.data,
+                    "profile": profile
+                }
+                profiles_list.append(_update)
+            except MyUser.DoesNotExist:
+                continue  # Skip if user not found
 
-            # Combine user and profile data
-            _update = {
-                "user": serialized_user.data,
-                "profile": profile
-            }
-            profiles_list.append(_update)
         return Response({'profiles': profiles_list}, status=200)
+
     except Exception as e:
-          return Response({'error': str(e)}, status = 400)
+        return Response({'error': str(e)}, status=400)
 
 @api_view(['GET'])
 def get_line_chart(request, uuid):
@@ -123,10 +184,20 @@ def get_line_chart(request, uuid):
 @api_view(['GET'])
 def get_achievements(request, uuid):
     try:
-        user = MyUser.objects.get(unique_id = uuid)
-        acheivements = Achievements.objects.filter(id_user_fk=user)
-        data = AchievementsSerializer(acheivements, many=True)
-        print('data okda  : =>>>>>>>>>> ', data)
-        return (Response({'data': data.data}, status=200))
+        user = get_object_or_404(MyUser, unique_id=uuid)
+        profile_status = get_object_or_404(ProfileStatus, id_user_fk=user)
+
+        # Get user achievements
+        
+        # last_match = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).order_by('-time').first()
+        achievements = Achievements.objects.filter(id_user_fk=user)
+        achievements_data = AchievementsSerializer(achievements, many=True).data
+
+        return Response({
+            'user_id': str(user.unique_id),
+            'wins': profile_status.wins,
+            'achievements': achievements_data
+        }, status=200)
+
     except Exception as e:
         return Response({'error': str(e)}, status=400)

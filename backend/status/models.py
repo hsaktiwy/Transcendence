@@ -47,7 +47,11 @@ class ProfileStatus(models.Model):
     _wins = models.IntegerField(default=0)
     _lose = models.IntegerField(default=0)
     rank = models.IntegerField()
-    level = models.FloatField(default=0)
+    xp = models.IntegerField(default=0)
+    level = models.FloatField(default=0.0)
+    last_match_id = models.IntegerField(null=True, blank=True)  # Track last processed match
+
+
 
 
 class   AchievementTypes(models.TextChoices):
@@ -61,12 +65,12 @@ class   AchievementTypes(models.TextChoices):
 
 ACHIEVEMENT_DESCRIPTION = {
     AchievementTypes.FIRST_MATCH: "Win your first match",
-    AchievementTypes.WINNING_STREAK: "Won five matches consecutively",
-    AchievementTypes.BRONZE: "Reached Bronze tier",
-    AchievementTypes.SILVER: "Reached Silver tier",
-    AchievementTypes.GOLD: "Reached Gold tier",
-    AchievementTypes.PLATINUM: "Reached Platinum tier",
-    AchievementTypes.LEGEND: "Achieved legendary status",
+    AchievementTypes.WINNING_STREAK: "Win 5 matches streak",
+    AchievementTypes.BRONZE: "win 5 matches",
+    AchievementTypes.SILVER: "win 15 matches",
+    AchievementTypes.GOLD: "win 25 matches",
+    AchievementTypes.PLATINUM: "win 35 matches",
+    AchievementTypes.LEGEND: "win 50 matches",
 }
 ACHIEVEMENT_TITLE  = {
     AchievementTypes.FIRST_MATCH: "First match",
@@ -99,7 +103,7 @@ class Achievements(models.Model):
     icon = models.CharField(max_length=30, null=True, blank=True) 
 
     def save(self , *arg, **kargs):
-        print("Achievements save: ", self, arg, kargs)
+        print("Achievements here ->>>>>> save: ", self, arg, kargs)
         if (self.type and not self.description):
             self.icon = ACHIEVEMENT_ICONS.get(self.type, 'firstPaddle')
             self.title = ACHIEVEMENT_TITLE.get(self.type,"No Title available.")

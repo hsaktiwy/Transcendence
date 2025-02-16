@@ -10,7 +10,6 @@ export function formatDate2(dateString: Date | string, slice?: boolean) {
 
     // If the date is within the last 24 hours
     const diffInHours = diffInMs / (1000 * 60 * 60);
-    console.log("hooooursss : ", date.getHours())
     if (diffInHours < 12 && now.getDay() === date.getDay() && now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear()) {
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');

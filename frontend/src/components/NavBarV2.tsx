@@ -51,7 +51,6 @@ function NavBarV2(){
         else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
             setNotificationDrop(false)
         else if (messagesContainerRef.current && !messagesContainerRef.current.contains(event.target as Node) && messagesDrop){
-            console.log("seeed l9lawi")
             setMessagesDrop(false)
         }
     }

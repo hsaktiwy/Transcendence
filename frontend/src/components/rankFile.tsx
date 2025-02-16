@@ -1,8 +1,10 @@
-import React, { useContext, useEffect }  from "react";
+import React, { useContext, useEffect, useState }  from "react";
 
  
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UserContext } from "./UserContext";
+import mailman from "@/utils/AxiosFetcher";
+import { rankInterface } from "@/utils/interfaces";
 // import { Separator } from "@/components/ui/separator"
 // const tags = Array.from({ length: 50 }).map(
 //   (_, i, a) => `v1.2.0-beta.${a.length - i}`
@@ -11,18 +13,31 @@ import { UserContext } from "./UserContext";
 function RankFile() {
 
     const userContextConsumer = useContext(UserContext)
+    const [userRank, setUserRank] = useState<rankInterface[]>([]);
+
         
        if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
-    const {userRank} = userContextConsumer;
-    const currentUser = userRank?.find(user => user.user.login === userContextConsumer?.userData?.login);
+    const rankData = async() =>
+        {
+            try{
     
+                const req = {
+                   url: `/profile/get_top_rank/`,
+                   method: 'GET',
+               };
+               const resp = await mailman(req);
+               if(resp.data.profiles)
+                setUserRank(resp.data.profiles);
+            }
+            catch (err){
+                console.error(" ",err)
+            }
+        }
+    const currentUser = userRank?.find(user => user.user.login === userContextConsumer?.userData?.login);
     useEffect(()=>{
-        if(userRank.length)
-            console.log('user Rank is here ->>', userRank);
-
-
-    },[userRank])
+        rankData()
+    },[])
 
     React.useEffect(()=>{}, [])    
   return (
@@ -34,11 +49,11 @@ function RankFile() {
                                                                 <h1 className="font-semibold text-left mb-2 md:text-2xl">Rank</h1>
                                                                 <div className="border-rank  w-full  bg-[#5E97A9] h-[1px] rounded-full "></div>
                                                         </div>
-                                                        <ScrollArea className="h-full w-full overflow-y-auto rounded-md">
+                                    <ScrollArea className="h-full w-full overflow-y-auto rounded-md pb-12">
                                         {userRank?.map((user, index) => (
-                                            <div key={user.user.email} className="w-full m-1">
+                                            <div key={index+1} className="w-full m-1">
                                             <div className="h-16 gap-3 md:px-5 flex items-center">
-                                                <h1 className="text-xl md:text-base font-medium">#{index + 1}</h1>
+                                                <h1 className="text-xl md:text-base font-medium">#{user.profile.rank}</h1>
                                                 <div className="min-w-32 w-[100%] h-full flex items-center">
                                                 <img className="w-11 aspect-square rounded-full object-cover " src={`${import.meta.env.VITE_axiosPath}${user.user.profile_pic}`} alt={user.user.login} />
                                                 <div className="mx-3">
@@ -46,14 +61,14 @@ function RankFile() {
                                                     <h1 className="font-normal opacity-80 text-xs text-left">@{user.user.login}</h1>
                                                 </div>
                                                 </div>
-                                                <div className="hidden xxl:block text-sm"> lvl {user.profile.level}</div>
+                                                <div className=" text-sm"> {user.profile.level.toFixed(2)} level</div>
                                             </div>
                                             <div className="border-rank my-1 w-full bg-[#5E97A9] h-[1px] rounded-full"></div>
                                             </div>
                                         ))}
                                         </ScrollArea>
                                         <div className=" absolute px-6 w-full bottom-4 h-14">
-                                            <div className=" rounded-xl h-full w-full bg-gradient-to-tr from-[#324951] to-[#2B2F32] md:px-5 flex items-center">
+                                            <div className=" rounded-xl h-full w-full px-2 bg-gradient-to-tr from-[#324951] to-[#2B2F32] md:px-5 flex items-center">
                                             <h1 className="text-xl md:text-base font-medium">#{currentUser?.profile.rank}</h1>
                                                 <div className="min-w-32 w-[100%] h-full flex items-center">
                                                 <img className="w-11 ml-3 aspect-square rounded-full object-cover " src={`${import.meta.env.VITE_axiosPath}${currentUser?.user.profile_pic}`} alt={currentUser?.user.login} />
@@ -62,7 +77,7 @@ function RankFile() {
                                                     <h1 className="font-normal opacity-80 text-xs text-left">@{currentUser?.user.login}</h1>
                                                 </div>
                                                 </div>
-                                                <div className="hidden xxl:block text-sm"> {currentUser?.profile.level}</div>
+                                                <div className="text-sm"> {currentUser?.profile.level.toFixed(2)}</div>
                                             </div>
                                         </div>
                                     </div>
