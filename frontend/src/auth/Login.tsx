@@ -34,7 +34,6 @@ const Login = () => {
     const [needLogin, setNeedLogin] = useState<boolean |  undefined>(undefined)
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        // console.log(import.meta.env.API_REDIRECT)
         window.location.href = import.meta.env.VITE_REDIRECT
     };
     const tryToLogin = async () =>{
@@ -42,7 +41,6 @@ const Login = () => {
             email: email,
             password: password
         }
-        console.log(data)
         const toastId = toast.loading("Loading");
         const resp = await AuthContextConsummer.LoginAction(data)
         if ('errorType' in resp) {
@@ -52,7 +50,6 @@ const Login = () => {
             const tmpError = resp.errorType as tmp
             if(tmpError['non_field_errors'] !== undefined)
                 toast.update(toastId, { render: tmpError['non_field_errors'][0], type: "error", isLoading: false, autoClose: 3000 });
-            console.log(resp.errorType)
         }
         else {
             if (resp.message === 'username needed'){
@@ -68,7 +65,6 @@ const Login = () => {
                 toast.update(toastId, { render: resp.message, type: "success", isLoading: false, autoClose: 3000 });
                 AuthContextConsummer.setLoggedIn(true)
             }
-            // Navigate('/')
         }
     }
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -116,20 +112,16 @@ const Login = () => {
                     else{
                         window.history.replaceState({}, document.title, window.location.pathname);
                         location.reload();
-                        // AuthContextConsummer.setLoggedIn(true)
-                        // Navigate('/')
                     }
                 }
 
             }
             catch (error) {
-                // setLoading(false);
                 console.error('Error:', error)
             }
         }
     }
     useEffect(()=>{
-        console.log("need loin == ",needLogin)
         if (needLogin! === false)
             if (oauth)
                 loginwith42(code)
@@ -142,47 +134,10 @@ const Login = () => {
             const tmpCode = searchParams.get('code');
             if (tmpCode)
                 _setCode(tmpCode)
-            console.log(`1234   ${tmpCode}`)
-    
-            // if (code) {
-    
-            //     try {
-            //         const req = {
-            //             url : '/api/LoginWithOAuth42/',
-            //             method : 'POST',
-    
-            //         }
-            //         const resp = 
-            //     }
-            //     catch{
-    
-            //     }
-    
-            //     const
-    
-            //     fetch('http://localhost:8000/api/LoginWithOAuth42/', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({ code }),
-            //     })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         if (data) {
-            //             console.log('data', data);
-            //         }
-            //         window.history.replaceState({}, document.title, window.location.pathname);
-            //     })
-            //     .catch(error => console.error('Error:', error));
-            // }
+
             if (tmpCode)
                 loginwith42(tmpCode)
     }, []);
-    // useEffect(()=>{
-    //     if (code.length > 0)
-    //         loginwith42(code)
-    // },[])
     const [hide, setHide] = useState<boolean>(true)
     const [passFoucs, setPassFocus] = useState<boolean>(false)
     const FormFade = () => {

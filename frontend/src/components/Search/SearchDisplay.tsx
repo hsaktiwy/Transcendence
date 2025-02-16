@@ -13,7 +13,6 @@ interface props
 
 function SearchDisplay({unique_id,login, firstName, lastName, profile_pic, lastElm}:props)
 {
-    console.log("in searchDisplay",  unique_id)
     return (
         <>
             <Link to={`/profile/${unique_id}`}>

@@ -2,7 +2,7 @@
 CMD = docker-compose
 
 all :
-	@echo "Try to run  : make [prod] [dev] [clean] [fclean] [re]"
+	@echo "Try to run  : make [prod] [dev] [clean_dev] [clean_prod] [fclean] [re]"
 
 prod:
 	$(CMD) -f docker-compose.prod.yaml up --build
@@ -12,11 +12,15 @@ clean:
 	$(CMD) -f docker-compose.dev.yaml down
 	$(CMD) -f docker-compose.prod.yaml down
 
+clean_dev:
+	$(CMD) -f docker-compose.dev.yaml down
+clean_prod:
+	$(CMD) -f docker-compose.prod.yaml down
 
-fclean: clean
+fclean: clean_dev clean_prod
 	docker system prune -af
 	docker volume prune -f
 
 re: fclean all
 
-.PHONY: re fclean all clean
+.PHONY: re fclean all clean_dev clean_prod

@@ -77,3 +77,27 @@ export interface MatchHistoryDataInterface{
     score_p1:number;
     score_p2:number;
 }
+export interface twoGames
+{
+    Pong:MatchHistoryDataInterface[];
+    Chess:MatchHistoryDataInterface[];
+}  
+
+
+export interface UserRankResponse {
+    // user_id: string;  
+    wins: number;     
+    xp: number;       
+    level: number;  
+
+}
+export interface ProfileRank
+{
+    rank:number;
+    level:number;
+}
+export interface rankInterface
+{
+    profile:ProfileRank;
+    user:ProfileDataInterface;
+}

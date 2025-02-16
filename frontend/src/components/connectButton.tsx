@@ -88,17 +88,14 @@ function ConnectButton(prop: buttonInterface) {
           to : uuid,
           status: isblock
         }
-        console.log(notification)
         const message = JSON.stringify(notification)
         SocketContext?.socket?.current?.send(message)
       }
       catch(err)
       {
-          console.log("Block status ", err)
+          console.log(err)
       }
     }
-    else
-      console.log(prop.user)
   }
 
   const BlockStatusCheck = async ()=>
@@ -122,7 +119,7 @@ function ConnectButton(prop: buttonInterface) {
       }
       catch(err)
       {
-          console.log("Block status ", err)
+          console.log(err)
       }
   }
 
@@ -138,10 +135,8 @@ function ConnectButton(prop: buttonInterface) {
         const resp = await mailman(req)
         const  responce:boolean = resp.data['status']
         setIsfriend(responce ? 'UNFRIEND' : 'CONNECT' );
-        console.log("rrrrrr    ----- ,", responce)
         if (responce)
           await getChannelId()
-        console.log(resp)
         const req2 = {
           url:'friendship/status/'+ uuid,
           method: 'GET',
@@ -153,15 +148,13 @@ function ConnectButton(prop: buttonInterface) {
         const  sender:boolean = resp2.data['sender']
         const  fr_id:number = resp2.data["friend_req_id"]
         setFriendRequestId(fr_id)
-        console.log(resp2)
         if (st === "pending")
           setFriendRequest((sender) ? 'Pending': 'Accept')
-        // }
-        // console.log(responce)
+
     }
     catch(err)
     {
-        console.log("Friend status ", err)
+        console.log(err)
     }
   }
   useEffect(()=>{
@@ -185,11 +178,9 @@ function ConnectButton(prop: buttonInterface) {
   // add our state update to the socket channel
 
   useEffect(()=>{
-    console.log("FRIENDDDS ====>", userContextConsumer?.friends)
     const FriendRequestAccepted = (data:NotificationPropreties)=>{
       if (data.sender.unique_id == uuid)
       {
-        //console.log('ACCEPTED :', uuid, data)
         getChannelId()
         setFriendRequest("")
         setIsfriend("UNFRIEND")
@@ -198,14 +189,12 @@ function ConnectButton(prop: buttonInterface) {
     const FriendRequestReceived = (data:NotificationPropreties)=>{
       if (data.sender.unique_id == uuid)
       {
-        // console.log('RECEIVED :', uuid, data)
         setFriendRequestId(data.friend_request_id)
         setFriendRequest('Accept')
       }
     }
   
     const TOCONNECT = (data:friendship)=>{
-      console.log('+===========================+++++++++++++++++', data)
       if (data.sender.unique_id == uuid)
       {
         setFriendRequest("")
@@ -225,7 +214,6 @@ function ConnectButton(prop: buttonInterface) {
     AddChannel('NotifBlock', blocknotify)
 
     return () => {
-      // Remove the CHAT call back function when we exist the chat section
       RemoveChannel('FriendRequestAccepted')
       RemoveChannel('FriendRequestReceived')
       RemoveChannel('NOTIFICATION_UNCONNECT')
@@ -491,17 +479,6 @@ function ConnectButton(prop: buttonInterface) {
                   >
                     Cancel
                   </motion.button>
-                  {/* <li
-                  className='m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer '
-                // className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
-                onClick={BlockActionCheck}
-              >
-                    <div className='text-xl'>
-                      <MdBlock/>
-                    </div>
-                    <p>{btn_block}</p>
-                    
-              </li> */}
                 </>
               }
           </motion.nav>

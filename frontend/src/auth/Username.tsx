@@ -34,10 +34,8 @@ const Username = (prop: SetUsernameProps) => {
                 data: data
             }
             const resp = await mailman(req)
-            console.log(resp)
             if(resp.status === 200){
                 setNeedLogin(false)
-
             }
         }
         catch(error){

@@ -9,5 +9,5 @@ urlpatterns = [
     path('inProgress/', ListGamesInProgress.as_view(), name="InProgress_Games"),
     path('ended/', ListGamesEnded.as_view(), name="Ended_Games"),
     path('change/status/<int:game_id>/<str:status_index>', ChangeGameStatus.as_view(), name="ChangeStatus_Games"),
-    path('get_matches/<str:uuid>/<str:type>', get_match_history, name="get_last_matches")
+    path('get_matches/<str:uuid>/', get_match_history, name="get_last_matches")
 ]

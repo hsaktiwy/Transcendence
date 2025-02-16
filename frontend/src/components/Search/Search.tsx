@@ -60,7 +60,6 @@ function Search(info:props) {
                 console.error(e)
             }
         }
-        console.log(info.search_for)
         GetMatchs();
     },[info.search_for])
 

@@ -1,3 +1,3 @@
-npm install --force
+npm install --legacy-peer-deps
 
 npm run dev

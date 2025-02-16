@@ -58,13 +58,10 @@ function ChatModal(){
                         })
                     }
                     catch(e){
-                        console.log('Error : in ChatModel get {'+ 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/' +'} :\n')
                         console.log(e)
                     }
                 }
             }
-            else
-                console.log('action None')
         }
         catch(err)
         {

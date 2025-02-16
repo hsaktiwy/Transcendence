@@ -159,9 +159,7 @@ const RegisterForm = () =>{
         if (registred)
             Navigate('/login')
     }, [registred])
-    useEffect(()=>{
-        console.log(inputsData)
-    },[inputsData])
+
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
                 <div className={`flex flex-col items-center justify-center min-h-screen font-poppins text-white relative`}>
