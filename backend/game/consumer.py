@@ -233,7 +233,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
         if room:
             if (len(room) == 4 and room[3] == 'Invited'): #game_invite_case
-                print('=====> To The Invitaion Room !', room[0])
+                print('=====> To The Invitaion Room !',user.login, room[0])
                 #protection diff room names
                 path = self.scope['path'] 
                 if path.endswith('/'):

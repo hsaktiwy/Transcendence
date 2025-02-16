@@ -45,10 +45,10 @@ const RemoteGame = () => {
 
 
     useEffect(()=>{
-        if (location.state)
+        if (location.state){
             console.log(location.state.room_name, location.state.my_user)
-        if (!ReomteGameData.room_name || !ReomteGameData.my_user)
-        {
+        // if (!ReomteGameData.room_name || !ReomteGameData.my_user)
+        // {
             if (location.state.room_name && location.state.my_user){
                 console.log("???????????????????????????????????????????????",location.state)
                 console.log("location.state.room_name :", location.state.room_name)
@@ -59,6 +59,7 @@ const RemoteGame = () => {
                 setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:location.state.p1_id, p2_id: location.state.p2_id, opponent: location.state.opponent}) //p2_id:location.state.my_user
             }
         }
+        // }
         setDataReady(true);
     },[])
     
@@ -134,12 +135,12 @@ const RemoteGame = () => {
             if(data['type'] == 'Forfait'){
                 
                 setReomteGameData({
-                    // room_name: null,
-                    // role     : null,
-                    // my_user  : null,
-                    // opponent : null,
-                    // p1_id    : null,
-                    // p2_id    : null,
+                    room_name: null,
+                    role     : null,
+                    my_user  : null,
+                    opponent : null,
+                    p1_id    : null,
+                    p2_id    : null,
                     winner  : ReomteGameData.my_user + ' FORFAIT'
                 }); 
                 setAiScore(0);
@@ -164,12 +165,24 @@ const RemoteGame = () => {
             if (state === true){
                 if (OppmouseDirection === 1){
                     setReomteGameData({
+                        room_name: null,
+                        role     : null,
+                        my_user  : null,
+                        opponent : null,
+                        p1_id    : null,
+                        p2_id    : null,
 
                         winner  : ReomteGameData.opponent
                     });
                 }
                 else {
                     setReomteGameData({
+                        room_name: null,
+                        role     : null,
+                        my_user  : null,
+                        opponent : null,
+                        p1_id    : null,
+                        p2_id    : null,
         
                         winner  : ReomteGameData.my_user
                     });        
@@ -884,12 +897,24 @@ const RemoteGame = () => {
         };
         if (playerScore === 7){
             setReomteGameData({
+                room_name: null,
+                role     : null,
+                my_user  : null,
+                opponent : null,
+                p1_id    : null,
+                p2_id    : null,
                 winner  : ReomteGameData.my_user
             });    
             message.ball.mousedirection = 1;
         }
         else {
             setReomteGameData({
+                room_name: null,
+                role     : null,
+                my_user  : null,
+                opponent : null,
+                p1_id    : null,
+                p2_id    : null,
                 winner  : ReomteGameData.opponent
             });     
             message.ball.mousedirection = 2;
