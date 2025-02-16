@@ -71,6 +71,7 @@ const PreRemote = () => {
     
     socket.onclose = () => {
       console.log("Matchmaking WebSocket Closed");
+      setIsSearching(false);
     };
     
     setMatchSocket(socket);

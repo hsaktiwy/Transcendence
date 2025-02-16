@@ -138,6 +138,7 @@ function Tournament() {
           date: new Date().toDateString(),
           teams: [
             { name: Matches.Final?.winner || 'TBD' },
+            { name: ' ' },
           ],
         },
       ],
