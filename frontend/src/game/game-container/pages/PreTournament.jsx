@@ -23,18 +23,34 @@ const PreTournament = () => {
   const { setLocalGamesData } = useLocalGamesContext();
   const { LocalGamesData } = useLocalGamesContext();
 
-  const handleLaunch = () => {    
+  const handleLaunch = () => {   
+    
+    const playerNames = [player1Name, player2Name, player3Name, player4Name];
+    const areNamesValid = playerNames.every(name => (name.length <= 8 && name.length > 0 && !/\s/.test(name))) && new Set(playerNames).size === playerNames.length;
+    
+    if (areNamesValid) {
       setLocalGamesData({
         gametype: 'Tournament', // Local, Multiplayer, Tournament 
         player1: player1Name,
         player2: player2Name,
+        playerx1: player1Name,
+        playerx2: player2Name,
         player3: player3Name,
         player4: player4Name,
         TBD1   : null,
         TBD2   : null,
+        F1_turn: true,
+        F2_turn: false,
+        FF_turn: false,
+        F1_done: false,
+        F2_done: false,
+        FF_done: false,
         Winner : null
       });
       navigate('/game/Tournament');
+    } else {
+      alert('Error: Player names must be unique and less than or equal to 8 characters.');
+    }
   };
 
   return (

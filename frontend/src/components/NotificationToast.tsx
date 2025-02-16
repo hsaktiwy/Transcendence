@@ -7,6 +7,8 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import mailman from "@/utils/AxiosFetcher";
+import { toast } from "react-toastify";
 
 
 export interface senderInterface {
@@ -35,16 +37,35 @@ const notifType: typeInterface = {
     'tournament': <RiGamepadLine/>,
     'message': <BiMessageSquareDetail/>,
 }
-
 const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
-
+    
     // const [remove, setRemove] = useState<boolean[]>([])
-
+    
     const userContextConsumer = useContext(UserContext)
-
+    
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     
+    const removeNotification = async (notification: NotificationPropreties) =>{
+        try{
+                const req = {
+                    url: `/profile/notification/${notification.id}/`,
+                    method: 'DELETE',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req)
+                if (resp.status === 204){
+                    userContextConsumer.setnotifications(prev => prev.filter(notif=>notif.id !== notification.id))
+                    const newItems = items.filter(item => item.id !== notification.id)
+                    userContextConsumer?.setNewNotification(newItems)
+                }
+                
+            
+        }
+        catch(e){
+            toast.error("Error occured")
+        }
+    }
     const removeItem = (itemId: number) =>{
         const newItems = items.filter(item => item.id !== itemId)
         userContextConsumer?.setNewNotification(newItems)
@@ -61,16 +82,28 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         }
     }, [items])
 
+// const formatMessage = (item: NotificationPropreties)=>{
+//     if (item.type === 'message' && item.content.length > 20){
 
+//     }
+// }
     return(
 
         <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4 w-[90%] sm:w-[500px] ">
   
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
+                        const sstatus = item.type === 'gameInvitation' ?  
+                            {   room_name: item.room_name,
+                                p1_id: userContextConsumer.userData?.unique_id,
+                                p2_id: item.sender.unique_id,
+                                my_user:userContextConsumer.userData?.login,
+                                opponent: item.sender?.login
+                            } : {channel_id: item.channel_id }
+                        console.log(sstatus)
                         return(
-                            <Link key={index+1} to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : (item.type === 'gameInvitation' ? '/game/RemoteGame': '/chat')} state={item.type === 'gameInvitation' ?  {room_name: item.room_name, my_user:userContextConsumer.userData?.unique_id}: { channel_id: item.channel_id }} onClick={() =>{
-                                removeItem(item.id)}}>
+                            <Link key={index+1} to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : (item.type === 'gameInvitation' ? '/game/RemoteGame': '/chat')} state={sstatus} onClick={() =>{
+                                removeNotification(item)}}>
             
                                 <div  className={`  relative duration-200 transition-all    hover:scale-[1.02]  sm:hover:scale-105  cursor-pointer shadow-[0px_20px_77px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-full sm:w-[500px] h-[120px]  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm rounded-lg flex text-white `}>
                                     <div className="notif-icon bg-[#5E97A9] h-full flex justify-center items-center text-2xl p-4 text-white rounded-l-lg">
@@ -82,16 +115,16 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                         <h1 className="font-semibold sm:text-xl">
                                             {`You have a new ${item.type==='message' ? 'Message' :'Notification' }`}
                                         </h1>
-                                        <div className="flex gap-4  items-center break-words">
+                                        <div className="flex gap-4  items-center">
                                             {
-                                                (item.type === 'friendship' || item.type === 'message') &&
+                                                (item.type === 'friendship' || item.type === 'message' || item.type === 'gameInvitation') &&
                                                 <div className=" h-[35px] w-[35px] sm:h-[50px] sm:w-[50px]">
                                                     {/* <p>{usersDataArr.current.find(user=>item.sender === user.login)?.profile_pic}</p> */}
                                                     <img src={`${import.meta.env.VITE_axiosPath}${item.sender.profile_pic}`} alt="sender_image" className="h-full w-full object-cover rounded-full border-[2px] border-white/50"/>
                                                 </div>
                                             }
-                                            <p className="text-white/80 break-words">
-                                                {item.content.length > 20 ? `${item.content.substring(0,20)}...` : item.content}
+                                            <p className="text-white/80 break-words scale-90">
+                                                {item.content.length > 40 ? `${item.content.substring(0,40)}...` : item.content}
                                             </p>
                                         </div>
                                     </div>

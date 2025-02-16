@@ -75,8 +75,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def game_invite_notification(self, _receiver, _sender, room_name):
         try:
             receiver = MyUser.objects.filter(unique_id=_receiver).first()
-            not_content = f'{_sender.unique_id} GAMEINVITE to {receiver.unique_id} room {room_name}'
-            notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='gameInvitation', friend_request_id=-1)
+            not_content = f'{_sender.unique_id} invites you to play a game'
+            notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='gameInvitation', friend_request_id=-1, room_name=room_name)
             return 1, notification, receiver.id
         except Exception as e:
             print(f'error  : {e}')

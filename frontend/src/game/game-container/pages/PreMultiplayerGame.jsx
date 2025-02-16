@@ -82,15 +82,26 @@ const PreMultiplayerGame = () => {
             default_icon='/GamePub/bottouns/default_offline.svg'
             hovered_icon='/GamePub/bottouns/hovered_offline.svg'
             onClick={() => {
-              setLocalGamesData({
-                gametype: 'Local', // Local, Multiplayer, Tournament 
-                player1: "BLUE",
-                player2: "RED",
-                player3: null,
-                player4: null,
-                Winner : null
-              });
-              navigate('/game/Multiplayer')}}
+
+              const playerNames = [blueTeamPlayers.player1, blueTeamPlayers.player3, redTeamPlayers.player2, redTeamPlayers.player4];
+              const areNamesValid = playerNames.every(name => (name.length <= 8 && name.length > 0 && !/\s/.test(name))) && new Set(playerNames).size === playerNames.length;
+              
+              if (areNamesValid) {
+                setLocalGamesData({
+                  gametype: 'Multiplayer', // Local, Multiplayer, Tournament 
+                  player1:  "BLUE",
+                  player2:  "RED",
+                  player3: null,
+                  player4: null,
+                  Winner : null
+                });
+                navigate('/game/Multiplayer')
+              } else {
+                alert('Error: Player names must be unique and less than or equal to 8 characters.');
+              }
+
+
+            }}
           />
         </div>
       </div>
