@@ -45,7 +45,13 @@ function RankFile() {
     React.useEffect(()=>{}, [])    
   return (
     <>
-        {!userRank ? ( <div> there is  no rank </div> ) : (
+        {!userRank ? (  <div className="text-2xl h-full w-full rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-lg font-semibold flex flex-col justify-center items-center p-4">
+              <div className="flex justify-center items-center rounded-xl bg-gradient-to-bl from-[#283137] to-[#242729] flex-col p-6">
+              <img className="w-10" src="/PaddelTime.svg"></img>
+
+                <h1 className="text-center m-2 text-lg">You haven't played any matches yet</h1>
+              </div>
+            </div>) : (
 
     <div className=" 2xl:col-span-2 rounded-2xl  bg-[#2B2F32]   text-center text-xl text-white h-96 sm:h-full  ">
                         <div className=" flex justify-center items-center p-4  2xl:col-span-2 rounded-2xl  bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32]  shadow-3xl  shadow-3xl shadow-[#22333869] rounded-text-center text-xl text-white h-full  ">
