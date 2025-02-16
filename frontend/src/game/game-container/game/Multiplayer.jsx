@@ -1113,7 +1113,7 @@ const MultiplayerGame = () => {
                     player2: null,
                     player3: null,
                     player4: null,
-                    Winner  : LocalGamesData.player1
+                    winner  : LocalGamesData.player1
                 });    
             }
             else {
@@ -1123,7 +1123,7 @@ const MultiplayerGame = () => {
                     player2: null,
                     player3: null,
                     player4: null,
-                    Winner  : LocalGamesData.player2
+                    winner  : LocalGamesData.player2
                 });     
             }
             
