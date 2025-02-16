@@ -4,4 +4,3 @@ from .models import ProfileStatus, Notification, Achievements
 
 admin.site.register(ProfileStatus)
 admin.site.register(Notification)
-admin.site.register(Achievements)
