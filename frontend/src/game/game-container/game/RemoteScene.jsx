@@ -102,6 +102,7 @@ const RemoteGame = () => {
                 console.log("Connected to the game room:", ReomteGameData.room_name);
                 setdocket(gameSocket);
             };
+            // gameSocket.onclose 
             
         }
         else if (ReomteGameData.inviting && ReomteGameData.room_name){
@@ -120,7 +121,16 @@ const RemoteGame = () => {
         const kmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); 
         const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
 //
-
+        gameSocket.onerror = (error) => {
+            console.error("WebSocket Error:", error);
+            navigate('/game/PreRemote');
+        };
+        
+        gameSocket.onclose = () => {
+            console.log("Matchmaking WebSocket Closed");
+            navigate('/game/PreRemote');
+        };
+        
         gameSocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         
