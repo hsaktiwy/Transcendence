@@ -7,6 +7,7 @@ import './Tournament.css';
 import './style.css';
 import { useLocalGamesContext } from '../game/MatchContext';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 function Tournament() {
   const navigate = useNavigate();
@@ -56,6 +57,17 @@ function Tournament() {
     },
   });
   
+  useEffect(() => {
+    if (LocalGamesData.F1_turn){
+      toast.success('Playing now ' + Matches.Semi_Final_1.player1 + ' ' + Matches.Semi_Final_1.player2)
+    } else if(LocalGamesData.F2_turn){
+      toast.success('Playing now ' + Matches.Semi_Final_2.player1 + ' ' + Matches.Semi_Final_2.player2)    
+    } else if(LocalGamesData.FF_turn){
+      toast.success('Playing now ' + Matches.Final.player1 + ' ' + Matches.Final.player2) 
+    }
+
+  }, [LocalGamesData.F1_turn, LocalGamesData.F2_turn, LocalGamesData.FF_turn])
+
   // if (Matches.Final.Done === true){
   //   // navigate('/game/')
   //   navigate("/game/Winner")
@@ -205,19 +217,22 @@ function Tournament() {
 
             <div className="matches-column">
               <h1 className="tournament-heading">MATCHES QUEUE</h1>
-                {(Matches.Semi_Final_1.Their_turn && <MatchCard 
+                {(Matches.Semi_Final_1.Their_turn 
+                 && <MatchCard 
                   matchId="Semi_Final_1"
                   matchData={Matches.Semi_Final_1}
                   onReady={handleReady}
                   onStartMatch={handleStartMatch}
                 />)}
-                {(Matches.Semi_Final_2.Their_turn && <MatchCard 
+                {(Matches.Semi_Final_2.Their_turn  
+                && <MatchCard 
                   matchId="Semi_Final_2"
                   matchData={Matches.Semi_Final_2}
                   onReady={handleReady}
                   onStartMatch={handleStartMatch}
                 />)}
-                {(Matches.Final.Their_turn && <MatchCard 
+                {(Matches.Final.Their_turn 
+                && <MatchCard 
                   matchId="Final"
                   matchData={Matches.Final}
                   onReady={handleReady}
