@@ -58,10 +58,6 @@ function ChatSession(){
         }
     }
 
-    useEffect(()=>{
-        // BlockStatusCheck()
-    },[userContext.action])
-    //amine
     
     
     useEffect(() =>{
