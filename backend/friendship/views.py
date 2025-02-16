@@ -179,10 +179,12 @@ def CancelFriendRequest(request, id):
 		myuser = request.user
 		friendrequest = FriendRequest.objects.filter(id=id)
 		if len(friendrequest) > 0:
-			if friendrequest.first().sender != myuser:
+			if friendrequest.first().sender != myuser and friendrequest.first().receiver != myuser:
 				return Response({'message': 'friend request not related to this user'}, status=401)
 			friendrequest.first().delete()
-		return Response({'status': 'Done'}, status=status.HTTP_200_OK)
+			return Response({'status': 'Done'}, status=status.HTTP_200_OK)
+		else:
+			return Response({'message': 'Notification not found'}, status=404)
 	except:
 		return Response({'Error': 'Something went wrong?'}, status=status.HTTP_400_BAD_REQUEST)
 

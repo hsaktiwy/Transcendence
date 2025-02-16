@@ -69,7 +69,7 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         {
                     items.filter(item => !item.is_readed).map((item, index) =>{
                         return(
-                            <Link to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : (item.type === 'gameInvitation' ? '/game/RemoteGame': '/chat')} state={item.type === 'gameInvitation' ?  {room_name: item.room_name, my_user:userContextConsumer.userData?.unique_id}: { channel_id: item.channel_id }} onClick={() =>{
+                            <Link key={index+1} to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : (item.type === 'gameInvitation' ? '/game/RemoteGame': '/chat')} state={item.type === 'gameInvitation' ?  {room_name: item.room_name, my_user:userContextConsumer.userData?.unique_id}: { channel_id: item.channel_id }} onClick={() =>{
                                 removeItem(item.id)}}>
             
                                 <div  className={`  relative duration-200 transition-all    hover:scale-[1.02]  sm:hover:scale-105  cursor-pointer shadow-[0px_20px_77px_10px_rgba(94,_151,_169,_0.35)]  animate-notificationAnimation w-full sm:w-[500px] h-[120px]  bg-gradient-to-br from-[#2a3236] to-[#1e2124] backdrop-filter backdrop-blur-sm rounded-lg flex text-white `}>

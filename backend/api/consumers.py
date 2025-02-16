@@ -551,3 +551,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def gameInvitation(self, event):
         message = json.dumps(event)
         await self.send(text_data=message)
+
+class NoMatchConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+        await self.send(text_data="No valid route found")
+        await self.close(code=4001)
