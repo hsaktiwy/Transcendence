@@ -135,18 +135,20 @@ const RemoteGame = () => {
             if(data['type'] == 'Forfait'){
                 
                 setReomteGameData({
-                    room_name: null,
-                    role     : null,
-                    my_user  : null,
-                    opponent : null,
-                    p1_id    : null,
-                    p2_id    : null,
+                    // room_name: null,
+                    // role     : null,
+                    // my_user  : null,
+                    // opponent : null,
+                    // p1_id    : null,
+                    // p2_id    : null,
                     winner  : ReomteGameData.my_user + ' FORFAIT'
                 }); 
                 setAiScore(0);
                 setPlayerScore(0);
                 navigate('/game/Winner');
             }
+            else {
+
             
             Aix               = data['paddle']['x'];
             Aiy               = data['paddle']['y'];
@@ -165,24 +167,24 @@ const RemoteGame = () => {
             if (state === true){
                 if (OppmouseDirection === 1){
                     setReomteGameData({
-                        room_name: null,
-                        role     : null,
-                        my_user  : null,
-                        opponent : null,
-                        p1_id    : null,
-                        p2_id    : null,
+                        // room_name: null,
+                        // role     : null,
+                        // my_user  : null,
+                        // opponent : null,
+                        // p1_id    : null,
+                        // p2_id    : null,
 
                         winner  : ReomteGameData.opponent
                     });
                 }
                 else {
                     setReomteGameData({
-                        room_name: null,
-                        role     : null,
-                        my_user  : null,
-                        opponent : null,
-                        p1_id    : null,
-                        p2_id    : null,
+                        // room_name: null,
+                        // role     : null,
+                        // my_user  : null,
+                        // opponent : null,
+                        // p1_id    : null,
+                        // p2_id    : null,
         
                         winner  : ReomteGameData.my_user
                     });        
@@ -192,7 +194,7 @@ const RemoteGame = () => {
                 console.log(ReomteGameData.my_user, ' Im quitting !')
                 navigate('/game/Winner');
             }
-
+            
             if(ball_count > Objects.length){
                 console.log('ball should be created here !')
                 createSphere(new THREE.Vector3(ball_x, ball_y, ball_y), false);
@@ -202,11 +204,12 @@ const RemoteGame = () => {
                 Objects[Objects.length - 1].sphere.position.y = ball_y;
                 Objects[Objects.length - 1].sphere.position.z = -ball_z;
             }
-
+            
             // sphere.position.x = -ball_x;
             // sphere.position.y = ball_y;
             // sphere.position.z = -ball_z;
-
+            
+        }
         };
     
     
@@ -897,24 +900,24 @@ const RemoteGame = () => {
         };
         if (playerScore === 7){
             setReomteGameData({
-                room_name: null,
-                role     : null,
-                my_user  : null,
-                opponent : null,
-                p1_id    : null,
-                p2_id    : null,
+                // room_name: null,
+                // role     : null,
+                // my_user  : null,
+                // opponent : null,
+                // p1_id    : null,
+                // p2_id    : null,
                 winner  : ReomteGameData.my_user
             });    
             message.ball.mousedirection = 1;
         }
         else {
             setReomteGameData({
-                room_name: null,
-                role     : null,
-                my_user  : null,
-                opponent : null,
-                p1_id    : null,
-                p2_id    : null,
+                // room_name: null,
+                // role     : null,
+                // my_user  : null,
+                // opponent : null,
+                // p1_id    : null,
+                // p2_id    : null,
                 winner  : ReomteGameData.opponent
             });     
             message.ball.mousedirection = 2;

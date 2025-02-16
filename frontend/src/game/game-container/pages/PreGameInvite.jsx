@@ -102,6 +102,7 @@ const PreInvite = () => {
                         
                         ReomteGameData.inviting = true
                         ReomteGameData.gameSocket = tgameSocket
+                        ReomteGameData.form_game_invite = false
                         
                         // Update Reomte context
                         
@@ -125,6 +126,7 @@ const PreInvite = () => {
         return(() => {
             if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
                 tmpsocket.close()
+                // ReomteGameData.form_game_invite = false
             }
         })
 
