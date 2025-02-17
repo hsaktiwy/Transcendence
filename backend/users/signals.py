@@ -6,11 +6,6 @@ from friendship.models import BlockList
 from status.models import ProfileStatus, Notification
 from datetime import timedelta
 
-# @receiver(pre_save, sender=Notification, dispatch_uid="clean_up_notification")
-# def cleanUpNotification(sender, instance, **kwargs):
-#     print("hello from signal")
-#     Notification.clean_up_notifications(instance.id_user_fk)
-
 @receiver(post_save, sender=MyUser, dispatch_uid="create_profile_status")
 def CreateProfileStatus(sender, instance, created, **kwargs):
     if created:

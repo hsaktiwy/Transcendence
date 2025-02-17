@@ -31,13 +31,13 @@ function ChatSession(){
         throw new Error('error')
 
 
-    const [message, setMessage] = useState('')// hamza
-    const [update, setUpdate] = useState<boolean>(false)// hamza
-    const  {AddChannel, RemoveChannel, socket} = SocketContext;// hamza
-    const containerRef = useRef<HTMLDivElement | null>(null);// amine 
-    const DropMenuRef = useRef<HTMLDivElement | null>(null);// amine 
+    const [message, setMessage] = useState('')
+    const [update, setUpdate] = useState<boolean>(false)
+    const  {AddChannel, RemoveChannel, socket} = SocketContext;
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const DropMenuRef = useRef<HTMLDivElement | null>(null);
     const [scrollPosition, setScrollPosition] = useState({scrollTop: -1, scrollLeft:-1})
-    const [openDrop, setOpenDrop] = useState<boolean>(false)// amine 
+    const [openDrop, setOpenDrop] = useState<boolean>(false)
     const [Status, setStatus] = useState<string>("Block")
     const BlockStatusCheck = async ()=>
     {
@@ -116,7 +116,7 @@ function ChatSession(){
                 console.error('WebSocket connection is not open')
         }
     }
-    // hamza
+
     const UpdateCurrentConvs = useCallback((message_received: Message , __channelId: number) => {
         if (__channelId === chatContext.active?.channelId) {
             chatContext.setActive((prevActive) => prevActive && ({
