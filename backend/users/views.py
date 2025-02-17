@@ -162,7 +162,6 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
-    # authentication_class = []
     permission_classes = [AllowAny]
     def post(self, request):
         if not isinstance(request.user, AnonymousUser):

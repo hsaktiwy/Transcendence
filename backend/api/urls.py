@@ -14,14 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
-# from users.views import getCRSFToken, MyLogin
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
-    # this was here by defalt gave us grafical admin interface only for users assogne in django default users exemple (hsaktiwy, 1234)<- super user in production level #DestroyThis
-    path('api/admin/', admin.site.urls),# this must be deleted
+    path('api/admin/', admin.site.urls),
     path('api/', include('users.urls')),
     path('chat/', include('conversations.urls')),
     path('profile/', include('status.urls')),

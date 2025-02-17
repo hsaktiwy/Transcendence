@@ -23,14 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
             'level': {'required': False}  
 
         }
-    # def create(self, validated_data):
-    #     return MyUser.objects.create_user(
-    #         login=validated_data['login'],
-    #         email=validated_data['email'],
-    #         first_name=validated_data['first_name'],
-    #         last_name=validated_data['last_name'],
-    #         password=validated_data['password'],
-    #     )
+
     def update(self, instance, validated_data):
 
         old_password = validated_data.get('old_password', None)
