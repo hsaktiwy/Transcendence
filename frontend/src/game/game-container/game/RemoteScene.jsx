@@ -123,12 +123,12 @@ const RemoteGame = () => {
 //
         gameSocket.onerror = (error) => {
             console.error("WebSocket Error:", error);
-            navigate('/game/PreRemote');
+            // navigate('/game/PreRemote');
         };
         
         gameSocket.onclose = () => {
             console.log("Matchmaking WebSocket Closed");
-            navigate('/game/PreRemote');
+            // navigate('/game/PreRemote');
         };
         
         gameSocket.onmessage = (event) => {
