@@ -349,27 +349,29 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                                 await sync_to_async(loser_profile.save)()
                                 await sync_to_async(winner_profile.save)()
 
-                                if len(room) == 4  and room[3] != 'Ended' and room[3] != 'Forfait':
-                                    print(f"=> room seted", room[0], 'Forfait, Deleted !')
-                                    remove_room(room[0], PPong_Rooms)
-                                    await create_game(
-                                        type='PONG',
-                                        user1=winner,
-                                        user2=loser,
-                                        winner=winner,
-                                        loser=loser,
-                                        score_p1=7,
-                                        score_p2=0
-                                    )
-                                    data = {"type" : "Forfait"}  #Forfait
-                                    await self.channel_layer.group_send(
-                                        self.room_group_name,
-                                        {
-                                            # This is the method name that will be called (like a "handler")
-                                            'type': 'broadcast_event',
-                                            'payload': data
-                                        }
-                                    )
+                                if len(room) == 3 or (len(room) == 4  and room[3] != 'Ended' and room[3] != 'Forfait'):
+                                    roomk = find_room_name(user, PPong_Rooms)
+                                    if roomk and roomk[0] == room[0]:
+                                        print(f"=> room seted", room[0], 'Forfait, Deleted !')
+                                        remove_room(room[0], PPong_Rooms)
+                                        await create_game(
+                                            type='PONG',
+                                            user1=winner,
+                                            user2=loser,
+                                            winner=winner,
+                                            loser=loser,
+                                            score_p1=7,
+                                            score_p2=0
+                                        )
+                                        data = {"type" : "Forfait"}  #Forfait
+                                        await self.channel_layer.group_send(
+                                            self.room_group_name,
+                                            {
+                                                # This is the method name that will be called (like a "handler")
+                                                'type': 'broadcast_event',
+                                                'payload': data
+                                            }
+                                        )
                     except Exception as e:
                         print("===> AN ERROR Ocuured exeption:", e)
                         pass
