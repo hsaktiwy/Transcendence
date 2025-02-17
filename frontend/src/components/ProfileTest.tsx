@@ -1,13 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import './style-component.css'
-import SideBar  from'./website/components-Profile/side-bar.tsx'
-import SearchInfoProfile from './website/components-Profile/serach-infos-profile.tsx'
-import ProfileOverView from './website/components-Profile/ProfileOverView'
-import StatsComponent from './website/components-Profile/statsComponents'
+
 import Achievements from "@/components/Achievements.tsx";
-import { ChartFile } from "@/components/Chartfile.tsx";
+
 import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
 import RankFile from "./rankFile.tsx";
@@ -19,17 +15,16 @@ import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import mailman from "../utils/AxiosFetcher";
-import { NotificationPropreties } from "./UserContext";
+
 import { WebSocketContext } from "../utils/WSContext";
 import ConnectButton from "./connectButton.tsx";
 import { MatchHistory } from "./MatchHistroy.tsx";
-import { SkeletonTheme } from 'react-loading-skeleton'
-import Skeleton from 'react-loading-skeleton'
+
 import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
-import { SlLock } from "react-icons/sl";
+
 import ProfileLocked from "./blocked/Profileblocked.tsx";
-import { LoseWins, LinechartData, RadarChartInterFace, MatchHistoryDataInterface } from "@/utils/interfaces.ts";
+import { LoseWins, LinechartData, RadarChartInterFace, UserRankResponse,twoGames } from "@/utils/interfaces.ts";
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
@@ -37,12 +32,13 @@ const ProfileTest  = () =>{
     if (!SocketContext)
         throw new Error('error')
     const [profileData, setProfileData] = useState<UserDataInterface | ProfileDataInterface | undefined>(undefined)
-    const [channel_id, setChannelId] = useState<number | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(true);
     const [isblock, setIsbLock] = useState<boolean>(false);
     const [matches, setMatches] = useState<LoseWins | undefined>()
     const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
+    const [level, setLevel] = useState<UserRankResponse | undefined>();
+    const Navigate = useNavigate()
     // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
     // const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
     
@@ -51,24 +47,8 @@ const ProfileTest  = () =>{
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
-//    const {setUserMatchHistorey} = userContextConsumer;
-
-    const getChannelId = async () =>{
-            try{
-                const req = {
-                    url: "/chat/conversation/get_channel/"+uuid+'/',
-                    method: 'GET'
-                }
-                const resp = await mailman(req)
-                const id:number = resp.data.channel_id;
-                if (id)
-                    setChannelId(id);
-            }
-            catch (error){
 
 
-            }
-    }
 
     const fetchLineChart = async () =>  
     {
@@ -84,12 +64,25 @@ const ProfileTest  = () =>{
                 weekly_match_data: resp.data.weekly_match_data, // This should already be an array
             };
             setLineChartData(fetchedData);
-            // setMatches(resp.data);
         }
         catch (err){
             console.error("dddddd======????",err)
     }}
-
+    const fetchLevle = async () =>
+        {
+            try{
+                const req = {
+                    url: `/profile/get_rank_user/${uuid}/`,
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req);
+                setLevel(resp.data);
+            }
+            catch (err){
+                console.error(err)
+            }
+        }
     const fetchMatches = async () =>
     {
         try{
@@ -107,38 +100,21 @@ const ProfileTest  = () =>{
         }
     }
 
-    const [matchHistoryType, setMatchHistoryType] = useState("PONG");
-    const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
+    const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
   
-    // Function to fetch match history data
-    const getMatchHistoryData = async (type: any) => {
+    const getMatchHistoryData = async () => {
       const req = {
-        url: `/game/get_matches/${uuid}/${type}`,
+        url: `/game/get_matches/${uuid}/`,
         method: "GET",
       };
       const resp = await mailman(req);
-    //   console.log('heeeree reso data', resp.data.Game)
-      if (resp.data.Game)
+      if (resp.data)
       {
-          setUserMatchHistory(resp.data.Game);
+        setUserMatchHistory(resp.data);
+
       }
     };
-    
-    // Function to switch match type
-    const switchMatchHistoryType = (type :any) => {
-        setMatchHistoryType(type);
-        getMatchHistoryData(type);
-    };
-    useEffect(()=>
-    {
-        console.log('zbiiiiiiii print ->>>> ', userMatchHistory)
 
-    }, [userMatchHistory])
-    
-    // Fetch initial data when component mounts
-    // useEffect(() => {
-    //     getMatchHistoryData(matchHistoryType);
-    //   }, [matchHistoryType]);  // <-- Now it will refetch when switching tabs
       
    const fetchUserData = async () =>{
     try{
@@ -155,18 +131,16 @@ const ProfileTest  = () =>{
             const respData: ProfileDataInterface = resp.data
     
             setProfileData(respData)
-            // setIsLoading(false);
-            // await getChannelId()
         }
         else{
             setProfileData(user[0])
-            // await getChannelId()
         }
     }
     catch (err){
-        console.error("dddddd======????",err)
+        Navigate('/404')
     }
   };
+
 
   const BlockStatusCheck = async ()=>
     {
@@ -182,15 +156,15 @@ const ProfileTest  = () =>{
         }
         catch(err)
         {
-            console.log("Block status ", err)
+            console.log(err)
         }
     }
     const waitData=  async() =>
         {
-            
+            await fetchLevle();
             await fetchLineChart();
             await fetchMatches();
-            await getMatchHistoryData(matchHistoryType);
+            await getMatchHistoryData();
             setIsLoading(false)
         } 
 
@@ -198,17 +172,14 @@ const ProfileTest  = () =>{
    useEffect(() =>{
     if (userContextConsumer?.userData?.unique_id !== uuid){
         fetchUserData().finally(() => {
-            // Add a delay of 1.2 seconds before setting isLoading to false
             const timer = setTimeout(() => {
               setIsLoading(false);
             }, 600);
       
-            // Cleanup timer
             return () => clearTimeout(timer);
           });
           BlockStatusCheck();
           waitData();
-          
     }
     else
     {
@@ -216,9 +187,7 @@ const ProfileTest  = () =>{
         setProfileData(userContextConsumer?.userData)
         waitData()
     }
-   },[uuid, userContextConsumer.blockList, matchHistoryType])
-   useEffect(()=>{
-   },[])
+   },[uuid, userContextConsumer.blockList])
 
     return(
         <>
@@ -248,21 +217,42 @@ const ProfileTest  = () =>{
                         <div className=" h-full mt-4 sm:mt-0  col-span-12 sm:col-span-9 sm:pl-4 2xl:col-span-10">
                                 <div className="flex relative items-cente justify-center w-full p-4  sm:h-full  xxl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]  shadow-3xl shadow-[#22333869] rounded-2xl  ">
                                     <div className="w-full  h-full  grid grid-rows-2 ">
-                                            <div className="relative bg-cover bg-center shadow-md   px-5 lg:px-10  rounded-3xl grid grid-rows-1 "
-                                            style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})`,}}>
-                                            <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
-                                                <div className=" h-20 hidden sm:flex items-center xxl:items-end ">
-                                                    <div className="  h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
-                                                        <div className=" text-xl text-white font-semibold xxl:text-lg ">{profileData?.login}</div>
+                                    <div
+                                        className="relative bg-cover bg-center shadow-md px-5 lg:px-10 rounded-3xl grid grid-rows-1 transition-all duration-300 ease-in-out"
+                                        style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})` }}
+                                        >
+                                            {/* Dark overlay for the background, stays behind the content */}
+                                            <div className="absolute  inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all duration-300 ease-in-out rounded-3xl"></div>
+                                            
+                                            {/* Content */}
+                                            <div className="relative  z-10">
+                                                <div className="h-20 hidden  sm:flex items-center xxl:items-end ">
+                                                <div className="h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
+                                                    <div className="text-xl text-white font-semibold xxl:text-lg">{profileData?.login}</div>
+                                                </div>
+                                                </div>
+
+                                                <div className="flex flex-col mt-7 xxl:mt-12  justify-center items-center ">
+                                                <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
+                                                <div className="h-3 w-[100%] bg-[#444444] rounded-full">
+                                                    <div
+                                                            style={{
+                                                                width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%` // Reset at every level
+                                                            }}
+                                                            className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
+                                                            /> 
+
+                                                    </div>
+                                                    <div className="w-full text-right">
+                                                        <div className="text-xs font-bold text mr-3">
+                                                        {level?.xp}xp
+                                                        <span className="text-[9px]"> / </span>
+                                                        {(Math.floor(level?.level ?? 0) + 1) * 1000}xp
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            <div className=" flex flex-col justify-center  items-center mb-7">
-                                                <h1 className="text-2xl font-semibold xxl:text-3xl">7.5 Level</h1>
-                                                <div className="h-3 w-[100%]  bg-[#444444] rounded-full">
-                                                    <div className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"></div>
-                                                </div>
                                             </div>
-                                        </div>
+                                            </div>
                                         <Achievements uuid={uuid}/>
                                     </div>    
                                    
@@ -271,31 +261,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 relative rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-3xl shadow-[#22333869] h-full w-full">
                                 <div className="w-full h-full flex flex-col">
-                                    {/* Tab Navigation */}
-                                    <div className="flex ">
-                                    {["PONG", "CHESS"].map((type) => (
-                                        <button
-                                        key={type}
-                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                                            matchHistoryType === type
-                                            ? " rounded-b-none"
-                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                                        } hover:text-[#5E97A9]`}
-                                        onClick={() => switchMatchHistoryType(type)}
-                                        >
-                                        <div>
-                                            {
-                                                type == "PONG" ?        
-                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                                     :
-                                                     <div><img className="w-6" src="../strategy.png"/></div>
-                                        }
-                                        </div>
-                                        {type}
-                                        </button>
-                                    ))}
-                                    </div>
-                                    <MatchHistory data={userMatchHistory} username={profileData?.login} />
+                                    <MatchHistory data={userMatchHistory} username={profileData?.login} /> 
                                 </div>
                             </div>
 
@@ -320,31 +286,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full">
 
-                            <div className="w-full h-full flex flex-col">
-                                    {/* Tab Navigation */}
-                                    <div className="flex ">
-                                    {["PONG", "CHESS"].map((type) => (
-                                        <button
-                                        key={type}
-                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                                            matchHistoryType === type
-                                            ? " rounded-b-none"
-                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                                        } hover:text-[#5E97A9]`}
-                                        onClick={() => switchMatchHistoryType(type)}
-                                        >
-                                        <div>
-                                            {
-                                                type == "PONG" ?        
-                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                                     :
-                                                     <div><img className="w-6" src="../strategy.png"/></div>
-                                        }
-                                        </div>
-                                        {type}
-                                        </button>
-                                    ))}
-                                    </div>
+                            <div className="w-full h-full flex flex-col">                                   
                                     <MatchHistory data={userMatchHistory} username={profileData?.login} />
                                 </div>
                         </div>

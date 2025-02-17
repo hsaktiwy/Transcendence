@@ -113,7 +113,7 @@ class ApiConsumer(WebsocketConsumer):
         parts = path.split('/')
         invited_id = None
 
-        if len(parts) == 4 and parts[-2] == 'invite':
+        if len(parts) == 5 and parts[-2] == 'invite':
             invited_id = parts[-1]
             print("Invite mode. Unique ID:", invited_id)
 
@@ -1137,4 +1137,3 @@ def remove_room(room_name, Rooms):
 #             return
 
 #         await self.send(json.dumps(event['payload']))
-

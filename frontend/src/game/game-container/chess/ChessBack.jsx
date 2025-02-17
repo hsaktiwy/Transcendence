@@ -119,7 +119,6 @@ const ChessGameBack = () => {
         
                 while (gltf.scene.children.length){
                     item = gltf.scene.children[0];
-                    // console.log("=> ", item.name);
                     if (item.name === "board"){
                         item.position.y = 1.004;
                     }

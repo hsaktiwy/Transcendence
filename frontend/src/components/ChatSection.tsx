@@ -1,20 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import ChatSession from "./ChatSession";
 import Conversations from "./Conversations";
 import {ChatSectionContext, Conversation, Message, User} from "../utils/ChatContext"
-import {init_conv, initialized, received} from "../utils/ConversationsList"
-import { useParams } from "react-router-dom";
+import {init_conv} from "../utils/ConversationsList"
 import ChatFriendInfo from "./ChatFriendInfo";
 import NoActiveChat from "./NoActiveChat";
 import LoadingIndecator from "./Loading";
 import ChatModal from "./ChatModal";
-import { WebSocketContext, WebSocketProvider } from "../utils/WSContext";
-import { createContext } from "react";
+import { WebSocketContext } from "../utils/WSContext";
+
 import { NotificationPropreties, UserContext } from "./UserContext";
 import { useLocation } from "react-router-dom";
 import { ProfileDataInterface } from "@/utils/UserDataInterface";
 import mailman from "@/utils/AxiosFetcher";
-import { Underline } from "lucide-react";
+
 
 function ChatSection(){
     const location = useLocation()
@@ -32,7 +31,7 @@ function ChatSection(){
         throw new Error("userContext must be used within a UserProvider");
     if (!SocketContext)
         throw new Error('error')
-    const {AddChannel,RemoveChannel, socket} = SocketContext
+    const {AddChannel,RemoveChannel} = SocketContext
     const updateConvsState = () =>{
         if (convs && convs.length){
             const {friends} = userContextConsumer
@@ -59,22 +58,11 @@ function ChatSection(){
         }
     }
     useEffect(()=>{
-        console.log("dada")
         updateConvsState()
     }, [userContextConsumer.friends])
-    // useEffect(()=>{
-    //     if (active && convs && convs?.filter(conv=>conv.user2.id===active?.user2.id).length > 0)
-    //         setActive((prev)=>{
-    //                     if (!prev)
-    //                         return undefined
-    //                     const newUserState = convs?.filter(conv=>conv.user2.id===prev?.user2.id)[0].user2
-    //                     return({...prev, user2: newUserState})
-    //                 }
-    //         )
-    // }, [convs])
+
     const UpdateConvs = (data:any)=>
     {
-        console.log('Update convs ...')
         const message_received: Message = {
             id: data.message_id,
             sender: data.user,
@@ -82,23 +70,27 @@ function ChatSection(){
             isread: false,
             timestamp: data.timestamp
         };
-        // Assuming chatContext.setConvs is a state update function
-        const channelId = data.channel;
-        setConvs((prevConvs: Conversation[]) => {
-            const updatedConvs = prevConvs.map(conv =>
-                conv.channelId === channelId
-                    ? { ...conv, LastUpdate: data.LastUpdate ,messages: [...conv.messages, message_received], new_message: 1 }
-                    : conv
-            );
-            updatedConvs.sort((a, b)=>{
-                const DateA = new Date(a.LastUpdate) 
-                const DateB = new Date(b.LastUpdate)
-                console.log(DateA)
-                console.log(DateB)
-                return DateB - DateA;
-            })
-            console.log('Updated convs:', updatedConvs);
-            return updatedConvs
+        
+        const channelId:number = data.channel;
+        setConvs((prevConvs) => {
+            if (prevConvs){
+                const updatedConvs = prevConvs.map((conv) =>{
+                    const last_update:string = data.LastUpdate
+                   if (conv.channelId === channelId)
+                        return { ...conv, LastUpdate: last_update ,messages: [...conv.messages, message_received], new_message: 1 as 0 | 1 }
+                    else
+                        return conv
+    
+                }
+                );
+                updatedConvs.sort((a, b)=>{
+                    const DateA = new Date(a.LastUpdate) 
+                    const DateB = new Date(b.LastUpdate)
+                    return DateB.getTime() - DateA.getTime();
+                })
+                return updatedConvs
+            }
+            return prevConvs
         })
     }
     const get_conversation = async (channel_id:number)=>{
@@ -111,31 +103,27 @@ function ChatSection(){
             }
             const rep  = await mailman(req)
             const fetched_conv:Conversation =  rep.data.conv as Conversation
-            // console.log(fetched_conv)
-            // console.log('conv', convs)
             if (convs != undefined)
             {
                 let list_conv:Conversation[] = [fetched_conv, ...convs]
                 setConvs(list_conv)
+                // console.log('1list conv', list_conv)
+
             }
             else
             {
                 let list_conv:Conversation[] = [fetched_conv]
                 setConvs(list_conv)
+                // console.log('2list conv', list_conv)
             }
-            // console.log('list conv', list_conv)
             
         }
         catch(e){
-            console.log('Error : in ChatModel get {'+ 'chat/conversation/'+channel_id+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/' +'} :\n')
             console.log(e)
         }
     }
     const Update_chat_notif = (data:NotificationPropreties)=>{
-        // if (data)
-        // {
         const channel_id = data.channel_id
-        // console.log('wa hafida ', convs, channel_id)
         if (convs)
         {
             if (convs?.filter(conv => conv.channelId === channel_id).length === 0)
@@ -143,7 +131,6 @@ function ChatSection(){
         }
         else
             get_conversation(channel_id)
-        // }
     }
     useEffect(() =>{
         if (loading == false)
@@ -163,7 +150,6 @@ function ChatSection(){
   
     useEffect(()=>
     {
-        console.log('hekkkk')
        
         if (location?.state?.channel_id)
         {
@@ -174,11 +160,6 @@ function ChatSection(){
         }
         else
             init_conv(setLoading,setActive, setConvs, channelId);
-        console.log("wala ", convs)
-
-        // create a function that will update the general data
-        // updateConvsState()
-       
     }, [])
 
     return(

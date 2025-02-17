@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FiEdit2 } from "react-icons/fi";
+import React, { useContext, useState } from "react";
+
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
 import { GoQuestion } from "react-icons/go";
-import { BsPhoneFlip } from "react-icons/bs";
+
 import TwoFA from "./TwoFA";
 import mailman from "@/utils/AxiosFetcher";
 import { toast } from "react-toastify";
-import { AxiosError } from "axios";
-import { oldPassError, pass2Error, passError, signupError } from "@/auth/signUpError";
+
+
 import { UserContext } from "./UserContext";
 
 interface PasswordInputInterface{

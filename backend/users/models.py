@@ -7,22 +7,6 @@ import pyotp
 import uuid
 from django.core.validators import RegexValidator, EmailValidator
 
-name_validator = RegexValidator(
-    regex=r"^(?=.{3,50}$)[A-Za-z]+([ '-][A-Za-z]+)*$",
-    message="Name should be 3-50 characters long and contain only letters and spaces."
-)
-
-username_validator = RegexValidator(
-    regex=r'^[a-zA-Z0-9_]{3,20}$',
-    message="Username must be 3-20 characters and can only contain letters, numbers, and underscores."
-)
-
-email_validator = EmailValidator(message="It should be a valid email address!")
-
-password_validator = RegexValidator(
-    regex=r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$',
-    message="Password should be 8-20 characters long and include at least 1 uppercase, 1 lowercase, 1 number, and 1 special character."
-)
 def user_pic_location(instance, filename):
     return 'user{0}/{1}'.format(instance.id,filename)
 def validateImage(image):
@@ -31,12 +15,17 @@ def validateImage(image):
         raise ValidationError(f"Max size of file is {limit_mb} MB")
 
 class MyUserManager(BaseUserManager):
+
+    password_validator = RegexValidator(
+        regex=r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$',
+        message="Password should be 8-20 characters long and include at least 1 uppercase, 1 lowercase, 1 number, and 1 special character."
+    )
     def create_user(self, email, firstName, lastName, password=None, **extra_fields):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
         if password:
-            password_validator(password)
+            self.password_validator(password)
         user = self.model(email=email, firstName=firstName, lastName=lastName, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -51,6 +40,17 @@ class MyUserManager(BaseUserManager):
 
 # Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
+    name_validator = RegexValidator(
+        regex=r"^(?=.{3,50}$)[A-Za-z]+([ '-][A-Za-z]+)*$",
+        message="Name should be 3-50 characters long and contain only letters and spaces."
+    )
+
+    username_validator = RegexValidator(
+        regex=r'^[a-zA-Z0-9_]{3,20}$',
+        message="Username must be 3-20 characters and can only contain letters, numbers, and underscores."
+    )
+
+    email_validator = EmailValidator(message="It should be a valid email address!")
     ONLINE    = 'online'
     IN_GAME   = 'in_game'
     IN_SEARCH = 'in_search'
@@ -73,6 +73,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     login = models.CharField(max_length=20, unique=True, blank=True, null=True, validators=[username_validator])
     firstName = models.CharField(max_length=50,validators=[name_validator])
     lastName = models.CharField(max_length=50, validators=[name_validator])
+    level = models.FloatField(default=0.0)  # Level
     email = models.EmailField(unique=True, max_length=255, verbose_name="email address", validators=[email_validator])
     two_factor_auth = models.BooleanField(default=False)
     two_factor_auth_code = models.CharField(max_length=32, default=pyotp.random_base32)

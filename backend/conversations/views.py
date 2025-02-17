@@ -1,48 +1,12 @@
 from rest_framework import generics, status
-from .serializers import MessageSerializer, ChannelSerializer, UserSerializer, MessageSerializer2
+from .serializers import ChannelSerializer, UserSerializer, MessageSerializer
 from .models import Message, Channel
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from users.models import MyUser
 from django.core.paginator import Paginator
 from friendship.models import BlockList
 from rest_framework.decorators import api_view
 from django.db.models import Q
-import json
-# Create your views here.
-
-class MessageRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-	queryset = Message.objects.all()
-	serializer_class = MessageSerializer
-
-class MessageAPICreate(generics.ListCreateAPIView):
-	queryset = Message.objects.all()
-	serializer_class = MessageSerializer
-
-	def perform_create(self, serializer):
-		# Save the new message
-		message = serializer.save()
-		
-		# Update the related channel's last_update field
-		try:
-			user = MyUser.objects.get(id=message.sender.id)
-		except MyUser.DoesNotExist:
-			raise Response({'Error' : 'Sender not found'}, status=status.HTTP_400_BAD_REQUEST)
-
-		try:
-			channel = Channel.objects.get(id=message.id_channel_fk.id)
-		except Channel.DoesNotExist:
-			raise Response({'Error' : 'channel not found'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ChannelRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-	queryset = Channel.objects.all()
-	serializer_class = ChannelSerializer
-
-class ChannelAPICreate(generics.ListCreateAPIView):
-	queryset = Channel.objects.all()
-	serializer_class = ChannelSerializer
 
 class ConversationAPIVIEW(generics.RetrieveAPIView):
 	serializer_class = ChannelSerializer
@@ -91,7 +55,7 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 								new_messages = True
 								break
 	
-				MessagesSerialized = MessageSerializer2(packet, many=True) if conversation_status == 0 else None
+				MessagesSerialized = MessageSerializer(packet, many=True) if conversation_status == 0 else None
 				users = channel.users.all()
 				if len(users) < 2:
 					return  Response({'Wala' : 'the users on this channel are less then 2 (probably one is deleted)'}, status=status.HTTP_400_BAD_REQUEST)
@@ -130,6 +94,12 @@ class ConversationUpdateAPIVIEW(generics.RetrieveAPIView):
 		# we will access to the channels that are related to our user,
 		# then retreave all conversation and build a json and return it to the user
 		try :
+			user = request.user
+			# check if the channel that we have container our user o if it does exist
+			channel = Channel.objects.get(id=channelId)
+			check  = channel.users.filter(id=user.id).exists()
+			if check == False:
+				return  Response({'Error' : user.login + " is not in the conversation channel "+str(channelId)}, status=status.HTTP_400_BAD_REQUEST)
 			messages = Message.objects.filter(id_channel_fk=channelId).order_by('-timestamp')
 			# first let creat the paginator object called paginator
 			print(packetSize)
@@ -138,7 +108,7 @@ class ConversationUpdateAPIVIEW(generics.RetrieveAPIView):
 			packet = paginator.page(packetToAdd)
 			# reverce the packet after recieving it
 			packet = list(packet.object_list)[::-1]
-			MessagesSerialized = MessageSerializer2(packet, many=True)
+			MessagesSerialized = MessageSerializer(packet, many=True)
 			return Response({
 				'messages' : MessagesSerialized.data,'last_packet': packetToAdd,
 				'next_packet_number': packetToAdd + 1 if paginator.num_pages - packetToAdd > 0 else  packetToAdd,
@@ -191,7 +161,7 @@ def get_conversation(request, channelId, packetSize):
 							new_messages = True
 							break
 				print("--------------->Wala,", channel.id)
-			MessagesSerialized = MessageSerializer2(packet, many=True) if conversation_status == 0 else None
+			MessagesSerialized = MessageSerializer(packet, many=True) if conversation_status == 0 else None
 			users = channel.users.all()
 			if len(users) < 2:
 				return  Response({'Wala' : 'the users on this channel are less then 2 (probably one is deleted)'}, status=status.HTTP_400_BAD_REQUEST)

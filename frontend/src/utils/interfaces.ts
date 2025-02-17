@@ -31,22 +31,15 @@ export interface childrenInterface{
     children: React.ReactNode
 }
 
-// this will help us idenifying the channels element type in WSContext.ts 
 export interface channelType {
     [key: string]: CallbackType;
 }
 
 export interface WebSocketContextType {
-    AddChannel: (channelName: string, callback: CallbackType) => void; // ADD CALLBACK function that will gave us the ability to change the  targeted component data
+    AddChannel: (channelName: string, callback: CallbackType) => void;
     RemoveChannel: (channelName: string) => void;
-    socket: React.MutableRefObject<WebSocket> | undefined
+    socket: React.MutableRefObject<WebSocket | undefined>
 }
-
-export const defaultContextValue: WebSocketContextType = {
-    AddChannel: () => {},
-    RemoveChannel: () => {},
-    socket: undefined,
-};
 
 export interface LoseWins
 {
@@ -83,4 +76,28 @@ export interface MatchHistoryDataInterface{
     draw: boolean;
     score_p1:number;
     score_p2:number;
+}
+export interface twoGames
+{
+    Pong:MatchHistoryDataInterface[];
+    Chess:MatchHistoryDataInterface[];
+}  
+
+
+export interface UserRankResponse {
+    // user_id: string;  
+    wins: number;     
+    xp: number;       
+    level: number;  
+
+}
+export interface ProfileRank
+{
+    rank:number;
+    level:number;
+}
+export interface rankInterface
+{
+    profile:ProfileRank;
+    user:ProfileDataInterface;
 }

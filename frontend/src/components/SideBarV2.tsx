@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link } from 'react-router-dom'
 import { UserContext } from "./UserContext";
 import { GiSettingsKnobs } from "react-icons/gi";
@@ -10,7 +10,6 @@ import { FiUser } from "react-icons/fi";
 
 
 function SideBarV2(){
-    const [showSideBar, setShowSideBar] = useState<boolean>(false)
     const userContextConsumer = useContext(UserContext)
     const authContextConsumer  = useContext(AuthContext)
     const WsContextConsumer  = useContext(WebSocketContext)
@@ -21,7 +20,7 @@ function SideBarV2(){
     return (
         
         <aside className={`font-poppins w-full lg:h-full lg:w-[120px] shadow-lg mb-7 flex justify-center items-center z-50`}>
-        <div className="font-poppins h-[60px] w-full lg:h-[98%] lg:w-[120px]    z-50  bg-gradient-to-br from-[#2a3236] to-[#1e2124] fixed bottom-0 lg:rounded-2xl lg:ml-3 lg:top-2 2xl:top-3 left-0 text-white flex flex-row lg:flex-col items-center justify-center ">
+        <div className="font-poppins h-[60px] w-full lg:h-[98%] lg:w-[120px]    z-50   bg-gradient-to-br  from-[#2a3236] to-[#1e2124] lg:from-[#2a3236]/0 lg:to-[#1e2124]/0 fixed bottom-0 lg:rounded-2xl lg:ml-3 lg:top-2 2xl:top-3 left-0 text-white flex flex-row lg:flex-col items-center justify-center ">
             <div id="sidebar-menu" className="w-[100%] lg:w-auto  h-auto lg:h-[80%] flex flex-row lg:flex-col p-4 justify-center gap-[10%]">
                 <Link to="/" className=" cursor-pointer w-[30px] h-[30px] ">
                     <img src="/assets/svg/Overview.svg" alt="Home Icon" className="w-full h-full" />
@@ -50,7 +49,8 @@ function SideBarV2(){
                     type: "NOTIFICATION_STATE",
                     state: "offline"
                 }
-                socket?.current.send(JSON.stringify(stateObj))
+                if (socket.current)
+                    socket.current.send(JSON.stringify(stateObj))
                 authContextConsumer.setLoggedIn(false)
                 toast.info('User Logged Out')
                 

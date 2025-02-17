@@ -29,8 +29,8 @@ const PreInvite = () => {
         if (ReomteGameData.form_game_invite === true){
             INVITE_TEXT = ReomteGameData.inviter_login + ' VS ' + ReomteGameData.invited_login
             show = true
-            tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
-            console.log("==>", import.meta.env.VITE_ws_url + '/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+            tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+            console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
             
             tmpsocket.onopen = () => {
                 console.log("Inviting WebSocket Connected");
@@ -41,7 +41,7 @@ const PreInvite = () => {
             };
             tmpsocket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log("==> message received from the backend !");
+                console.log("==> message received from the backend !", data);
                 
                 if (data['type'] === 'room_created') {
                 // tmpsocket.close()
@@ -84,9 +84,9 @@ const PreInvite = () => {
                 
                 
                 
-                console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ping-pong/room/' + data['room_name']);
+                console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
-                const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ping-pong/room/' + data['room_name']);
+                const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
                 tgameSocket.onopen = () => {
                     console.log("Connected to the game room:", data['room_name']);

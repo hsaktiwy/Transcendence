@@ -31,7 +31,7 @@ JWT_SECRET_KEY = os.getenv('DJANGO_JWT_SECRET_KEY')#'4484877278439867979ffd7ecc7
 ACCESS_TOKEN_LIFETIME = 10
 REFRESH_TOKEN_LIFETIME = 7
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # settings.py
 
@@ -73,21 +73,20 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'users.test_____test.DebuginMidleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'api.utils.JWTAuthHTTPMiddlware',
     'silk.middleware.SilkyMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
-    
 ]
 
 
-CORS_ALLOW_ALL_ORIGINS = True  
+CORS_ALLOW_ALL_ORIGINS = False 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (

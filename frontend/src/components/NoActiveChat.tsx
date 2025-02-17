@@ -1,5 +1,3 @@
-import React from 'react'
-
 function NoActiveChat(){
     return(
         <div className='font-poppins overflow-hidden lg:left-[30%] xl:left-[22%] absolute w-0 lg:w-[70%] xl:w-[78%] hidden lg:flex flex-col justify-center items-center h-full'>

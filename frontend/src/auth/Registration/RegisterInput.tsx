@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { inputsDataInterface, inputsErrorInterface } from "../RegisterForm";
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
-import { userNameError } from "../signUpError";
 
 
 interface FormInputPropInterface {
@@ -68,7 +67,7 @@ const FormInput = (prop: FormInputPropInterface)=>{
             }
         }
     };
-    const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const onFocus = (_e: React.FocusEvent<HTMLInputElement>) => {
         if (name === 'password')
             setPassFocus(true)
         else if (name === 'password2')

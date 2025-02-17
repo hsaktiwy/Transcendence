@@ -1,13 +1,11 @@
-import React, { useContext, useState, useEffect, FormEvent } from "react";
+import { useContext, useState, useEffect, FormEvent } from "react";
 import { UserContext } from "./UserContext";
-import { FiEdit2 } from "react-icons/fi";
 import { toast } from 'react-toastify'
-import { BACKEND } from "../utils/Constants";
 import mailman from "../utils/AxiosFetcher";
 import GeneralSettingsInput from "./GeneralSettingsInput";
 import { AxiosError } from "axios";
 import { emailError, firstNameError, lastNameError, signupError, userNameError } from "@/auth/signUpError";
-import { inputsErrorInterface } from "@/auth/RegisterForm";
+
 export interface inputInterface{
     name?: keyof SettingsInputsDataInterface,
     type: string,
@@ -103,7 +101,6 @@ function GeneralSettings(){
         }
         else if (Object.values(inputsError).includes(true))
         {
-          console.log(inputsError)
           toast.error("Please correct the required fields")
         }
         else{
@@ -144,7 +141,7 @@ function GeneralSettings(){
         </div> */}
         <div className="flex gap-20 justify-center items-center flex-wrap">
           {
-            inputs.filter((item, index)=>index <=1).map((input, index) =>{
+            inputs.filter((_item, index)=>index <=1).map((input, index) =>{
               return(
                 <GeneralSettingsInput key={index+1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} setChanged={setChanged} changed={changed} inputsError={inputsError} setInputError={setInputError}/>
               )
@@ -153,9 +150,9 @@ function GeneralSettings(){
         </div>
         <div className="flex gap-20 justify-center items-center flex-wrap">
         {
-            inputs.filter((item, index)=>index > 1).map((input, index) =>{
+            inputs.filter((_item, index)=>index > 1).map((input, index) =>{
               return(
-                <GeneralSettingsInput key={index+1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} setChanged={setChanged} changed={changed} inputsError={inputsError} setInputError={setInputError}/>
+                <GeneralSettingsInput  key={index+1} {...input} value={inputsData[input.name!]} setInputsData={setInputsData} setChanged={setChanged} changed={changed} inputsError={inputsError} setInputError={setInputError}/>
               )
             })
         }
