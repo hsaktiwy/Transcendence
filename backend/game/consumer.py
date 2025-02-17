@@ -332,11 +332,10 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     winner = await async_get_user(room[1][0].unique_id)#MyUser.objects.filter(unique_id=room[1][0].unique_id).first()
                 
                 if (len(room) == 3 and loser and winner and (loser.state == MyUser.IN_GAME and winner.state == MyUser.IN_GAME) ) or (len(room) == 4 and room[3] == 'Invited'):
-                    if (len(room) == 4 and room[3] == 'Invited'): #or tar9i3a
-                        room[3] = 'Forfait'
-                    else:
-                        room.append('Forfait')
-                    print(f"=> room seted", room[0], 'Forfait !')
+                    # if (len(room) == 4 and room[3] == 'Invited'): #or tar9i3a
+                    #     room[3] = 'Forfait'
+                    # else:
+                    #     room.append('Forfait')
 
                     try:
                         loser_profile   = await get_profile(loser)#ProfileStatus.objects.get(id_user_fk=loser)
@@ -350,27 +349,32 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                                 await sync_to_async(loser_profile.save)()
                                 await sync_to_async(winner_profile.save)()
 
-                            await create_game(
-                                type='PONG',
-                                winner=winner,
-                                loser=loser,
-                                score_p1=7,
-                                score_p2=0
-                            )
-                            data = {"type" : "Forfait"}  #Forfait
-                            await self.channel_layer.group_send(
-                                self.room_group_name,
-                                {
-                                    # This is the method name that will be called (like a "handler")
-                                    'type': 'broadcast_event',
-                                    'payload': data
-                                }
-                            )
+                                if len(room) == 4  and room[3] != 'Ended' and room[3] != 'Forfait':
+                                    print(f"=> room seted", room[0], 'Forfait, Deleted !')
+                                    remove_room(room[0], PPong_Rooms)
+                                    await create_game(
+                                        type='PONG',
+                                        user1=winner,
+                                        user2=loser,
+                                        winner=winner,
+                                        loser=loser,
+                                        score_p1=7,
+                                        score_p2=0
+                                    )
+                                    data = {"type" : "Forfait"}  #Forfait
+                                    await self.channel_layer.group_send(
+                                        self.room_group_name,
+                                        {
+                                            # This is the method name that will be called (like a "handler")
+                                            'type': 'broadcast_event',
+                                            'payload': data
+                                        }
+                                    )
                     except Exception as e:
                         print("===> AN ERROR Ocuured exeption:", e)
                         pass
-                    else:
-                        print("===> AN ERROR Ocuured :")
+                else:
+                    print("===> AN ERROR Ocuured :", user.login, " didn't save in db ", room[0])
 
         ######################################
         await self.channel_layer.group_discard(
@@ -412,52 +416,57 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
             # print('==> is the room ??', room)
             if room:
                 if (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
-                    print('+===> Match going to end here and the room would be setted to Ended', room[0])
+                    # print('+===> Match going to end here and the room would be setted to Ended', room[0])
                     if (len(room) == 3) or (len(room) == 4 and room[3] == 'Invited'):
-                        remove_room(room[0], PPong_Rooms)
                         # room.append('Ended')
-                    # elif (len(room) == 4 and room[3] == 'Invited'):
+                        remove_room(room[0], PPong_Rooms)
+                    elif (len(room) == 4 and room[3] == 'Invited'):
                         # room[3] = 'Ended'
+                        remove_room(room[0], PPong_Rooms)
                     user_id1 = event['payload']['paddle']['x']
                     user_id2 = event['payload']['paddle']['y']
 
-                    user     = await async_get_user(user_id1)
-                    user2    = await async_get_user(user_id2)
-                    
+                    user  = await async_get_user(user_id1)
+                    print('==>', user.login)
+                    user2 = await async_get_user(user_id2)
                     profile1 = await get_profile(user)
                     profile2 = await get_profile(user2)
-                    
-                    score_1  = int(event['payload']['ball']['x'])
-                    score_2  = int(event['payload']['ball']['y'])
+
+                    print('==>', user2.login)
+
+                    score_1 = int(event['payload']['ball']['x'])
+                    score_2 = int(event['payload']['ball']['y'])
 
                     if user and user2:
-                        try:
-                            if score_1 > score_2:
-                                t_winner, t_loser = user, user2
-                                w_profile, l_profile = profile1, profile2
-                            else:
-                                t_winner, t_loser = user2, user
-                                w_profile, l_profile = profile2, profile1
+                        # Decide winner vs loser
+                        if score_1 > score_2:
+                            t_winner, t_loser = user, user2
+                            if (profile1 and profile2):
+                                profile1.wins += 1
+                                profile2.lose += 1
+                        else:
+                            t_winner, t_loser = user2, user
+                            if (profile1 and profile2):
+                                profile2.wins += 1
+                                profile1.lose += 1
 
-                            if (w_profile and l_profile):
-                                l_profile.wins += 1
-                                w_profile.lose += 1
+                        if (profile1 and profile2):
+                            profile2.total_games += 1
+                            profile1.total_games += 1                    
 
-                                l_profile.total_games += 1
-                                w_profile.total_games += 1
+                        if (profile1 and profile2):
+                            await sync_to_async(profile1.save)()
+                            await sync_to_async(profile2.save)()
 
-                                await sync_to_async(w_profile.save)()
-                                await sync_to_async(l_profile.save)()
-
-                            await create_game(
-                                type='PONG',
-                                winner  =t_winner,
-                                loser   =t_loser,
-                                score_p1=score_1,
-                                score_p2=score_2
-                            )
-                        except Exception as e:
-                            pass    
+                        await create_game(
+                            type='PONG',
+                            user1=user,
+                            user2=user2,
+                            winner=t_winner,
+                            loser=t_loser,
+                            score_p1=score_1,
+                            score_p2=score_2
+                        )    
     
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):
             return
@@ -481,11 +490,11 @@ def sync__get_user(unique_id):
     return MyUser.objects.filter(unique_id=unique_id).first()
 
 @sync_to_async
-def create_game(type, winner, loser, score_p1, score_p2):
+def create_game(type, user1, user2, winner, loser, score_p1, score_p2):
     return Game.objects.create(
         type=type,
-        user_p1=winner,
-        user_p2=loser,
+        user_p1=user1,
+        user_p2=user2,
         winner=winner,
         loser=loser,
         score_p1=score_p1,
@@ -1031,8 +1040,8 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
                                 await create_game(
                                     type='CHESS',
-                                    # user_p1=winner,
-                                    # user_p2=loser,
+                                    user1=user1,
+                                    user2=user2,
                                     winner=winner,
                                     loser=loser,
                                     score_p1=1,
@@ -1085,15 +1094,17 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
     async def broadcast_event_chess(self, event):
         if event['payload'].get('type') == 'Game_end': #check that shit
             user = self.scope['user']
-            user = await async_get_user(user.unique_id)
-            if not user:
-                return
+            # user = await async_get_user(user.unique_id)
+            # if not user:
+            #     return
             room = find_room_name(user, Chess_Rooms)
             # print('==> is the room ??', room)
             if room:
                 if (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
                     if (len(room) == 3):
                         room.append('Ended')
+                    elif len(room) == 4 and room[3] != 'Invited':
+                        room[3] = 'Ended'
                         # print("=> room seted", room[0] ,"Ended.")
 
                     user_id1 = event['payload']['p1_id']
@@ -1124,8 +1135,8 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
                                 await create_game(
                                     type='CHESS',
-                                    # user_p1=user,
-                                    # user_p2=user2,
+                                    user1=user,
+                                    user2=user2,
                                     winner=user,
                                     loser=user2,
                                     score_p1=0,
@@ -1153,8 +1164,8 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
                                 await create_game(
                                     type='CHESS',
-                                    # user_p1=t_winner,
-                                    # user_p2=t_loser,
+                                    user1=user,
+                                    user2=user2,
                                     winner=t_winner,
                                     loser=t_loser,
                                     score_p1=score_1, #SWITCH TEMPORALRLY
