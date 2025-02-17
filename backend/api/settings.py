@@ -28,8 +28,9 @@ OAUTH_API_KEY = os.getenv('DJANGO_API_KEY')
 OAUTH_REDIRECT_URI = os.getenv('DJANGO_REDIRECT_URI')
 OAUTH_CLIENT = os.getenv('DJANGO_CLIENT')
 JWT_SECRET_KEY = os.getenv('DJANGO_JWT_SECRET_KEY')#'4484877278439867979ffd7ecc7f5a5e82f53544e22b4d0fdd2211dcae3b4c0e'
-ACCESS_TOKEN_LIFETIME = 10
-REFRESH_TOKEN_LIFETIME = 7
+ACCESS_TOKEN_LIFETIME = int(os.getenv('DJANGO_ACCESS_TOKEN_LIFETIME'))
+REFRESH_TOKEN_LIFETIME = int(os.getenv('DJANGO_REFRESH_TOKEN_LIFETIME'))
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -57,9 +58,8 @@ INSTALLED_APPS = [
     'status.apps.StatusConfig',
     'friendship.apps.FriendshipConfig',
     'game.apps.GameConfig',
-    'invitation.apps.InvitationConfig',
-    'silk',# THIS IS FOR SILK TESTING PURPOSE
 ]
+
 AUTH_USER_MODEL = "users.MyUser"
 
 REST_FRAMEWORK = {
@@ -73,14 +73,12 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
-    'users.test_____test.DebuginMidleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'silk.middleware.SilkyMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
@@ -90,30 +88,18 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
-    "http://localhost:5173",
-    "http://localhost:5173",
     "https://localhost:4444",
     "https://localhost",
 )
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5173",
     "https://localhost:4444",
     "https://localhost",
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:6379",
-    "http://10.13.4.11:5173",
-    "http://localhost:5173",
-    "http://172.21.0.3:5173",
     "https://localhost:4444",
     "https://localhost",
 ]

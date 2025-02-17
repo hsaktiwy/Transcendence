@@ -56,14 +56,12 @@ return(
                         
                             <div className="relative inline-block">
                                 <img src={backendPath + currentConvData.picture} alt="friend-pic" className={`aspect-square rounded-full object-cover w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] outline ${conv.user2.state ==='online' || conv.user2.state === 'in_game' ? 'outline-green-500' : conv.user2.state === 'offline' ? 'outline-red-500' : 'outline-[#5e98a9c9]'}  `} />
-                                {/* <div className={`${conv.user2.state === 'none' && 'hidden'} absolute bottom-4 right-0 w-3 h-3 rounded-full ${conv.user2.state ==='online' ? 'bg-green-500' : conv.user2.state ==='offline' && 'bg-red-500'} border border-white`}></div>  */}
                             </div>                                    
                                     <div className="self-center flex-1">
                                         <div className="flex justify-between items-center">
                                             <h1 className="text-sm xxl:text-lg font-semibold">{currentConvData.friendName}</h1>
                                             {currentConvData.new_message!==0 &&  
                                     <div className=" rounded-full  w-[10px] h-[10px] bg-[#5E97A9]    text-sm font-light text-center">
-                                            {/* {currentConvData.new_message} */}
                                     </div> }
                                         </div>
                                         <div className="flex justify-between items-center w-full ">

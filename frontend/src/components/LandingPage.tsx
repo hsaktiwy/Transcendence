@@ -10,7 +10,6 @@ function LandingPage(){
     const feature3 = useRef<HTMLDivElement>(null)
     const feature4 = useRef<HTMLDivElement>(null)
 
- 
     return(
         <div className="   px-[20px] sm:px-[100px] min-h-[100vh] py-4 bg-gradient-to-b from-[#070320] to-[#1a3340] font-poppins ">
             <div className="  min-h-[100vh] overflow-hidden">

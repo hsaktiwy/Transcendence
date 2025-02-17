@@ -27,6 +27,7 @@ export interface SettingsInputsErrorInterface{
   email: boolean,
   username:boolean
 }
+
 function GeneralSettings(){
     const userContextConsumer = useContext(UserContext)
     if (!userContextConsumer)
@@ -133,12 +134,6 @@ function GeneralSettings(){
     return (
 
       <form onSubmit={handleSubmit} className=" general-settings w-[90%] lg:w-[50%] mx-auto border border-white/20 my-4 sm:my-16  h-[1000px] flex-1 bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl p-16 flex justify-center flex-col items-center gap-20 relative">
-        {/* <div className="absolute left-0 top-0 h-full w-full backdrop-filter bg-black/80 backdrop-blur-2xl z-50 rounded-xl flex justify-center items-center"> 
-          <div className="bg-white p-10 text-black">
-            you are connected with 42 
-
-          </div>
-        </div> */}
         <div className="flex gap-20 justify-center items-center flex-wrap">
           {
             inputs.filter((_item, index)=>index <=1).map((input, index) =>{

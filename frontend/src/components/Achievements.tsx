@@ -1,7 +1,5 @@
 
  
-import { ScrollArea } from "@/components/ui/scroll-area"
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useEffect } from "react";

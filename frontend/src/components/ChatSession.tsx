@@ -22,7 +22,6 @@ import { toast } from "react-toastify";
 
 export const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
 function ChatSession(){
-    
     const chatContext =useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
     if (!chatContext || !userContext)
@@ -58,17 +57,13 @@ function ChatSession(){
         }
     }
 
-    
-    
     useEffect(() =>{
-
-        // Scroll to the bottom whenever the messages array changes
         if (update && containerRef.current) {
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
             setUpdate(false)
         }
     }, [update]);
-    //amine
+
     useEffect(() =>{
         const handleCloseMenu = (e:any) =>
         {
@@ -80,7 +75,6 @@ function ChatSession(){
         }
         if (openDrop)
         {
-            // BlockStatusCheck()
             window.addEventListener('click', handleCloseMenu)
         }
         return () =>{
@@ -88,7 +82,7 @@ function ChatSession(){
         }
     },[openDrop])
 
-    // hamza
+
     const sendMessage = () =>
     {
         if (message.length > 0 &&  socket?.current && socket?.current.readyState === WebSocket.OPEN)
@@ -133,16 +127,15 @@ function ChatSession(){
             setUpdate(true);
         }
     }, [chatContext.active?.channelId, chatContext.setActive]);
+
     useEffect(()=>
-    {        AddChannel('CHATROOM', UpdateCurrentConvs)
-        // BlockStatusCheck()
+    {   
+        AddChannel('CHATROOM', UpdateCurrentConvs)
         return () => {
-            // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
         }
     },[chatContext.active])
                                 
-    // when we rerender the page
     const SendWebSocketToDefine = ()=>
     {
         try
@@ -171,20 +164,14 @@ function ChatSession(){
     }
 
     useEffect(() => {
-        // Scroll to the bottom whenever the messages array changes (but in our case we are interested only in
-        // one the first render where chatContext.active.scrollLeft = -1 &&  chatContext.active.scrollTop = -1)
         if (chatContext.active?.status == 0 && containerRef.current && chatContext.active.scrollLeft == -1 &&  chatContext.active.scrollTop == -1) {
-
-            //containerRef.current.scrollTop = containerRef.current.scrollHeight;
             const newScrollTop = containerRef.current.scrollHeight;
             const newScrollLeft = containerRef.current.scrollLeft;
-            // Updating the active conversation's scroll properties
             chatContext.setActive((prevConv) => (prevConv && {
                 ...prevConv,
                 scrollTop: newScrollTop,
                 scrollLeft: newScrollLeft,
             }));
-
             chatContext.setConvs((prevConvs) => {
                 return prevConvs?.map((conv) =>
                     conv.channelId === chatContext.active?.channelId
@@ -202,8 +189,7 @@ function ChatSession(){
         if (chatContext.active?.new_message == 1)
             SendWebSocketToDefine()
     }, [chatContext.active])
-    // this function will update our conv list and add packet of old messages to it
-    // const 
+
     const FetchOldMessages = async ()=>
     {
         try
@@ -213,7 +199,6 @@ function ChatSession(){
             const request = {
                 url: url,
                 method: 'GET',
-                // withCredentials: true
             }
             const response = await mailman(request)
             interface conversation_type {
@@ -252,6 +237,7 @@ function ChatSession(){
             console.log(error)
         }
     }
+
     useEffect(()=>
     {
         const {scrollTop} =  scrollPosition
@@ -261,7 +247,6 @@ function ChatSession(){
         }
     }, [scrollPosition])
 
-    // function hthat will check for scrol behavior
     const handleContainerScroll = ()=>{
         if (containerRef.current)
         {
@@ -276,11 +261,10 @@ function ChatSession(){
         console.log(openDrop)
         if (openDrop == true)
         {
-            console.log("hhm ")
             BlockStatusCheck()
         }
     },[openDrop])
-    //
+
     return(
             <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
             `}>
@@ -303,7 +287,6 @@ function ChatSession(){
                                     <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
                                     <div className=" flex gap-3 items-center">
                                         <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.login}`} </p>
-                                        {/* <div className={`rounded-full h-[6px] w-[6px] ${chatContext.active?.user2.state === 'none' ? 'bg-transparent' : chatContext.active?.user2.state === 'online' ? 'bg-green-500' : 'bg-red-500'}`}></div> */}
                                     </div>
                                 </div>
                             </div>
@@ -362,9 +345,7 @@ function ChatSession(){
                                 </div>
                             </div>
                     </div>
-                    {/* <div className="bg-white w-[100%] h-[1px] lg:mt-4 rounded-full "></div> */}
                 </div>
-                        {/* <div className="h-full w-full top-0 left-0  basis-[85%] backdrop-filter backdrop-blur-md"></div> */}
                     <div ref={containerRef} onScroll={handleContainerScroll} className=" text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden">
                     {
                         chatContext.active?.messages?.map((msg, index): React.ReactNode => {
@@ -385,9 +366,6 @@ function ChatSession(){
                     }
                 </div>
                 <div id="conversation-footer-container" className="py-4 px-16 flex justify-between items-center gap-1 sm:gap-4  ">
-                    {/* <span className="bg-[#5E97A9] text-white rounded-full hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
-                        <HiPlus/>
-                    </span> */}
                     <input type="text" placeholder="Message" className=" bg-transparent rounded-full border border-white/20 focus:outline-none text-white   text-sm sm:text-md px-4 py-4  basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
                     <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <RiSendPlaneFill />

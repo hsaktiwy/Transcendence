@@ -1,80 +1,60 @@
 import { BrowserRouter,Routes, Route} from 'react-router-dom'
 import Auth from './auth/Authication'
-//import { childrenInterface } from './utils/interfaces'
 import Layout from './Layout'
 import ChatSection from './components/ChatSection'
 import { WebSocketProvider } from './utils/WSContext'
 import Settings from './components/Settings'
 import UserProvider from './components/UserContext'
 import Dashboard from './components/Dashboard'
-import LoadingIndecator from './components/Loading'
 import { SkeletonTheme } from 'react-loading-skeleton'
-
 import 'react-loading-skeleton/dist/skeleton.css'
 import ProfileTest from './components/ProfileTest'
-
-// import Profile from './components/Profile'
 import AuthProvider from './components/AuhtenticationContext'
-
-
-// import GameCenter from './game/GameUi'
-
-
-
-
-
-import RemoteGame from './game/game-container/game/RemoteScene.jsx';
-// import WebSocketComponent from './game/game-container/game/Matchmaking.jsx';
-
-import Lobby from './game/game-container/pages/Lobby.jsx';
-
-
-import PlayLocally_1v1 from './game/game-container/pages/PLayLocally_1v1.jsx';
-
-import LocalGame from './game/game-container/game/LocalScene.jsx';
-
-import Tournament from './game/game-container/pages/Tournament.jsx';
-
-import PreTournament from './game/game-container/pages/PreTournament.jsx';
-
-import Winner from './game/game-container/pages/Winner.jsx';
-
-import PreRemote from './game/game-container/pages/PreRemote.jsx';
-import PreInvite from './game/game-container/pages/PreGameInvite.jsx';
-import { RemoteGameProvider } from './game/game-container/game/MatchContext.jsx';
-
-import { LocalGamesProvider } from './game/game-container/game/MatchContext.jsx';
-
-import PreMultiplayerGame from './game/game-container/pages/PreMultiplayerGame.jsx';
-
-import MultiplayerGame from './game/game-container/game/Multiplayer.jsx';
-
-import ChessLobby from './game/game-container/chess/LobbyChess.jsx';
-
-import LocalChessGame from './game/game-container/chess/LocalSceneChess.jsx';
-
-import ChessPreRemote from './game/game-container/chess/remote/ChessPreRemote.jsx';
-
-import ChessRemoteGame from './game/game-container/chess/remote/ChessRemoteScene.jsx';
-
-import MainGamePage from './game/game-container/pages/MainGamePage.jsx';
-
-import ChessPreLocal from './game/game-container/chess/ChessPreLocal.jsx';
-
-import ChessWinner from './game/game-container/chess/ChessWinner.jsx';
 import PageNotFound from './components/NotFound.js'
 
-// import Backgrounds from './game/game-container/components/Backgounds.jsx';
-
-
-
+//@ts-ignore
+import RemoteGame from './game/game-container/game/RemoteScene.jsx';
+//@ts-ignore
+import Lobby from './game/game-container/pages/Lobby.jsx';
+//@ts-ignore
+import PlayLocally_1v1 from './game/game-container/pages/PLayLocally_1v1.jsx';
+//@ts-ignore
+import LocalGame from './game/game-container/game/LocalScene.jsx';
+//@ts-ignore
+import Tournament from './game/game-container/pages/Tournament.jsx';
+//@ts-ignore
+import PreTournament from './game/game-container/pages/PreTournament.jsx';
+//@ts-ignore
+import Winner from './game/game-container/pages/Winner.jsx';
+//@ts-ignore
+import PreRemote from './game/game-container/pages/PreRemote.jsx';
+//@ts-ignore
+import PreInvite from './game/game-container/pages/PreGameInvite.jsx';
+//@ts-ignore
+import { RemoteGameProvider } from './game/game-container/game/MatchContext.jsx';
+//@ts-ignore
+import { LocalGamesProvider } from './game/game-container/game/MatchContext.jsx';
+//@ts-ignore
+import PreMultiplayerGame from './game/game-container/pages/PreMultiplayerGame.jsx';
+//@ts-ignore
+import MultiplayerGame from './game/game-container/game/Multiplayer.jsx';
+//@ts-ignore
+import ChessLobby from './game/game-container/chess/LobbyChess.jsx';
+//@ts-ignore
+import LocalChessGame from './game/game-container/chess/LocalSceneChess.jsx';
+//@ts-ignore
+import ChessPreRemote from './game/game-container/chess/remote/ChessPreRemote.jsx';
+//@ts-ignore
+import ChessRemoteGame from './game/game-container/chess/remote/ChessRemoteScene.jsx';
+//@ts-ignore
+import MainGamePage from './game/game-container/pages/MainGamePage.jsx';
+//@ts-ignore
+import ChessPreLocal from './game/game-container/chess/ChessPreLocal.jsx';
+//@ts-ignore
+import ChessWinner from './game/game-container/chess/ChessWinner.jsx';
 
 const App = () =>
 {
-  // const Components :childrenInterface = {site : <Layout>
-  //         <ChatSection/>
-  //       </Layout>}
-
   return (
   
   <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
@@ -126,7 +106,6 @@ const App = () =>
         </AuthProvider>
       </BrowserRouter>
     </SkeletonTheme>
-
   )
 }
 
