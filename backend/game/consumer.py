@@ -1161,5 +1161,4 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):
             return
 
-#         await self.send(json.dumps(event['payload']))
-
+        await self.send(json.dumps(event['payload']))
