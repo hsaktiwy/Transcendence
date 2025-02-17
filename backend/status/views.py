@@ -12,7 +12,6 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework.exceptions import NotFound
 
-# Create your views here.
 class NotificationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Notification.objects.all()
@@ -22,11 +21,6 @@ class NotificationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         if obj.id_user_fk != self.request.user:
             raise NotFound("Notification not found or not related to the authenticated user.")
         return obj
-
-class NotificationAPICreate(generics.ListCreateAPIView):
-	permission_classes = [IsAuthenticated]
-	queryset = Notification.objects.all()
-	serializer_class = NotificationSerializer
 
 class ProfileStatusRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = [IsAuthenticated]
@@ -38,21 +32,14 @@ class ProfileStatusAPICreate(generics.ListCreateAPIView):
 	queryset = ProfileStatus.objects.all()
 	serializer_class = ProfileStatusSerializer
 
-
-
 @api_view(['GET'])
 def get_Win_Lose(request,uuid):
     try:
-        # euser = request.user
         user = MyUser.objects.get(unique_id=uuid)
         profile = ProfileStatus.objects.get(id_user_fk=user)
         return Response({'wins' : profile.wins, 'lose' : profile.lose, '_wins' : profile._wins, '_lose' : profile._lose }, status=200)
     except:
         return Response({'error': 'somthing went wrong'}, status=400)
-
-
-
-
 
 @api_view(['GET'])
 def get_Rank_User(request, uuid):
@@ -103,7 +90,6 @@ def get_Rank_User(request, uuid):
 @api_view(['GET'])
 def get_top_rank(request):
     try:
-        user = request.user
         ranked_profiles = ProfileStatus.objects.all().order_by('-level')
 
         serialized_profiles = RankProfileSerializer(ranked_profiles, many=True)\
@@ -165,8 +151,6 @@ def get_line_chart(request, uuid):
     except Exception as e:
         return Response({'error': str(e)}, status=400)
 
-
-
 @api_view(['GET'])
 def get_achievements(request, uuid):
     try:
@@ -176,11 +160,7 @@ def get_achievements(request, uuid):
             Q(user_p1=user) | Q(user_p2=user),
             type='PONG'
         ).order_by('-time')[:5]
-        print("Last five matches ->>>>>>>>>>>>>")
-        for match in last_five_matches:
-            print(f"Match ID: {match.id}, Winner: {match.winner}, Time: {match.time}, Type: {match.type}")
         all_wins = len(last_five_matches) == 5 and all(match.winner == user for match in last_five_matches)
-
         Achievements_Meta = [
             {
                 "type": "FIRST_MATCH",
@@ -232,8 +212,7 @@ def get_achievements(request, uuid):
                 "game_numbers": 50,
                 "icon": "legend"
             }
-        ]   
-
+        ]
         return Response({
             'user_id': str(user.unique_id),
             'wins': profile_status.wins,
