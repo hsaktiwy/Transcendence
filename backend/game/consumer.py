@@ -1040,8 +1040,8 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
                                 await create_game(
                                     type='CHESS',
-                                    user1=user1,
-                                    user2=user2,
+                                    user1=winner,
+                                    user2=loser,
                                     winner=winner,
                                     loser=loser,
                                     score_p1=1,
@@ -1164,8 +1164,8 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
                                 await create_game(
                                     type='CHESS',
-                                    user1=user,
-                                    user2=user2,
+                                    user1=t_winner,
+                                    user2=t_loser,
                                     winner=t_winner,
                                     loser=t_loser,
                                     score_p1=score_1, #SWITCH TEMPORALRLY
