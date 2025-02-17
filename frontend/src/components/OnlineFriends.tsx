@@ -1,6 +1,5 @@
 
 import { useContext, useState } from "react"
-// import { import.meta.env.VITE_axiosPath } from "@/utils/Constants"
 import { UserContext } from "./UserContext"
 import { Link } from "react-router-dom"
 
@@ -45,12 +44,7 @@ function OnlineFriends() {
                                     </div>
                                     <p className="font-medium text-sm text-white/60 px-3 break-words text-center">No friends, no drama. Enjoy the peace! ...or add some friends.</p>
                                     <div className='chat-direction'>
-                                        {/* <div className='chat-button  h-36'>
-                                            <img style={{width: '20px'}} className="" src="/images/chat_bubble.svg" />
-                                                <h3 style={{fontWeight: '400', margin:'0px 4px', fontSize: '12px'}}>Add friends</h3>
-                                        </div> */}
-                                    </div>
-                                            
+                                    </div>  
                                 </div>
                                 </>
                         }

@@ -59,8 +59,6 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                     const newItems = items.filter(item => item.id !== notification.id)
                     userContextConsumer?.setNewNotification(newItems)
                 }
-                
-            
         }
         catch(e){
             toast.error("Error occured")
@@ -82,11 +80,6 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
         }
     }, [items])
 
-// const formatMessage = (item: NotificationPropreties)=>{
-//     if (item.type === 'message' && item.content.length > 20){
-
-//     }
-// }
     return(
 
         <div className="    font-poppins animate-notificationAnimation fixed z-40  bottom-[80px] lg:bottom-0 right-0  flex flex-col gap-4 m-4 w-[90%] sm:w-[500px] ">
@@ -100,7 +93,6 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                                 my_user:userContextConsumer.userData?.login,
                                 opponent: item.sender?.login
                             } : {channel_id: item.channel_id }
-                        console.log(sstatus)
                         return(
                             <Link key={index+1} to={item.type === 'friendship' ? `/profile/${item.sender.unique_id}` : (item.type === 'gameInvitation' ? '/game/RemoteGame': '/chat')} state={sstatus} onClick={() =>{
                                 removeNotification(item)}}>

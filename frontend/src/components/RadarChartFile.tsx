@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+
 import {
   ChartConfig,
   ChartContainer,
@@ -22,18 +23,12 @@ import {
 
 export const description = "A radar chart"
 
-
 const chartConfig = {
   game: {
     label: "game",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig
-
-
-// interface prop{
-//   matches:  RadarChartInterFace | undefined
-// }
 
 export function RadarChartFile(props: { radarchartData: RadarChartInterFace }) {
   

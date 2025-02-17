@@ -258,7 +258,6 @@ function ChatSession(){
 
     useEffect(()=>
     {
-        console.log(openDrop)
         if (openDrop == true)
         {
             BlockStatusCheck()

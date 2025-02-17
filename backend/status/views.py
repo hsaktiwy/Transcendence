@@ -142,14 +142,11 @@ def get_line_chart(request, uuid):
         for week in range(5):
             week_start = start_date + timedelta(days=week * 7)
             week_end = week_start + timedelta(days=7)
-
-            # Filter matches for the current week involving the user
             matches = Game.objects.filter(
                 time__gte=week_start,
                 time__lt=week_end,
                 winner__id=user.id,  
             )
-            # Count matches for the current week
             weekly_match_data.append({
                 "week_start": week_start.strftime("%Y-%m-%d"),
                 "week_end": week_end.strftime("%Y-%m-%d"),
@@ -173,16 +170,12 @@ def get_line_chart(request, uuid):
 @api_view(['GET'])
 def get_achievements(request, uuid):
     try:
-
-        # last_match = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).order_by('-time')[:5]
         user = get_object_or_404(MyUser, unique_id=uuid)
         profile_status = get_object_or_404(ProfileStatus, id_user_fk=user)
         last_five_matches = Game.objects.filter(
             Q(user_p1=user) | Q(user_p2=user),
             type='PONG'
         ).order_by('-time')[:5]
-
-        # Check if the user won all last five matches
         print("Last five matches ->>>>>>>>>>>>>")
         for match in last_five_matches:
             print(f"Match ID: {match.id}, Winner: {match.winner}, Time: {match.time}, Type: {match.type}")
@@ -201,7 +194,7 @@ def get_achievements(request, uuid):
                 "description": "Win 5 matches streak",
                 "title": "5 wins streak",
                 "game_numbers": 5,
-                "achieved": all_wins,  # Add flag if achieved
+                "achieved": all_wins,
                 "icon": "streak"
             },
             {
@@ -240,7 +233,7 @@ def get_achievements(request, uuid):
                 "icon": "legend"
             }
         ]   
- 
+
         return Response({
             'user_id': str(user.unique_id),
             'wins': profile_status.wins,

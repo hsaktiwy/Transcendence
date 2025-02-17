@@ -1,40 +1,34 @@
 import React, { useContext, useEffect, useState }  from "react";
-
- 
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UserContext } from "./UserContext";
 import mailman from "@/utils/AxiosFetcher";
 import { rankInterface } from "@/utils/interfaces";
 import { Link } from "react-router-dom";
-// import { Separator } from "@/components/ui/separator"
-// const tags = Array.from({ length: 50 }).map(
-//   (_, i, a) => `v1.2.0-beta.${a.length - i}`
-// )
- 
+
 function RankFile() {
 
     const userContextConsumer = useContext(UserContext)
     const [userRank, setUserRank] = useState<rankInterface[] | undefined>([]);
 
-        
-       if (!userContextConsumer)
-        throw new Error("userContext must be used within a UserProvider");
+    if (!userContextConsumer)
+    throw new Error("userContext must be used within a UserProvider");
     const rankData = async() =>
-        {
-            try{
-    
-                const req = {
-                   url: `/profile/get_top_rank/`,
-                   method: 'GET',
-               };
-               const resp = await mailman(req);
-               if(resp.data.profiles)
-                setUserRank(resp.data.profiles);
-            }
-            catch (err){
-                console.error(" ",err)
-            }
+    {
+        try{
+
+            const req = {
+                url: `/profile/get_top_rank/`,
+                method: 'GET',
+            };
+            const resp = await mailman(req);
+            if(resp.data.profiles)
+            setUserRank(resp.data.profiles);
         }
+        catch (err){
+            console.error(" ",err)
+        }
+    }
+
     const currentUser = userRank?.find(user => user.user.login === userContextConsumer?.userData?.login);
     useEffect(()=>{
         rankData()

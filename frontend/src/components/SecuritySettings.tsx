@@ -1,14 +1,10 @@
 import React, { useContext, useState } from "react";
-
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu";
 import { GoQuestion } from "react-icons/go";
-
 import TwoFA from "./TwoFA";
 import mailman from "@/utils/AxiosFetcher";
 import { toast } from "react-toastify";
-
-
 import { UserContext } from "./UserContext";
 
 interface PasswordInputInterface{
@@ -16,11 +12,13 @@ interface PasswordInputInterface{
     password: string,
     password2:string
 }
+
 interface PasswordErrorInterface{
     old_password: boolean,
     password: boolean,
     password2:boolean
 }
+
 function SecuritySettings(){
     const passwordError = "Password should be 8-20 characters long and include at least 1 uppercase, 1 lowercase, 1 number, and 1 special character."
     const [hide, setHide] = useState<boolean[]>([true, true, true])
@@ -105,7 +103,6 @@ function SecuritySettings(){
             }
             catch (err){
                 toast.update(toastId, { render: "invalid credentials. Try Again!", type: "error", isLoading: false, autoClose: 3000 });
-                // toast.error("invalid credentials. Try Again!")
             }
         }
     }
@@ -125,12 +122,6 @@ function SecuritySettings(){
         <div className="   border border-white/20 w-[90%] lg:w-[60%] xl:w-[85%] xxl:w-[60%] mx-auto security-settings my-4 sm:my-2 flex-1   bg-gradient-to-b from-slate-300/10 to-cyan-500/10 rounded-xl flex flex-col gap-10">
             <div className=" px-4 sm:px-10 py-4 flex justify-center 2xl:justify-between  items-center 2xl:items-start gap-8 2xl:gap-0 relative flex-col 2xl:flex-row ">
                 <h1 className="text-2xl pt-4 text-center sm:text-start">Change Password</h1>
-                {/* <div className="absolute top-0 left-0 w-full h-full backdrop-filter backdrop-blur-[2px] z-40  flex justify-center items-center">
-                    <div className="p-10 bg-gradient-to-br from-[#323339] via-[#28292F] to-[#232628] text-white text-lg font-semibold rounded-xl w-[700px] text-center">
-                        <h1 className="text-2xl font-semibold ">You are using a third-party Authentication you can't change the account passoword</h1>
-                    </div>
-                </div> */}
-
                 <form onSubmit={handleSubmit} className="flex flex-col gap-8  ">
                     <div className="relative w-full 2xl:w-[780px] m-4 sm:m-0">
                         <label htmlFor="oldPassword"></label>
@@ -186,7 +177,6 @@ function SecuritySettings(){
 
                             <button type='submit' className="w-[150px] bg-[#5E97A9]/70 px-4 py-2 rounded-xl  border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75">Save Changes</button>
                             <button type='button' className="w-[150px]  px-4 py-2 rounded-xl  bg-black/35 border-0 outline-none  focus:outline-0 focus:border-0 hover:opacity-75 focus:opacity-75" onClick={resetPass}>Cancel</button>
-
                         </div>
                     }
                 </form>
