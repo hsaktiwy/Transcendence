@@ -1,6 +1,6 @@
-import React from 'react';
+
 import Skeleton from "react-loading-skeleton";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 
 function SkeletonDashboard() {

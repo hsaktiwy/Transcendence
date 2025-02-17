@@ -1,14 +1,14 @@
-import React, { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { UserContext } from "./UserContext";
-import ChatSection from "./ChatSection";
+
 import { cookies } from "../auth/Cookie";
-import { BACKEND, axiosPath } from "../utils/Constants";
+
 import mailman from "../utils/AxiosFetcher";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import { FiEdit2 } from "react-icons/fi";
 import { toast } from "react-toastify";
-import Skeleton from "react-loading-skeleton";
+
 import { UserDataInterface } from "../utils/UserDataInterface";
 function Settings() {
 
@@ -26,9 +26,10 @@ function Settings() {
             let uploadUrl=  `/api/user/upload_pic/`
             if(e.target.id === 'CoverProfile')
                 uploadUrl = `/api/user/CoverProfile/`
-            const imageId = e.target.id
+
             const formData = new FormData();
             formData.append(e.target.id, e.target.files[0]);
+
             try{
                 
 
@@ -72,9 +73,7 @@ function Settings() {
                             <FiEdit2/>
                         </div>
                         <img src={`${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile}`} alt="user-pic" className="rounded-xl object-cover h-full w-full"/>
-                        <input id='CoverProfile' type="file" accept='image/*' onClick={(e: any)=>{
-                            console.log(typeof(e.target.id))
-                        }} onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50  border-black w-full h-full rounded-xl" />
+                        <input id='CoverProfile' type="file" accept='image/*' onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50  border-black w-full h-full rounded-xl" />
                     </div>
                 <div className="relative h-[300px] bg-black/25 rounded-xl left-0 top-0 bg-"></div>
                     <div className=" z-20 group user-pic cursor-pointer h-[160px] w-[160px] absolute top-[200px]  left-[50%] -translate-x-[50%] rounded-full  after:content-[''] after:absolute after:h-[160px] after:w-[160px] after:rounded-full   after:top-0 after:left-[50%] after:-translate-x-[50%] after:border-[5px] after:border-white after:bg-transparent after:hover:bg-black/45 ">

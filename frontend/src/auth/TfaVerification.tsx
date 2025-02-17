@@ -5,7 +5,7 @@ import { AuthContext } from "@/components/AuhtenticationContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 interface TfaProp {
-    user:string
+    user?:string
 }
 const TfaVerificationFade = () => {
     return (
@@ -34,7 +34,6 @@ const TfaVerification:React.FC<TfaProp> = ({user}) =>{
         throw new Error("invalid scope");
     const [otp, setOtp] = useState<string>('')
     const inputOnChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) =>{
-        console.log("A")
         const target = e.target
         let targetValue = target.value
         const re = new RegExp(/^\d+$/)
@@ -50,7 +49,7 @@ const TfaVerification:React.FC<TfaProp> = ({user}) =>{
         if (nextInput)
             nextInput.focus()
     }
-    const inputOnKeyDown= (e: React.KeyboardEvent<HTMLInputElement>, index:number) =>{
+    const inputOnKeyDown= (e: React.KeyboardEvent<HTMLInputElement>) =>{
         const target = e.target as HTMLInputElement
         const key = e.key
         target.setSelectionRange(0,1)
@@ -109,6 +108,7 @@ const TfaVerification:React.FC<TfaProp> = ({user}) =>{
                     [1,2,3,4,5,6].map((item, index) => {
                         return (
                             <input
+                                id={`item_${item}`}
                                 value={otp.split('')[index] ? otp.split('')[index] : ''}
                                 type="text"
                                 inputMode="numeric"
@@ -116,7 +116,7 @@ const TfaVerification:React.FC<TfaProp> = ({user}) =>{
                                 key={index}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => inputOnChange(e, index)}
                                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>)=>{
-                                    inputOnKeyDown(e, index)
+                                    inputOnKeyDown(e)
                                 }}
                                 onFocus={(e: React.FocusEvent<HTMLInputElement>)=> inputOnFocus(e)}
                                 className="h-[40px] w-[40px] bg-transparent outline-none border-white border rounded-md text-center focus:border-[#5E97A9]"/>

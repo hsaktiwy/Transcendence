@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import { LinechartData } from "@/utils/interfaces"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
@@ -63,9 +63,6 @@ export function LineCharFile({ data }: LineCharFileProps) {
   
     return { chartData, range };
   }, [data]);
-
-  console.log("Chart Data:", chartData);
-  console.log('m here ', data)
   return (
     <Card className="border-none shadow-none h-full w-full">
         <CardHeader className="p-2">

@@ -13,11 +13,3 @@ class Message(models.Model):
     content = models.TextField()
     isread=models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    # def clean(self):
-    #     if not self.id_channel_fk.users.filter(id=self.id_user_fk.id).exist():
-    #         raise ValueError('Error user must be in the channel to add message to it')
-    
-    # def save(self, *arg, **kwargs):
-    #     self.clean()
-    #     super().save(*arg, **kwargs)

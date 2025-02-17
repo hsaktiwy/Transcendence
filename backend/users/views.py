@@ -1,29 +1,4 @@
-#from django.shortcuts import render
-# from rest_framework import generics, status
-# from .serializers import UserSerializer
-# from .models import MyUser
-# from rest_framework.permissions import IsAuthenticated
-# from rest_framework.views import APIView
-# from django.http import JsonResponse
-# from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-# from django.middleware.csrf import get_token
-# from rest_framework.response import Response
-# import os
-# # login
-# from django.utils.decorators import method_decorator
-# from django.views.decorators.cache import never_cache
-# from django.views.decorators.csrf import csrf_protect
-# from django.views.decorators.debug import sensitive_post_parameters
-# from django.contrib.auth.forms import AuthenticationForm
-# from django.shortcuts import redirect
-# from rest_framework.decorators import api_view
-# from django.contrib.auth import login as auth_login
-# from django.views.decorators.http import require_http_methods
-# from django.shortcuts import get_object_or_404
-# import logging
-# logger = logging.getLogger(__name__)
 
-# from rest_framework.permissions import AllowAny
 import os
 from status.serializers import NotificationSerializer
 from status.models import Notification
@@ -33,18 +8,12 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import MyUser
 from .serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer, PublicUserSerializer, SearchUserSerializer
-from .utils import generate_access_token, generate_refresh_token, isLoginAlreadyUSed
-from rest_framework.permissions import AllowAny , IsAuthenticated
-import datetime
+from .utils import generate_access_token, isLoginAlreadyUSed
+from rest_framework.permissions import AllowAny
 from django.conf import settings
-from django.views.decorators.csrf import csrf_protect
-from django.utils.decorators import method_decorator
-from django.middleware.csrf import get_token
 from .utils import decode_token, generate_tokens_response, generat_qr_code, verify2faCode, generate_TFA_verification_response, generate_set_username_response
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
-from rest_framework.exceptions import AuthenticationFailed
-import json
 from io import BytesIO
 from django.core.files import File
 from django.http import Http404
@@ -88,7 +57,6 @@ def LoginWithOAuth42(request):
             return Response({'error': 'Failed to retrieve access token'}, status=400)
         
         access_token = response.json().get('access_token')
-        print(access_token)
         headers = {
             'Authorization': f'Bearer {access_token}',
         }
@@ -153,21 +121,6 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         else:
             return get_object_or_404(MyUser, login=identifier)
 
-# class UserAPICreate(generics.CreateAPIView):
-#     queryset = MyUser.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [AllowAny]
-    
-
-# class UserListAPIView(generics.ListAPIView):
-#     queryset = MyUser.objects.all()
-#     serializer_class = UserSerializer
-class GetUsers(APIView):
-    def get(self, request):
-        users = MyUser.objects.all()
-        serializer = PublicUserSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
 class getPublicUser(APIView):
     def get(self, request,*args, **kwargs):
         identifier = self.kwargs.get('identifier')
@@ -192,7 +145,7 @@ class getAuthenticatedUser(APIView):
     def patch(self, request):
         user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
-        print('from view  ')
+        print('from view pppp ')
         if serializer.is_valid():
             user = serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
@@ -331,12 +284,12 @@ class CheckAuth(APIView):
 class UploadProfilePicture(APIView):
     def patch(self, request, *args, **kwargs):
         try:
-            user = get_object_or_404(MyUser, login=request.user.login)
+            user = request.user
             serializer = UserSerializer(instance=user, data=request.data)
             if serializer.is_valid():
                 if not user.isDefaultImage():
                     os.remove('media/' + user.profile_pic.name)  
-                serializer.save()
+                serializer.update(instance=user, validated_data=serializer.validated_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -347,12 +300,12 @@ class UploadProfilePicture(APIView):
 @api_view(['PATCH'])
 def UploadCoverProfile(request):
     try:
-        user = get_object_or_404(MyUser, login=request.user.login)
+        user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             if not user.isDefaultCoverImage():
                 os.remove('media/' + user.CoverProfile.name)  
-            serializer.save()
+            serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -383,11 +336,11 @@ class Enable2faView(APIView):
                 user.two_factor_auth = True
                 user.save()
                 return Response({
-                    'message' : 'Two Factory Authentication enabled succefully'
+                    'message' : 'Two Factor Authentication enabled succefully'
                 }, status=200)
             else:
                 return Response({
-                    'message' : 'Two Factory Authentication already enabled'
+                    'message' : 'Two Factor Authentication already enabled'
                 }, status=200)
         return Response({
             'message' : 'Invalid OTP'
@@ -443,7 +396,6 @@ def LogoutView(request):
 @permission_classes([AllowAny])
 def SetUsername(request):
         try:
-            print(request.data)
             email = request.data.get('email')
             user = MyUser.objects.get(email=email)
             if user.login is not None and user.login != "":

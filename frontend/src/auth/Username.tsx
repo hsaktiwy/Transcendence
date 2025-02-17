@@ -1,8 +1,6 @@
-// Login.tsx
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom';
 import mailman from '../utils/AxiosFetcher'
-// import { user_id } from '../utils/Constants';
 import { toast } from 'react-toastify'
 import { AuthContext} from '@/components/AuhtenticationContext';
 import LoadingIndecator from '@/components/Loading';
@@ -36,10 +34,8 @@ const Username = (prop: SetUsernameProps) => {
                 data: data
             }
             const resp = await mailman(req)
-            console.log(resp)
             if(resp.status === 200){
                 setNeedLogin(false)
-
             }
         }
         catch(error){
@@ -82,16 +78,13 @@ const Username = (prop: SetUsernameProps) => {
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
 
-                <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
-                    {/* <ThreeScene/> */}
-                    
-                     
+                <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white    relative`}>
                             <motion.form 
                                 variants={FormFade()}
                                 initial="formInitial"
                                 animate="formAnimate"
                                 onSubmit={handleSubmit}
-                                className=" p-6 rounded-lg shadow-lg max-w-screen-sm lg:w-[500px]  ">
+                                className=" p-10  shadow-lg max-w-screen-sm lg:w-[500px]   bg-white/10 backdrop-filter backdrop-sm border border-white/20 rounded-3xl">
                                 <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                                     <h1 >One more step!</h1>
                                     <p className='text-lg font-normal '>Please Enter a username</p>
@@ -132,7 +125,6 @@ const Username = (prop: SetUsernameProps) => {
                     
 
                 </div> 
-                // <ThreeScene/>
             
 
     );

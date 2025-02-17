@@ -27,14 +27,13 @@ const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [uuid, setUuid] = useState<string>('');
     const [oauth, setOauth] = useState<boolean>(false);
-    const [code, setCode] = useState<string>('');
+    const [code, _setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
     const [needLogin, setNeedLogin] = useState<boolean |  undefined>(undefined)
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        // console.log(import.meta.env.API_REDIRECT)
         window.location.href = import.meta.env.VITE_REDIRECT
     };
     const tryToLogin = async () =>{
@@ -42,7 +41,6 @@ const Login = () => {
             email: email,
             password: password
         }
-        console.log(data)
         const toastId = toast.loading("Loading");
         const resp = await AuthContextConsummer.LoginAction(data)
         if ('errorType' in resp) {
@@ -52,7 +50,6 @@ const Login = () => {
             const tmpError = resp.errorType as tmp
             if(tmpError['non_field_errors'] !== undefined)
                 toast.update(toastId, { render: tmpError['non_field_errors'][0], type: "error", isLoading: false, autoClose: 3000 });
-            console.log(resp.errorType)
         }
         else {
             if (resp.message === 'username needed'){
@@ -68,7 +65,6 @@ const Login = () => {
                 toast.update(toastId, { render: resp.message, type: "success", isLoading: false, autoClose: 3000 });
                 AuthContextConsummer.setLoggedIn(true)
             }
-            // Navigate('/')
         }
     }
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -115,21 +111,17 @@ const Login = () => {
                         setTfaUser(resp.data.user)
                     else{
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        AuthContextConsummer.setLoggedIn(true)
-                        // Navigate('/')
+                        location.reload();
                     }
-                        // location.reload();
                 }
 
             }
             catch (error) {
-                // setLoading(false);
                 console.error('Error:', error)
             }
         }
     }
     useEffect(()=>{
-        console.log("need loin == ",needLogin)
         if (needLogin! === false)
             if (oauth)
                 loginwith42(code)
@@ -140,42 +132,9 @@ const Login = () => {
       
             const searchParams = new URLSearchParams(window.location.search);
             const tmpCode = searchParams.get('code');
-            // if (tmpCode)
-            //     setCode(tmpCode)
-            console.log(`1234   ${code}`)
-    
-            // if (code) {
-    
-            //     try {
-            //         const req = {
-            //             url : '/api/LoginWithOAuth42/',
-            //             method : 'POST',
-    
-            //         }
-            //         const resp = 
-            //     }
-            //     catch{
-    
-            //     }
-    
-            //     const
-    
-            //     fetch('http://localhost:8000/api/LoginWithOAuth42/', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({ code }),
-            //     })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         if (data) {
-            //             console.log('data', data);
-            //         }
-            //         window.history.replaceState({}, document.title, window.location.pathname);
-            //     })
-            //     .catch(error => console.error('Error:', error));
-            // }
+            if (tmpCode)
+                _setCode(tmpCode)
+
             if (tmpCode)
                 loginwith42(tmpCode)
     }, []);
@@ -203,9 +162,8 @@ const Login = () => {
     }
     return (
             AuthContextConsummer.loggedIn === undefined ? <LoadingIndecator/> : 
+                <div className={`flex  justify-center 2xl:justify-center items-center min-h-screen font-poppins text-white   relative `}>
 
-                <div className={`flex  justify-center 2xl:justify-between items-center min-h-screen font-poppins text-white   2xl:pr-80 relative`}>
-                    {/* <ThreeScene/> */}
                     
                         {tfaUser === undefined  && needLogin === undefined ? 
                             <motion.form 
@@ -213,7 +171,7 @@ const Login = () => {
                                 initial="formInitial"
                                 animate="formAnimate"
                                 onSubmit={handleSubmit}
-                                className=" p-6 rounded-lg shadow-lg max-w-screen-sm lg:w-[500px]  ">
+                                className=" p-6 rounded-lg shadow-lg max-w-screen-sm lg:w-[500px]  bg-white/10 backdrop-filter backdrop-sm border border-white/20">
                                 <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                                     <h1 >Welcome Back !</h1>
                                     <p className='text-lg font-normal '>Please Enter your details</p>
@@ -227,7 +185,7 @@ const Login = () => {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
+                                        className="bg-transparent w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black"
                                     />
                                 </div>
                                 <div className="mb-6 relative ">
@@ -239,7 +197,7 @@ const Login = () => {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="bg-slate-900 w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
+                                        className="bg-transparent w-full px-3 py-2 text-white outline-none rounded-2xl  duration-75 border border-slate-200 focus:border-slate-900 focus:bg-slate-200 focus:text-black "
                                         onFocus={()=>{
                                             setPassFocus(true)
                                         }}
@@ -257,7 +215,7 @@ const Login = () => {
 
                                 <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
 
-                                    <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded  hover:scale-105  duration-150">
+                                    <button type="submit" className="w-full  bg-white text-black text-lg font-bold py-2 px-4 rounded-3xl  hover:opacity-90  duration-150">
                                         Sign in
                                     </button>
                                     <div className='h-[30px] flex items-center justify-evenly w-full'>
@@ -265,8 +223,8 @@ const Login = () => {
                                         <p className='w-[5%] text-white'> or </p>
                                         <div className=' w-[45%] bg-white h-[1px]'></div>
                                     </div>
-                                    <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded hover:border-slate-200 hover:scale-105 duration-150" onClick={handleSubmitWith42}>
-                                    {!loading ? <p >Sign in with <img src="42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
+                                    <button type="submit" className=" border border-slate-200 w-full font-lg bg-[#131313] text-white font-bold py-2 px-4 rounded-3xl hover:border-slate-200 hover:opacity-90 duration-150" onClick={handleSubmitWith42}>
+                                    {!loading ? <p >Sign in with <img src="/42.png" alt="42-logo" className='inline-block mx-3'/></p> : <Loading__/>}
                                     </button>
                                     <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
                                         <p>Don't have an account ? <Link to='/signup' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign up</Link></p>
@@ -274,10 +232,8 @@ const Login = () => {
                                     </div>
                                 </div>
                             </motion.form> : needLogin === true  || needLogin === false ? <Username email={email} setNeedLogin={setNeedLogin} /> : <TfaVerification user={tfaUser}/>}
-                    
-
                 </div> 
-                // <ThreeScene/>
+  
             
 
     );

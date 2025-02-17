@@ -16,7 +16,6 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('users/', views.GetUsers.as_view()),
     path('users/<identifier>/', views.getPublicUser.as_view(), name="Access_User"),
     path('user/', views.getAuthenticatedUser.as_view()),
     path('user/search/',views.Search, name="Search"),
@@ -33,5 +32,4 @@ urlpatterns = [
     path('user/CoverProfile/', views.UploadCoverProfile, name="cover_profile"),
     path('LoginWithOAuth42/', views.LoginWithOAuth42, name="LoginWithOAuth42"),
     path('setusername/', views.SetUsername, name="set_username")
-    # path('login/', views.LoginView.as_view())
 ]

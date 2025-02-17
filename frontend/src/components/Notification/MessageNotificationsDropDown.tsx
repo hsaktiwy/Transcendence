@@ -1,17 +1,16 @@
-import React from "react";
-import { useContext, useRef, useState,useEffect } from "react";
-import { Navigate, Link } from "react-router-dom";
+
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import { IoCloseOutline } from "react-icons/io5";
+
 import { RiNotification2Line } from "react-icons/ri";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { NotificationPropreties } from "../UserContext";
-// import { import.meta.env.VITE_axiosPath, BACKEND } from "../../utils/Constants";
+
 import mailman from "../../utils/AxiosFetcher";
-import { PiMaskSadLight } from "react-icons/pi";
-import { Loading__ } from "@/auth/Login";
+
 import { RiInbox2Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 interface prop {
@@ -103,15 +102,7 @@ const MessageNotificationsDropDown = (info: prop) =>{
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     const LOGO = 'https://static.vecteezy.com/system/resources/previews/013/959/227/non_2x/table-tennis-fire-logosilhouette-ping-pong-club-line-art-logos-or-icons-illustration-vector.jpg'
-    function getFirstWord(inputString:string) {
-        if (typeof inputString !== 'string' || !inputString.trim()) {
-            return 'Invalid input'; // Handle non-string or empty input
-        }
 
-        // Split the string by spaces and return the first non-empty element
-        const words = inputString.trim().split(/\s+/);
-        return words[0];
-    }
     let linkToChat = ''
     const removeNotification = async (notification: NotificationPropreties) =>{
         try{

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { BsPhoneFlip } from "react-icons/bs";
 import mailman from "@/utils/AxiosFetcher";
-import { QrCode } from "lucide-react";
 import { AxiosRequestConfig } from 'axios';
 import { toast } from 'react-toastify'
 import TfaVerifiedModal from "./TfaVerifiedModal";
@@ -26,7 +25,6 @@ function TwoFA(){
                 responseType: 'blob'
             }
             const resp = await mailman(req)
-            console.log(resp)
             const qrUrl = URL.createObjectURL(resp.data);
             setQRCode(qrUrl)
         }
@@ -125,8 +123,6 @@ function TwoFA(){
                             <div className="w-12 h-12 border-4 border-[#5E97A9] border-solid border-t-transparent rounded-full animate-spin"></div>
                         </div>
                     }
-                    {/* <img src={QR} alt="qr-code" className="w-full h-full object-contain 2xl:object-cover"/>  */}
-                    {/* <img src={QrCode} alt="qr-code" className="w-full h-full object-contain 2xl:object-cover"/> */}
                 </div>
             </div>
         </div>

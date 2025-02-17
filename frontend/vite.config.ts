@@ -19,6 +19,9 @@ export default defineConfig({
   },
 
   build: {
-    sourcemap: true
+    sourcemap: true,
+    minify: false, 
+    chunkSizeWarningLimit: 1500
+    
   }
 })

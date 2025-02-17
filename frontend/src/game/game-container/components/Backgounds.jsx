@@ -8,9 +8,6 @@ import DefaultBack from './DefaultBack';
 import ChessPreview from './ChessPreview';
 import PingPongPreview from './PingPongPreview';
 
-import { UIQualityProvider, useUIQuality } from '../../../UIQualityContext';
-// const { qualityLevel } = useUIQuality();
-
 
 function Backgrounds() {
   const location = useLocation();
@@ -41,9 +38,6 @@ function Backgrounds() {
   
   // console.log(location.pathname, ", OnPongRoute : ", OnPongRoute, ", OnChessRoute : ", OnChessRoute, ", show : ", show);
 
-  const { qualityLevel } = useUIQuality();
-
-
   return (
     <>
 
@@ -60,7 +54,7 @@ function Backgrounds() {
 
 
         {/* <div className="main-game-page-container"> */}
-          {qualityLevel === 3 && (<div className={show ? "teams-container" : "hidden-v"} >
+          {/* <div className={show ? "teams-container" : "hidden-v"} >
             <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
               <center>
                 <h1>Le7ya's Game</h1>
@@ -73,7 +67,7 @@ function Backgrounds() {
               </center>
               <PingPongPreview />
             </div>
-          </div>) }
+          </div> */}
         {/* </div> */}
     </>
   );

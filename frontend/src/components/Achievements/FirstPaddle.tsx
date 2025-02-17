@@ -1,13 +1,5 @@
-import * as React from "react"
- 
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { SlLock } from "react-icons/sl";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import mailman from "@/utils/AxiosFetcher";
-
 
 function FirstPaddle()
 {

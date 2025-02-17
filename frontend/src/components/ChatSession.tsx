@@ -16,7 +16,7 @@ import { WebSocketContext } from "../utils/WSContext";
 import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
-import { formatDate2 } from "./NavBarModal";
+import { formatDate2 } from "@/utils/textFromatting";
 import { toast } from "react-toastify";
 
 
@@ -40,10 +40,6 @@ function ChatSession(){
     const [scrollPosition, setScrollPosition] = useState({scrollTop: -1, scrollLeft:-1})
     const [openDrop, setOpenDrop] = useState<boolean>(false)// amine 
     const [Status, setStatus] = useState<string>("Block")
-
-    // for testing
-    const [rcount, setRCount] = useState<number>(0)
-    // end
     const BlockStatusCheck = async ()=>
     {
         try{
@@ -62,15 +58,10 @@ function ChatSession(){
         }
     }
 
-    useEffect(()=>{
-        setRCount((re)=>(re+1))
-        // BlockStatusCheck()
-    },[userContext.action])
-    //amine
     
     
     useEffect(() =>{
-        setRCount((re)=>(re+1))
+
         // Scroll to the bottom whenever the messages array changes
         if (update && containerRef.current) {
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -79,7 +70,6 @@ function ChatSession(){
     }, [update]);
     //amine
     useEffect(() =>{
-        setRCount((re)=>(re+1))
         const handleCloseMenu = (e:any) =>
         {
             if(e.target && e.target.parentElement && e.target.parentElement.className.split(' ')[0] !== 'drop')
@@ -134,9 +124,7 @@ function ChatSession(){
     }
     // hamza
     const UpdateCurrentConvs = useCallback((message_received: Message , __channelId: number) => {
-        console.log(__channelId, chatContext.active?.channelId)
         if (__channelId === chatContext.active?.channelId) {
-            console.log('messagr received:  ', message_received)
             chatContext.setActive((prevActive) => prevActive && ({
             ...prevActive,
             new_message: 1,
@@ -146,10 +134,8 @@ function ChatSession(){
         }
     }, [chatContext.active?.channelId, chatContext.setActive]);
     useEffect(()=>
-    {
-        setRCount((re)=>(re+1))
-        AddChannel('CHATROOM', UpdateCurrentConvs)
-        BlockStatusCheck()
+    {        AddChannel('CHATROOM', UpdateCurrentConvs)
+        // BlockStatusCheck()
         return () => {
             // Remove the CHATROOM call back function when we exist the chat section
             RemoveChannel('CHATROOM')
@@ -166,7 +152,8 @@ function ChatSession(){
                 channel: chatContext.active?.channelId,
                 first_index: (chatContext.active?.messages && chatContext.active?.messages.length) ? chatContext.active?.messages[0].id: -1
             }
-            SocketContext.socket?.current.send(JSON.stringify(req))
+            if (SocketContext.socket.current)
+                SocketContext.socket?.current.send(JSON.stringify(req))
             chatContext.active?.new_message==0
             chatContext.setConvs((prevConvs) => {
             return prevConvs?.map((conv) =>
@@ -184,7 +171,6 @@ function ChatSession(){
     }
 
     useEffect(() => {
-        setRCount((re)=>(re+1))
         // Scroll to the bottom whenever the messages array changes (but in our case we are interested only in
         // one the first render where chatContext.active.scrollLeft = -1 &&  chatContext.active.scrollTop = -1)
         if (chatContext.active?.status == 0 && containerRef.current && chatContext.active.scrollLeft == -1 &&  chatContext.active.scrollTop == -1) {
@@ -213,8 +199,6 @@ function ChatSession(){
 
     useEffect(()=>
     {
-        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ active ", chatContext.active?.channelId)
-        setRCount((re)=>(re+1))
         if (chatContext.active?.new_message == 1)
             SendWebSocketToDefine()
     }, [chatContext.active])
@@ -270,7 +254,6 @@ function ChatSession(){
     }
     useEffect(()=>
     {
-        setRCount((re)=>(re+1))
         const {scrollTop} =  scrollPosition
         if (chatContext.active?.status == 0 && scrollTop == 0 && chatContext.active?.is_next_packet)
         {
@@ -288,15 +271,15 @@ function ChatSession(){
         }
     }
 
-    // testing purpose
     useEffect(()=>
     {
-        console.log("render time:", rcount)
-    },[rcount])
-    useEffect(()=>
-    {
-            console.log("activeeeee")
-    },[chatContext.active])
+        console.log(openDrop)
+        if (openDrop == true)
+        {
+            console.log("hhm ")
+            BlockStatusCheck()
+        }
+    },[openDrop])
     //
     return(
             <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800

@@ -37,7 +37,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 return None
             return friend_group_list
         except Exception as e:
-            print(e)
+            print("kkkk", e)
             return None
 
 
@@ -75,8 +75,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def game_invite_notification(self, _receiver, _sender, room_name):
         try:
             receiver = MyUser.objects.filter(unique_id=_receiver).first()
-            not_content = f'{_sender.unique_id} GAMEINVITE to {receiver.unique_id} room {room_name}'
-            notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='gameInvitation', friend_request_id=-1)
+            not_content = f'{_sender.unique_id} invites you to play a game'
+            notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='gameInvitation', friend_request_id=-1, room_name=room_name)
             return 1, notification, receiver.id
         except Exception as e:
             print(f'error  : {e}')
@@ -126,7 +126,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 return False, 'NOT A FRIEND!'
             return True, 'CLEAR'
         except Exception as e:
-            print(e)
+            print("aaa", e)
             return False, "CAN'T DO THAT!"
 
     @database_sync_to_async
@@ -357,7 +357,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     message_id, lastUpdate, message_timestamp, message_isread= await sync_to_async(self.creatMessage)(user,room_id, message, message_id, lastUpdate)
                     SerializedUser = await sync_to_async(self.get_SerializedUser)(user)
                     lastUpdate = format(lastUpdate, 'Y-m-d H:i:s')
-                    
+                    print(room)
                     await self.channel_layer.group_send(
                         room,
                         {
@@ -379,7 +379,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'notification':'Error'
                     }
                     await self.send(text_data=json.dumps(responce))
-            if message_json['type'] == 'NOTIFICATION_MESSAGE':
+            elif message_json['type'] == 'NOTIFICATION_MESSAGE':
                 print(text_data)
                 receiver = message_json['to']
                 channel_id = message_json["channel_id"]
@@ -526,6 +526,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def message(self, event):
         message = json.dumps(event)
+        room_id = event.get('channel_id')
+        print(room_id)
+        room  = f"CHATROOM{room_id}"
+
+        if room not in self.rooms:
+            print(f"--->wala we did it {room_id}?")
+            user = self.scope['user']
+            room_name = room
+            print(f"Adding room: {room_name}")
+            self.rooms.add(room_name)
+            print(f'Room {room_name}, added to the {user.login} goups')
+
+            await self.channel_layer.group_add(
+                room_name,
+                self.channel_name
+            )
         await self.send(text_data=message)
 
     async def state(self, event):
@@ -535,3 +551,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def gameInvitation(self, event):
         message = json.dumps(event)
         await self.send(text_data=message)
+
+class NoMatchConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+        await self.send(text_data="No valid route found")
+        await self.close(code=4001)
