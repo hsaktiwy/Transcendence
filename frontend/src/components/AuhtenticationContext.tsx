@@ -3,14 +3,17 @@ import mailman from "@/utils/AxiosFetcher";
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 export interface LoginDataInterface{
     email: string,
     password: string
 }
+
 export interface VerifyTFAInterface{
     user: string | undefined,
     otp_code: string
 }
+
 export interface signUpDataInterface{
     firstName: string,
     lastName: string,
@@ -36,6 +39,7 @@ export interface LoginError{
     errorType: unknown,
     status: number
 }
+
 interface AuthContextInterface{
     loggedIn: boolean | undefined,
     setLoggedIn : React.Dispatch<React.SetStateAction<boolean | undefined> >,

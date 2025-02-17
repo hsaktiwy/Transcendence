@@ -187,7 +187,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         catch (err){
             console.error(err)
         }
-
     }
     const fetchSentFriendRequest = async () =>{
 
@@ -278,7 +277,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-            console.log("aaaaa=>>>>>>, " , resp)
             let notificationData : NotificationPropreties[] = resp.data
             notificationData = await getNotificationData(notificationData)
             setnotifications(notificationData.sort((a, b)=> b.id - a.id))
@@ -343,13 +341,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         data.content = `${data.sender.login} invites you to play a pong game`
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%> ", data.room_name)
-        // if (data.type === 'friendship')
-        // {
-            // fetchReceivedFriendRequest()
-            // fetchSentFriendRequest()
-            // fetchFriends()
-        // }      
     }
     const updateFriendList = (user: ProfileDataInterface) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
