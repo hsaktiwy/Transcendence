@@ -12,8 +12,10 @@ interface prop {
 
 const DisableTFAModal: React.FC<prop> = ({dispatch}) =>{
     const userContextConsumer = useContext(UserContext)
+
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
+
     const disableTFA = async () =>{
         try{
                 const req = {
@@ -34,6 +36,7 @@ const DisableTFAModal: React.FC<prop> = ({dispatch}) =>{
             toast.error("An error occured! Try again later")
         }
     }
+
     return(
         <div className="h-[100%] w-[100%] fixed  top-0 -left-0 backdrop-filter backdrop-blur-sm bg-black/40  z-50  flex justify-center items-center ">
             <motion.div

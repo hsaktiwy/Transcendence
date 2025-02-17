@@ -1,17 +1,11 @@
 import  { useContext, useEffect } from "react";
 import Chart from "chart.js/auto";
-import "../index.css"
 import { CategoryScale } from "chart.js";
 import { useState } from "react";
-
-
 import { LineCharFile } from "./lineChart.tsx";
 import { RadarChartFile } from "./RadarChartFile.tsx";
-
 import RankFile from "./rankFile.tsx";
-// import { axiosPath ,BACKEND } from "../utils/Constants";
 import OnlineFriends from "./OnlineFriends.tsx";
-
 import Achievements from "./Achievements.tsx";
 import { PieChartFile } from "./PieChart.tsx";
 import { UserContext } from "./UserContext";
@@ -20,22 +14,24 @@ import SkeletonDashboard from "./Skeletons/SkeletoneDashboard.tsx";
 import { WebSocketContext } from "@/utils/WSContext.tsx";
 import mailman from "@/utils/AxiosFetcher.ts";
 import { LinechartData, LoseWins, RadarChartInterFace, twoGames, UserRankResponse,  } from "@/utils/interfaces.ts";
+import "../index.css"
 
 Chart.register(CategoryScale);
 
 function Dashboard(){
+    const userContextConsumer = useContext(UserContext);
+    const wsConsumer = useContext(WebSocketContext)
+    const [isLoading, setIsLoading] = useState(true);
+    const [matches, setMatches] = useState<LoseWins | undefined>()
+    const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
+    const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
+    const uuid = userContextConsumer?.userData?.unique_id;
+    const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
 
-  const userContextConsumer = useContext(UserContext);
-  // const 
-  const wsConsumer = useContext(WebSocketContext)
-  const [isLoading, setIsLoading] = useState(true);
-  const [matches, setMatches] = useState<LoseWins | undefined>()
-  const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
-  const [lineChartData, setLineChartData] = useState<LinechartData | undefined>()
-  
+    if (!userContextConsumer || !wsConsumer)
+        throw new Error("userContext must be used within a UserProvider");
 
-  const uuid = userContextConsumer?.userData?.unique_id;
-  const fetchLineChart = async () =>
+    const fetchLineChart = async () =>
     {
         try{
             const req = {
@@ -46,7 +42,7 @@ function Dashboard(){
             const resp = await mailman(req);
             const fetchedData: LinechartData = {
                 user: resp.data.user,
-                weekly_match_data: resp.data.weekly_match_data, // This should already be an array
+                weekly_match_data: resp.data.weekly_match_data,
             };
             setLineChartData(fetchedData);
         }
@@ -54,8 +50,7 @@ function Dashboard(){
             console.error(err)
     }}
 
-    const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
-  
+
     const getMatchHistoryData = async () => {
       const req = {
         url: `/game/get_matches/${uuid}/`,
@@ -85,42 +80,40 @@ function Dashboard(){
             console.error(err)
         }
     }
-        const [level, setLevel] = useState<UserRankResponse | undefined>();
-    
-        const fetchLevle = async () =>
-            {
-                try{
-                    const req = {
-                        url: `/profile/get_rank_user/${uuid}/`,
-                        method: 'GET',
-                        withCredentials: true,
-                    }
-                    const resp = await mailman(req);
-                    if(resp.data)
-                        setLevel(resp.data);
-                }
-                catch (err){
-                    console.error("dddddd======????",err)
-                }
+
+    const [level, setLevel] = useState<UserRankResponse | undefined>();
+
+    const fetchLevle = async () =>
+    {
+        try{
+            const req = {
+                url: `/profile/get_rank_user/${uuid}/`,
+                method: 'GET',
+                withCredentials: true,
             }
+            const resp = await mailman(req);
+            if(resp.data)
+                setLevel(resp.data);
+        }
+        catch (err){
+            console.error(err)
+        }
+    }
   
     const waitData=  async() =>
-      {
-          await fetchLineChart();
-          await fetchMatches();
-          await getMatchHistoryData();
-          await fetchLevle();
-          setIsLoading(false)
-      } 
-  useEffect(() => {
+    {
+        await fetchLineChart();
+        await fetchMatches();
+        await getMatchHistoryData();
+        await fetchLevle();
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
     if(!level)
         waitData()
-    // Cleanup the timer to avoid memory leaks
-  }, [level]);
-  if (!userContextConsumer || !wsConsumer)
-    throw new Error("userContext must be used within a UserProvider");
+    }, [level]);
 
-      
     return(
       <div>
       {isLoading ? (
@@ -138,15 +131,12 @@ function Dashboard(){
                               <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
                                       <div className=" h-20  flex items-center 2xl:items-end ">
                                               <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
-                                                  {/* <div className="absolute inset-0 bg-gradient-to-br from-[#1c2328] to-[#323639] opacity-70 rounded-xl"></div> */}
                                                   <div className="relative text-lg text-white font-medium">
                                                     {`Hello ${userContextConsumer.userData?.firstName}`} 
-                                                    
                                                   </div>
                                                 </div>
 
                                           </div>
-                                          
                                           <div className="flex flex-col  justify-center items-center ">
                                               <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
                                               <div className="h-3 w-[100%] bg-[#444444] rounded-full">
@@ -208,9 +198,7 @@ function Dashboard(){
     </div>
         </>
       )}
-    </div>
-
-       
+    </div> 
     )
 }
 

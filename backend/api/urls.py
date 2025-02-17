@@ -21,22 +21,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     # this was here by defalt gave us grafical admin interface only for users assogne in django default users exemple (hsaktiwy, 1234)<- super user in production level #DestroyThis
-    path('api/admin/', admin.site.urls),
-    # path('auth/', include('rest_framework.urls')),
-    # path('login/', MyLogin, name='MyAuthentication_User'),
-    # path('csrftoken/', getCRSFToken, name='csrftoken_set'),
-    #users app
+    path('api/admin/', admin.site.urls),# this must be deleted
     path('api/', include('users.urls')),
-    #channel app
     path('chat/', include('conversations.urls')),
-    # #status app
-    #     #Notifications
     path('profile/', include('status.urls')),
-    # #friendship app
     path('friendship/', include('friendship.urls')),
-    # #Game
     path('game/', include('game.urls')),
-    # #Game Invitation
-    path('invitation/', include('invitation.urls')),# THIS IS FOR SILK TESTING PURPOSE
-    path('silk/', include('silk.urls', namespace='silk')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

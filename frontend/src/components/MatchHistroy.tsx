@@ -26,7 +26,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
         const isUserP2 = username === game.user_p2.login;
     
         if (game.score_p1 === game.score_p2) 
-          return 'draw'; // Handle draw case
+          return 'draw';
         if ((isUserP1 && game.score_p1 > game.score_p2) || (isUserP2 && game.score_p2 > game.score_p1)) {
             return 'win';
         }
@@ -51,7 +51,6 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
           ) : (
             <>
               <div>
-                {/* Switch Buttons */}
                 <div className="flex">
                   {["PONG", "CHESS"].map((type) => (
                     <button
@@ -74,8 +73,6 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                     </button>
                   ))}
                 </div>
-      
-                {/* Display Matches Based on Selected Type */}
                 <div className="mt-4">
                   {matchHistoryType === "PONG" ? (
                         data?.Pong && data.Pong.length > 0 ? (
@@ -113,20 +110,17 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                            <div className="  w-full  border-t border-[#5E97A9] rounded-full my-3 mt-1"></div>
                            <div className="h-36  xxl:h-60 rounded-lg overflow-y-auto px-5">
                            {data.Pong.map((game: any, index: any) => {
-                              const matchResult = getMatchResult(game, username); // Determine if the user won
+                              const matchResult = getMatchResult(game, username);
                               const findUser = findTheUSer(game, username)
                               return (
                                 <React.Fragment key={game.id}>
                                   <div className="w-full mb-4 flex items-center bg-gradient-to-bl from-[#242b2f] to-[#1b1e1f] gap-4 shadow-lg rounded-lg py-4">
-                                    {/* Conditional Gradient for Win/Loss */}
                                     <div className={`bg-gradient-to-b ${
                                           matchResult === 'win' ? 'from-[#84D679] via-[#598752] to-[#2D392C]' :
                                           matchResult === 'lose' ? 'from-[#E45959] via-[#875252] to-[#392C2C]' :
-                                          'from-[#E5C359] via-[#877852] to-[#39332C]' // Yellow for draw
+                                          'from-[#E5C359] via-[#877852] to-[#39332C]'
                                         } w-1 h-16 rounded-r-lg`}
                                       ></div>
-
-                                    {/* Player 1 Details */}
                                     <div className="w-full mr-4">
                                       <Link to={`/profile/${game.user_p1.unique_id}`} className="flex items-center">
                                         <div className="min-w-32 w-[100%] h-full  flex items-center">
@@ -156,8 +150,6 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                       </Link>
 
                                       <div className="w-full border-t border-[#5E97A9] rounded-full my-4"></div>
-
-                                      {/* Player 2 Details */}
                                       <Link to={`/profile/${game.user_p2.unique_id}`} className="flex items-center">
                                         <div className="min-w-32 w-[100%] h-full flex items-center">
                                           <img

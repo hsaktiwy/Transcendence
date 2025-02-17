@@ -20,7 +20,6 @@ import {
 
 export const description = "Win A linear line chart"
 
-
 const chartConfig = {
   Wins: {
     label: "Wins",
@@ -28,11 +27,9 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-
 interface LineCharFileProps {
-  data: LinechartData | undefined; // Data passed to the component
+  data: LinechartData | undefined;
 }
-
 
 export function LineCharFile({ data }: LineCharFileProps) {
   const { chartData, range } = useMemo(() => {

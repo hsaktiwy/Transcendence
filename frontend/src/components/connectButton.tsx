@@ -21,7 +21,6 @@ interface buttonInterface{
 }
 
 function ConnectButton(prop: buttonInterface) {
-  // const [isOpen, setIsOpen] = useState(false);
   const [isblock, setIsbLock] = useState<boolean>(false);
   const [btn_block, setBtn_block] = useState("Block");
   const [isfriend, setIsfriend] = useState("");
@@ -30,10 +29,9 @@ function ConnectButton(prop: buttonInterface) {
   const [loading, setLoading] = useState<boolean>(true)
   const [channelId, setChannelId] = useState<number | undefined>(undefined)
   const [blocker, setBloker] = useState<boolean>(false)
-
   const {uuid} = useParams();
-  const userContextConsumer = useContext(UserContext)
 
+  const userContextConsumer = useContext(UserContext)
   const SocketContext = useContext(WebSocketContext)
     if (!SocketContext)
         throw new Error('error')
@@ -51,7 +49,6 @@ function ConnectButton(prop: buttonInterface) {
               setChannelId(id);
       }
       catch (error){
-
 
       }
   }
@@ -158,24 +155,12 @@ function ConnectButton(prop: buttonInterface) {
     }
   }
   useEffect(()=>{
-    // and does the main user have block relationship with the searched one (the one in useparam)
     setIsfriend("")
     setFriendRequest("")
     BlockStatusCheck()
-    // friendship ? 
     FriendStatusCheck()
-    // does we have sent or recieved request, [case 1, case 2]
-    // friendship ?
-    // does we have
     setLoading(false)
   } , [uuid]);
-  // FIRST FETCH DATA ABOUT THE USER
-  // CASE 1: NO FRIEND REQUEST STATUS : SEND,BLOCK
-  // CASE 2: ...: PENDING
-  // CASE 3: FRIEND : UNFRIEND + SENDMESSAGE,BLOCK
-  // 
-
-  // add our state update to the socket channel
 
   useEffect(()=>{
     const FriendRequestAccepted = (data:NotificationPropreties)=>{
@@ -221,8 +206,7 @@ function ConnectButton(prop: buttonInterface) {
 
     }
   },[])
-  
-  
+
   const send_friend_request = ()=>{
     const notification = {
       type: 'NOTIFICATION_ADD_FRIEND',
@@ -233,108 +217,95 @@ function ConnectButton(prop: buttonInterface) {
     SocketContext?.socket?.current?.send(message)
     FriendStatusCheck()
   }
-  
-
 
   const accept_friend_request = async () =>
   {
-      try{
-
-          if (friend_req_id != -1)
-          {
-            const req = {
-              url: `/friendship/request/status/set/accept/${friend_req_id}`,
-              method: 'POST',
-              withCredentials:true
-            }
-            await mailman(req)
-            userContextConsumer?.fetchFriends()
-            const notification = {
-              type: 'NOTIFICATION_ACCEPT_FRIEND',
-              to : uuid
-            }
-            const message = JSON.stringify(notification)
-            SocketContext?.socket?.current?.send(message)
-            setFriendRequest("")
-            setIsfriend("UNFRIEND")
-            getChannelId()
-          }
-          // we need to rest all thing to get back to what it should be
+    try{
+      if (friend_req_id != -1)
+      {
+        const req = {
+          url: `/friendship/request/status/set/accept/${friend_req_id}`,
+          method: 'POST',
+          withCredentials:true
+        }
+        await mailman(req)
+        userContextConsumer?.fetchFriends()
+        const notification = {
+          type: 'NOTIFICATION_ACCEPT_FRIEND',
+          to : uuid
+        }
+        const message = JSON.stringify(notification)
+        SocketContext?.socket?.current?.send(message)
+        setFriendRequest("")
+        setIsfriend("UNFRIEND")
+        getChannelId()
       }
-      catch(e){
-          console.log(e)
-      }
+    }
+    catch(e){
+      console.log(e)
+    }
   }
 
   const Cancel_friend_request = async () =>
   {
-      try{
-
-          if (friend_req_id != -1)
-          {
-            const req = {
-              url: `/friendship/request/status/set/cancel/${friend_req_id}`,
-              method: 'DELETE',
-              withCredentials:true
-            }
-            await mailman(req)
-            const notification = {
-              type: 'NOTIFICATION_UNCONNECT',
-              to : uuid,
-              status: false
-            }
-            const message = JSON.stringify(notification)
-            SocketContext?.socket?.current?.send(message)
-            setFriendRequest("")
-            setIsfriend("CONNECT")
-          }
-          // we need to rest all thing to get back to what it should be
+    try{
+      if (friend_req_id != -1)
+      {
+        const req = {
+          url: `/friendship/request/status/set/cancel/${friend_req_id}`,
+          method: 'DELETE',
+          withCredentials:true
+        }
+        await mailman(req)
+        const notification = {
+          type: 'NOTIFICATION_UNCONNECT',
+          to : uuid,
+          status: false
+        }
+        const message = JSON.stringify(notification)
+        SocketContext?.socket?.current?.send(message)
+        setFriendRequest("")
+        setIsfriend("CONNECT")
       }
-      catch(e){
-          console.log(e)
-      }
+    }
+    catch(e){
+      console.log(e)
+    }
   }
 
   const unfriend_request = async () =>
   {
     try{
-
-        if (friend_req_id != -1)
-        {
-          const req = {
-            url: "friendship/unfriend/"+uuid,
-            method: "POST",
-            withCredentials: true,
-          }
-          await mailman(req)
-          userContextConsumer?.fetchFriends()
-          const notification = {
-            type: 'NOTIFICATION_UNCONNECT',
-            to : uuid,
-            status: false
-          }
-          const message = JSON.stringify(notification)
-          SocketContext?.socket?.current?.send(message)
-          setFriendRequest("")
-          setIsfriend("CONNECT")
+      if (friend_req_id != -1)
+      {
+        const req = {
+          url: "friendship/unfriend/"+uuid,
+          method: "POST",
+          withCredentials: true,
         }
-        // we need to rest all thing to get back to what it should be
+        await mailman(req)
+        userContextConsumer?.fetchFriends()
+        const notification = {
+          type: 'NOTIFICATION_UNCONNECT',
+          to : uuid,
+          status: false
+        }
+        const message = JSON.stringify(notification)
+        SocketContext?.socket?.current?.send(message)
+        setFriendRequest("")
+        setIsfriend("CONNECT")
+      }
     }
     catch(e){
         console.log(e)
     }
   }
- 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-
-
-
-  
   return (
     <>
       {
@@ -356,7 +327,6 @@ function ConnectButton(prop: buttonInterface) {
        </div> : 
           <motion.nav
             initial={false}
-            // animate={isOpen ? "open" : "closed"}
             className="flex flex-col justify-center items-center"
           >
               { isfriend === "UNFRIEND" &&
@@ -372,8 +342,6 @@ function ConnectButton(prop: buttonInterface) {
                 </div>
                 <p>Friend</p>
               </motion.button>
-
-              {/* Dropdown Menu */}
               {isMenuOpen && (
                 <motion.div
                   className="absolute rounded-lg    text-base right-[-160px]  top-[15%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-0 animate-pluse-right shadow-lg z-50"
@@ -383,8 +351,6 @@ function ConnectButton(prop: buttonInterface) {
                 >
                   <li
                     className='m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer   '
-                      // className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none"
-
                     onClick={unfriend_request}
                   >
                     <div className='text-lg xl:text-xl '>
@@ -395,7 +361,6 @@ function ConnectButton(prop: buttonInterface) {
                   </li>
                   <li
                   className='m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer '
-                // className="m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] hover:border-[#5E97A9] flex gap-3 items-center justify-center "
                 onClick={BlockActionCheck}
               >
                     <div className='text-xl'>
@@ -407,32 +372,21 @@ function ConnectButton(prop: buttonInterface) {
                 </motion.div>
               )}
             </div>
-                  {/* <motion.button
-                      className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none"
-                      whileTap={{ scale: 0.97 }}
-                    onClick={unfriend_request}
-                  >
-                    <div className='text-lg xl:text-xl '>
-                      <IoPersonRemoveOutline/>
-                    </div>
-                    <p >UnFriend</p>
-                    
-                  </motion.button> */}
-                  <Link to="/chat/" state={{channel_id : channelId}}>
-                    <motion.button
-                      className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none   "
-                      whileTap={{ scale: 0.97 }}
+                <Link to="/chat/" state={{channel_id : channelId}}>
+                  <motion.button
+                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none   "
+                    whileTap={{ scale: 0.97 }}
 
-                    >
-    
-                      <div className='text-xl '>
-                        <TbMessage2/>
-                      </div>
-                      <p>Message</p>
-                      
-                    </motion.button>
-                  </Link>
-                </>
+                  >
+  
+                    <div className='text-xl '>
+                      <TbMessage2/>
+                    </div>
+                    <p>Message</p>
+                    
+                  </motion.button>
+                </Link>
+              </>
               }
               { isfriend === "CONNECT" && FriendRequest === "" &&
                 <>
@@ -455,10 +409,7 @@ function ConnectButton(prop: buttonInterface) {
                       <MdBlock/>
                     </div>
                     <p>{btn_block}</p>
-                    
                     </motion.button>
-
-                  
                 </>
               }
               {FriendRequest !== "" &&

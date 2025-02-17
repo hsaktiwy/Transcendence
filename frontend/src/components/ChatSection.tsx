@@ -27,10 +27,12 @@ function ChatSection(){
     const [modalMessage, setModalMessage] = useState<string>("")
     const SocketContext = useContext(WebSocketContext)
     const userContextConsumer = useContext(UserContext)
+
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
     if (!SocketContext)
         throw new Error('error')
+
     const {AddChannel,RemoveChannel} = SocketContext
     const updateConvsState = () =>{
         if (convs && convs.length){
@@ -57,6 +59,7 @@ function ChatSection(){
             setConvs(tmpConvs)
         }
     }
+
     useEffect(()=>{
         updateConvsState()
     }, [userContextConsumer.friends])
@@ -80,7 +83,6 @@ function ChatSection(){
                         return { ...conv, LastUpdate: last_update ,messages: [...conv.messages, message_received], new_message: 1 as 0 | 1 }
                     else
                         return conv
-    
                 }
                 );
                 updatedConvs.sort((a, b)=>{
@@ -93,6 +95,7 @@ function ChatSection(){
             return prevConvs
         })
     }
+
     const get_conversation = async (channel_id:number)=>{
         try{
 
@@ -107,14 +110,11 @@ function ChatSection(){
             {
                 let list_conv:Conversation[] = [fetched_conv, ...convs]
                 setConvs(list_conv)
-                // console.log('1list conv', list_conv)
-
             }
             else
             {
                 let list_conv:Conversation[] = [fetched_conv]
                 setConvs(list_conv)
-                // console.log('2list conv', list_conv)
             }
             
         }
@@ -122,6 +122,7 @@ function ChatSection(){
             console.log(e)
         }
     }
+
     const Update_chat_notif = (data:NotificationPropreties)=>{
         const channel_id = data.channel_id
         if (convs)
@@ -132,6 +133,7 @@ function ChatSection(){
         else
             get_conversation(channel_id)
     }
+
     useEffect(() =>{
         if (loading == false)
         {
@@ -150,7 +152,6 @@ function ChatSection(){
   
     useEffect(()=>
     {
-       
         if (location?.state?.channel_id)
         {
             const {channel_id} = location.state 
@@ -163,7 +164,6 @@ function ChatSection(){
     }, [])
 
     return(
-        
         <ChatSectionContext.Provider value={{convs, setConvs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile, openModal, setOpenModal, modalMessage, setModalMessage}}>
                 {openModal && <ChatModal/>} 
                 <div className="    bg-white/5 backdrop-filter backdrop-blur-md border border-white/20  rounded-3xl   absolute top-[60px]  left-0 lg:left-[142px] h-[calc(100%-100px)] w-[calc(100%-20px)] lg:w-[calc(100%-162px)] 2xl:w-[calc(80%)] my-[20px] mx-[10px] 2xl:mx-[8%]">
