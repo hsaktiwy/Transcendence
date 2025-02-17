@@ -25,7 +25,6 @@ def get_cookies(scope):
 class JWTAuthMiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
         cookies = get_cookies(scope)
-        print("Cookies:", cookies)  # Should show all cookies
         access_token = cookies.get('access_token') 
         
         try:

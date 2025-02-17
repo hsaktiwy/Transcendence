@@ -11,8 +11,6 @@ class ProfileStatusSerializer(serializers.ModelSerializer):
         model = ProfileStatus
         fields = '__all__'
 
-
-
 class RankProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileStatus
