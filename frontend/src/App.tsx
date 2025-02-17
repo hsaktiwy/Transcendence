@@ -52,6 +52,10 @@ import MainGamePage from './game/game-container/pages/MainGamePage.jsx';
 import ChessPreLocal from './game/game-container/chess/ChessPreLocal.jsx';
 //@ts-ignore
 import ChessWinner from './game/game-container/chess/ChessWinner.jsx';
+//@ts-ignore
+import Backgrounds from './game/game-container/components/Backgounds.jsx';
+
+
 
 const App = () =>
 {
@@ -59,7 +63,7 @@ const App = () =>
   
   <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
     <BrowserRouter>
-      {/* <Backgrounds/> */}
+      <Backgrounds/>
         <AuthProvider>
           <Auth>
             <WebSocketProvider>
