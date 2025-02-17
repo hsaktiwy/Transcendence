@@ -405,15 +405,19 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
     async def broadcast_event(self, event):
         if event['payload'].get('type') == 'Game_end': #check that shit
-            user = await async_get_user(self.scope['user'].unique_id)
-            if not user:
-                return
+            user = self.scope['user']
+            # if not user:
+            #     return
             room = find_room_name(user, PPong_Rooms)
             # print('==> is the room ??', room)
             if room:
                 if (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
-                    if (len(room) == 3):
-                        room.append('Ended')
+                    print('+===> Match going to end here and the room would be setted to Ended', room[0])
+                    if (len(room) == 3) or (len(room) == 4 and room[3] == 'Invited'):
+                        remove_room(room[0], PPong_Rooms)
+                        # room.append('Ended')
+                    # elif (len(room) == 4 and room[3] == 'Invited'):
+                        # room[3] = 'Ended'
                     user_id1 = event['payload']['paddle']['x']
                     user_id2 = event['payload']['paddle']['y']
 
