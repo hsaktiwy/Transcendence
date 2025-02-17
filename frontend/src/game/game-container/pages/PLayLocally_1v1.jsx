@@ -8,6 +8,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import PlayerInput from '../components/PlayerInput';
 
 import { useLocalGamesContext } from '../game/MatchContext';
+import { toast } from 'react-toastify';
+
 
 
 const PlayLocally_1v1 = () => {
@@ -73,7 +75,7 @@ const PlayLocally_1v1 = () => {
                     });
                     navigate('/game/LocalGame')
                   } else {
-                    alert('Error: Player names must be unique and less than or equal to 8 characters.');
+                    toast.success('Error: Player names must be unique and less than or equal to 8 characters.')                    
                   }
                 }}
             />

@@ -7,6 +7,8 @@ import "./PreMultiplayerGame.css";
 
 
 import { useLocalGamesContext } from '../game/MatchContext';
+import { toast } from 'react-toastify';
+
 
 const PreMultiplayerGame = () => {
   const { setLocalGamesData } = useLocalGamesContext();
@@ -97,7 +99,7 @@ const PreMultiplayerGame = () => {
                 });
                 navigate('/game/Multiplayer')
               } else {
-                alert('Error: Player names must be unique and less than or equal to 8 characters.');
+                toast.success('Error: Player names must be unique and less than or equal to 8 characters.')                
               }
 
 
