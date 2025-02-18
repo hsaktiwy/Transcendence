@@ -773,23 +773,25 @@ const LocalGame = () => {
             if (LocalGamesData.gametype == 'Tournament'){
                 console.log('====> ON tournamentooooooo');
                 if (playerScore === 7){
-                    if (LocalGamesData.TBD1 && LocalGamesData.TBD2){
+                    if (LocalGamesData.FF_done){
                         LocalGamesData.winner = LocalGamesData.TBD1;
                     }
-                    else if (LocalGamesData.TBD1){
-                        LocalGamesData.TBD2   = LocalGamesData.player1;
-                    }else{
-                        LocalGamesData.TBD1   = LocalGamesData.player1;
+                    else if (LocalGamesData.F2_done){
+                        LocalGamesData.TBD2 = LocalGamesData.player1;
+                    }
+                    else if (LocalGamesData.F1_done){
+                        LocalGamesData.TBD1 = LocalGamesData.player1;
                     }
                 }
                 else {
-                    if (LocalGamesData.TBD1 && LocalGamesData.TBD2){
+                    if (LocalGamesData.FF_done){
                         LocalGamesData.winner = LocalGamesData.TBD2;
                     }
-                    else if (LocalGamesData.TBD1){
-                        LocalGamesData.TBD2   = LocalGamesData.player2;
-                    }else{
-                        LocalGamesData.TBD1   = LocalGamesData.player2;
+                    else if (LocalGamesData.F2_done){
+                        LocalGamesData.TBD2 = LocalGamesData.player2;
+                    }
+                    else if (LocalGamesData.F1_done){
+                        LocalGamesData.TBD1 = LocalGamesData.player2;
                     }
                 }
                 
@@ -808,6 +810,34 @@ const LocalGame = () => {
                 navigate("/game/Winner")
             }
 
+        }
+        else if (playerScore <= 7 && aiScore <= 7){
+            console.log('====> Getted Info : ', LocalGamesData);
+            if (LocalGamesData.gametype == 'Tournament'){
+                if (playerScore >= aiScore){
+                    if (LocalGamesData.FF_done){
+                        LocalGamesData.winner = LocalGamesData.TBD1;
+                    }
+                    else if (LocalGamesData.F2_done){
+                        LocalGamesData.TBD2 = LocalGamesData.player1;
+                    }
+                    else if (LocalGamesData.F1_done){
+                        LocalGamesData.TBD1 = LocalGamesData.player1;
+                    }
+                }
+                else {
+                    if (LocalGamesData.FF_done){
+                        LocalGamesData.winner = LocalGamesData.TBD2;
+                    }
+                    else if (LocalGamesData.F2_done){
+                        LocalGamesData.TBD2 = LocalGamesData.player2;
+                    }
+                    else if (LocalGamesData.F1_done){
+                        LocalGamesData.TBD1 = LocalGamesData.player2;
+                    }
+                }
+                setLocalGamesData(LocalGamesData);    
+            }
         }
       }, [playerScore, aiScore]);
 
