@@ -45,20 +45,25 @@ const RemoteGame = () => {
 
 
     useEffect(()=>{
-        console.log("=>> C protections !!!")
-        console.log("ReomteGameData           :",ReomteGameData)
-        console.log("location.state           :",location.state)
-        console.log("location.state.room_name :", location.state.room_name)
-        console.log("location.state.my_user   :", location.state.my_user)
-        console.log("location.state.p1_id     :", location.state.p1_id)
-        console.log("location.state.p2_id     :", location.state.p2_id)
-        console.log("location.state.opponent  :", location.state.opponent)
-        if (location.state){
-            if (location.state.room_name && location.state.my_user){
-                setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:location.state.p1_id, p2_id: location.state.p2_id, opponent: location.state.opponent}) //p2_id:location.state.my_user
-            }
+        if (!ReomteGameData && !location.state){
+            console.log("=>> C protections !!!")
+            navigate('/game/PreRemote');
         }
-        setDataReady(true);
+        else{
+            console.log("ReomteGameData           :",ReomteGameData)
+            if (location.state){
+                console.log("location.state           :",location.state)
+                console.log("location.state.room_name :", location.state.room_name)
+                console.log("location.state.my_user   :", location.state.my_user)
+                console.log("location.state.p1_id     :", location.state.p1_id)
+                console.log("location.state.p2_id     :", location.state.p2_id)
+                console.log("location.state.opponent  :", location.state.opponent)
+                if (location.state.room_name && location.state.my_user){
+                    setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:location.state.p1_id, p2_id: location.state.p2_id, opponent: location.state.opponent}) //p2_id:location.state.my_user
+                }
+            }
+            setDataReady(true);
+        }
     },[])
     
     // Remote LOgic
