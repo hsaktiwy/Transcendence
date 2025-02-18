@@ -14,11 +14,12 @@ import { FiUser } from "react-icons/fi";
 import {NotificationPropreties} from './UserContext'
 import { ProfileDataInterface, UserDataInterface } from '@/utils/UserDataInterface';
 import { SlLock } from "react-icons/sl";
-import { friendship } from '@/utils/interfaces';
+import { friendship, manage_button } from '@/utils/interfaces';
 
 interface buttonInterface{
   user: UserDataInterface | ProfileDataInterface | undefined
 }
+
 
 function ConnectButton(prop: buttonInterface) {
   const [isblock, setIsbLock] = useState<boolean>(false);
@@ -145,15 +146,16 @@ function ConnectButton(prop: buttonInterface) {
         const  sender:boolean = resp2.data['sender']
         const  fr_id:number = resp2.data["friend_req_id"]
         setFriendRequestId(fr_id)
+        console.log('heerere->>>>', resp2)
         if (st === "pending")
           setFriendRequest((sender) ? 'Pending': 'Accept')
-
     }
     catch(err)
     {
         console.log(err)
     }
   }
+
   useEffect(()=>{
     setIsfriend("")
     setFriendRequest("")
@@ -193,9 +195,19 @@ function ConnectButton(prop: buttonInterface) {
         userContextConsumer?.setBlockList(prev=>[...prev])
       }
     }
+    const MANAGE_BUTTONS = (data:manage_button)=>
+    {
+      if (data.action == "FRIENDSHIP")
+      {
+        FriendStatusCheck()
+      }
+    }
+
     AddChannel('FriendRequestAccepted', FriendRequestAccepted)
     AddChannel('FriendRequestReceived', FriendRequestReceived)
     AddChannel('NOTIFICATION_UNCONNECT', TOCONNECT)
+    AddChannel('NOTIFICATION_MANAGER_BUTTON', MANAGE_BUTTONS)
+
     AddChannel('NotifBlock', blocknotify)
 
     return () => {
@@ -203,7 +215,7 @@ function ConnectButton(prop: buttonInterface) {
       RemoveChannel('FriendRequestReceived')
       RemoveChannel('NOTIFICATION_UNCONNECT')
       RemoveChannel('NotifBlock')
-
+      RemoveChannel('NOTIFICATION_MANAGER_BUTTON')
     }
   },[])
 
@@ -215,7 +227,6 @@ function ConnectButton(prop: buttonInterface) {
     }
     const message = JSON.stringify(notification)
     SocketContext?.socket?.current?.send(message)
-    FriendStatusCheck()
   }
 
   const accept_friend_request = async () =>

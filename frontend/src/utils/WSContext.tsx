@@ -1,5 +1,5 @@
 import {useEffect, createContext, useRef, useContext} from 'react'
-import {channelType, WebSocketContextType, childrenInterface, friendship} from './interfaces'
+import {channelType, WebSocketContextType, childrenInterface, friendship, manage_button} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 import { AuthContext } from '@/components/AuhtenticationContext'
@@ -112,6 +112,17 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                   const notifData =  JSON.parse(message.data);
                   channels.current['NOTIFICATION_MESSAGE'](notifData)
                 }
+            }
+            if (type === 'manager_button')
+            {
+              const info: manage_button = {
+                action: data.action,
+                status: data.status
+              };
+              if (channels.current['NOTIFICATION_MANAGER_BUTTON'])
+              {
+                channels.current['NOTIFICATION_MANAGER_BUTTON'](info)
+              }
             }
             if (type === 'state'){
               const notifData =  JSON.parse(message.data);

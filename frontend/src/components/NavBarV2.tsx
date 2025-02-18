@@ -7,6 +7,7 @@ import NavBarDrop from "./NavbarDrop.tsx";
 import Search from "./Search/Search.tsx";
 import NotificationDropDown from "./Notification/NotificationDropDown.tsx";
 import MessageNotificationsDropDown from "./Notification/MessageNotificationsDropDown.tsx";
+import { useLocation } from "react-router-dom";
  
 
 
@@ -22,6 +23,7 @@ function NavBarV2(){
     const dropContainerRef = useRef<HTMLDivElement>(null)
     const notificationContainerRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
+    const location = useLocation()
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>)=>
     {
         if (searchRef.current && !searchRef.current.contains(event.relatedTarget))
@@ -46,19 +48,25 @@ function NavBarV2(){
       }, []);
     useEffect(() => {
         const handleClickOutDrop = (event: MouseEvent) => {
-        if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node) && drop)
-            setDrop(false)
-        else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
-            setNotificationDrop(false)
-        else if (messagesContainerRef.current && !messagesContainerRef.current.contains(event.target as Node) && messagesDrop){
-            setMessagesDrop(false)
+            if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node) && drop)
+                setDrop(false)
+            else if (notificationContainerRef.current && !notificationContainerRef.current.contains(event.target as Node) && notificationDrop)
+                setNotificationDrop(false)
+            else if (messagesContainerRef.current && !messagesContainerRef.current.contains(event.target as Node) && messagesDrop){
+                setMessagesDrop(false)
+            }
         }
-    }
         document.addEventListener("click", handleClickOutDrop);
         return () => {
           document.removeEventListener("click", handleClickOutDrop);
         };
       }, [drop, notificationDrop, messagesDrop]);
+    
+    useEffect(()=>{
+        if (search !=="")
+            setSearch("")
+    },[location])
+
     return(
         <>
         {
@@ -76,6 +84,7 @@ function NavBarV2(){
                         </div>
                         <div className="" >
                             <input type="text" 
+                                    value={search}
                                     placeholder="Search"
                                     className={`text-white rounded-full mx-10   ${isSearchBarActive ? '  w-[calc(70%)] px-4 py-1' : 'w-0'} bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] bg-[#2B2F32] h-10 lg:w-[50%]  lg:px-4 lg:py-1  focus:lg:w-[460px] absolute top-[70%] -translate-y-[70%] left-[10%] lg:left-[10%] outline-none transition-all duration:300 bg-transparent focus:backdrop-filter focus:backdrop-blur-3xl `}
                                     onChange={(event_object)=> setSearch(event_object.target.value)}
