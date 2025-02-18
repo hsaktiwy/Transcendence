@@ -14,10 +14,6 @@ class ListGames(generics.ListAPIView):
     queryset = Game.objects.all()
     serializer_class = GameSerializer
 
-# class CreateGame(generics.ListCreateAPIView):
-#     permission_classes = [IsAuthenticated]
-#     queryset = Game.objects.all()
-#     serializer_class = GameSerializer
 @api_view(['GET'])
 def CreateGame(request):
     try:

@@ -101,3 +101,8 @@ export interface rankInterface
     profile:ProfileRank;
     user:ProfileDataInterface;
 }
+
+export interface manage_button{
+  action: string,
+  status: string
+}

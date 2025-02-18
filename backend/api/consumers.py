@@ -17,7 +17,6 @@ from api.utils import get_cookies
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
-    
     def get_user_friends_group_names(self, user):
         try:
             list_s = FriendRequest.objects.filter(Q(sender=user, status='accepted'))
@@ -193,16 +192,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 room_name,
                 self.channel_name
             )
-            # await self.channel_layer.group_send(
-            #     room_name,
-            #     {
-            #         'type': 'send_message',
-            #         'channel_id' : channel.id,
-            #         'username': user.login,
-            #         'ConversationType' : 'Connection',
-            #         'message': f'ok, I am in channel {room_name}'
-            #     }
-            # )
     async def add_group(self, channel, user):
         try:
             if channel and user:
@@ -213,23 +202,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     room_name,
                     self.channel_name
                 )
-                # await self.channel_layer.group_send(
-                #     room_name,
-                #     {
-                #         'type': 'send_message',
-                #         'channel_id' : channel.id,
-                #         'username': user.login,
-                #         'ConversationType' : 'Connection',
-                #         'message': f'ok, I am in channel {room_name}'
-                #     }
-                # )
         except Exception as e:
             print(f"Error while trying to add to group: {e}")
 
 
     async def connect(self):
-        
-        # first let get the room name
+
         user = self.scope['user']
         if user.is_authenticated:
             self.cookies = get_cookies(self.scope)
@@ -388,6 +366,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender
                     }
                 )
+                group2_name = f'notification_user_{user.id}'
+                await self.channel_layer.group_send(
+                group2_name,
+                {
+                    'type' : "manager_button",
+                    'action' : "FRIENDSHIP",
+                    'status' : "ADD_FRIEND"
+                })
+
             elif message_json['type'] == 'NOTIFICATION_ACCEPT_FRIEND':
                 receiver = message_json['to']
                 success,notification, receiver_id, friend_request_id = await sync_to_async(self.accept_friend_notification)(receiver, user)
@@ -476,6 +463,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=message)
 
     async def profile_notif(self, event):
+        message = json.dumps(event)
+        await self.send(text_data=message)
+
+    async def manager_button(self, event):
         message = json.dumps(event)
         await self.send(text_data=message)
 

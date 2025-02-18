@@ -151,3 +151,11 @@ guidness :
             
 
 [ ] recheck for search bare limitation 
+
+
+
+
+
+
+
+ 2025-02-18 17:21:51.888 UTC [468] STATEMENT:  INSERT INTO "friendship_friendrequest" ("sender_id", "receiver_id", "status", "created_at") VALUES (7, 5, 'pending', '2025-02-18T17:21:51.888412+00:00'::timestamptz) RETURNING "friendship_friendrequest"."id"
