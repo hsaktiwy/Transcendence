@@ -8,13 +8,17 @@ services:
     networks:
       - transendence
   gunicorn_django:
-    build: backend/.
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
     container_name: gunicorn_django
     command: > 
-      sh -c "  /bin/bash -c /script.sh &&  python manage.py makemigrations &&  python manage.py collectstatic --noinput && python manage.py migrate --noinput && gunicorn api.wsgi:application --bind 0.0.0.0:8000 --log-level debug --capture-output"
+      sh -c "/bin/bash -c /wait_data_base.sh && /bin/bash -c /setup_backend.sh && gunicorn api.wsgi:application --bind 0.0.0.0:8000"
     restart: always
     volumes:
-      - ./backend:/app
+      - backend:/app
+      - media:/app/media
+      - static:/app/static
     env_file:
       - .env
     networks:
@@ -22,12 +26,14 @@ services:
     depends_on:
       - redis
   daphne_django:
-    build: backend/.
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
     container_name: daphne_django
-    command: sh -c " /bin/bash -c /script.sh && daphne -b 0.0.0.0 -p 8001 api.asgi:application"
+    command: sh -c " /bin/bash -c /wait_data_base.sh && daphne -b 0.0.0.0 -p 8001 api.asgi:application"
     restart: always 
     volumes:
-      - ./backend:/app
+      - backend:/app
     env_file:
       - .env
     networks:
@@ -41,9 +47,9 @@ services:
     container_name: frontend
     restart : always
     volumes:
-      - ./frontend:/app
-      - ./backend/media:/app/media
-      - ./backend/static:/app/static
+      - frontend:/app
+      - media:/app/media
+      - static:/app/static
     env_file:
       - .env
     depends_on:
@@ -66,3 +72,8 @@ networks:
   transendence:
     name: transendence
 
+volumes:
+  backend:
+  frontend:
+  media:
+  static:
