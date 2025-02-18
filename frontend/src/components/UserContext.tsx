@@ -187,7 +187,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         catch (err){
             console.error(err)
         }
-
     }
     const fetchSentFriendRequest = async () =>{
 
@@ -278,7 +277,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-            console.log("aaaaa=>>>>>>, " , resp)
             let notificationData : NotificationPropreties[] = resp.data
             notificationData = await getNotificationData(notificationData)
             setnotifications(notificationData.sort((a, b)=> b.id - a.id))
@@ -343,22 +341,21 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         data.content = `${data.sender.login} invites you to play a pong game`
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%> ", data.room_name)
-        // if (data.type === 'friendship')
-        // {
-            // fetchReceivedFriendRequest()
-            // fetchSentFriendRequest()
-            // fetchFriends()
-        // }      
     }
     const updateFriendList = (user: ProfileDataInterface) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
     }
     const updateFriendShip = (info: friendship) =>{
-        if(info.status!== undefined && info.status === false)
-            setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
-        else if (info.status!== undefined && info.status === true)
-            setFriends(prev => [...prev, info.sender])
+        console.log(info.status)
+        if(info.status=== undefined ){
+            if (friends.find(friend=>friend.unique_id === info.sender.unique_id) !== undefined)
+                setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
+            setBlockList(prev=>[...prev, info.sender])
+        }
+        else{
+            if (blockList.find(block=>block.unique_id === info.sender.unique_id) !== undefined)
+                setBlockList(prev=> prev.filter(block=> block.unique_id!==info.sender.unique_id))
+        }
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
         if (data.sender.unique_id === userData?.unique_id && data.state === 'offline'){
@@ -407,7 +404,10 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     },[AuthContextConsummer?.loggedIn])
 
-    
+    useEffect(()=>{
+        if (blockList.length > 0)
+            console.log(blockList)
+    },[blockList])
     const ajami = async() =>
     {
         await fetchUserData()

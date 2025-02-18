@@ -11,6 +11,7 @@ export interface User{
     last_visit:string | null;
     profile_pic:string;
     CoverProfile: string;
+    block?: boolean;
 }
 
 export interface Message{

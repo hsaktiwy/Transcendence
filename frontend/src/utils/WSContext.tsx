@@ -98,8 +98,10 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                 channels.current[info.action](info)
               if (info.action === 'NOTIFICATION_UNCONNECT')
                 channels.current['UPDATE_FRIEND_LIST'](info.sender)
-              else
+              else{
+                console.log(message.data)
                 channels.current['UPDATE_FRIENDSHIP'](info)
+              }
             }
             if (type === 'message'){
                 if (channels.current['UPDATE_CHAT_NOTIF'])

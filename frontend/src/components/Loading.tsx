@@ -2,7 +2,6 @@ import {motion} from 'framer-motion';
 
 const LoadingIndecator = () =>
 {
-
     const loadingContainerVariants = {
         start : {
             transition : {

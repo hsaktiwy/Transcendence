@@ -1,10 +1,4 @@
-// "use client"
-
-
-
 import { Label, Pie, PieChart } from "recharts"
-
-
 
 import {
   Card,
@@ -12,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+
 import {
   ChartConfig,
   ChartContainer,
@@ -20,7 +15,6 @@ import {
 } from "@/components/ui/chart"
 
 export const description = "A donut chart with text"
-
 
 
 interface LoseWins
@@ -33,6 +27,7 @@ interface LoseWins
 interface prop{
   matches:  LoseWins | undefined
 }
+
 export function PieChartFile(prop: prop) {
     const chartData = [
       { browser: "Win", Matches: prop.matches?.wins, fill: "#5E97A9" },

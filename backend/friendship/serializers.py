@@ -11,7 +11,6 @@ class FriendRequestSerializer(serializers.ModelSerializer):
 
 
 class BlockListSerializer(serializers.ModelSerializer):
-	# user = PublicUserSerializer()
 	block_users = PublicUserSerializer(many=True)
 	class Meta:
 		model = BlockList

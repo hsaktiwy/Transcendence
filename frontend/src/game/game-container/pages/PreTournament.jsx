@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import PlayerInput from '../components/PlayerInput';
 import { useLocalGamesContext } from '../game/MatchContext';
+import { toast } from 'react-toastify';
 
 import './PreTournament.css';
 
@@ -49,7 +50,7 @@ const PreTournament = () => {
       });
       navigate('/game/Tournament');
     } else {
-      alert('Error: Player names must be unique and less than or equal to 8 characters.');
+      toast.success('Error: Player names must be unique and less than or equal to 8 characters.')
     }
   };
 

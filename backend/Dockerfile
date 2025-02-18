@@ -12,4 +12,3 @@ COPY ./utils/script.sh .
 RUN chmod +x script.sh
 RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app
-# CMD /bin/bash -c /script.sh

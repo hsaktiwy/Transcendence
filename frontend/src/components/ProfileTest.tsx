@@ -1,28 +1,20 @@
 import { Link, useNavigate } from "react-router-dom"
-
-import './style-component.css'
-
+import '../css/style-component.css'
 import Achievements from "@/components/Achievements.tsx";
-
 import { PieChartFile } from "@/components/PieChart.tsx";
 import { LineCharFile } from "@/components/lineChart.tsx";
 import RankFile from "./rankFile.tsx";
-// import { import.meta.env.VITE_axiosPath ,BACKEND } from "../utils/Constants";
 import { RadarChartFile } from "@/components/RadarChartFile.tsx";
-
 import { UserDataInterface, ProfileDataInterface } from "../utils/UserDataInterface";
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import mailman from "../utils/AxiosFetcher";
-
 import { WebSocketContext } from "../utils/WSContext";
 import ConnectButton from "./connectButton.tsx";
 import { MatchHistory } from "./MatchHistroy.tsx";
-
 import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
-
 import ProfileLocked from "./blocked/Profileblocked.tsx";
 import { LoseWins, LinechartData, RadarChartInterFace, UserRankResponse,twoGames } from "@/utils/interfaces.ts";
 
@@ -39,17 +31,11 @@ const ProfileTest  = () =>{
     const [radarchartData, setRadarChartData] = useState<RadarChartInterFace | undefined>()
     const [level, setLevel] = useState<UserRankResponse | undefined>();
     const Navigate = useNavigate()
-    // const [userMatchHistory, setUserMatchHistory] = useState<MatchHistoryDataInterface[]>([]);
-    // const [matchHistoryType, setMatchHistoryType] = useState<'PONG' | 'CHESS'>('PONG')
     
-
    const {uuid} = useParams();
    const userContextConsumer = useContext(UserContext)
    if (!userContextConsumer)
     throw new Error("userContext must be used within a UserProvider");
-//    const {setUserMatchHistorey} = userContextConsumer;
-
-
 
     const fetchLineChart = async () =>  
     {
@@ -62,13 +48,12 @@ const ProfileTest  = () =>{
             const resp = await mailman(req);
             const fetchedData: LinechartData = {
                 user: resp.data.user,
-                weekly_match_data: resp.data.weekly_match_data, // This should already be an array
+                weekly_match_data: resp.data.weekly_match_data,
             };
             setLineChartData(fetchedData);
-            // setMatches(resp.data);
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error(err)
     }}
     const fetchLevle = async () =>
         {
@@ -101,9 +86,7 @@ const ProfileTest  = () =>{
             console.error("dddddd======????",err)
         }
     }
-
     const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
-  
     const getMatchHistoryData = async () => {
       const req = {
         url: `/game/get_matches/${uuid}/`,
@@ -116,23 +99,21 @@ const ProfileTest  = () =>{
 
       }
     };
-
-      
+ 
    const fetchUserData = async () =>{
     try{
         const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
         if (user.length === 0)
         {
             setIsLoading(true);
- 
-                const req = {
-                    url: `/api/users/${uuid}/`,
-                    method: 'GET',
-                }
-                
-                const resp = await mailman(req)
-                const respData: ProfileDataInterface = resp.data
-                setProfileData(respData)
+            const req = {
+                url: `/api/users/${uuid}/`,
+                method: 'GET',
+            }
+            
+            const resp = await mailman(req)
+            const respData: ProfileDataInterface = resp.data
+            setProfileData(respData)
         }
         else{
             setProfileData(user[0])
@@ -142,7 +123,6 @@ const ProfileTest  = () =>{
         Navigate('/404')
     }
   };
-
 
   const BlockStatusCheck = async ()=>
     {
@@ -174,12 +154,9 @@ const ProfileTest  = () =>{
    useEffect(() =>{
     if (userContextConsumer?.userData?.unique_id !== uuid){
         fetchUserData().finally(() => {
-            // Add a delay of 1.2 seconds before setting isLoading to false
             const timer = setTimeout(() => {
               setIsLoading(false);
             }, 600);
-      
-            // Cleanup timer
             return () => clearTimeout(timer);
           });
           BlockStatusCheck();
@@ -225,25 +202,21 @@ const ProfileTest  = () =>{
                                         className="relative bg-cover bg-center shadow-md px-5 lg:px-10 rounded-3xl grid grid-rows-1 transition-all duration-300 ease-in-out"
                                         style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})` }}
                                         >
-                                            {/* Dark overlay for the background, stays behind the content */}
-                                            <div className="absolute  inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all duration-300 ease-in-out rounded-3xl"></div>
-                                            
-                                            {/* Content */}
+                                            <div className="absolute  inset-0 bg-black/60  rounded-3xl"></div>
                                             <div className="relative  z-10">
                                                 <div className="h-20 hidden  sm:flex items-center xxl:items-end ">
                                                 <div className="h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
                                                     <div className="text-xl text-white font-semibold xxl:text-lg">{profileData?.login}</div>
                                                 </div>
                                                 </div>
-
                                                 <div className="flex flex-col mt-7 xxl:mt-12  justify-center items-center ">
                                                 <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
                                                 <div className="h-3 w-[100%] bg-[#444444] rounded-full">
                                                     <div
                                                             style={{
-                                                                width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%` // Reset at every level
+                                                                width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%`
                                                             }}
-                                                            className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
+                                                            className="h-3 w-[53%] bg-gradient-to-tr from-[#23363c] to-[#5E97A9] rounded-full"
                                                             /> 
 
                                                     </div>
@@ -265,30 +238,6 @@ const ProfileTest  = () =>{
                         </div>
                         <div className="md:hidden xxl:block xl:col-span-4 xl:row-span-4 2xl:col-span-3 xxl:row-span-6 relative rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-3xl shadow-[#22333869] h-full w-full">
                                 <div className="w-full h-full flex flex-col">
-                                    {/* Tab Navigation */}
-                                    {/* <div className="flex ">
-                                    {["PONG", "CHESS"].map((type) => (
-                                        <button
-                                        key={type}
-                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                                            matchHistoryType === type
-                                            ? " rounded-b-none"
-                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                                        } hover:text-[#5E97A9]`}
-                                        onClick={() => switchMatchHistoryType(type)}
-                                        >
-                                        <div>
-                                            {
-                                                type == "PONG" ?        
-                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                                     :
-                                                     <div><img className="w-6" src="../strategy.png"/></div>
-                                        }
-                                        </div>
-                                        {type}
-                                        </button>
-                                    ))}
-                                    </div> */}
                                     <MatchHistory data={userMatchHistory} username={profileData?.login} /> 
                                 </div>
                             </div>
@@ -302,8 +251,8 @@ const ProfileTest  = () =>{
                             </div>
                             
                         </div>
-                        <div className="row-span-4 relative md:col-span-6 md:row-span-3 xl:col-span-4 xl:h-96 2xl:col-span-4 xxl:h-[548px] xxl:col-span-3">
-                            <RankFile/>
+                        <div className="row-span-3 relative  md:col-span-6 md:row-span-3 xl:col-span-4 xl:h-96 2xl:col-span-4 xxl:h-[548px] xxl:col-span-3">
+                            <RankFile user={profileData}/>
                           
                         </div>
                         <div className="row-span-2  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">
@@ -314,31 +263,7 @@ const ProfileTest  = () =>{
                         </div>
                         <div className=" row-span-2 hidden md:block md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden rounded-2xl bg-gradient-to-br from-[#242b2f] to-[#1b1e1f]  shadow-3xl shadow-[#22333869]  xl:h-96 h-full">
 
-                            <div className="w-full h-full flex flex-col">
-                                    {/* Tab Navigation */}
-                                    {/* <div className="flex ">
-                                    {["PONG", "CHESS"].map((type) => (
-                                        <button
-                                        key={type}
-                                        className={`px-4 py-4 text-sm font-medium w-full flex justify-center items-center gap-3 rounded-md transition-all ${
-                                            matchHistoryType === type
-                                            ? " rounded-b-none"
-                                            : "text-gray-500 bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] "
-                                        } hover:text-[#5E97A9]`}
-                                        onClick={() => switchMatchHistoryType(type)}
-                                        >
-                                        <div>
-                                            {
-                                                type == "PONG" ?        
-                                                    <img src="/assets/svg/game.svg" alt="Message Icon" className="w-5 h-full" />
-                                                     :
-                                                     <div><img className="w-6" src="../strategy.png"/></div>
-                                        }
-                                        </div>
-                                        {type}
-                                        </button>
-                                    ))}
-                                    </div> */}
+                            <div className="w-full h-full flex flex-col">                                   
                                     <MatchHistory data={userMatchHistory} username={profileData?.login} />
                                 </div>
                         </div>
