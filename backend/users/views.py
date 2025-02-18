@@ -376,8 +376,8 @@ def Search(request):
         SerializedUsers = SearchUserSerializer(Users, many=True)
 
         return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
-    except:
-        return Response({"error": "wala\n"},status=400)
+    except Exception as e:
+        return Response({"error": str(e)},status=400)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

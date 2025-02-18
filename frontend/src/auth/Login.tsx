@@ -177,7 +177,7 @@ const Login = () => {
                                     <p className='text-lg font-normal '>Please Enter your details</p>
                                 </div>
                                 <div className="mb-4">
-                                    <label htmlFor="email" className="block text-white font-bold mb-2">Email:</label>
+                                    <label  className="block text-white font-bold mb-2">Email:</label>
                                     <input
                                         autoComplete='off'
                                         type="email"
@@ -189,7 +189,7 @@ const Login = () => {
                                     />
                                 </div>
                                 <div className="mb-6 relative ">
-                                    <label htmlFor="password" className="block text-white font-bold mb-2">Password:</label>
+                                    <label  className="block text-white font-bold mb-2">Password:</label>
                                     <input
                                         autoComplete='off'
                                         type={hide  ? 'password' : 'text'}
