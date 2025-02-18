@@ -59,11 +59,11 @@ function Tournament() {
   
   useEffect(() => {
     if (LocalGamesData.F1_turn){
-      toast.success('Playing now ' + Matches.Semi_Final_1.player1 + ' ' + Matches.Semi_Final_1.player2)
+      toast.success('Playing now : ' + Matches.Semi_Final_1.player1 + ' vs ' + Matches.Semi_Final_1.player2)
     } else if(LocalGamesData.F2_turn){
-      toast.success('Playing now ' + Matches.Semi_Final_2.player1 + ' ' + Matches.Semi_Final_2.player2)    
+      toast.success('Playing now : ' + Matches.Semi_Final_2.player1 + ' vs ' + Matches.Semi_Final_2.player2)    
     } else if(LocalGamesData.FF_turn){
-      toast.success('Playing now ' + Matches.Final.player1 + ' ' + Matches.Final.player2) 
+      toast.success('Playing now : ' + Matches.Final.player1 + ' vs ' + Matches.Final.player2) 
     }
 
   }, [LocalGamesData.F1_turn, LocalGamesData.F2_turn, LocalGamesData.FF_turn])
@@ -141,16 +141,16 @@ function Tournament() {
           id: 1,
           date: new Date().toDateString(),
           teams: [
-            { name: Matches.Semi_Final_1?.player1 || 'TBD' },
-            { name: Matches.Semi_Final_1?.player2 || 'TBD' },
+            { name: Matches.Semi_Final_1?.player1 || '-----' },
+            { name: Matches.Semi_Final_1?.player2 || '-----' },
           ],
         },
         {
           id: 2,
           date: new Date().toDateString(),
           teams: [
-            { name: Matches.Semi_Final_2?.player1 || 'TBD' },
-            { name: Matches.Semi_Final_2?.player2 || 'TBD' },
+            { name: Matches.Semi_Final_2?.player1 || '-----' },
+            { name: Matches.Semi_Final_2?.player2 || '-----' },
           ],
         },
       ],
@@ -162,8 +162,8 @@ function Tournament() {
           id: 3,
           date: new Date().toDateString(),
           teams: [
-            { name: Matches.Final?.player1 || 'TBD' },
-            { name: Matches.Final?.player2 || 'TBD' },
+            { name: Matches.Final?.player1 || '-----' },
+            { name: Matches.Final?.player2 || '-----' },
           ],
         },
       ],
@@ -175,7 +175,7 @@ function Tournament() {
           id: 4,
           date: new Date().toDateString(),
           teams: [
-            { name: Matches.Final?.winner || 'TBD' },
+            { name: Matches.Final?.winner || '-----' },
             { name: ' ' },
           ],
         },
