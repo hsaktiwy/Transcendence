@@ -402,7 +402,7 @@ function ConnectButton(prop: buttonInterface) {
               { isfriend === "CONNECT" && FriendRequest === "" &&
                 <>
                   <motion.button
-                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px] duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none  "
+                    className="text-white m-2 px-4 py-2 xl:h-10 xl:px-7 2xl:py-1 font-semibold rounded-xl border border-white/30 text-sm xl:text-md min-w-[120px]  duration-200 transition-all active:bg-[#5E97A9] hover:border-[#5E97A9] flex gap-3 items-center justify-center focus:outline-none active:outline-none  "
                     whileTap={{ scale: 0.97 }}
                     onClick={send_friend_request}
                   >

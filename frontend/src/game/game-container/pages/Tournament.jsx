@@ -184,20 +184,21 @@ function Tournament() {
   ];
 
   return (
-    <div className="main-game-page-container">
+    <div className="main-game-page-container ">
       <div className="tournament-page">
         <div className="tournament-layout">
-          <div className="bracket-section">
+          <div className=" bg-white/5 backdrop-filter backdrop-blur-md border  border-white/20 w-full h-full rounded-3xl ">
             <div className="bracket-display">
               <center>
-                <Bracket rounds={rounds}/>
+                <Bracket className rounds={rounds}/>
               </center>
             </div>
           </div>
 
-          <div className="matches-section">
-            <div className="matches-column">
-              <h1 className="tournament-heading">MATCHES HISTORY</h1>
+          <div className="matches-section border bg-white/5 backdrop-filter backdrop-blur-md  border-white/20 w-full h-full ">
+            <div className=" py-5 bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-3xl rounded-3xl w-full mx-6  flex justify-center items-center flex-col">
+              <h1 className="tournament-heading ">MATCHES HISTORY</h1>
+              <div className='h-full  '>
                 {(Matches.Semi_Final_1.Done && <MatchHistory 
                   matchId="Semi_Final_1"
                   matchData={Matches.Semi_Final_1}
@@ -211,12 +212,15 @@ function Tournament() {
                   matchData={Matches.Final}
                 />)}
 
+              </div>
+
             </div>
 
-            <div className="vertical-line"/>
+            <div className="vertical-line "/>
 
-            <div className="matches-column">
-              <h1 className="tournament-heading">MATCHES QUEUE</h1>
+            <div className="py-5 bg-gradient-to-br from-[#242b2f] to-[#1b1e1f] shadow-3xl rounded-3xl w-full mx-6  flex justify-center items-center flex-col">
+              <h1 className="tournament-heading ">MATCHES QUEUE</h1>
+              <div className='h-full flex justify-center  items-center w-full'>
                 {(Matches.Semi_Final_1.Their_turn 
                  && <MatchCard 
                   matchId="Semi_Final_1"
@@ -238,6 +242,7 @@ function Tournament() {
                   onReady={handleReady}
                   onStartMatch={handleStartMatch}
                 />)}
+              </div>
             </div>
           </div>
         </div>
