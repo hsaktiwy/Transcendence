@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-// import { axiosPath } from './Constants';
 
 const mailman = axios.create(
     {

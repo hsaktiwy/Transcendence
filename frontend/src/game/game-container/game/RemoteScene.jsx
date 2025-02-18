@@ -80,7 +80,9 @@ const RemoteGame = () => {
     let ball_x     = 0;
     let ball_y     = 0;
     let ball_z     = 0;
-    let Objects  = [];
+    let Objects    = [];
+    let my_score   = 0
+    let opp_score  = 0
 
     let OppmouseDirection;
 
@@ -123,12 +125,12 @@ const RemoteGame = () => {
 //
         gameSocket.onerror = (error) => {
             console.error("WebSocket Error:", error);
-            navigate('/game/PreRemote');
+            // navigate('/game/PreRemote');
         };
         
         gameSocket.onclose = () => {
             console.log("Matchmaking WebSocket Closed");
-            navigate('/game/PreRemote');
+            // navigate('/game/PreRemote');
         };
         
         gameSocket.onmessage = (event) => {
@@ -158,17 +160,6 @@ const RemoteGame = () => {
                 navigate('/game/Winner');
             }
             else {
-
-            
-            Aix               = data['paddle']['x'];
-            Aiy               = data['paddle']['y'];
-
-            ball_count        = data['ball']['c'];
-
-            ball_x            = data['ball']['x'];
-            ball_y            = data['ball']['y'];
-            ball_z            = data['ball']['z'];
-
 
             state             = Boolean(data['ball']['state']);
 
@@ -205,19 +196,37 @@ const RemoteGame = () => {
                 navigate('/game/Winner');
             }
             
-            if(ball_count > Objects.length){
-                console.log('ball should be created here !')
-                createSphere(new THREE.Vector3(ball_x, ball_y, ball_y), false);
+            if (data){
+                Aix               = data['paddle']['x'];
+                Aiy               = data['paddle']['y'];
+    
+                ball_count        = data['ball']['c'];
+    
+                ball_x            = data['ball']['x'];
+                ball_y            = data['ball']['y'];
+                ball_z            = data['ball']['z'];
+    
+                my_score          = data['score']['p2']
+                opp_score         = data['score']['p1']
+    
+                if (aiScore != opp_score){
+                    console.log(aiScore, opp_score);
+                    setAiScore(opp_score)
+                }
+                if (playerScore != my_score){
+                    console.log(playerScore, my_score);
+                    setAiScore(my_score)
+                }
+                if(ball_count > Objects.length){
+                    console.log('ball should be created here !')
+                    createSphere(new THREE.Vector3(ball_x, ball_y, ball_y), false);
+                }
+                if(Objects.length && Objects[Objects.length - 1].created_by_me === false){
+                    Objects[Objects.length - 1].sphere.position.x = -ball_x;
+                    Objects[Objects.length - 1].sphere.position.y = ball_y;
+                    Objects[Objects.length - 1].sphere.position.z = -ball_z;
+                }
             }
-            if(Objects.length && Objects[Objects.length - 1].created_by_me === false){
-                Objects[Objects.length - 1].sphere.position.x = -ball_x;
-                Objects[Objects.length - 1].sphere.position.y = ball_y;
-                Objects[Objects.length - 1].sphere.position.z = -ball_z;
-            }
-            
-            // sphere.position.x = -ball_x;
-            // sphere.position.y = ball_y;
-            // sphere.position.z = -ball_z;
             
         }
         };
@@ -693,6 +702,10 @@ const RemoteGame = () => {
                     
                     status: Objects[Objects.length - 1]?.created_by_me ?? false,
                     state : end_state
+                },
+                score:{
+                    p1: playerScore,
+                    p2: aiScore,
                 }
             };
             if (gameSocket.readyState === 1)

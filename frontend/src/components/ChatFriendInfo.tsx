@@ -1,6 +1,6 @@
 import { useContext, useState , useEffect} from "react";
 import {ChatSectionContext} from "../utils/ChatContext"
-import { RadarChartInterFace} from "@/utils/interfaces";
+import { RadarChartInterFace, UserRankResponse} from "@/utils/interfaces";
 import { IoCloseSharp } from "react-icons/io5";
 
 import { VscGame } from "react-icons/vsc";
@@ -48,7 +48,28 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
     const [_Status, setStatus] = useState<string>("Block")
     if (!chatContext || !userContext)
      throw new Error('error')
-    const user2_level:number = (Math.random() * 10)
+
+
+    const [level, setLevel] = useState<UserRankResponse | undefined>();
+    
+    const fetchLevle = async () =>
+        {
+            try{
+                const req = {
+                    url: `/profile/get_rank_user/${uuid}/`,
+                    method: 'GET',
+                    withCredentials: true,
+                }
+                const resp = await mailman(req);
+                if(resp.data)
+                    setLevel(resp.data);
+            }
+            catch (err){
+                console.error("dddddd======????",err)
+            }
+        }
+        
+
     const fetchMatches = async () =>
         {
             try{
@@ -88,7 +109,8 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
     useEffect(()=>{
         BlockStatusCheck()
         fetchMatches()
-    },[/*userContext.action, chatContext.active,*/  /*radarchartData*/])
+        fetchLevle()
+    },[userContext.action  /*radarchartData*/])
 
     return(
         <>          
@@ -133,11 +155,11 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
                                     {chatContext.active ? `@${chatContext.active.user2.login}` : ''}
                                 </p>
                                 <h2>
-                                    <span>{chatContext.active ? `${user2_level.toFixed(2)} Level` : ''}</span>
+                                    <span>{chatContext.active ? `${level?.level.toFixed(2)} Level` : ''}</span>
                                 </h2>
                                 <div className="relative my-3 w-full h-2 bg-white/80 rounded-full">
                                     <div className="absolute top-0 left-0 bg-[#5E97A9] h-full rounded-full" 
-                                        style={{ width: chatContext.active ? `${((user2_level - Math.floor(user2_level)) * 100).toFixed()}%` : '0%' }}>
+                                        style={{ width: chatContext.active ? `${((level?.level ?? 0 - Math.floor(level?.level ?? 0)) * 100).toFixed()}%` : '0%' }}>
                                     </div>
                                 </div>
                             </div>
@@ -165,8 +187,8 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
                     </div>
 
                     <div className="">
-                    <div className="mx-3 bg-gradient-to-br from-[#283137] to-[#242729] rounded-xl overflow-x-auto whitespace-nowrap flex justify-center items-center px-4">
-                        <div className="flex gap-4">
+                    <div className="mx-3 bg-gradient-to-br from-[#283137]  py-2 to-[#242729] rounded-xl overflow-x-auto whitespace-nowrap flex justify-start items-center px-4">
+                        <div className="flex  h-44 2xl:h-60 gap-4">
                             <Achievements uuid={uuid} />
                         </div>
                     </div>

@@ -11,17 +11,15 @@ import { toast } from "react-toastify";
 
 import { UserDataInterface } from "../utils/UserDataInterface";
 function Settings() {
-
     let csrfToken:string = cookies.get('csrftoken');
     const userContextConsumer = useContext(UserContext)
-    // const [userData, setUserData] = useState<UserDataInterface | null>(null)
     const [activeSettingSection , setActiveSettingsSection] = useState<string>('general')
 
     if (!userContextConsumer)
         throw new Error("userContext must be used within a UserProvider");
+
     const handleProfilChanged = async (e: ChangeEvent<HTMLInputElement>) =>{
         e.preventDefault()
-
         if (e.target.files && e.target.files[0]){
             let uploadUrl=  `/api/user/upload_pic/`
             if(e.target.id === 'CoverProfile')
@@ -54,7 +52,6 @@ function Settings() {
                         toast.success('Cover picture changed succesfully')
                     }
                     userContextConsumer.setUserData(newUserData!)
-
                 }
             }
             catch (err){

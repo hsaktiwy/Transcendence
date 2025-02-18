@@ -17,6 +17,7 @@ interface FormInputPropInterface {
     inputsError: SettingsInputsErrorInterface,
     setInputError: React.Dispatch<React.SetStateAction<SettingsInputsErrorInterface> >,
 }
+
 const GeneralSettingsInput = (prop: FormInputPropInterface)=>{
     const {value,name, type,label, inputsData ,pattern ,setInputsData, setChanged, changed ,errorMessage, inputsError, setInputError, ...inputProps} = prop
     const [error, setError] = useState<boolean>(false)
