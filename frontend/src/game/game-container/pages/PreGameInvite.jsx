@@ -106,12 +106,10 @@ const PreInvite = () => {
                         
                         // Update Reomte context
                         
-                        setReomteGameData(
-                            ReomteGameData
-                        );
-                    if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
-                        tmpsocket.close()
-                    }
+                        if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
+                            tmpsocket.close()
+                        }
+                        setReomteGameData(ReomteGameData);
                         navigate('/game/RemoteGame');
                     }
                 }
