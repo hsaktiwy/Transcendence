@@ -71,19 +71,20 @@ def get_match_history(request, uuid):
     try:
         user = MyUser.objects.get(unique_id=uuid)
 
-        # Get the last 5 PONG games
         pong_games = Game.objects.filter(
             Q(user_p1=user) | Q(user_p2=user),
             type='PONG'
         ).order_by('-time')[:5]
 
-        # Get the last 5 CHESS games
         chess_games = Game.objects.filter(
             Q(user_p1=user) | Q(user_p2=user),
             type='CHESS'
         ).order_by('-time')[:5]
 
-        # Serialize the data
+        if not pong_games.exists() and not chess_games.exists():
+            return Response({'matches': []}, status=200)
+
+
         pong_matches = GameSerializer(pong_games, many=True)
         chess_matches = GameSerializer(chess_games, many=True)
 
