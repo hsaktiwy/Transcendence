@@ -44,14 +44,16 @@ def get_Win_Lose(request,uuid):
 @api_view(['GET'])
 def get_Rank_User(request, uuid):
     try:
-        user = MyUser.objects.get(unique_id=uuid)
+        user = get_object_or_404(MyUser, unique_id=uuid)
         profile_status = get_object_or_404(ProfileStatus, id_user_fk=user)
 
         last_match = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).order_by('-time').first()
 
         if not last_match:
-            return Response({'error': 'No matches found'}, status=400)
-
+            return Response({'user_id': str(user.unique_id),
+                'xp': 0,
+                'level': 0}, status=200)
+        
         if profile_status.last_match_id == last_match.id:
             return Response({  
                 'user_id': str(user.unique_id),
@@ -90,7 +92,7 @@ def get_Rank_User(request, uuid):
 @api_view(['GET'])
 def get_top_rank(request):
     try:
-        ranked_profiles = ProfileStatus.objects.all().order_by('-level')
+        ranked_profiles = ProfileStatus.objects.all().order_by('-level')[:10]
 
         serialized_profiles = RankProfileSerializer(ranked_profiles, many=True)\
         

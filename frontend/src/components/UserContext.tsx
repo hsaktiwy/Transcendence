@@ -157,7 +157,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         try
         {
             const req = {
-                url: `/game/get_matches/${userData?.unique_id}/PONG`,
+                url: `/game/get_matches/${userData?.unique_id}/`,
                 method: 'GET',
             };
             const resp = await mailman(req);
