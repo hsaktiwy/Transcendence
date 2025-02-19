@@ -26,16 +26,17 @@ const ChessWinner = () => {
     const { ReomteGameData } = useRemoteGameContext();
     const { LocalGamesData } = useLocalGamesContext();
     
-    
+
     useEffect( () => {
         if ((ReomteGameData.winner === null || ReomteGameData.winner === undefined)
-          // && (LocalGamesData.gametype === null  || LocalGamesData.gametype === undefined)
+          && (LocalGamesData.gametype === null  || LocalGamesData.gametype === undefined)
         ){
           navigate('/game/Chess_Lobby');
         };
         
       }
     )
+
     
     if ((ReomteGameData !== null && ReomteGameData !== undefined) && (ReomteGameData.winner !== null && ReomteGameData.winner !== undefined)){
       winner = ReomteGameData.winner;
