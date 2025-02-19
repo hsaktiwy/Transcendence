@@ -67,7 +67,7 @@ function ChatSession(){
     useEffect(() =>{
         const handleCloseMenu = (e:any) =>
         {
-            if(e.target && e.target.parentElement && e.target.parentElement.className.split(' ')[0] !== 'drop')
+            if(e.target && e.target.parentElement && typeof e.target.parentElement.className === "string" && e.target.parentElement.className.split(' ')[0] !== 'drop')
             {
                 if (openDrop)
                     setOpenDrop(false)
@@ -89,10 +89,14 @@ function ChatSession(){
         {
             if (socket?.current && socket?.current.readyState === WebSocket.OPEN)
             {
-                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.unique_id}` , message : message, channel_id: chatContext.active?.channelId})
-                socket?.current.send(holder)
-                holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
-                socket?.current.send(holder)
+                let _message = message.trim();
+                if (_message.length > 0)
+                {
+                    let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.unique_id}` , message : _message, channel_id: chatContext.active?.channelId})
+                    socket?.current.send(holder)
+                    holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : _message})
+                    socket?.current.send(holder)
+                }
                 setMessage('')
             }
             else
@@ -106,10 +110,14 @@ function ChatSession(){
         {
             if (socket?.current && socket?.current.readyState === WebSocket.OPEN)
             {
-                let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.unique_id}` , message : message, channel_id: chatContext.active?.channelId})
-                socket?.current.send(holder)
-                holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
-                socket?.current.send(holder)
+                let _message = message.trim();
+                if (_message.length > 0)
+                {
+                    let holder:string = JSON.stringify({type: 'NOTIFICATION_MESSAGE', to:`${chatContext.active?.user2.unique_id}` , message : message, channel_id: chatContext.active?.channelId})
+                    socket?.current.send(holder)
+                    holder = JSON.stringify({type: 'MESSAGE', channel: 'CHATROOM' + chatContext.active?.channelId, message : message})
+                    socket?.current.send(holder)
+                }
                 setMessage('')
             }
             else
@@ -182,7 +190,6 @@ function ChatSession(){
             setUpdate(true)
         }
     }, []);
-
 
     useEffect(()=>
     {
@@ -328,18 +335,6 @@ function ChatSession(){
                                                 {Status}
                                             </p>
                                         </li>
-                                        <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer "  onClick={
-                                            () => {
-                                                chatContext.setOpenModal(true)
-                                                chatContext.setModalMessage("delete this conversation")
-                                            }
-                                        }>
-                                                <span className="inline-block text-xl"><IoTrashOutline/></span>
-                                            <p>
-                                                Delete Conversation
-                                            </p>
-                                        </li>
-
                                     </ul>
                                 </div>
                             </div>
@@ -365,7 +360,7 @@ function ChatSession(){
                     }
                 </div>
                 <div id="conversation-footer-container" className="py-4 px-16 flex justify-between items-center gap-1 sm:gap-4  ">
-                    <input type="text" placeholder="Message" className=" bg-transparent rounded-full border border-white/20 focus:outline-none text-white   text-sm sm:text-md px-4 py-4  basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
+                    <input type="text" placeholder="Message" className=" bg-transparent rounded-full border border-white/20 focus:outline-none text-white   text-sm sm:text-md px-4 py-4  basis-[95%]" maxLength={1000} value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
                     <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
                         <RiSendPlaneFill />
                     </span>

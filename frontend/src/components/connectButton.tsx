@@ -146,7 +146,6 @@ function ConnectButton(prop: buttonInterface) {
         const  sender:boolean = resp2.data['sender']
         const  fr_id:number = resp2.data["friend_req_id"]
         setFriendRequestId(fr_id)
-        console.log('heerere->>>>', resp2)
         if (st === "pending")
           setFriendRequest((sender) ? 'Pending': 'Accept')
     }

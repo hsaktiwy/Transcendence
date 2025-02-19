@@ -12,42 +12,31 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 	serializer_class = ChannelSerializer
 
 	def get(self, request, packetSize,*args, **kwargs):
-		# we will access to the channels that are related to our user,
-		# then retreave all conversation and build a json and return it to the user
 		try :
 			user = request.user
-			# extract the packet size
 			channels = Channel.objects.filter(users__id=user.id).order_by('-last_update')
 			consversations = []
 			for channel in channels:
 				conversation_status = 0
 				new_messages = False
 				packet_max_size = 0
-				# check for invalide conversation
 				user_list = channel.users.exclude(id=user.id)
 				if (len(user_list) > 0):
 					other_user = user_list[0]
 					other_user_block_list = BlockList.objects.get(user=other_user)
 					is_blocking = other_user_block_list.block_users.filter(id=user.id).exists()
-					# check if one if the user is blocking the other one
 					if is_blocking:
 						conversation_status = 1
 				if conversation_status == 0:
-					# check if the other user is blocking our user
 					user_block_list = BlockList.objects.get(user=user)
 					is_blocking = user_block_list.block_users.filter(id=other_user.id).exists()
 					if  is_blocking:
 						conversation_status = 1
 				if conversation_status == 0:
 					messages = Message.objects.filter(id_channel_fk=channel.id).order_by('-timestamp')
-					# first let creat the paginator object called paginator
-					print(packetSize)
 					paginator = Paginator(messages, packetSize)
-					#page = 1
 					packet_max_size = paginator.num_pages
 					packet = paginator.page(1)
-
-					# reverce the packet after recieving it
 					packet = list(packet.object_list)[::-1]
 					if len(packet) > 0:
 						for message in packet:
@@ -91,22 +80,15 @@ class ConversationUpdateAPIVIEW(generics.RetrieveAPIView):
 	serializer_class = ChannelSerializer
 
 	def get(self, request, channelId,packetSize, packetToAdd,*args, **kwargs):
-		# we will access to the channels that are related to our user,
-		# then retreave all conversation and build a json and return it to the user
 		try :
 			user = request.user
-			# check if the channel that we have container our user o if it does exist
 			channel = Channel.objects.get(id=channelId)
 			check  = channel.users.filter(id=user.id).exists()
 			if check == False:
 				return  Response({'Error' : user.login + " is not in the conversation channel "+str(channelId)}, status=status.HTTP_400_BAD_REQUEST)
 			messages = Message.objects.filter(id_channel_fk=channelId).order_by('-timestamp')
-			# first let creat the paginator object called paginator
-			print(packetSize)
 			paginator = Paginator(messages, packetSize)
-			#page = 1
 			packet = paginator.page(packetToAdd)
-			# reverce the packet after recieving it
 			packet = list(packet.object_list)[::-1]
 			MessagesSerialized = MessageSerializer(packet, many=True)
 			return Response({
@@ -145,22 +127,15 @@ def get_conversation(request, channelId, packetSize):
 					conversation_status = 1
 			if conversation_status == 0:
 				messages = Message.objects.filter(id_channel_fk=channel.id).order_by('-timestamp')
-				# first let creat the paginator object called paginator
-				print(packetSize)
 				paginator = Paginator(messages, packetSize)
-				#page = 1
 				packet_max_size = paginator.num_pages
 				packet = paginator.page(1)
-
-				# reverce the packet after recieving it
-				print("--------------->before,", channel.id)
 				packet = list(packet.object_list)[::-1]
 				if len(packet) > 0:
 					for message in packet:
 						if message.sender!=user and message.isread == False:
 							new_messages = True
 							break
-				print("--------------->Wala,", channel.id)
 			MessagesSerialized = MessageSerializer(packet, many=True) if conversation_status == 0 else None
 			users = channel.users.all()
 			if len(users) < 2:
