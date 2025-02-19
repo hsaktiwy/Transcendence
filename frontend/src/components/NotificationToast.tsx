@@ -20,9 +20,11 @@ export interface senderInterface {
     birthDay: string;
 
 }
+
 interface NotificationsList{
     items: NotificationPropreties[]
 }
+
 interface typeInterface{
     'system': JSX.Element;
     'friendship': JSX.Element,
@@ -30,6 +32,7 @@ interface typeInterface{
     'tournament': JSX.Element,
     'message': JSX.Element,
 }
+
 const notifType: typeInterface = {
     'system': <RiNotification2Line/>,
     'friendship': <IoPersonAddOutline/>,
@@ -37,6 +40,7 @@ const notifType: typeInterface = {
     'tournament': <RiGamepadLine/>,
     'message': <BiMessageSquareDetail/>,
 }
+
 const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     
     const userContextConsumer = useContext(UserContext)

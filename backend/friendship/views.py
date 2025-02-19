@@ -238,7 +238,6 @@ def GetBlockList(request):
 		user= request.user
 		block_list = BlockList.objects.filter(user=user)
 		serialized_data = BlockListSerializer(block_list, many=True)
-		print(serialized_data.data[0])
 		return Response(serialized_data.data[0].get('block_users'), status=status.HTTP_200_OK)
 	except BlockList.DoesNotExist:
 		return Response({'Error':'user does not exist'}, status=404)

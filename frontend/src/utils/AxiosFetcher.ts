@@ -8,7 +8,6 @@ const mailman = axios.create(
     }
 );
 
-// Request Interceptor
 mailman.interceptors.request.use(
     (config) => {
         if (!config.headers['Content-Type'])
