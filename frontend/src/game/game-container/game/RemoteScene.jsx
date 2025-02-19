@@ -65,6 +65,9 @@ const RemoteGame = () => {
             }
             setDataReady(true);
         }
+        if (!ReomteGameData.my_user && !ReomteGameData.opponent){
+            navigate('/game/PreRemote');
+        }
     },[])
     
     // Remote LOgic
