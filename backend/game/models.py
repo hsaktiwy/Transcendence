@@ -24,12 +24,10 @@ class Game(models.Model):
     loser = models.ForeignKey('users.MyUser', on_delete=models.CASCADE, related_name='losts', null=True, blank=True)
     score_p1 = models.IntegerField(default=0)
     score_p2 = models.IntegerField(default=0)
-    # this can be useless 
     status =  models.CharField(
             max_length=20,
             choices=[(tag.value, tag.name) for tag in GameEnumStatus],
             default=GameEnumStatus.WAITING.value
     )
     draw = models.BooleanField(default=False)
-    # score_p1 = 
     time = models.DateTimeField(auto_now_add=True)

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { SettingsInputsDataInterface, SettingsInputsErrorInterface } from "./GeneralSettings";
 import { FiEdit2 } from "react-icons/fi";
+import { UserContext } from "./UserContext";
 
 interface FormInputPropInterface {
     name?: keyof SettingsInputsDataInterface ,
@@ -21,7 +22,10 @@ interface FormInputPropInterface {
 const GeneralSettingsInput = (prop: FormInputPropInterface)=>{
     const {value,name, type,label, inputsData ,pattern ,setInputsData, setChanged, changed ,errorMessage, inputsError, setInputError, ...inputProps} = prop
     const [error, setError] = useState<boolean>(false)
+    const userContext = useContext(UserContext)
 
+    if (!userContext)
+      throw new Error('error')
     const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         const inputRegex = new RegExp(pattern)
         if(!inputRegex.test(e.target.value.trim()) && error === false){
@@ -50,6 +54,7 @@ const GeneralSettingsInput = (prop: FormInputPropInterface)=>{
         <label htmlFor={name} className="w-[100px] self-start ">{label+':'}</label>
         <div className="group relative w-[220px] sm:w-[280px]  h-[70px] flex flex-col gap-2">
           <input
+            disabled={userContext.userData?.oauth && name==='email'}
             {...inputProps}
             value={value}
             onChange={onChange}

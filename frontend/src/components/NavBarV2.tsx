@@ -24,19 +24,22 @@ function NavBarV2(){
     const notificationContainerRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
     const location = useLocation()
+
+    if (!userContextConsumer)
+        throw new Error("userContext must be used within a UserProvider");
+
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>)=>
     {
         if (searchRef.current && !searchRef.current.contains(event.relatedTarget))
         {
             setFocus(false)
         }
-    } 
-    if (!userContextConsumer)
-        throw new Error("userContext must be used within a UserProvider");
+    }
+
     useEffect(() => {
         const handleClickInside = (event: MouseEvent) => {
             if (searchRef.current && searchRef.current.contains(event.target as Node)) {
-                setFocus(false); // Close the search results on click inside the container
+                setFocus(false);
             }
    
         };
@@ -45,7 +48,8 @@ function NavBarV2(){
         return () => {
           document.removeEventListener("click", handleClickInside);
         };
-      }, []);
+    }, []);
+
     useEffect(() => {
         const handleClickOutDrop = (event: MouseEvent) => {
             if (dropContainerRef.current && !dropContainerRef.current.contains(event.target as Node) && drop)
@@ -58,9 +62,9 @@ function NavBarV2(){
         }
         document.addEventListener("click", handleClickOutDrop);
         return () => {
-          document.removeEventListener("click", handleClickOutDrop);
+            document.removeEventListener("click", handleClickOutDrop);
         };
-      }, [drop, notificationDrop, messagesDrop]);
+    }, [drop, notificationDrop, messagesDrop]);
     
     useEffect(()=>{
         if (search !=="")
