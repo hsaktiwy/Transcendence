@@ -504,7 +504,8 @@ const RemoteGame = () => {
         const handleKeyDown = (event) => {
             const keyName = event.key;
           
-              if (keyName === " "){
+            //   if (keyName === " "  ){
+              if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
                   BallCreator.createBall()
               }
               if (keyName === "t"){
