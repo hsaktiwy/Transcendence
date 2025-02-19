@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
-import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
 import gsap from 'gsap'; 
 import LoadingScreen from '../components/LoadingScreen';
@@ -17,16 +15,13 @@ const PingPongBack = () => {
 
     useEffect(() => {
 
-////=>////
         const loadingManager = new THREE.LoadingManager();
 
         loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
             gsap.to('#loading-screen', {
               opacity: 0,
               duration: 1,
               onComplete: () => {
-                // Hide the screen entirely
                 setLoading(false);
               }
             });
@@ -43,7 +38,7 @@ const PingPongBack = () => {
         scene.add(ambientLight)
         
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2)
-        directionalLight.castShadow = true
+        directionalLight.castShadow = false
         directionalLight.shadow.mapSize.set(1024, 1024)
         directionalLight.shadow.camera.far    = 300
         directionalLight.shadow.camera.left   = - 20
@@ -58,7 +53,6 @@ const PingPongBack = () => {
             height: window.innerHeight
         }
         
-        //event listeners
         const handleResize = () => {
             sizes.width = window.innerWidth
             sizes.height = window.innerHeight
@@ -74,16 +68,12 @@ const PingPongBack = () => {
         camera.position.set(-22, 6, 0)
         scene.add(camera)
         
-        const topControls = new OrbitControls(camera, canvas)
-        topControls.enableDamping = true
         
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas
         })
-        renderer.shadowMap.enabled = true
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap
         renderer.setSize(sizes.width, sizes.height)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
         
         const GLTFLoaderr = new GLTFLoader(loadingManager); 
         GLTFLoaderr.load('/GamePub/models/chinese_tea_table_4k.gltf/tabla_v2.gltf', function (gltf){
@@ -92,13 +82,7 @@ const PingPongBack = () => {
             model.position.y += 1.7;
             model.position.z = -1.94;
             
-            model.traverse(function (node) {
-                if (node.isMesh) {
-                    node.castShadow = true;
-                    node.receiveShadow = true;
-                    node.material.wireframe = false;
-                }
-            })
+
             scene.add(model);
         })
         
@@ -121,18 +105,6 @@ const PingPongBack = () => {
         })
         
 
-        // enviroment map
-        const rgbeLoader = new RGBELoader(loadingManager);
-        rgbeLoader.load('/GamePub/models/neon_photostudio_2k.hdr', (enviroment_map) => {
-            enviroment_map.mapping = THREE.EquirectangularReflectionMapping
-            scene.background  = enviroment_map;
-            scene.environment = enviroment_map;
-            
-            scene.backgroundBlurriness = 0.5; 
-            scene.environmentIntensity = 0.01; 
-            scene.backgroundIntensity  = 0.007;
-        })
-        
         //  Animate
         const clock = new THREE.Clock()
         let   deltaTime    = 0;
@@ -149,9 +121,10 @@ const PingPongBack = () => {
             camera.position.x = radius * Math.cos(angle) ;
             camera.position.z = radius * Math.sin(angle);
             camera.position.y = (radius * (Math.abs(Math.sin(angle)) / 2)) + 5;
+
+            camera.lookAt(0, 0, 0)
             
         
-            topControls.update()
             
             renderer.render(scene, camera)
         
@@ -159,19 +132,24 @@ const PingPongBack = () => {
         }
         
         tick()
-////=>////
 
         return() => {
-            window.removeEventListener('resize', handleResize);
-
-            while (scene.children.length > 0) {
-                const child = scene.children[0];
-                scene.remove(child);
-            }
+            window.removeEventListener('resize', handleResize)
 
             renderer.dispose();
-
-            topControls.dispose();
+            scene.traverse(object => {
+              if (object.geometry) object.geometry.dispose();
+              if (object.material) {
+                if (Array.isArray(object.material)) {
+                  object.material.forEach(mat => mat.dispose());
+                } else {
+                  object.material.dispose();
+                }
+              }
+            });
+            while (scene.children.length > 0) {
+              scene.remove(scene.children[0]);
+            }
         };
 
     }, []);
@@ -179,7 +157,7 @@ const PingPongBack = () => {
 
     return (
         <>
-            <LoadingScreen show={loading} />
+            {/* <LoadingScreen show={loading} /> */}
             <div className="blur-wrapper">
                 <canvas ref={canvasRef}></canvas>
             </div>
