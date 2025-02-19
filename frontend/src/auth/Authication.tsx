@@ -29,7 +29,6 @@ function Auth(children:childrenInterface)
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<RegisterForm/>}/>
                 <Route path="/home" element={<LandingPage2/>}/>
-                {/* <Route path="/site" element={<Layout><ChatSection/></Layout>}/> */}
             </Routes>
         </>          
     )

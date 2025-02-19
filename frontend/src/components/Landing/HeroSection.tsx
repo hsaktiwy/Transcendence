@@ -1,5 +1,3 @@
-
-// import Switch from '/Switch.png'
 import Paddle from '/landingHero.gif'
 import { FaArrowRight } from "react-icons/fa6";
 import { motion } from "framer-motion";

@@ -23,5 +23,3 @@ export interface ProfileDataInterface {
     profile_pic:string;
     CoverProfile: string;
 }
-
-

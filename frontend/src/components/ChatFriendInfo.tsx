@@ -110,12 +110,11 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
         BlockStatusCheck()
         fetchMatches()
         fetchLevle()
-    },[userContext.action  /*radarchartData*/])
+    },[userContext.action])
 
     return(
         <>          
         <div className={`rounded-l-xl lg:rounded-l-none rounded-r-3xl border-r-0 lg:border-l-[1px] border-white/20 font-poppins  bg-[#2B2F32] lg:bg-transparent  absolute top-0   h-full  ${chatContext.showProfile ? 'right-0 w-full  lg:w-[279px] xl:w-[379px] 2xl:w-[479px]' : 'w-0 -right-32'} transition-all duration-[300ms]  text-white overflow-auto`}>
-            {/* <div className="h-full w-full absolute -z-10 top-0 left-0 bg-black/50 "></div> */}
             <div className=" bg-black/35  w-full  overflow-auto relative   ">
                 <div id="friend-info-header" className=" m-4 text-[24px]  text-white flex justify-between items-center">
 
@@ -126,7 +125,6 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
                         <IoCloseSharp/>
                     </span>
                 </div>
-                    {/* <div className="bg-white w-[100%] h-[1px] lg:mt-[28px] rounded-full"></div> */}
             </div>
             {
                 isblock ? <ChatInfoBlocked/> : 

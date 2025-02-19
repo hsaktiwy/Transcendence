@@ -39,8 +39,6 @@ const notifType: typeInterface = {
 }
 const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     
-    // const [remove, setRemove] = useState<boolean[]>([])
-    
     const userContextConsumer = useContext(UserContext)
     
     if (!userContextConsumer)
