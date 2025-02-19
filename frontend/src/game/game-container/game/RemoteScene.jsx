@@ -501,29 +501,89 @@ const RemoteGame = () => {
             prevMouseX = mouse.x;
         };
         
-        const handleKeyDown = (event) => {
-            const keyName = event.key;
+        // const handleKeyDown = (event) => {
+        //     const keyName = event.key;
           
-            //   if (keyName === " "  ){
-              if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
-                  BallCreator.createBall()
-              }
-              if (keyName === "t"){
-                  BallCreator.reset()
-              }
-              if (keyName === "v"){
-                  BallCreator.cameraFixed = true;
-              }
-              if (keyName === "b"){
-                  BallCreator.cameraFixed = false;
-              }
-        };
-        document.addEventListener("keydown", handleKeyDown)
+        //     //   if (keyName === " "  ){
+        //       if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
+        //           BallCreator.createBall()
+        //       }
+        //     //   if (keyName === "t"){
+        //     //       BallCreator.reset()
+        //     //   }
+        //     //   if (keyName === "v"){
+        //     //       BallCreator.cameraFixed = true;
+        //     //   }
+        //     //   if (keyName === "b"){
+        //     //       BallCreator.cameraFixed = false;
+        //     //   }
+        // };
+        // document.addEventListener("keydown", handleKeyDown)
         //
         
         
         const mouse = new THREE.Vector2();
         window.addEventListener('mousemove', handleMouseMove)
+
+
+        // const keyboard = new THREE.Vector2();
+        let Chained_Keys = [
+            // {w:0},
+            // {d:0},
+            // {s:0},
+            // {a:0},
+
+            {ArrowUp   :0},
+            {ArrowRight:0},
+            {ArrowDown :0},
+            {ArrowLeft :0},
+        ]
+        
+
+        const handleKeyDown = (event) => {
+            const keyName = event.key;
+          
+              if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
+                  BallCreator.createBall()
+              }
+
+
+            if ( keyName === "ArrowUp") {
+                Chained_Keys.ArrowUp = 1;
+            }
+            if (keyName === "ArrowRight"){
+                Chained_Keys.ArrowRight = 1;
+            }
+            if (keyName === "ArrowDown"){
+                Chained_Keys.ArrowDown = 1;
+            }
+            if (keyName === "ArrowLeft"){
+                Chained_Keys.ArrowLeft = 1;
+            }
+        }
+        ;
+        
+        
+        const handleKeyUp = (event) => {
+            const keyName = event.key;
+            
+            if ( keyName === "ArrowUp") {
+                Chained_Keys.ArrowUp = 0;
+            }
+            if (keyName === "ArrowRight"){
+                Chained_Keys.ArrowRight = 0;
+            }
+            if (keyName === "ArrowDown"){
+                Chained_Keys.ArrowDown = 0;
+            }
+            if (keyName === "ArrowLeft"){
+                Chained_Keys.ArrowLeft = 0;
+            }
+        };
+        
+        document.addEventListener("keydown", handleKeyDown)
+        document.addEventListener("keyup", handleKeyUp)
+
         
         
         // enviroment map
@@ -811,7 +871,33 @@ const RemoteGame = () => {
                     // }
                 }
                 
+                if ( Chained_Keys.ArrowUp === 1) {
+                    mouse.y += 0.04;
+                }
+                if (Chained_Keys.ArrowDown === 1){
+                    mouse.y -= 0.04;
+                }
+                if (Chained_Keys.ArrowRight === 1){
+                    mouse.x += 0.04;
+                }
+                if (Chained_Keys.ArrowLeft === 1){
+                    mouse.x -= 0.04; 
+                }
         
+                if (mouse.x > 0){
+                    mouse.x = Math.min(mouse.x, 1);
+                }
+                if (mouse.x < 0){
+                    mouse.x = Math.max(mouse.x, -1);
+                }
+                if (mouse.y > 0){
+                    mouse.y = Math.min(mouse.y, 1);
+                }
+                if (mouse.y < 0){
+                    mouse.y = Math.max(mouse.y, -1);
+                }
+                
+
                 camera.position.x = 0;
                 camera.position.y = 7.8;
                 camera.position.z = 12.8;
