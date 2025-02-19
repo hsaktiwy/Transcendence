@@ -12,14 +12,18 @@ import '../game/RemoteScene.css'
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js'
 // import { Frame } from '../components/Frame';
+import { useLocalGamesContext } from '../game/MatchContext';
+
 
 
 const LocalChessGame = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const canvasRef = useRef(null);
     // const buttonRef = useRef(null);
 
     const [loading, setLoading] = useState(true);
+    const { setLocalGamesData } = useLocalGamesContext();
+    const { LocalGamesData } = useLocalGamesContext();
 
     useEffect(() => {
 
@@ -316,6 +320,32 @@ const LocalChessGame = () => {
                 if (result){
                     console.log('Valid Move !')
         
+
+
+                    if (engine_validator.isGameOver()) {
+                        if (engine_validator.isCheckmate()) {
+                            let winning_color = engine_validator.turn() === 'w' ? 'black' : 'white';
+                            console.log("Checkmate! Winning side:", winning_color);
+                            setLocalGamesData({
+                                gametype: 'chess',
+                                winner  : winning_color + ' WON !'
+                            });                             
+                            
+                        } else if (engine_validator.isDraw()) {
+                            message.winner = 'Draw'
+                            setLocalGamesData({
+                                gametype: 'chess',
+                                winner  : 'Draw'
+                            });    
+                            
+                        }
+                        navigate('/game/ChessWinner')
+
+                    }
+
+
+
+
                     ///Capturing
                     if (result.captured){
                         const capturedPiece = findCapturedPiece(name, toNotation);
