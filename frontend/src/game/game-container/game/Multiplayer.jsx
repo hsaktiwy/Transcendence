@@ -389,12 +389,12 @@ const MultiplayerGame = () => {
         const handleKeyDown = (event) => {
             const keyName = event.key;
             
-            if (keyName === "r"){
+            if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
                 BallCreator.createBall()
             }
-            if (keyName === " "){
-                BallCreator.cameraFixed = true;
-            }
+            // if (keyName === " "){
+            //     BallCreator.cameraFixed = true;
+            // }
 
             if ( keyName === "w") {
                 Chained_Keys.w = 1;

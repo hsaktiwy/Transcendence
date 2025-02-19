@@ -396,7 +396,7 @@ const LocalGame = () => {
               if (keyName === "a"){
                   Chained_Keys.a = 1;
               }
-              if (keyName === " "){
+              if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
                   BallCreator.createBall()
               }}
         ;
