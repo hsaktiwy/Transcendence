@@ -4,7 +4,7 @@ import LocalChessGame from './LocalSceneChess';
 import { useNavigate } from "react-router-dom";
 import './style.css'
 import '../game/RemoteScene.css'
-import ChessGameBack from './ChessBack';
+import { SlLock } from "react-icons/sl";
 
 
 function ChessLobby(){
@@ -48,7 +48,7 @@ function ChessLobby(){
                     default_icon='/GamePub/bottouns/default_online.svg'
                     hovered_icon='/GamePub/bottouns/hovered_online.svg'
                     onClick={() => {navigate('/game/ChessPreRemote')}}
-                />
+                    />
                 <Frame
                     text="Vs Ai"
                     default_icon='/GamePub/bottouns/default_ai.svg'

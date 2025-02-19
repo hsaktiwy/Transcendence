@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
-import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 import gsap from 'gsap'; 
 import LoadingScreen from '../components/LoadingScreen';
 import '../game/RemoteScene.css'
@@ -15,16 +13,13 @@ const ChessGameBack = () => {
 
     useEffect(() => {
 
-////=>////
         const loadingManager = new THREE.LoadingManager();
 
         loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
             gsap.to('#loading-screen', {
               opacity: 0,
               duration: 1,
               onComplete: () => {
-                // Hide the screen entirely
                 setLoading(false);
               }
             });
@@ -39,15 +34,12 @@ const ChessGameBack = () => {
         
         const scene = new THREE.Scene()
        
-        const hit_sound     = new Audio('/GamePub/chess-assets/sounds/passion.mp3');
-
-        
         // Lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 2.4)
         scene.add(ambientLight)
         
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8)
-        directionalLight.castShadow = true
+        directionalLight.castShadow = false
         directionalLight.shadow.mapSize.set(1024, 1024)
         directionalLight.shadow.camera.far = 15
         directionalLight.shadow.camera.left = - 7
@@ -76,7 +68,7 @@ const ChessGameBack = () => {
         
             // Update renderer
             renderer.setSize(sizes.width, sizes.height)
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))     
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1))     
         }
         
         // Base camera
@@ -84,17 +76,11 @@ const ChessGameBack = () => {
         camera.position.set(-0.71, 1.41, 0.78)
         scene.add(camera)
         
-        // Controls
-        const controls = new OrbitControls(camera, canvas)
-        controls.target.set(0, 0.75, 0)
-        controls.enableDamping = true
         
         //  Renderer
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas
         })
-        renderer.shadowMap.enabled = true
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap
         renderer.setSize(sizes.width, sizes.height)
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         
@@ -106,7 +92,7 @@ const ChessGameBack = () => {
         GLTFLoaderr.load(
             '/GamePub/chess-assets/models/round_wooden_table_01_2k.gltf/round_wooden_table_01_2k.gltf',
             function ( gltf ) {
-                gltf.scene.children[0].position.y = 0;
+                gltf.scene.children[0].position.y = -0.5;
                 scene.add( gltf.scene.children[0] ); //Jilali Table
             }
         );
@@ -120,10 +106,10 @@ const ChessGameBack = () => {
                 while (gltf.scene.children.length){
                     item = gltf.scene.children[0];
                     if (item.name === "board"){
-                        item.position.y = 1.004;
+                        item.position.y = 0.504;
                     }
                     else{
-                        item.position.y = 1.0215;
+                        item.position.y = 0.5215;
                     }
                     scene.add(item)
                 }
@@ -131,32 +117,10 @@ const ChessGameBack = () => {
         );
         
         
-        //
-        // //Enviroment Map
-        // const rgbeLoader = new RGBELoader();
-        // rgbeLoader.load('/GamePub/chess-assets/models/envmap/photo_studio_loft_hall_8k.pic', (enviroment_map) => {
-        //     enviroment_map.mapping = THREE.EquirectangularReflectionMapping
-        //     scene.background  = enviroment_map;
-        //     scene.environment = enviroment_map;
-        // })
-        
-        // enviroment map
-        const rgbeLoader = new RGBELoader(loadingManager);
-        rgbeLoader.load('/GamePub/chess-assets/models/neon_photostudio_2k.hdr', (enviroment_map) => {
-            enviroment_map.mapping = THREE.EquirectangularReflectionMapping
-            scene.background  = enviroment_map;
-            scene.environment = enviroment_map;
-            
-            scene.backgroundBlurriness = 0.5; 
-            scene.environmentIntensity = 0.01; 
-            scene.backgroundIntensity  = 0.007;
-        })
-        
-        
         //  Animate
         let cameraAngle  = 0;
-        let cameraHeight = 0.9;
-        let cameraRadius = 2; // Adjust based on your scene scale
+        let cameraHeight = 0.7;
+        let cameraRadius = 1.8; // Adjust based on your scene scale
         //
         
     
@@ -176,12 +140,9 @@ const ChessGameBack = () => {
             camera.position.z = Math.sin(cameraAngle) * (cameraRadius - cameraHeight);
             camera.position.y = cameraHeight;
             
-            if (cameraHeight > 1.7) cameraHeight = 0.9;
+            if (cameraHeight > 1.7) cameraHeight = 0.7;
     
             camera.lookAt(0, 0, 0);
-        
-            // Update controls
-            controls.update()
         
             // Render
             renderer.render(scene, camera)
@@ -198,24 +159,27 @@ const ChessGameBack = () => {
 
             window.removeEventListener('resize', handleResize)
 
-            controls.dispose();
             renderer.dispose();
-
-            
+            scene.traverse(object => {
+              if (object.geometry) object.geometry.dispose();
+              if (object.material) {
+                if (Array.isArray(object.material)) {
+                  object.material.forEach(mat => mat.dispose());
+                } else {
+                  object.material.dispose();
+                }
+              }
+            });
             while (scene.children.length > 0) {
-                const child = scene.children[0];
-                scene.remove(child);
+              scene.remove(scene.children[0]);
             }
-
-            hit_sound.pause();
-            hit_sound.src = "";
         };
 
     }, []);
   
     return (
         <>
-            <LoadingScreen show={loading} />
+            {/* <LoadingScreen show={loading} /> */}
             <div className="blur-wrapper">
                 <canvas ref={canvasRef}></canvas>
             </div>
