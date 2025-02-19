@@ -1,18 +1,12 @@
 
 import React, {useState} from "react";
-
-
-
-
 import { twoGames } from "@/utils/interfaces";
 import { Link } from "react-router-dom";
-
 
 interface MatchHistoryProps {
   data: twoGames | undefined;
   username:string | undefined
 }
-
  
 export function MatchHistory({ data, username }: MatchHistoryProps) {
   const [matchHistoryType, setMatchHistoryType] = useState<"PONG" | "CHESS">("PONG");

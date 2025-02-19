@@ -1,7 +1,6 @@
 
 import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
-
 import TargetImage from "/target-front-color.png"
 import ChatImage from "/chaticon.png"
 import TropheyImage from "/img.png"
@@ -19,6 +18,7 @@ interface cardInfo{
     alt: string,
     desc: string
 }
+
 const imageArray:string[] = [TargetImage, MedalImage, TropheyImage ,ChatImage]
 const descArray:string[] = [localGamePlayDesc, remoteGamePlayDesc, tournamentDesc, chatDesc]
 const altArray:string[] = ['Local Gameplay', 'Remote Gameplay', 'Tournament' ,'Chat with friends']
@@ -70,9 +70,6 @@ const LandingPage2 = () =>{
                             )
                         })
                    }
-                    {/* <div className="h-[300px] w-[300px] bg-slate-900 rounded-xl shadow-[0px_0px_9px_12px_rgba(255,_255,_255,_0.05)] self-end"></div>
-                    <div className="h-[300px] w-[300px] bg-slate-900 rounded-xl shadow-[0px_0px_9px_12px_rgba(255,_255,_255,_0.05)]"></div>
-                    <div className="h-[300px] w-[300px] bg-slate-900 rounded-xl shadow-[0px_0px_9px_12px_rgba(255,_255,_255,_0.05)] self-end"></div> */}
                 </div>
             </section>
 

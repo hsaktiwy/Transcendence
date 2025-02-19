@@ -1,6 +1,7 @@
 
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+
 const NavBar = () =>{
     return(
         <motion.nav
@@ -16,7 +17,6 @@ const NavBar = () =>{
               <Link to='/login' className="px-7 sm:px-8 py-2 sm:py-3 bg-[#5E97A9] rounded-md text-white opacity-80 duration-75 hover:opacity-100  cursor-pointer">Login</Link>
             </li>
           </ul>
-   
         </motion.nav>
     )
 }

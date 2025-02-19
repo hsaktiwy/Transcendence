@@ -14,7 +14,7 @@ function RedirectRoute()
 
    return  (
     <>
-       AuthContextConsummer.loggedIn === true ? <Navigate to='/dashboard'/> : <Navigate to='/'/>
+      {AuthContextConsummer.loggedIn === true ? <Navigate to='/dashboard'/> : <Navigate to='/'/>}
        <Outlet/>
     </>
    )

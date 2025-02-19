@@ -1,8 +1,5 @@
 import { ChangeEvent, useContext, useState } from "react";
 import { UserContext } from "./UserContext";
-
-import { cookies } from "../auth/Cookie";
-
 import mailman from "../utils/AxiosFetcher";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
@@ -11,7 +8,6 @@ import { toast } from "react-toastify";
 
 import { UserDataInterface } from "../utils/UserDataInterface";
 function Settings() {
-    let csrfToken:string = cookies.get('csrftoken');
     const userContextConsumer = useContext(UserContext)
     const [activeSettingSection , setActiveSettingsSection] = useState<string>('general')
 
@@ -29,8 +25,6 @@ function Settings() {
             formData.append(e.target.id, e.target.files[0]);
 
             try{
-                
-
                 const req = {
                     url: uploadUrl,
                     method: 'PATCH',
@@ -38,7 +32,6 @@ function Settings() {
                     withCredentials: true,
                     headers : {
                         'Content-Type': 'multipart/form-data',
-                        'X-CSRFToken': csrfToken,
                     }
                   }
                 const response =  await mailman(req)

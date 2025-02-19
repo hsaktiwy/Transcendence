@@ -82,7 +82,6 @@ const TfaVerification:React.FC<TfaProp> = ({user}) =>{
         if (resp.message === 'User logged in successfuly' ) {
             toast.success(resp.message)
             AuthContextConsummer.setLoggedIn(true)
-            // Navigate('/')
         }
         else
             toast.error(resp.message)
