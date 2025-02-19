@@ -202,7 +202,7 @@ const ProfileTest  = () =>{
                                         className="relative bg-cover bg-center shadow-md px-5 lg:px-10 rounded-3xl grid grid-rows-1 transition-all duration-300 ease-in-out"
                                         style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${profileData?.CoverProfile})` }}
                                         >
-                                            <div className="absolute  inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-all duration-300 ease-in-out rounded-3xl"></div>
+                                            <div className="absolute  inset-0 bg-black/60  rounded-3xl"></div>
                                             <div className="relative  z-10">
                                                 <div className="h-20 hidden  sm:flex items-center xxl:items-end ">
                                                 <div className="h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30 rounded-xl sm:flex justify-center items-center">
@@ -216,7 +216,7 @@ const ProfileTest  = () =>{
                                                             style={{
                                                                 width: `${((level?.level ?? 0) % 1 * 100).toFixed()}%`
                                                             }}
-                                                            className="h-3 w-[53%] bg-gradient-to-br from-[#373e37] to-[#5E97A9] rounded-full"
+                                                            className="h-3 w-[53%] bg-gradient-to-tr from-[#23363c] to-[#5E97A9] rounded-full"
                                                             /> 
 
                                                     </div>
@@ -251,8 +251,8 @@ const ProfileTest  = () =>{
                             </div>
                             
                         </div>
-                        <div className="row-span-4 relative md:col-span-6 md:row-span-3 xl:col-span-4 xl:h-96 2xl:col-span-4 xxl:h-[548px] xxl:col-span-3">
-                            <RankFile/>
+                        <div className="row-span-3 relative  md:col-span-6 md:row-span-3 xl:col-span-4 xl:h-96 2xl:col-span-4 xxl:h-[548px] xxl:col-span-3">
+                            <RankFile user={profileData}/>
                           
                         </div>
                         <div className="row-span-2  md:col-span-6 md:row-span-3 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-5 xxl:hidden">

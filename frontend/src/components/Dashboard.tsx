@@ -15,6 +15,7 @@ import { WebSocketContext } from "@/utils/WSContext.tsx";
 import mailman from "@/utils/AxiosFetcher.ts";
 import { LinechartData, LoseWins, RadarChartInterFace, twoGames, UserRankResponse,  } from "@/utils/interfaces.ts";
 import "../index.css"
+import { ProfileDataInterface } from "@/utils/UserDataInterface.ts";
 
 Chart.register(CategoryScale);
 
@@ -128,8 +129,8 @@ function Dashboard(){
                               <div className="w-full h-full  grid grid-rows-2 ">
                               <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
                                   style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
-                              <div className="absolute inset-0 bg-black opacity-10 rounded-3xl"></div>
-                                      <div className=" h-20  flex items-center 2xl:items-end ">
+                              <div className="absolute inset-0 bg-black/60 rounded-3xl"></div>
+                                      <div className=" h-20  flex items-center 2xl:items-end z-10">
                                               <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
                                                   <div className="relative text-lg text-white font-medium">
                                                     {`Hello ${userContextConsumer.userData?.firstName}`} 
@@ -137,7 +138,7 @@ function Dashboard(){
                                                 </div>
 
                                           </div>
-                                          <div className="flex flex-col  justify-center items-center ">
+                                          <div className="flex flex-col  justify-center items-center z-10">
                                               <h1 className="text-2xl font-semibold xxl:text-3xl">{level?.level.toFixed(2)} Level </h1>
                                               <div className="h-3 w-[100%] bg-[#444444] rounded-full">
                                               <div
@@ -180,7 +181,7 @@ function Dashboard(){
             </div>
         </div>
         <div className="  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-4 2xl:row-span-6 xxl:col-span-3">
-            <RankFile/>
+            <RankFile user={userContextConsumer.userData as ProfileDataInterface}/>
         </div>
         <div className="2xl:px-7  row-span-4 md:col-span-6 md:row-span-4 xl:col-span-4 xl:row-span-4 2xl:col-span-3 2xl:row-span-5">
         <div className="  rounded-2xl bg-gradient-to-tr from-[#2f3a41] to-[#2B2F32] h-full w-full  flex items-center mr-6  justify-center p-4">

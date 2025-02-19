@@ -9,7 +9,6 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 
 
 import { MdOutlineBlock } from "react-icons/md";
-import { IoTrashOutline } from "react-icons/io5";
 
 
 import { WebSocketContext } from "../utils/WSContext";
@@ -18,6 +17,7 @@ import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
 import { formatDate2 } from "@/utils/textFromatting";
 import { toast } from "react-toastify";
+import ChatSessionBlocked from "./chatSessionBlocked";
 
 
 export const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
@@ -270,9 +270,11 @@ function ChatSession(){
             BlockStatusCheck()
         }
     },[openDrop])
-
+    const isBlocked = ()=>{
+        return chatContext.active?.user2.block !== undefined && chatContext.active.user2.block === true
+    }
     return(
-            <div  className={`  rrounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
+            <div  className={`  rounded-xl lg:rounded-3xl     font-poppins flex flex-col justify-between overflow-hidden absolute  lg:left-[30%] xl:left-[22%] ${chatContext.showProfile? `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[calc(70%-280px)] xl:w-[calc(78%-380px)] 2xl:w-[calc(78%-480px)] ` : `${chatContext.activeSectionOnSm==='chat' ? 'w-full' : 'w-0'} lg:w-[70%] xl:w-[78%] rounded-r-xl`}  h-full transition-all duration-800
             `}>
                 <div id="conversation-header-container" className="border-b border-white/20 ">
                     <div id="conversation-header" className="text-white grid grid-cols-4 px-4 py-[2px]">
@@ -285,10 +287,12 @@ function ChatSession(){
                                 <IoArrowBackOutline />
                                 </span>
                                 <img src={`${chatContext.active &&  `${backendPath +  chatContext.active.user2.profile_pic}`}`} alt="user-pic" className=" w-[40px] h-[40px] aspect-square rounded-full object-cover cursor-pointer" onClick={()=>{
-                                    chatContext.setShowProfile(true)
+                                    if (!isBlocked())
+                                        chatContext.setShowProfile(true)
                                 }}/>
                                 <div className="cursor-pointer " onClick={()=>{
-                                    chatContext.setShowProfile(true)
+                                    if (!isBlocked())
+                                        chatContext.setShowProfile(true)
                                 }}>
                                     <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
                                     <div className=" flex gap-3 items-center">
@@ -299,7 +303,8 @@ function ChatSession(){
                             <div id='conv-header-menu ' className="drop relative col-span-1  flex justify-self-end items-center text-[24px]">
                                 <span className="  m-4 cursor-pointer hover:text-[#5E97A9] focus:text-[#5E97A9] duration-300" onClick={()=>{
                                     setOpenDrop(false)
-                                    chatContext.setShowProfile(true)
+                                    if (!isBlocked())
+                                        chatContext.setShowProfile(true)
                                 }}>
                                 <IoMdInformationCircleOutline />
                                 </span>
@@ -308,7 +313,7 @@ function ChatSession(){
                                     }}>
                                      <IoIosMore/>
                                     </span>
-                                <div id='drop-menu' ref={DropMenuRef} className= {` ${!openDrop ? 'hidden': 'block' } rounded-lg   absolute text-base right-[-10px]  top-[100%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-20 animate-fade-down `}>
+                                <div id='drop-menu' ref={DropMenuRef} className= {` ${!openDrop ? 'hidden': isBlocked() || chatContext.active?.user2.state === 'none' ? 'hidden':'block' } z-30 rounded-lg   absolute text-base right-[-10px]  top-[100%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-20 animate-fade-down `}>
                                     <ul className="w-80 py-4">
                                         <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer " onClick={() =>{
                                                 chatContext.setOpenModal(true)
@@ -340,9 +345,9 @@ function ChatSession(){
                             </div>
                     </div>
                 </div>
-                    <div ref={containerRef} onScroll={handleContainerScroll} className=" text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden">
+                    <div ref={containerRef} onScroll={handleContainerScroll} className=" relative text-white basis-[85%]  text-[14px] rounded-lg   p-3 sm:p-5 flex flex-col gap-10 overflow-y-auto overflow-x-hidden">
                     {
-                        chatContext.active?.messages?.map((msg, index): React.ReactNode => {
+                        !isBlocked() ? chatContext.active?.messages?.map((msg, index): React.ReactNode => {
                             return(
                                 <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender?.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
                                 <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] aspect-square object-cover rounded-full cursor-pointer" onClick={()=>{
@@ -356,15 +361,22 @@ function ChatSession(){
                             </div>
                             )
                             
-                        })
+                        }):
+                        <ChatSessionBlocked/>
                     }
                 </div>
-                <div id="conversation-footer-container" className="py-4 px-16 flex justify-between items-center gap-1 sm:gap-4  ">
-                    <input type="text" placeholder="Message" className=" bg-transparent rounded-full border border-white/20 focus:outline-none text-white   text-sm sm:text-md px-4 py-4  basis-[95%]" maxLength={1000} value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
-                    <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
-                        <RiSendPlaneFill />
-                    </span>
-                </div>
+                { chatContext.active?.user2.state !== 'none' ?
+                    <div id="conversation-footer-container" className={`py-4 px-16 ${((chatContext.active?.user2.block !== undefined && chatContext.active.user2.block === true )) && 'invisible'}  flex justify-between items-center gap-1 sm:gap-4  h-[86px]`}>
+                        <input type="text"  placeholder="Message" className=" bg-transparent rounded-full border border-white/20 focus:outline-none text-white   text-sm sm:text-md px-4 py-4  basis-[95%]" maxLength={1000} value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
+                        <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
+                            <RiSendPlaneFill />
+                        </span>
+                    </div>:
+                    <div className={`py-4 px-16 ${((chatContext.active?.user2.block !== undefined && chatContext.active.user2.block === true )) && 'invisible'}  flex justify-center items-center border-white/20 border-t  h-[86px]`}>
+                            <h1 className="text-white/70">{`You and ${chatContext.active?.user2.login} are not friends anymore`}</h1>
+                    </div>
+
+                }
 
             </div>
     )
