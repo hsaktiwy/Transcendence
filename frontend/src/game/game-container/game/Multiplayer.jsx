@@ -1108,27 +1108,15 @@ const MultiplayerGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
+            LocalGamesData.gametype = 'Multiplayer'
             if (playerScore === 7){
-                setLocalGamesData({
-                    gametype: 'Multiplayer', // Local, Multiplayer, Tournament 
-                    player1: null,
-                    player2: null,
-                    player3: null,
-                    player4: null,
-                    winner  : LocalGamesData.player1
-                });    
+                LocalGamesData.winner   = LocalGamesData.player1
             }
             else {
-                setLocalGamesData({
-                    gametype: 'Multiplayer', // Local, Multiplayer, Tournament 
-                    player1: null,
-                    player2: null,
-                    player3: null,
-                    player4: null,
-                    winner  : LocalGamesData.player2
-                });     
+                LocalGamesData.winner   = LocalGamesData.player2
             }
             
+            setLocalGamesData(LocalGamesData);     
             // setPlayerScore(0);
             // setAiScore(0);
 
