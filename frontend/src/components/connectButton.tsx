@@ -77,7 +77,6 @@ function ConnectButton(prop: buttonInterface) {
               prev.filter(blocked => blocked.unique_id!== user.unique_id)
             )
           })
-          userContextConsumer?.setFriends(prev=>[...prev, user])
         }
         setBtn_block(isblock ? 'Block' : 'Unblock');
         setIsbLock(!isblock)
@@ -239,7 +238,8 @@ function ConnectButton(prop: buttonInterface) {
           withCredentials:true
         }
         await mailman(req)
-        userContextConsumer?.fetchFriends()
+        if (userContextConsumer?.userData?.unique_id !== prop.user?.unique_id)
+          userContextConsumer?.setFriends(prev=>[...prev, prop.user as ProfileDataInterface])
         const notification = {
           type: 'NOTIFICATION_ACCEPT_FRIEND',
           to : uuid

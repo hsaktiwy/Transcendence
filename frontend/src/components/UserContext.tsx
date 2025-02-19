@@ -346,10 +346,16 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
     }
     const updateFriendShip = (info: friendship) =>{
-        if(info.status!== undefined && info.status === false)
-            setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
-        else if (info.status!== undefined && info.status === true)
-            setFriends(prev => [...prev, info.sender])
+        if(info.status=== undefined ){
+            if (friends.find(friend=>friend.unique_id === info.sender.unique_id) !== undefined)
+                setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
+            setBlockList(prev=>[...prev, info.sender])
+            setnotifications(prev=>prev.filter(notif=>!notif.content.startsWith(info.sender.login)))
+        }
+        else{
+            if (blockList.find(block=>block.unique_id === info.sender.unique_id) !== undefined)
+                setBlockList(prev=> prev.filter(block=> block.unique_id!==info.sender.unique_id))
+        }
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
         if (data.sender.unique_id === userData?.unique_id && data.state === 'offline'){
@@ -398,7 +404,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     },[AuthContextConsummer?.loggedIn])
 
-    
     const ajami = async() =>
     {
         await fetchUserData()

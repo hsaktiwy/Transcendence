@@ -100,6 +100,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                 channels.current['UPDATE_FRIEND_LIST'](info.sender)
               else
                 channels.current['UPDATE_FRIENDSHIP'](info)
+              
             }
             if (type === 'message'){
                 if (channels.current['UPDATE_CHAT_NOTIF'])
