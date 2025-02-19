@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 function PingPongPreview() {
   const canvasRef = useRef(null);
@@ -28,7 +27,8 @@ function PingPongPreview() {
     // Renderer
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
+
 
     // Light
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -37,8 +37,8 @@ function PingPongPreview() {
     scene.add(Directional);
 
     // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
+    // const controls = new OrbitControls(camera, renderer.domElement);
+    // controls.enableDamping = true;
 
     // Resize handling
     function onResize() {
@@ -83,7 +83,7 @@ function PingPongPreview() {
       }
 
 
-      controls.update();
+      // controls.update();
       renderer.render(scene, camera);
       renderer.setAnimationLoop(tick);
       // requestAnimationFrame(tick);
@@ -94,7 +94,19 @@ function PingPongPreview() {
     return () => {
       window.removeEventListener('resize', onResize);
       renderer.dispose();
-      controls.dispose();
+      
+      scene.traverse((object) => {
+        if (object.isMesh) {
+          object.geometry.dispose();
+          if (object.material) {
+            if (Array.isArray(object.material)) {
+              object.material.forEach((mat) => mat.dispose());
+            } else {
+              object.material.dispose();
+            }
+          }
+        }
+      });
       scene.clear();
     };
   }, []);
