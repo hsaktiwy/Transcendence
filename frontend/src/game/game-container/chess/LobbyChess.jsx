@@ -19,7 +19,7 @@ function ChessLobby(){
                 <div className="lktaba1">Chess Platform Game</div>
                 <div className="lktaba2">GAME DESCIEPTION :</div>
                 <p className="lktaba3">
-                    Lorem Ipsum is simply dummy text of the printing
+                    {/* Lorem Ipsum is simply dummy text of the printing
                     and&nbsp;&nbsp;typesetting industry. Lorem Ipsum has been the
                     industry&#39;s standard dumm y text ever since the 1500s, when
                     an unknown printer took a galley of&nbsp;&nbsp;type and
@@ -29,7 +29,8 @@ function ChessLobby(){
                     unchanged. It was popularised in the 1960s with&nbsp;&nbsp;the
                     release of Letraset sheets containing Lorem Ipsum passages, and
                     more recently with desktop publishing software like Aldus
-                    PageMaker&nbsp;&nbsp;including versions of Lorem Ipsum
+                    PageMaker&nbsp;&nbsp;including versions of Lorem Ipsum */}
+                    Embark on a new dimension of strategic warfare with our immersive 3D Chess experience! Challenge friends in local matches, test your skills in online battles against global competitors, and look forward to conquering formidable AI opponents coming soon. Refine your tactics in stunning 3D environments and prove you have what it takes to rule the board!
                 </p>
             </div>
 

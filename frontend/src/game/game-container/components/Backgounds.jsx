@@ -57,7 +57,7 @@ function Backgrounds() {
           {/* <div className={show ? "teams-container" : "hidden-v"} >
             <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
               <center>
-                <h1>Le7ya's Game</h1>
+                <h1>Chess Game</h1>
               </center>
               <ChessPreview />
             </div>

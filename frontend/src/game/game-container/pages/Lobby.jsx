@@ -19,7 +19,7 @@ function Lobby(){
                 <div className="lktaba1">Ping Pong Game</div>
                 <div className="lktaba2">GAME DESCIEPTION :</div>
                 <p className="lktaba3">
-                    Lorem Ipsum is simply dummy text of the printing
+                    {/* Lorem Ipsum is simply dummy text of the printing
                     and&nbsp;&nbsp;typesetting industry. Lorem Ipsum has been the
                     industry&#39;s standard dumm y text ever since the 1500s, when
                     an unknown printer took a galley of&nbsp;&nbsp;type and
@@ -29,7 +29,8 @@ function Lobby(){
                     unchanged. It was popularised in the 1960s with&nbsp;&nbsp;the
                     release of Letraset sheets containing Lorem Ipsum passages, and
                     more recently with desktop publishing software like Aldus
-                    PageMaker&nbsp;&nbsp;including versions of Lorem Ipsum
+                    PageMaker&nbsp;&nbsp;including versions of Lorem Ipsum */}
+                    Experience the adrenaline rush of fast-paced 3D Ping Pong! Hone your reflexes in local matches, battle friends online, and prove your dominance in thrilling local tournaments. With multiplayer modes galore—and AI opponents coming soon—you’ll be smashing epic rallies around the table in no time!
                 </p>
             </div>
 

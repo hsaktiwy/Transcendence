@@ -1,37 +1,56 @@
 .info-container {
-    position: absolute;
-    left:   3%;
-    bottom: 7%;
+  position: absolute;
+  left: 3%;
+  bottom: 7%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
 
-    display: flex;
-    align-items: center;
-    cursor: pointer; /* so it looks clickable if needed */
-  }
-  
-  /* The icon can have a border or some styling if desired */
-  .info-icon {
-    width: 40px;      /* adjust size as needed */
-    height: 40px;
-    border-radius: 50%;       /* if the icon is a circle */
-    border: 1px solid #ffffff; /* for a white ring around it, if you want */
-    object-fit: cover;         /* keep it circular if the file is square */
-    opacity: 0.5;
-  }
-  
-  /* The text is hidden by default */
-  .info-text {
-    margin-left: 10px; /* space between icon and text */
-    color: #888;       /* grey text color, as in your screenshot */
-    opacity: 0;        /* start invisible */
-    transition: opacity 0.2s ease-in-out; /* animate fade-in/out */
-  }
-  
-  /* Reveal text on hover */
-  .info-container:hover .info-text {
-    opacity: 1;
-  }
-  
-  .info-container:hover .info-icon {
-    opacity: 1;
-  }
-  
+.info-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  object-fit: cover;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.info-text {
+  margin-left: 10px;
+  color: #888;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.info-container:hover .info-icon,
+.info-container:hover .info-text {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 130%;
+  left: 30%;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(10px);
+  font-size: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.3);
+  white-space: nowrap;
+  opacity: 0.8; /*0.7*/
+  transition: opacity 0.2s ease;
+}
+
+
+.lktabaa {
+  width: 400px;       /* desired width */
+  height: 200px;      /* desired height */
+
+  overflow: auto;            /* enable scrolling if content exceeds box */
+}
