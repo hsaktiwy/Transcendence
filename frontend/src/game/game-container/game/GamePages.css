@@ -54,3 +54,29 @@
     font-weight: bold;
     font-style: italic;
   }
+
+  .downleft {
+    position: absolute;
+    left: 10%;
+    bottom: 2%;
+    
+  }
+  
+  .Upleft {
+    position: absolute;
+    left: 10%;
+    bottom: 52%;
+  }
+
+
+  .downRight {
+    position: absolute;
+    right: 10%;
+    bottom: 2%;
+  }
+  
+  .UpRight {
+    position: absolute;
+    right: 10%;
+    bottom: 52%;
+  }

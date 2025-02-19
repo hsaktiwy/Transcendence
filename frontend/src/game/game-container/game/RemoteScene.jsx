@@ -16,6 +16,7 @@ import Scoreboard from '../components/Scoreboard';
 import { useLocation, useNavigate} from 'react-router-dom';
 
 import { useRemoteGameContext } from '../game/MatchContext';
+import Tooltip from '../components/Tooltip';
 
 
 
@@ -1055,6 +1056,9 @@ const RemoteGame = () => {
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
             <Hud/>
+            <div className='downleft'>
+                <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (Up, Right, Left, Down) or your Mouse to move, aim, and interact with the game.'}/>
+            </div>
             <Scoreboard player1={ReomteGameData.my_user} player2={ReomteGameData.opponent} playerScore={playerScore} aiScore={aiScore}/>
         </>
     )
