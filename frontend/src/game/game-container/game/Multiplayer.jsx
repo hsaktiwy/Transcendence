@@ -11,11 +11,13 @@ import LoadingScreen from '../components/LoadingScreen';
 import Hud from '../components/Hud'
 
 import './RemoteScene.css'
+import './GamePages.css'
 
 import Scoreboard from '../components/Scoreboard';
 import { useNavigate } from 'react-router-dom';
 
 import { useLocalGamesContext } from './MatchContext';
+import Tooltip from '../components/Tooltip';
 
 
 
@@ -1143,6 +1145,18 @@ const MultiplayerGame = () => {
                 height: '100%'}} ref={canvasRef}></canvas>
             <Hud/>
             {/* <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={"RED"} playerScore={playerScore} player2="BLUE" aiScore={aiScore}/> */}
+            <div className='Upleft'>
+                <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (I, J, K, L) to move, aim, and interact with the game.'}/>
+            </div>
+            <div className='downleft'>
+                <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (G, V, B, N) to move, aim, and interact with the game.'}/>
+            </div>
+            <div className='UpRight'>
+                <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (Up, Right, Left, Down) to move, aim, and interact with the game.'}/>
+            </div>
+            <div className='downRight'>
+                <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (W, A, S, D) to move, aim, and interact with the game.'}/>
+            </div>
             <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={LocalGamesData.player1} player2={LocalGamesData.player2} playerScore={playerScore} aiScore={aiScore}/>
             
         </>

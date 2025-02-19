@@ -58,6 +58,13 @@ outline: 4px auto -webkit-focus-ring-color;
 } */
 
 
+.downleft {
+  position: absolute;
+  left: 10%;
+  bottom: 2%;
+
+}
+
 
 
 #loading-screen {

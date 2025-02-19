@@ -14,6 +14,7 @@ import './RemoteScene.css'
 import Scoreboard from '../components/Scoreboard';
 import { useNavigate } from 'react-router-dom';
 import { useLocalGamesContext } from './MatchContext';
+import Tooltip from '../components/Tooltip';
 
 
 
@@ -913,6 +914,12 @@ const LocalGame = () => {
                 left: 0,
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
+            <div className='Upleft'>
+                <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (Up, Right, Left, Down) or your Mouse to move, aim, and interact with the game.'}/>
+            </div>
+            <div className='downleft'>
+                <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (W, A, S, D) to move, aim, and interact with the game.'}/>
+            </div>
             <Scoreboard style={{zIndex: 98, position: 'absolute'}} player1={LocalGamesData.player1} player2={LocalGamesData.player2} playerScore={playerScore} aiScore={aiScore}/>
         </>
     )
