@@ -228,7 +228,8 @@ function ConnectButton(prop: buttonInterface) {
           withCredentials:true
         }
         await mailman(req)
-        userContextConsumer?.fetchFriends()
+        if (userContextConsumer?.userData?.unique_id !== prop.user?.unique_id)
+          userContextConsumer?.setFriends(prev=>[...prev, prop.user as ProfileDataInterface])
         const notification = {
           type: 'NOTIFICATION_ACCEPT_FRIEND',
           to : uuid

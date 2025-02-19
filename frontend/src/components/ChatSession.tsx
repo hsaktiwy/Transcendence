@@ -307,7 +307,7 @@ function ChatSession(){
                                     }}>
                                      <IoIosMore/>
                                     </span>
-                                <div id='drop-menu' ref={DropMenuRef} className= {` ${!openDrop ? 'hidden': isBlocked() ? 'hidden':'block' } rounded-lg   absolute text-base right-[-10px]  top-[100%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-20 animate-fade-down `}>
+                                <div id='drop-menu' ref={DropMenuRef} className= {` ${!openDrop ? 'hidden': isBlocked() || chatContext.active?.user2.state === 'none' ? 'hidden':'block' } z-30 rounded-lg   absolute text-base right-[-10px]  top-[100%] bg-gradient-to-br from-[#283137] to-[#242729] border border-white/30  transition-all duration-20 animate-fade-down `}>
                                     <ul className="w-80 py-4">
                                         <li className="m-4 flex gap-8 hover:text-[#5E97A9] duration-200 transition-all cursor-pointer " onClick={() =>{
                                                 chatContext.setOpenModal(true)
@@ -371,12 +371,18 @@ function ChatSession(){
                         <ChatSessionBlocked/>
                     }
                 </div>
-                <div id="conversation-footer-container" className={`py-4 px-16 ${chatContext.active?.user2.block !== undefined && chatContext.active.user2.block === true  && 'invisible'}  flex justify-between items-center gap-1 sm:gap-4  `}>
-                    <input type="text" placeholder="Message" className=" bg-transparent rounded-full border border-white/20 focus:outline-none text-white   text-sm sm:text-md px-4 py-4  basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
-                    <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
-                        <RiSendPlaneFill />
-                    </span>
-                </div>
+                { chatContext.active?.user2.state !== 'none' ?
+                    <div id="conversation-footer-container" className={`py-4 px-16 ${((chatContext.active?.user2.block !== undefined && chatContext.active.user2.block === true )) && 'invisible'}  flex justify-between items-center gap-1 sm:gap-4  h-[86px]`}>
+                        <input type="text"  placeholder="Message" className=" bg-transparent rounded-full border border-white/20 focus:outline-none text-white   text-sm sm:text-md px-4 py-4  basis-[95%]" value={message} onChange={(e)=> setMessage(e.target.value)} onKeyDown={TryToSendMessage}/>
+                        <span  onClick={sendMessage} className="bg-[#5E97A9] text-white rounded-lg  hover:bg-white hover:text-[#5E97A9] duration-300 text-2xl md:text-3xl lg:text-4xl basis-[2.5%] cursor-pointer p-0 sm:p-1">
+                            <RiSendPlaneFill />
+                        </span>
+                    </div>:
+                    <div className={`py-4 px-16 ${((chatContext.active?.user2.block !== undefined && chatContext.active.user2.block === true )) && 'invisible'}  flex justify-center items-center border-white/20 border-t  h-[86px]`}>
+                            <h1 className="text-white/70">{`You and ${chatContext.active?.user2.login} are not friends anymore`}</h1>
+                    </div>
+
+                }
 
             </div>
     )

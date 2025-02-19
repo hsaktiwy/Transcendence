@@ -351,6 +351,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             if (friends.find(friend=>friend.unique_id === info.sender.unique_id) !== undefined)
                 setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
             setBlockList(prev=>[...prev, info.sender])
+            setnotifications(prev=>prev.filter(notif=>!notif.content.startsWith(info.sender.login)))
         }
         else{
             if (blockList.find(block=>block.unique_id === info.sender.unique_id) !== undefined)

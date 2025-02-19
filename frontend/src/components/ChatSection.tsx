@@ -178,6 +178,10 @@ function ChatSection(){
         else
             init_conv(setLoading,setActive, setConvs, channelId);
     }, [])
+    useEffect(()=>{
+        if (active)
+            console.log(active)
+    },[active])
 
     return(
         <ChatSectionContext.Provider value={{convs, setConvs, setActive, active, activeSectionOnSm, setActiveSection, showProfile, setShowProfile, openModal, setOpenModal, modalMessage, setModalMessage}}>

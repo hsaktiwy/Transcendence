@@ -304,7 +304,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 )
             except Exception as e:
                 print(f"Error sending to group {group_name}: {e}")
-
+    def cleanNotifications(self, sender, receiver):
+        try:
+            senderObj = MyUser.objects.get(id=sender.id)
+            sender_uuid =str(senderObj.unique_id)
+            receiver_uuid = str(receiver.unique_id)
+            notifQuerySet = Notification.objects.filter((Q(id_user_fk=senderObj ) & Q(content__startswith=receiver_uuid)) | (Q(id_user_fk=receiver) & Q(content__startswith=sender_uuid)))
+            if notifQuerySet.exists():
+                notifQuerySet.delete()
+        except Exception as e:
+            print(e)
+            return
     async def receive(self, text_data):
         try:
             user = self.scope['user']
@@ -414,6 +424,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 receiver = message_json['to']
                 receiverObj = await self.get_receiver(receiver)
                 SerializedSender = await sync_to_async(self.get_sender)(user)
+                if message_json['type'] == 'NotifBlock' and  message_json.get('status') == False:
+                    await sync_to_async(self.cleanNotifications)(user, receiverObj)
                 group_name = f'notification_user_{receiverObj.id}'
                 dictResp = {
                         'type': 'profile_notif',

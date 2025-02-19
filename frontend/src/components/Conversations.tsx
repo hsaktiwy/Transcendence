@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import {ChatSectionContext, Message} from "../utils/ChatContext"
 import { UserContext } from "./UserContext";
 import { formatDate2 } from "@/utils/textFromatting";
@@ -19,20 +19,58 @@ function Conversations(){
         isread: true,
         timestamp: "2000-01-01T12:00"
         };
+    const [searchTerm, setSearchTerm] = useState<string>('')
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+        setSearchTerm(e.target.value.toLowerCase())
+    }
+    // const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>)=>{
+    //     setSearchTerm('')
+    // }
+    // useEffect(()=>{
+    //     if (chatContext.active && searchTerm.length>0)
+    //         setSearchTerm('')
+    // },[chatContext?.active])
 return(
 <div className={`    border-r-white/20 border-0 lg:border-r   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-3xl rounded-r-xl lg:rounded-r-none `}>
             <div className="messages-header-container   font-semibold  text-white flex flex-col   gap-4 py-4">
                 <h1 className=" ml-8 text-2xl">Messages</h1>
-                <div className="p-4 font-light relative">
-                    <input type="text" placeholder="Search" className=" px-5 py-3 bg-transparent w-full border border-white/20 rounded-full outline-none z-10" />
-                    <div className="absolute  mx-auto left-[50%] -translate-x-[50%] w-[90%] min-h-[100px] rounded-b-3xl z-0">
-                        
-                    </div>
+                <div className="p-4 font-light relative ">
+                    <input value={searchTerm} type="text" placeholder="Search" className=" px-5 py-3 bg-transparent w-full border border-white/20 rounded-full outline-none z-10" onChange={handleOnChange} />
+                    {
+                        searchTerm.length > 0 && chatContext.convs && chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm)).length > 0 &&
+                        <div className="absolute  mt-5 left-[50%] -translate-x-[50%] w-[100%] h-[800px]   flex flex-col gap-2">
+                            {
+                                chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm)).map((item, index)=>{
+                                    return(
+                                        <div key={index} className={`h-[100px] relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
+                                            setSearchTerm('')
+                                            chatContext.setActive(item)
+                                            chatContext.setActiveSection('chat')
+                                    }}>
+                                
+                                        <div className="relative inline-block">
+                                            <img src={backendPath + item.user2.profile_pic} alt="friend-pic" className={`aspect-square rounded-full object-cover w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]   `} />
+                                        </div>
+                                        <div className=" flex flex-col gap-3">
+                                            <h1 className="text-sm xxl:text-lg font-semibold">{`${item.user2.firstName} ${item.user2.lastName}`}</h1>
+                                            <p className="tex-sm text-white/75">{`@${item.user2.login}`}</p>
+                                        </div>
+                                    </div>  
+                                    )
+                                })
+                            }
+                        </div> 
+                    //     :
+                    //     <div className="absolute  mt-5 left-[50%] -translate-x-[50%] w-[100%] h-[800px]   flex flex-col gap-2">
+                            
+                    //         <h1>No Conversation found</h1>
+                    //     </div>
+                        }
                 </div>
             </div>
             {
                 chatContext.convs?.filter(conv => conv.messages.length > 0).length ?
-                <div id="messages-conatiner" className="text-white my-2 flex flex-col gap-2 ">
+                <div id="messages-conatiner" className={ ` text-white my-2 ${searchTerm.length > 0 ? 'hidden' : 'flex'} flex-col gap-2 `}>
                 {
                     chatContext.convs?.filter(conv => conv.messages.length > 0 ).map((conv, index): React.ReactNode => {
                         interface convData{
@@ -74,7 +112,7 @@ return(
                         )
                     }) 
                 }
-                </div> : <EmptyConversationList/>
+                </div> : searchTerm.length ===0 && <EmptyConversationList/>
             }
     </div>
 )
