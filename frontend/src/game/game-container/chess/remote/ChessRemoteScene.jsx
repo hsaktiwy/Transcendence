@@ -64,7 +64,10 @@ const ChessRemoteGame = () => {
             console.log("Connected to the game room:", ReomteGameData.room_name);
             setPlayerPov();
         };
-
+        gameSocket.onerror = (error) => {
+            console.error("WebSocket Error:", error);
+            navigate('/game/ChessPreRemote');
+        };
 
         gameSocket.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -85,7 +88,7 @@ const ChessRemoteGame = () => {
                     winnner = 'Draw'
                 }
                 else {
-                    winnner = 'Nta Zamel'
+                    winnner = 'You Lost'
                 }
                 setReomteGameData({
                     // room_name: data['room_name'],
