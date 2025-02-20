@@ -39,6 +39,10 @@ const PreInvite = () => {
             tmpsocket.onclose = () => {
                 console.log("==> Inviting Socket Disconnected !");
             };
+            tmpsocket.onerror = (error) => {
+                console.error("WebSocket Error:", error);
+                navigate('/game/PreRemote');
+            };
             tmpsocket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 console.log("==> message received from the backend !", data);
@@ -95,6 +99,13 @@ const PreInvite = () => {
                 tgameSocket.onclose = () => {
                     console.log("==> ", data['room_name'], " room Socket Disconnected !");
                 };
+                tgameSocket.onerror = (error) => {
+                    if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
+                        tmpsocket.close()
+                    }
+                    console.error("WebSocket Error:", error);
+                    navigate('/game/PreRemote');
+                };
                 tgameSocket.onmessage = (event) => {
                     const data = JSON.parse(event.data);
                     if (data['type'] === 'match_found') {
@@ -102,7 +113,7 @@ const PreInvite = () => {
                         
                         ReomteGameData.inviting = true
                         ReomteGameData.gameSocket = tgameSocket
-                        ReomteGameData.form_game_invite = false
+                        // ReomteGameData.form_game_invite = false
                         
                         // Update Reomte context
                         
