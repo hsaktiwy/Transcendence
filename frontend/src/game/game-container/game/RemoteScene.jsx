@@ -16,6 +16,7 @@ import Scoreboard from '../components/Scoreboard';
 import { useLocation, useNavigate} from 'react-router-dom';
 
 import { useRemoteGameContext } from '../game/MatchContext';
+import { useLocalGamesContext } from '../game/MatchContext';
 import Tooltip from '../components/Tooltip';
 
 
@@ -29,6 +30,7 @@ const RemoteGame = () => {
     // Remote LOgic
     const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
+    const { setLocalGamesData } = useLocalGamesContext();
     const location = useLocation()
     const [dataReady, setDataReady] = useState(false)
 
@@ -196,6 +198,7 @@ const RemoteGame = () => {
                 }); 
                 setAiScore(0);
                 setPlayerScore(0);
+                setLocalGamesData({})
                 navigate('/game/Winner');
             }
             else {
@@ -232,6 +235,7 @@ const RemoteGame = () => {
                 setAiScore(0);
                 setPlayerScore(0);
                 console.log(ReomteGameData.my_user, ' Im quitting !')
+                setLocalGamesData({})
                 navigate('/game/Winner');
             }
             
@@ -1077,6 +1081,7 @@ const RemoteGame = () => {
         setPlayerScore(0);
         setAiScore(0);
         //sleep a bit to send updates before disconnecting and forfait the game
+        setLocalGamesData({})
         navigate('/game/Winner');
 
         return(docket.close());
