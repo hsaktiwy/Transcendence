@@ -101,8 +101,8 @@ class ApiConsumer(WebsocketConsumer):
 
         # if (user.state == MyUser.IN_GAME or user.state == MyUser.IN_SEARCH):
         # print('===> WTF R U DOING HERE !', user.state, find_room_name(user, PPong_Rooms))
-        if (user.state != MyUser.ONLINE or find_room_name(user, PPong_Rooms)):
-            # print('===> WTF R U DOING HERE !', user.state, find_room_name(user, PPong_Rooms))
+        room = find_room_name(user, PPong_Rooms)
+        if (user.state != MyUser.ONLINE or (room and not (len(room) == 4 and room[3] == 'Invited' and room[2][0].unique_id == user.unique_id and room[2][1] == 'TBR'))):
             self.close()
             return
 
@@ -199,16 +199,19 @@ class ApiConsumer(WebsocketConsumer):
             user = sync__get_user(user.unique_id)
             user.state = MyUser.ONLINE #baghi 3a y3ich
             user.save()
-        elif (user.state == MyUser.IN_GAME and sync__get_user(room[2][0].unique_id).state == MyUser.ONLINE):
-            # print(user.state, sync__get_user(room[2][0].unique_id).state, room[3])
-            if room and len(room) >= 4 and room[3] == 'Invited':
-                remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
-                user = sync__get_user(user.unique_id)
-                user.state = MyUser.ONLINE #baghi 3a y3ich
-                user.save()
-            else:
-            # print('=> user ', user.login, ', quitting matchmaking!')
-                pass
+        elif (user.state == MyUser.IN_GAME):
+
+            second_user = sync__get_user(room[2][0].unique_id)
+            if second_user and second_user.state == MyUser.ONLINE:
+                # print(user.state, sync__get_user(room[2][0].unique_id).state, room[3])
+                if room and len(room) >= 4 and room[3] == 'Invited':
+                    remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
+                    user = sync__get_user(user.unique_id)
+                    user.state = MyUser.ONLINE #baghi 3a y3ich
+                    user.save()
+                else:
+                # print('=> user ', user.login, ', quitting matchmaking!')
+                    pass
 
         # Show_Rooms(PPong_Rooms)
         #idik fzeb
