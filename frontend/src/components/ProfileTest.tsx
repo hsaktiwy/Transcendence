@@ -128,7 +128,7 @@ const ProfileTest  = () =>{
     {
         try{
           const req = {
-            url:'friendship/is/BLOCKED_BOTH_SIDE/'+ uuid,
+            url:'friendship/is/BLOCKED_BOTH_SIDE/'+ uuid+"/",
             method: 'GET',
             withCredentials:true,
           }

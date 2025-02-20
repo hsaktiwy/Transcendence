@@ -59,7 +59,7 @@ function ConnectButton(prop: buttonInterface) {
     if (prop.user){
       try{
         const req = {
-          url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+uuid,
+          url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+uuid+"/",
           method: "POST",
           withCredentials: true,
         }
@@ -99,7 +99,7 @@ function ConnectButton(prop: buttonInterface) {
   {
       try{
         const req = {
-          url:'friendship/block_status/'+ uuid,
+          url:'friendship/block_status/'+ uuid+"/",
           method: 'GET',
           withCredentials:true,
         }
@@ -125,7 +125,7 @@ function ConnectButton(prop: buttonInterface) {
   {
     try{
         const req = {
-          url:'friendship/is/FRIEND/'+ uuid,
+          url:'friendship/is/FRIEND/'+ uuid+"/",
           method: 'GET',
           withCredentials:true,
         }
@@ -135,7 +135,7 @@ function ConnectButton(prop: buttonInterface) {
         if (responce)
           await getChannelId()
         const req2 = {
-          url:'friendship/status/'+ uuid,
+          url:'friendship/status/'+ uuid+"/",
           method: 'GET',
           withCredentials:true,
         }
@@ -233,7 +233,7 @@ function ConnectButton(prop: buttonInterface) {
       if (friend_req_id != -1)
       {
         const req = {
-          url: `/friendship/request/status/set/accept/${friend_req_id}`,
+          url: `/friendship/request/status/set/accept/${friend_req_id}/`,
           method: 'POST',
           withCredentials:true
         }
@@ -262,7 +262,7 @@ function ConnectButton(prop: buttonInterface) {
       if (friend_req_id != -1)
       {
         const req = {
-          url: `/friendship/request/status/set/cancel/${friend_req_id}`,
+          url: `/friendship/request/status/set/cancel/${friend_req_id}/`,
           method: 'DELETE',
           withCredentials:true
         }
@@ -289,7 +289,7 @@ function ConnectButton(prop: buttonInterface) {
       if (friend_req_id != -1)
       {
         const req = {
-          url: "friendship/unfriend/"+uuid,
+          url: "friendship/unfriend/"+uuid+"/",
           method: "POST",
           withCredentials: true,
         }

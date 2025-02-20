@@ -41,7 +41,7 @@ function Achievements({ uuid }: Prop) {
   const fetchAchievements = async () => {
     try {
       const req = {
-        url: `profile/get_achievements/${uuid}`,
+        url: `profile/get_achievements/${uuid}/`,
         method: "GET",
       };
       const resp = await mailman(req);

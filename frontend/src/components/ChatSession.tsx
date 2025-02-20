@@ -43,7 +43,7 @@ function ChatSession(){
     {
         try{
             const req = {
-                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.unique_id,
+                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.unique_id+"/",
                 method: 'GET',
                 withCredentials:true,
             }
@@ -352,7 +352,8 @@ function ChatSession(){
                                 <div key={index} id='message-container' className={` w-[80%] flex ${msg.sender?.id === chatContext.active?.user1.id && "flex-row-reverse self-end"} items-end gap-4 mt-auto `}>
                                 <img src={`${backendPath + msg?.sender?.profile_pic}`} alt="" className=" w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px] aspect-square object-cover rounded-full cursor-pointer" onClick={()=>{
                                     setOpenDrop(false)
-                                    chatContext.setShowProfile(true)
+                                    if (msg.sender?.unique_id != userContext.userData?.unique_id)
+                                        chatContext.setShowProfile(true)
                                 }}/>
                                 <div id='message' className={`${msg?.sender?.id !== chatContext.active?.user1.id ? ' bg-[#5E97A9] rounded-br-2xl' : 'bg-slate-800 rounded-bl-2xl'}  py-2 px-4 rounded-t-2xl  text-base 2x:text-lg flex flex-col justify-between min-w-[90px]`}>
                                     <p className="break-words">{msg?.content}</p>
