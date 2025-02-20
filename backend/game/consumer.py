@@ -493,6 +493,18 @@ def sync__get_user(unique_id):
 
 @sync_to_async
 def create_game(type, user1, user2, winner, loser, score_p1, score_p2):
+    if (score_p1 != score_p2):
+        try:
+            w = ProfileStatus.objects.get(id_user_fk=winner)
+            l = ProfileStatus.objects.get(id_user_fk=loser)
+            w.xp = w.xp+100
+            l.xp = max(l.xp-50,0)
+            w.level = w.xp/1000
+            l.level = l.xp/1000
+            w.save()
+            l.save()
+        except Exception as e :
+            print(e)
     return Game.objects.create(
         type=type,
         user_p1=user1,
