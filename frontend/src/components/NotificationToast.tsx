@@ -9,6 +9,7 @@ import { BiMessageSquareDetail } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import mailman from "@/utils/AxiosFetcher";
 import { toast } from "react-toastify";
+import { WebSocketContext } from "@/utils/WSContext";
 
 
 export interface senderInterface {
@@ -20,9 +21,11 @@ export interface senderInterface {
     birthDay: string;
 
 }
+
 interface NotificationsList{
     items: NotificationPropreties[]
 }
+
 interface typeInterface{
     'system': JSX.Element;
     'friendship': JSX.Element,
@@ -30,6 +33,7 @@ interface typeInterface{
     'tournament': JSX.Element,
     'message': JSX.Element,
 }
+
 const notifType: typeInterface = {
     'system': <RiNotification2Line/>,
     'friendship': <IoPersonAddOutline/>,
@@ -37,11 +41,13 @@ const notifType: typeInterface = {
     'tournament': <RiGamepadLine/>,
     'message': <BiMessageSquareDetail/>,
 }
+
 const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
     
     const userContextConsumer = useContext(UserContext)
-    
-    if (!userContextConsumer)
+    const WSContext = useContext(WebSocketContext)
+
+    if (!userContextConsumer || !WSContext)
         throw new Error("userContext must be used within a UserProvider");
     
     const removeNotification = async (notification: NotificationPropreties) =>{
@@ -53,6 +59,11 @@ const NotificationToast: React.FC<NotificationsList> = ({ items }) =>{
                 }
                 const resp = await mailman(req)
                 if (resp.status === 204){
+                    const message = {
+                        type: "NOTIF_DELETE",
+                        id: notification.id
+                    }
+                    WSContext.socket.current?.send(JSON.stringify(message))
                     userContextConsumer.setnotifications(prev => prev.filter(notif=>notif.id !== notification.id))
                     const newItems = items.filter(item => item.id !== notification.id)
                     userContextConsumer?.setNewNotification(newItems)

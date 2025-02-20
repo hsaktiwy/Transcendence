@@ -145,7 +145,7 @@ async def connect_websocket(csrf_token: str, access_token: str):
     The tokens are passed in the header accordingly.
     """
     # Replace with your actual WebSocket URL.
-    ws_url = "wss://localhost:4444/api/ws/chat/"
+    ws_url = "wss://localhost:4444/api/ws/ping-pong/room"
 
     # Construct the Cookie header value.
     cookie_value = f"csrftoken={csrf_token}; access_token={access_token}"

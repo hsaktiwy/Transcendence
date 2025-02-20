@@ -8,7 +8,6 @@ const mailman = axios.create(
     }
 );
 
-// Request Interceptor
 mailman.interceptors.request.use(
     (config) => {
         if (!config.headers['Content-Type'])
@@ -30,6 +29,7 @@ mailman.interceptors.response.use(
         return response
     },
     async (error) =>{
+        // console.clear()
         const originalRequest = error.config
         if ((error.response.config.responseType==='blob' || (error.response  && error.response.data['detail'] && error.response.data['detail'] == 'Expired token')) && (error.response.status == 401 && !originalRequest._retry)){
             originalRequest._retry = true

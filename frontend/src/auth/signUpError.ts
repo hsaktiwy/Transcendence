@@ -9,7 +9,7 @@ export interface signupError {
     firstName: string[]
     lastName: string[],
     login: string[],
-    email: string[],
+    email: string[] | string,
     password: string[],
     password2: string[],
     old_password: string[]

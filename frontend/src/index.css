@@ -5,6 +5,7 @@
 /* Scrollbar container */
 ::-webkit-scrollbar {
   width: 3px;
+  height: 3px;
 }
   
 /* Scrollbar track */
@@ -43,7 +44,7 @@ html, body {
   width: 110%;  
   height: 110vh;
   
-  background-image: url('https://cdnb.artstation.com/p/assets/images/images/046/547/131/large/rutger-van-de-steeg-hongkong-night-melancholy.jpg?1645386955');
+  background-image: url('../public/ft_wallpaper.jpeg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
