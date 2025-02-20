@@ -42,8 +42,8 @@ class UserSerializer(serializers.ModelSerializer):
             if new_password != confirm_password:
                 raise serializers.ValidationError({"password2": "New password and confirm password do not match."})
             instance.set_password(new_password)
-        instance.login = validated_data.get('login', instance.login)
-        instance.email = validated_data.get('email', instance.email)
+        instance.login = validated_data.get('login', instance.login).lower()
+        instance.email = validated_data.get('email', instance.email).lower()
         instance.firstName = validated_data.get('firstName', instance.firstName)
         instance.lastName = validated_data.get('lastName', instance.lastName)
         instance.state = validated_data.get('state', instance.state)
@@ -84,6 +84,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('password2')
         validated_data['level'] = 0.0  # Default level
+        validated_data['email'] = validated_data['email'].lower()
         return MyUser.objects.create_user(**validated_data)
 
 class UserLoginSerializer(serializers.ModelSerializer):
@@ -97,6 +98,8 @@ class UserLoginSerializer(serializers.ModelSerializer):
     def validate(self, data):
         email = data.get('email')
         password = data.get('password')
+        if email:
+            email = email.lower()
         user = authenticate(email=email, password=password)
         if user is None:
             raise serializers.ValidationError("Invalid email or password.")

@@ -46,39 +46,6 @@ def get_Rank_User(request, uuid):
     try:
         user = get_object_or_404(MyUser, unique_id=uuid)
         profile_status = get_object_or_404(ProfileStatus, id_user_fk=user)
-
-        last_match = Game.objects.filter(Q(user_p1=user) | Q(user_p2=user)).order_by('-time').first()
-
-        if not last_match:
-            return Response({'user_id': str(user.unique_id),
-                'xp': 0,
-                'level': 0}, status=200)
-        
-        if profile_status.last_match_id == last_match.id:
-            return Response({  
-                'user_id': str(user.unique_id),
-                'xp': profile_status.xp,
-                'level': profile_status.level
-            }, status=200)
-
-        match (last_match.winner == user, last_match.type):
-            case (True, 'PONG'):
-                profile_status.xp += 100
-            case (True, 'CHESS'):
-                profile_status.xp += 50
-            case (False, 'PONG'):
-                profile_status.xp -= 50
-            case _:
-                profile_status.xp -= 25
-
-
-
-        profile_status.xp = max(profile_status.xp, 0)
-        profile_status.level = profile_status.xp / 1000
-
-        profile_status.last_match_id = last_match.id
-        profile_status.save(update_fields=['xp', 'level', 'last_match_id'])
-
         return Response({
             'user_id': str(user.unique_id),
             'xp': profile_status.xp,

@@ -85,13 +85,13 @@ const Username = (prop: SetUsernameProps) => {
                                 animate="formAnimate"
                                 onSubmit={handleSubmit}
                                 className=" p-10  shadow-lg max-w-screen-sm lg:w-[500px]   bg-white/10 backdrop-filter backdrop-sm border border-white/20 rounded-3xl">
-                                <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
+                                <div className='form-header  text-2xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                                     <h1 >One more step!</h1>
-                                    <p className='text-lg font-normal '>Please Enter a username</p>
+                                    <p className='text-lg font-normal font-poppins '>Please Enter a username</p>
                                 </div>
                                     <FormInput {...usernameInput} value={username} setInput={setUsername} usernameError={usernameError} setUSernameError={setUsernameError}/>
 
-                                <div className='flex flex-col gap-6 mt-9 justify-center items-center'>
+                                <div className='flex flex-col gap-6 my-9 justify-center items-center'>
 
                                     <button type="submit"
                                             disabled= {usernameError ? true : false}

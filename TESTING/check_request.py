@@ -96,7 +96,7 @@ def main():
     session = requests.Session()
 
     # Define login parameters -- modify these according to your website requirements
-    host = "https://localhost:4444"
+    host = "https://10.13.1.16:4444"
     login_url = host + "/api/api/user/login/"  # Replace with your login URL
     credentials = {
         "email": "Baki@gmail.com",

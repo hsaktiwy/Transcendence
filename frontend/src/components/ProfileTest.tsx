@@ -102,9 +102,7 @@ const ProfileTest  = () =>{
  
    const fetchUserData = async () =>{
     try{
-        const user = userContextConsumer.friends.filter(friend=>(friend.unique_id === uuid)); 
-        if (user.length === 0)
-        {
+      
             setIsLoading(true);
             const req = {
                 url: `/api/users/${uuid}/`,
@@ -114,10 +112,7 @@ const ProfileTest  = () =>{
             const resp = await mailman(req)
             const respData: ProfileDataInterface = resp.data
             setProfileData(respData)
-        }
-        else{
-            setProfileData(user[0])
-        }
+        
     }
     catch (err){
         Navigate('/404')

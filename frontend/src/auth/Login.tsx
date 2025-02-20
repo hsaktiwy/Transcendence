@@ -113,10 +113,10 @@ const Login = () => {
                         setTfaUser(resp.data.user)
                     else{
                         // console.log(window.location.pathname)
-                        AuthContextConsummer.setWaitForOauth(false)
-
-                        window.history.replaceState({}, document.title, '/');
+                        window.history.replaceState({}, document.title, window.location.pathname);
                         location.reload()
+                        // AuthContextConsummer.setWaitForOauth(false)
+                        // AuthContextConsummer.setLoggedIn(true)
                         // _setCode(null)
                         // location.reload();
                         // AuthContextConsummer.setLoggedIn(true)
@@ -183,7 +183,7 @@ const Login = () => {
                                 animate="formAnimate"
                                 onSubmit={handleSubmit}
                                 className=" p-6 rounded-lg shadow-lg max-w-screen-sm lg:w-[500px]  bg-white/10 backdrop-filter backdrop-sm border border-white/20">
-                                <div className='form-header  text-4xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
+                                <div className='form-header  text-3xl font-semibold text-white tracking-wider mb-[50px] flex flex-col gap-4 justify-center items-center'>
                                     <h1 >Welcome Back !</h1>
                                     <p className='text-lg font-normal '>Please Enter your details</p>
                                 </div>
