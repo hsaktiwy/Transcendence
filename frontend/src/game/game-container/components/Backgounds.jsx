@@ -46,7 +46,7 @@ function Backgrounds() {
         <div className={OnPongRoute ? "" : "hidden-v"}>
         {/* {(OnPongRoute && <PingPongBack />)} */}
           <PingPongBack />
-        </div>
+        </div> 
 
 
         {/* <div className="main-game-page-container"> */}

@@ -120,8 +120,10 @@ function GeneralSettings(){
       catch (err){
         const customError = err as AxiosError
         const axiosErrorMessage = customError.response?.data as signupError
-        if (axiosErrorMessage.email)
-            toast.error(emailError)
+        if (axiosErrorMessage.email){
+
+          typeof axiosErrorMessage.email === 'string' ? toast.error(axiosErrorMessage.email) : toast.error(emailError)
+        }
         if (axiosErrorMessage.login)
             toast.error(userNameError)
         if (axiosErrorMessage.firstName)

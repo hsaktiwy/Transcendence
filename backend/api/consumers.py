@@ -32,7 +32,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 return None
             return friend_group_list
         except Exception as e:
-            print(f'error  : {e}')
             return None
 
 
@@ -48,7 +47,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='friendship', friend_request_id=friendreq.id)
             return 1, notification, receiver.id, friendreq.id
         except Exception as e:
-            print(f'error  : {e}')
             return 0, None, None, None
     def accept_friend_notification(self, _receiver, _sender):
         try:
@@ -63,8 +61,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 rev_notif.save()
             return 1, notification, receiver.id, acceptedFriendReq.id
         except Exception as e:
-            print(f'error  : {e}')
-            return 0, None, None, None,# None
+            return 0, None, None, None
     def game_invite_notification(self, _receiver, _sender, room_name):
         try:
             receiver = MyUser.objects.filter(unique_id=_receiver).first()
@@ -72,8 +69,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='gameInvitation', friend_request_id=-1, room_name=room_name)
             return 1, notification, receiver.id
         except Exception as e:
-            print(f'error  : {e}')
-            return 0, None, None, None,# None
+            return 0, None, None, None
 
     def create_message_notification(self, receiver, sender, message, channel_id):
         try:
@@ -92,7 +88,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 return notification, user.id
             return None, None
         except Exception as e:
-            print(f'error  : {e}')
             return None, None
 
     def get_user_channels(self, user_id):
@@ -119,7 +114,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 return False, 'NOT A FRIEND!'
             return True, 'CLEAR'
         except Exception as e:
-            print(f'error  : {e}')
             return False, "CAN'T DO THAT!"
 
     @database_sync_to_async
@@ -150,7 +144,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             updated_channel = Channel.objects.get(id=room_id)
             return message_obj.id, updated_channel.last_update, message_obj.timestamp, message_obj.isread
         except Exception as e:
-            print(f'Error while trying to create a Message : {e}')
             return
 
     def get_SerializedUser(self, user):
@@ -170,7 +163,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             userObj = MyUser.objects.get(id=user.id)
             return (PublicUserSerializer(userObj).data)
         except:
-
             return None
 
     def set_messages_isread_to_true(self , user, channel_id, start_id):
@@ -181,7 +173,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     messages_to_updates.update(isread=True)
                     Notification.objects.filter(channel_id=channel_id).update(is_readed=True)
         except Exception as e:
-            print(f'Error while trying to create a Message : {e}')
+            return
 
     async def add_groups(self, channels, user):
         async for channel in channels:
@@ -203,7 +195,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     self.channel_name
                 )
         except Exception as e:
-            print(f"Error while trying to add to group: {e}")
+            return
 
 
     async def connect(self):
@@ -227,10 +219,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.add_groups(channels, user)
                 await self.accept()
             except Exception as e:
-                print(f"Error while connecting to channels: {e}")
                 await self.close()
         else:
-            print("Anonymous user attempted to connect.")
             await self.close()
 
     async def disconnect(self, code):
@@ -282,7 +272,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 )
             except Exception as e:
                 print(f"Error sending to group {group_name}: {e}")
-
+    def cleanNotifications(self, sender, receiver):
+        try:
+            senderObj = MyUser.objects.get(id=sender.id)
+            sender_uuid =str(senderObj.unique_id)
+            receiver_uuid = str(receiver.unique_id)
+            notifQuerySet = Notification.objects.filter((Q(id_user_fk=senderObj ) & Q(content__startswith=receiver_uuid)) | (Q(id_user_fk=receiver) & Q(content__startswith=sender_uuid)))
+            if notifQuerySet.exists():
+                notifQuerySet.delete()
+        except Exception as e:
+            return
     async def receive(self, text_data):
         try:
             user = self.scope['user']
@@ -401,6 +400,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 receiver = message_json['to']
                 receiverObj = await self.get_receiver(receiver)
                 SerializedSender = await sync_to_async(self.get_sender)(user)
+                if message_json['type'] == 'NotifBlock' and  message_json.get('status') == False:
+                    await sync_to_async(self.cleanNotifications)(user, receiverObj)
                 group_name = f'notification_user_{receiverObj.id}'
                 dictResp = {
                         'type': 'profile_notif',
@@ -420,13 +421,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     try:
                         await self.update_and_broadcast_state(user , state)
                     except Exception as e:
-                        print(f"Error updating and broadcasting state: {e}")
-
+                        return
             elif message_json['type']=="READ":
                 first_index = int(message_json['first_index'])
                 channel_id = int(message_json['channel'])
                 await sync_to_async(self.set_messages_isread_to_true)(user, channel_id, first_index)
-
             elif message_json['type'] == "GAME_INVITE":
                 receiver = message_json['receiver']
                 room_name = message_json['room_name']
@@ -450,7 +449,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'sender': SerializedSender,
                         'room_name': room_name,
                     }
-                )       
+                )
+            elif message_json['type'] == 'NOTIF_DELETE':
+                group_name = f'notification_user_{user.id}'
+                await self.channel_layer.group_send(
+                    group_name,
+                    {
+                        'type': 'delete_notif',
+                        'id': message_json['id']
+                    }
+                )
         except Exception as e:
             print(f"Error while receiving/sending message: {e}")
 
@@ -490,6 +498,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=message)
 
     async def gameInvitation(self, event):
+        message = json.dumps(event)
+        await self.send(text_data=message)
+
+    async def delete_notif(self, event):
         message = json.dumps(event)
         await self.send(text_data=message)
 

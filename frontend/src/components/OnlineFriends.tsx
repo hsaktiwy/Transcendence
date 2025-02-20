@@ -18,8 +18,6 @@ function OnlineFriends() {
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.toLowerCase();
         setSearchTerm(value);
-
-        // Filter friends based on login, firstName, or lastName
         if(friends){
             const results: ProfileDataInterface[] = friends.filter((friend) =>
                 friend.login.toLowerCase().includes(value) ||

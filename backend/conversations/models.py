@@ -10,6 +10,6 @@ class Channel(models.Model):
 class Message(models.Model):
     sender = models.ForeignKey('users.MyUser', on_delete=models.CASCADE)
     id_channel_fk = models.ForeignKey('channel', on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField(max_length=1000)
     isread=models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)

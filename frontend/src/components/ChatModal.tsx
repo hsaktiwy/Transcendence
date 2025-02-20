@@ -4,10 +4,13 @@ import {ChatSectionContext, Conversation} from "../utils/ChatContext"
 import { UserContext } from "./UserContext";
 import { ActionType } from "@/utils/interfaces";
 import mailman from "@/utils/AxiosFetcher";
+import { WebSocketContext } from "@/utils/WSContext";
+import { ProfileDataInterface } from "@/utils/UserDataInterface";
 function ChatModal(){
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
-    if (!chatContext || ! userContext)
+    const SocketContext = useContext(WebSocketContext)
+    if (!chatContext || ! userContext || !SocketContext)
      throw new Error('error')
     const DoAction = async ()=>
     {
@@ -16,30 +19,46 @@ function ChatModal(){
             {
                 const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": (userContext?.action?.type == ActionType.UNFRIEND ? "unfriend" :'none'))
                 const req = {
-                    url: "friendship/"+action+"/"+userContext?.action?.Target_User_UniqueId,
+                    url: "friendship/"+action+"/"+userContext?.action?.Target_User_UniqueId+"/",
                     method: "POST",
                     withCredentials: true,
                 }
                 await mailman(req)
                 userContext.setAction({type:ActionType.NONE, Target_User_UniqueId:undefined,ConversationChannel:undefined})
                 chatContext.setOpenModal(false)
-                if (action == 'block')
+                if (action == 'block' || action == 'unfriend')
                 {
-                    chatContext.setActive((prevActive) => (prevActive && ({
-                        ...prevActive,
-                        status: 1,
-                        messages: []
-                    })))
-                    chatContext.setConvs((prevConvs) =>{
-                        if (prevConvs)
-                            return (prevConvs.map((conv)=>{
-                                if (conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel))
-                                    return {...conv, messages:[], status:1}
-                                else
-                                    return conv
-                            }))
-                        return prevConvs
-                    })
+                    if( chatContext.active){
+                        const notification = {
+                            type: action == 'unfriend' ? 'NOTIFICATION_UNCONNECT' :'NotifBlock',
+                            to : chatContext.active.user2.unique_id,
+                            status: false
+                          }
+                          const message = JSON.stringify(notification)
+                          SocketContext?.socket?.current?.send(message)
+                          const user: ProfileDataInterface = chatContext.active.user2 as ProfileDataInterface
+                          if (userContext?.action?.type == ActionType.BLOCK){
+                            userContext.setBlockList(prev=>[...prev, user])
+                            userContext.setnotifications(prev=>prev.filter(notif=>!notif.content.startsWith(user.login)))
+                          }
+                          userContext.setFriends(prev=>prev.filter(friend=>friend.unique_id!== user.unique_id))
+                    }
+
+                    // chatContext.setActive((prevActive) => (prevActive && ({
+                    //     ...prevActive,
+                    //     status: 1,
+                    //     messages: []
+                    // })))
+                    // chatContext.setConvs((prevConvs) =>{
+                    //     if (prevConvs)
+                    //         return (prevConvs.map((conv)=>{
+                    //             if (conv &&  userContext.action?.ConversationChannel && (conv.channelId == userContext.action?.ConversationChannel))
+                    //                 return {...conv, messages:[], status:1}
+                    //             else
+                    //                 return conv
+                    //         }))
+                    //     return prevConvs
+                    // })
                 }
                 else if (action == 'unblock')
                 {

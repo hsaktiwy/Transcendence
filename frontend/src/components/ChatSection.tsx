@@ -32,7 +32,7 @@ function ChatSection(){
         throw new Error("userContext must be used within a UserProvider");
     if (!SocketContext)
         throw new Error('error')
-
+    const  {blockList} = userContextConsumer
     const {AddChannel,RemoveChannel} = SocketContext
     const updateConvsState = () =>{
         if (convs && convs.length){
@@ -63,7 +63,23 @@ function ChatSection(){
     useEffect(()=>{
         updateConvsState()
     }, [userContextConsumer.friends])
-
+    useEffect(()=>{
+        if (convs && blockList.length >0){
+            let updateActive : Conversation | undefined = undefined
+            const newConvs = convs.map((conv)=>{
+                let userFound = blockList.find(block=>block.unique_id === conv.user2.unique_id)
+                if (userFound !== undefined){
+                    conv.user2.block = true
+                    if(userFound.unique_id === active?.user2.unique_id)
+                        updateActive = conv
+                }
+                return conv
+            })
+            setConvs(newConvs)
+            if (updateActive !== undefined)
+                setActive(updateActive)
+        }
+    },[blockList])
     const UpdateConvs = (data:any)=>
     {
         const message_received: Message = {

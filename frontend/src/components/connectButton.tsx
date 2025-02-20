@@ -59,7 +59,7 @@ function ConnectButton(prop: buttonInterface) {
     if (prop.user){
       try{
         const req = {
-          url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+uuid,
+          url: "friendship/"+ (isblock ? "unblock":"block")+ "/"+uuid+"/",
           method: "POST",
           withCredentials: true,
         }
@@ -77,7 +77,6 @@ function ConnectButton(prop: buttonInterface) {
               prev.filter(blocked => blocked.unique_id!== user.unique_id)
             )
           })
-          userContextConsumer?.setFriends(prev=>[...prev, user])
         }
         setBtn_block(isblock ? 'Block' : 'Unblock');
         setIsbLock(!isblock)
@@ -100,7 +99,7 @@ function ConnectButton(prop: buttonInterface) {
   {
       try{
         const req = {
-          url:'friendship/block_status/'+ uuid,
+          url:'friendship/block_status/'+ uuid+"/",
           method: 'GET',
           withCredentials:true,
         }
@@ -126,7 +125,7 @@ function ConnectButton(prop: buttonInterface) {
   {
     try{
         const req = {
-          url:'friendship/is/FRIEND/'+ uuid,
+          url:'friendship/is/FRIEND/'+ uuid+"/",
           method: 'GET',
           withCredentials:true,
         }
@@ -136,7 +135,7 @@ function ConnectButton(prop: buttonInterface) {
         if (responce)
           await getChannelId()
         const req2 = {
-          url:'friendship/status/'+ uuid,
+          url:'friendship/status/'+ uuid+"/",
           method: 'GET',
           withCredentials:true,
         }
@@ -146,7 +145,6 @@ function ConnectButton(prop: buttonInterface) {
         const  sender:boolean = resp2.data['sender']
         const  fr_id:number = resp2.data["friend_req_id"]
         setFriendRequestId(fr_id)
-        console.log('heerere->>>>', resp2)
         if (st === "pending")
           setFriendRequest((sender) ? 'Pending': 'Accept')
     }
@@ -235,12 +233,13 @@ function ConnectButton(prop: buttonInterface) {
       if (friend_req_id != -1)
       {
         const req = {
-          url: `/friendship/request/status/set/accept/${friend_req_id}`,
+          url: `/friendship/request/status/set/accept/${friend_req_id}/`,
           method: 'POST',
           withCredentials:true
         }
         await mailman(req)
-        userContextConsumer?.fetchFriends()
+        if (userContextConsumer?.userData?.unique_id !== prop.user?.unique_id)
+          userContextConsumer?.setFriends(prev=>[...prev, prop.user as ProfileDataInterface])
         const notification = {
           type: 'NOTIFICATION_ACCEPT_FRIEND',
           to : uuid
@@ -263,7 +262,7 @@ function ConnectButton(prop: buttonInterface) {
       if (friend_req_id != -1)
       {
         const req = {
-          url: `/friendship/request/status/set/cancel/${friend_req_id}`,
+          url: `/friendship/request/status/set/cancel/${friend_req_id}/`,
           method: 'DELETE',
           withCredentials:true
         }
@@ -290,7 +289,7 @@ function ConnectButton(prop: buttonInterface) {
       if (friend_req_id != -1)
       {
         const req = {
-          url: "friendship/unfriend/"+uuid,
+          url: "friendship/unfriend/"+uuid+"/",
           method: "POST",
           withCredentials: true,
         }

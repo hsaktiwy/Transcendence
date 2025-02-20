@@ -346,10 +346,16 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
     }
     const updateFriendShip = (info: friendship) =>{
-        if(info.status!== undefined && info.status === false)
-            setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
-        else if (info.status!== undefined && info.status === true)
-            setFriends(prev => [...prev, info.sender])
+        if(info.status=== undefined ){
+            if (friends.find(friend=>friend.unique_id === info.sender.unique_id) !== undefined)
+                setFriends(prev => prev.filter(friend=> friend.unique_id !== info.sender.unique_id))
+            setBlockList(prev=>[...prev, info.sender])
+            setnotifications(prev=>prev.filter(notif=>!notif.content.startsWith(info.sender.login)))
+        }
+        else{
+            if (blockList.find(block=>block.unique_id === info.sender.unique_id) !== undefined)
+                setBlockList(prev=> prev.filter(block=> block.unique_id!==info.sender.unique_id))
+        }
     }
     const friendStateHandler = (data: NotificationStatePropreties) =>{
         if (data.sender.unique_id === userData?.unique_id && data.state === 'offline'){
@@ -363,11 +369,15 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         tmpFriends.push(friend)
         setFriends(tmpFriends)
     }
-
+    const deleteNotifHandler = (id: number)=>{
+        setnotifications(prev => prev.filter(notif=> notif.id !== id))
+        setNewNotification(prev => prev.filter(notif=> notif.id !== id))
+    }
     useEffect(() =>{
         if (ready)
         {
             matchHistoryData()
+            SocketContext.AddChannel('NOTIFICATION_DELETE', deleteNotifHandler)
             SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
             SocketContext.AddChannel('UPDATE_FRIEND_LIST', updateFriendList)
             SocketContext.AddChannel('UPDATE_FRIENDSHIP', updateFriendShip)
@@ -398,7 +408,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
     },[AuthContextConsummer?.loggedIn])
 
-    
     const ajami = async() =>
     {
         await fetchUserData()
