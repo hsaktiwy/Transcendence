@@ -199,19 +199,19 @@ class ApiConsumer(WebsocketConsumer):
             user = sync__get_user(user.unique_id)
             user.state = MyUser.ONLINE #baghi 3a y3ich
             user.save()
-        elif (user.state == MyUser.IN_GAME):
+        elif (user.state == MyUser.IN_GAME and room and len(room) >= 4 and room[3] == 'Invited'):
 
             second_user = sync__get_user(room[2][0].unique_id)
             if second_user and second_user.state == MyUser.ONLINE:
-                # print(user.state, sync__get_user(room[2][0].unique_id).state, room[3])
-                if room and len(room) >= 4 and room[3] == 'Invited':
-                    remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
-                    user = sync__get_user(user.unique_id)
-                    user.state = MyUser.ONLINE #baghi 3a y3ich
-                    user.save()
-                else:
-                # print('=> user ', user.login, ', quitting matchmaking!')
-                    pass
+                remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
+                user = sync__get_user(user.unique_id)
+                user.state = MyUser.ONLINE #baghi 3a y3ich
+                user.save()
+            else:
+            # print('=> user ', user.login, ', quitting matchmaking!')
+                return
+        elif (user.state == MyUser.IN_GAME and room):
+            print('=====> Fuck My Life !!!!!!!!!!')
 
         # Show_Rooms(PPong_Rooms)
         #idik fzeb
@@ -536,7 +536,6 @@ def remove_room(room_name, Rooms):
     for i, room in enumerate(Rooms):
         if len(room) >= 1 and room_name == room[0]:
             Rooms.pop(i)
-
 
 
 
