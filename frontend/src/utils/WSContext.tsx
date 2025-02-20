@@ -138,6 +138,11 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
                 channels.current['NOTIFICATION'](notifData)
               }
             }
+            if (type === 'delete_notif'){
+              const notifData =  JSON.parse(message.data);
+              if (channels.current['NOTIFICATION_DELETE'])
+                channels.current['NOTIFICATION_DELETE'](notifData.id)
+            }
         } catch (error) {
             console.error('Error processing WebSocket message:', error);
         }
@@ -150,7 +155,6 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
         ConnectSocket()
       else if (connected.current === true)
           socket.current?.close()
-
       return () => {
         if (socket.current)
           socket.current.close()

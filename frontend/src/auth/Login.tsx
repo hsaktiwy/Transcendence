@@ -27,7 +27,7 @@ const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [uuid, setUuid] = useState<string>('');
     const [oauth, setOauth] = useState<boolean>(false);
-    const [code, _setCode] = useState<string>('');
+    const [code, _setCode] = useState<string | null>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
@@ -79,6 +79,8 @@ const Login = () => {
 
     const loginwith42 = async (code: string | null) => {
         if (code) {
+            if (!AuthContextConsummer.waitForOauth )
+                AuthContextConsummer.setWaitForOauth(true)
            interface DataInterface{
             code?: string,
             uuid?: string,
@@ -110,8 +112,13 @@ const Login = () => {
                     else if (resp.data.user)
                         setTfaUser(resp.data.user)
                     else{
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        location.reload();
+                        // console.log(window.location.pathname)
+                        AuthContextConsummer.setWaitForOauth(false)
+
+                        window.history.replaceState({}, document.title, '/');
+                        _setCode(null)
+                        // location.reload();
+                        // AuthContextConsummer.setLoggedIn(true)
                     }
                 }
 
@@ -128,15 +135,19 @@ const Login = () => {
             else
                 tryToLogin()
     }, [needLogin])
+    useEffect(()=>{
+        if (code === null)
+            location.reload()
+    },[code])
     useEffect(() => {
       
             const searchParams = new URLSearchParams(window.location.search);
             const tmpCode = searchParams.get('code');
-            if (tmpCode)
+            if (tmpCode){
                 _setCode(tmpCode)
-
-            if (tmpCode)
+                AuthContextConsummer.setWaitForOauth(true)
                 loginwith42(tmpCode)
+            }
     }, []);
     const [hide, setHide] = useState<boolean>(true)
     const [passFoucs, setPassFocus] = useState<boolean>(false)
