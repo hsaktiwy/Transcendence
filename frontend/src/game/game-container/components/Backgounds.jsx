@@ -39,14 +39,14 @@ function Backgrounds() {
   return (
     <>
 
-        <div className={OnChessRoute ? "" : "hidden-v"}>
+        {/* <div className={OnChessRoute ? "" : "hidden-v"}> */}
           {/* {(OnChessRoute && <ChessGameBack />)} */}
-          <ChessGameBack />
-        </div>
-        <div className={OnPongRoute ? "" : "hidden-v"}>
+          {/* <ChessGameBack /> */}
+        {/* </div> */}
+        {/* <div className={OnPongRoute ? "" : "hidden-v"}> */}
         {/* {(OnPongRoute && <PingPongBack />)} */}
-          <PingPongBack />
-        </div> 
+          {/* <PingPongBack /> */}
+        {/* </div>  */}
 
 
         {/* <div className="main-game-page-container"> */}

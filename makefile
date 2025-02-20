@@ -13,7 +13,7 @@ clean:
 	$(CMD) -f docker-compose.prod.yaml down
 
 restart:
-	docker restart frontend daphne_django gunicorn_django 
+	docker restart daphne_django gunicorn_django frontend
 
 fclean: clean
 	docker system prune -af
