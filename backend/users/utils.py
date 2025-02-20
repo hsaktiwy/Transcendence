@@ -16,7 +16,7 @@ from friendship.models import FriendRequest
 from .serializers import PublicUserSerializer
 
 SECRET_KEY = settings.JWT_SECRET_KEY
-ACCESS_TOKEN_EXPIRATION = datetime.timedelta(minutes=settings.ACCESS_TOKEN_LIFETIME)
+ACCESS_TOKEN_EXPIRATION = datetime.timedelta(hours=settings.ACCESS_TOKEN_LIFETIME)
 REFRESH_TOKEN_EXPIRATION = datetime.timedelta(days=settings.REFRESH_TOKEN_LIFETIME)
 ALGORITHM='HS256'
 

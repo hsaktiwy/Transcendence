@@ -47,6 +47,8 @@ interface AuthContextInterface{
     VerifyTFA : (data: VerifyTFAInterface) => Promise<LoginResp >,
     checkLoggedInUser : () => void
     logout : () => void
+    waitForOauth: boolean,
+    setWaitForOauth : React.Dispatch<React.SetStateAction<boolean> >,
 
 }
 
@@ -55,6 +57,7 @@ export const AuthContext = createContext<AuthContextInterface | undefined>(undef
 const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
     const location = useLocation()
     const [loggedIn, setLoggedIn] = useState<boolean | undefined>(undefined)
+    const [waitForOauth, setWaitForOauth] = useState<boolean>(false)
     const Navigate = useNavigate();
     const LoginAction = async (data: LoginDataInterface): Promise<LoginResp  | LoginTFAResponse | LoginError> =>{
         try{
@@ -127,6 +130,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
+                console.log(location,resp, waitForOauth)
                 if(resp.data['message'] && resp.data['message'] === 'user already logged in' && loggedIn === undefined)
                     setLoggedIn(true)
                 else if (resp.data['message'] && resp.data['message'] === 'User logged in successfuly' && loggedIn === undefined)
@@ -147,17 +151,20 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
   
     }
     useEffect(()=>{
-        if (loggedIn === false)
-            logout()
-        else if(loggedIn === true && (location.pathname === '/login' || location.pathname === '/login/')){
-            Navigate('/')
+        if (!waitForOauth){
+            if (loggedIn === false)
+                logout()
+            else if(loggedIn === true && (location.pathname === '/login' || location.pathname === '/login/')){
+                Navigate('/')
+            }
         }
 
     }, [loggedIn])
     useEffect (() =>{
-            checkLoggedInUser()
-    },[location])
-    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, VerifyTFA, checkLoggedInUser, logout}}>
+            if (!waitForOauth)
+                checkLoggedInUser()
+    },[location, waitForOauth])
+    return <AuthContext.Provider value={{loggedIn, setLoggedIn, LoginAction, VerifyTFA, checkLoggedInUser, logout, waitForOauth, setWaitForOauth}}>
         {children}
     </AuthContext.Provider>
 }

@@ -1,4 +1,3 @@
-
 import os
 from status.serializers import NotificationSerializer
 from status.models import Notification
@@ -17,8 +16,6 @@ from django.contrib.auth.models import AnonymousUser
 from io import BytesIO
 from django.core.files import File
 from django.http import Http404
-
-from django.contrib.auth import login
 from rest_framework.decorators import api_view, permission_classes
 import requests
 @api_view(['POST'])
@@ -36,9 +33,6 @@ def LoginWithOAuth42(request):
         client_id = settings.OAUTH_CLIENT
         client_secret = settings.OAUTH_API_KEY
         redirect_uri = settings.OAUTH_REDIRECT_URI
-        print(client_id)
-        print(client_secret)
-        print(redirect_uri)
 
         token_url = 'https://api.intra.42.fr/oauth/token'
         user_info_url = 'https://api.intra.42.fr/v2/me'
@@ -50,12 +44,10 @@ def LoginWithOAuth42(request):
             'code': code,
             'redirect_uri': redirect_uri,
         }
-        # Exchange the code for an access token
-        response = requests.post(token_url, data=payload)
 
+        response = requests.post(token_url, data=payload)
         if response.status_code != 200:
             return Response({'error': 'Failed to retrieve access token'}, status=400)
-        
         access_token = response.json().get('access_token')
         headers = {
             'Authorization': f'Bearer {access_token}',
@@ -145,8 +137,9 @@ class getAuthenticatedUser(APIView):
     def patch(self, request):
         user = request.user
         serializer = UserSerializer(instance=user, data=request.data)
-        print('from view pppp ')
         if serializer.is_valid():
+            if 'email' in serializer.validated_data and serializer.validated_data['email'] != user.email and user.oauth == True:
+                return Response({'email' : 'Email update is not allowed for accounts linked to a third-party provider.'}, status=401)
             user = serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
@@ -177,7 +170,6 @@ class LoginView(APIView):
             elif user.two_factor_auth:
                 resp = generate_TFA_verification_response(user)
             else:
-                print(user.unique_id)
                 resp = generate_tokens_response(user, request)
             return resp
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
@@ -188,6 +180,8 @@ class UpdateUserData(APIView):
  
         serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
+            if 'email' in serializer.validated_data and user.oauth == True:
+                return Response({'message' : 'Email update is not allowed for accounts linked to a third-party provider.'}, status=401)
             user = serializer.update(instance=user, validated_data=serializer.validated_data)
             return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=400)
@@ -220,7 +214,6 @@ class RefreshToken(APIView):
                     httponly=True,
                     samesite='Lax'
                 )
-                # resp.headers['csrf_token'] = csrf_token
                 return resp
             except MyUser.DoesNotExist:
                 raise PermissionDenied('User not found')
@@ -234,51 +227,15 @@ class CheckAuth(APIView):
         csrf_token  = request.headers.get('X-CSRFToken')
         csrf_cookie = request.COOKIES.get('csrftoken')
         if not isinstance(request.user, AnonymousUser):
-            # if not csrf_token or not csrf_cookie:
-            #     return Response({
-            #         'message': 'invalid csrf credentials'
-            #     }, status=status.HTTP_401_UNAUTHORIZED)
-            # elif csrf_cookie != csrf_token:
-            #     return Response({
-            #         'message': 'csrf_token mismatch'
-            #     }, status=status.HTTP_401_UNAUTHORIZED)
-            # else:
-                resp = {
-                    'message' : 'user already logged in'
-                }
-                # if request.user.state == 'offline':
-                #     resp['state']= 'online'
-                return Response(resp, status=status.HTTP_200_OK)
+            resp = {
+                'message' : 'user already logged in'
+            }
+            return Response(resp, status=status.HTTP_200_OK)
         else:
             return Response({
                 'message': 'Anonymous user'
             }, status=status.HTTP_200_OK)
            
-# @sensitive_post_parameters()
-# @require_http_methods(["POST"])
-# @csrf_protect
-# @api_view(['POST'])
-# def MyLogin(request):
-#     if request.method == 'POST':
-#         form  = AuthenticationForm(request, data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             auth_login(request, user)
-#             return Response({'message': 'Login successful', 'user_id': user.id}, status=status.HTTP_200_OK)
-#         else :
-#             return Response({'Error': 'Invalide user credentials!'}, status=status.HTTP_401_UNAUTHORIZED) 
-#     else:
-#         return  Response({'Error': 'This path only accept POST request!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-# class CheckAuthentication(APIView):
-#     authentication_classes = [SessionAuthentication, BasicAuthentication]
-#     permission_classes = [IsAuthenticated]
-#     def get(request, *arg, **kwarg):
-#         return JsonResponse({'IsAuthenticated': True})
-
-# def getCRSFToken(request):
-#         csrf_token = get_token(request)
-#         return JsonResponse({'csrfToken': csrf_token})
 
 class UploadProfilePicture(APIView):
     def patch(self, request, *args, **kwargs):
@@ -400,7 +357,6 @@ def SetUsername(request):
             if user.login is not None and user.login != "":
                 return Response({"message" : "login already setted"}, status=status.HTTP_200_OK)
             del request.data['email']
-            print(request.data)
             serializer = UserSerializer(instance=user, data=request.data)
             if serializer.is_valid():
                 user = serializer.update(instance=user, validated_data=serializer.validated_data)

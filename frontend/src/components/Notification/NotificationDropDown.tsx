@@ -11,6 +11,7 @@ import mailman from "../../utils/AxiosFetcher";
 import { RiInbox2Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { formatDate } from "@/utils/textFromatting";
+import { WebSocketContext } from "@/utils/WSContext";
 
 interface prop {
     display: boolean
@@ -44,7 +45,8 @@ export const notifType: typeInterface = {
 }
 const NotificationDropDown = (info: prop) =>{
     const userContextConsumer = useContext(UserContext)
-    if (!userContextConsumer)
+    const WSContext = useContext(WebSocketContext)
+    if (!userContextConsumer || !WSContext)
         throw new Error("userContext must be used within a UserProvider");
     const LOGO = '/tennis-fire-logo.jpeg'
     let linkProfile = ''
@@ -56,8 +58,14 @@ const NotificationDropDown = (info: prop) =>{
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
-                if (resp.status === 204)
+                if (resp.status === 204){
+                    const message = {
+                        type: "NOTIF_DELETE",
+                        id: notification.id
+                    }
+                    WSContext.socket.current?.send(JSON.stringify(message))
                     userContextConsumer.setnotifications(prev => prev.filter(notif=>notif.id !== notification.id))
+                }
                 
             
         }

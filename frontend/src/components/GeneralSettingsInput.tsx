@@ -65,7 +65,7 @@ const GeneralSettingsInput = (prop: FormInputPropInterface)=>{
           <div className=" -z-20 duration-100 invisible group-hover:visible absolute right-1 text-white/80 top-[18%] -translate-y-[18%]">
             <FiEdit2 />
           </div>
-        <span className={`${error ? 'block' : 'hidden'} text-[12px] px-[10px] text-red-500 `}>{errorMessage}</span>
+        <span className={`${error || userContext.userData?.oauth && name==='email' ? 'block' : 'hidden'} text-[12px] px-[10px] text-red-500 `}>{error? errorMessage : 'Email update is not allowed for accounts linked to a third-party provider.'}</span>
         </div>
       </div>
            
