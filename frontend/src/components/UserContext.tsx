@@ -369,11 +369,15 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         tmpFriends.push(friend)
         setFriends(tmpFriends)
     }
-
+    const deleteNotifHandler = (id: number)=>{
+        setnotifications(prev => prev.filter(notif=> notif.id !== id))
+        setNewNotification(prev => prev.filter(notif=> notif.id !== id))
+    }
     useEffect(() =>{
         if (ready)
         {
             matchHistoryData()
+            SocketContext.AddChannel('NOTIFICATION_DELETE', deleteNotifHandler)
             SocketContext.AddChannel('NOTIFICATION_ADD_FRIEND', notificationHandler)
             SocketContext.AddChannel('UPDATE_FRIEND_LIST', updateFriendList)
             SocketContext.AddChannel('UPDATE_FRIENDSHIP', updateFriendShip)
