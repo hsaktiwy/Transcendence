@@ -307,7 +307,7 @@ class Verify2faOTPView(APIView):
     def post(self, request):
         try:
             code = request.data.get('otp_code')
-            login = request.data.get('user')
+            login = request.data.get('user').lower()
             user = get_object_or_404(MyUser, login=login)
             if verify2faCode(user, code):
                 resp = generate_tokens_response(user, request)
@@ -352,7 +352,7 @@ def LogoutView(request):
 @permission_classes([AllowAny])
 def SetUsername(request):
         try:
-            email = request.data.get('email')
+            email = request.data.get('email').lower()
             user = MyUser.objects.get(email=email)
             if user.login is not None and user.login != "":
                 return Response({"message" : "login already setted"}, status=status.HTTP_200_OK)

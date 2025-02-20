@@ -17,7 +17,7 @@ const ChessPreRemote = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
-    // const socket = new WebSocket('ws://localhost:8000/ws/server-endpoint-socket-chess/');
+    // const socket = new WebSocket('ws://10.13.1.16:8000/ws/server-endpoint-socket-chess/');
     const socket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket-chess/');
     // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
     

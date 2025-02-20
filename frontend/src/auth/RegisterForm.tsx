@@ -125,6 +125,8 @@ const RegisterForm = () =>{
                 toast.error(emailError)
             if (axiosErrorMessage.password || axiosErrorMessage.password2)
                 toast.error(passError)
+            else
+                toast.error("Error occured try again")
         }
 
     }

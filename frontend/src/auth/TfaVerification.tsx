@@ -75,7 +75,7 @@ const TfaVerification:React.FC<TfaProp> = ({user}) =>{
     const handleSubmit = async () => {
 
         const data: VerifyTFAInterface = {
-            user: user,
+            user: user !== undefined ? user.toLowerCase() : user,
             otp_code: otp
         }
         const resp = await AuthContextConsummer.VerifyTFA(data)

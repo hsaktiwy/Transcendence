@@ -9,8 +9,8 @@ Production levels:
             + "corsheaders" -> in the INSTALLED_APPS
             + "corsheaders.middleware.CorsMiddleware" -> in the MIDDLEWARE
             + CORS_ORIGIN_WHITELIST = (
-                "http://localhost:3000",
-                "http://localhost:8000",
+                "http://10.13.1.16:3000",
+                "http://10.13.1.16:8000",
                 )
         }
     + added rest_framwork
@@ -22,7 +22,7 @@ Production levels:
                     'rest_framework.permissions.AllowAny',
                 ],
             }
-            CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"] 
+            CSRF_TRUSTED_ORIGINS = ["http://10.13.1.16:3000"] 
         }
 
 Do List:
@@ -33,22 +33,22 @@ Do List:
     [ ] need to fix websocket disconnection when access token is expired
 hints:
     [=] if you need to connect your frontend with the backend, and get the error 401 UnAuthorized or 403 Forbiden,
-        cooled be that the server refuse the connection, that because in our back end setting.py there is protect that use to limite the hosts to connect, and trust only (http://localhost:3000, http://127.0.0.1:3000, http://localhost:5173, http://127.0.0.1:5173), you can  you host and pore in this arrays in setting.py and the problem will be fixed:
+        cooled be that the server refuse the connection, that because in our back end setting.py there is protect that use to limite the hosts to connect, and trust only (http://10.13.1.16:3000, http://127.0.0.1:3000, http://10.13.1.16:5173, http://127.0.0.1:5173), you can  you host and pore in this arrays in setting.py and the problem will be fixed:
         CORS_ORIGIN_WHITELIST = (
-            "http://localhost:3000",
-            "http://localhost:5173",
+            "http://10.13.1.16:3000",
+            "http://10.13.1.16:5173",
             "http://127.0.0.1:3000",
             "http://127.0.0.1:5173"
         )
 
         CORS_ALLOWED_ORIGINS = [
-            "http://localhost:3000",
-            "http://localhost:5173",
+            "http://10.13.1.16:3000",
+            "http://10.13.1.16:5173",
             "http://127.0.0.1:3000",
             "http://127.0.0.1:5173"
         ]
 
-        CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173"]
+        CSRF_TRUSTED_ORIGINS = ["http://10.13.1.16:3000", "http://10.13.1.16:5173"]
 
         plus don't confuse this with the need of the authentication, as this will make you unhable to send request to the backend, cause it will always refuse it no matter what, plus you can notice that from the backend, request debuging (they will be showned after call python manage.py runserver exmple :
             ?> python manage.py runserver
@@ -77,8 +77,8 @@ guidness :
             BACKEND:string = "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:8000/", ws_host = '{YOUR_COMPUTER_IP_IN_THE_NETWORK}'
             - in the backend got to the setting and add:
             CORS_ORIGIN_WHITELIST = (
-                "http://localhost:3000",
-                "http://localhost:5173",
+                "http://10.13.1.16:3000",
+                "http://10.13.1.16:5173",
                 "http://127.0.0.1:3000",
                 "http://127.0.0.1:5173",
                 "http://127.0.0.1:6379",
@@ -87,8 +87,8 @@ guidness :
             )
 
             CORS_ALLOWED_ORIGINS = [
-                "http://localhost:3000",
-                "http://localhost:5173",
+                "http://10.13.1.16:3000",
+                "http://10.13.1.16:5173",
                 "http://127.0.0.1:3000",
                 "http://127.0.0.1:5173",
                 "http://127.0.0.1:6379",
@@ -96,7 +96,7 @@ guidness :
 
             ]
 
-            CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:6379", "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:5173"]
+            CSRF_TRUSTED_ORIGINS = ["http://10.13.1.16:3000", "http://10.13.1.16:5173", "http://127.0.0.1:6379", "http://{YOUR_COMPUTER_IP_IN_THE_NETWORK}:5173"]
         and voila, every thing should work proporly if you have any problem try:
             1 _ search for it on your own.
             2 _ use Chatgpt
@@ -117,8 +117,8 @@ guidness :
             1 - $> pip install celery[redis]
             2 - In your Django settings file, add:
                 ```
-                    CELERY_BROKER_URL = "redis://localhost:6379/0"
-                    CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+                    CELERY_BROKER_URL = "redis://10.13.1.16:6379/0"
+                    CELERY_RESULT_BACKEND = "redis://10.13.1.16:6379/1"
                 ```
                 Note : The broker is the single most important configuration value, since it tells Django and Celery how to communicate. If they don't have the same value for this setting, no tasks will run.
             Note:   We need a small Python file that will initialize Celery the way we want it,

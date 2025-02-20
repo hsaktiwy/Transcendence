@@ -178,7 +178,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                 withCredentials: true,
             }
             const resp = await mailman(req)
-
             const respData: UserDataInterface = resp.data
             setUserData(respData)
             setProfilePicChanged(false)

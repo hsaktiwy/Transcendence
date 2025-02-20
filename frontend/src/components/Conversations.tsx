@@ -3,6 +3,8 @@ import {ChatSectionContext, Message} from "../utils/ChatContext"
 import { UserContext } from "./UserContext";
 import { formatDate2 } from "@/utils/textFromatting";
 import EmptyConversationList from "./EmptyConversationList";
+import { TbFaceIdError } from "react-icons/tb";
+
 
 function Conversations(){
     const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
@@ -37,10 +39,10 @@ return(
                 <div className="p-4 font-light relative ">
                     <input value={searchTerm} type="text" placeholder="Search" className=" px-5 py-3 bg-transparent w-full border border-white/20 rounded-full outline-none z-10" onChange={handleOnChange} />
                     {
-                        searchTerm.length > 0 && chatContext.convs && chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm)).length > 0 &&
+                        searchTerm.length > 0 && chatContext.convs && chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm.toLowerCase())).length > 0 ?
                         <div className="absolute  mt-5 left-[50%] -translate-x-[50%] w-[100%] h-[800px]   flex flex-col gap-2">
                             {
-                                chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm)).map((item, index)=>{
+                                chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm.toLocaleLowerCase())).map((item, index)=>{
                                     return(
                                         <div key={index} className={`h-[100px] relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
                                             setSearchTerm('')
@@ -60,11 +62,13 @@ return(
                                 })
                             }
                         </div> 
-                    //     :
-                    //     <div className="absolute  mt-5 left-[50%] -translate-x-[50%] w-[100%] h-[800px]   flex flex-col gap-2">
-                            
-                    //         <h1>No Conversation found</h1>
-                    //     </div>
+                        :
+                        searchTerm.length > 0 && <div className="absolute  mt-5  left-0 w-[100%] h-[400px]   flex flex-col gap-8 justify-center items-center">
+                            <span className="text-7xl text-white/85">
+                                <TbFaceIdError/>
+                            </span>
+                            <h1 className="text-white/70  text-3xl lg:text-xl 2xl:text-3xl font-light">No Conversation found</h1>
+                        </div>
                         }
                 </div>
             </div>

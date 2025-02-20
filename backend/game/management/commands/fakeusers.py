@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = "Populates the Users model with random fake data"
 
     def handle(self, *args, **kwargs):
-        username_list = ["Guts","Hamza", "Mosashy", "Yojiro", "Yassu", "Yakuza", "Baki"]
+        username_list = ["Guts1","Hamza1", "Mosashy1", "Yojiro1", "Yassu1", "Yakuza1", "Baki1"]
         # email_list_bonuse = ["_mail"]
         password = "Hamza@123"
         for username in username_list:
