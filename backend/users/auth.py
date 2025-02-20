@@ -39,7 +39,7 @@ class JWTAuthentication(BaseAuthentication):
         if payload == 0:
             raise AuthenticationFailed("Expired token")
         elif payload == -1:
-            if path in self.AUTH_BYPASS_PATHS:
+            if path in self.AUTH_BYPASS:
                 return None
             raise AuthenticationFailed("Invalid token")
         return payload

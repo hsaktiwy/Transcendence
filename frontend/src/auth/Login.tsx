@@ -27,7 +27,6 @@ const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [uuid, setUuid] = useState<string>('');
     const [oauth, setOauth] = useState<boolean>(false);
-    const [code, _setCode] = useState<string | null>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false)
     const [tfaUser, setTfaUser] = useState<string | undefined>(undefined)
@@ -78,7 +77,7 @@ const Login = () => {
     }, [AuthContextConsummer.loggedIn, Navigate])
 
     const loginwith42 = async (code: string | null) => {
-        if (code) {
+     
             if (!AuthContextConsummer.waitForOauth )
                 AuthContextConsummer.setWaitForOauth(true)
            interface DataInterface{
@@ -87,7 +86,8 @@ const Login = () => {
            }
             const data: DataInterface = {}
             if (needLogin === undefined){
-                data.code = code
+                if(code)
+                    data.code = code
                 setOauth(true)
                 setLoading(true)
             }
@@ -116,7 +116,8 @@ const Login = () => {
                         AuthContextConsummer.setWaitForOauth(false)
 
                         window.history.replaceState({}, document.title, '/');
-                        _setCode(null)
+                        location.reload()
+                        // _setCode(null)
                         // location.reload();
                         // AuthContextConsummer.setLoggedIn(true)
                     }
@@ -126,25 +127,24 @@ const Login = () => {
             catch (error) {
                 console.error('Error:', error)
             }
-        }
+        
     }
     useEffect(()=>{
         if (needLogin! === false)
             if (oauth)
-                loginwith42(code)
+                loginwith42(null)
             else
                 tryToLogin()
     }, [needLogin])
-    useEffect(()=>{
-        if (code === null)
-            location.reload()
-    },[code])
+    // useEffect(()=>{
+    //     if (code === null)
+    //         location.reload()
+    // },[code])
     useEffect(() => {
       
             const searchParams = new URLSearchParams(window.location.search);
             const tmpCode = searchParams.get('code');
             if (tmpCode){
-                _setCode(tmpCode)
                 AuthContextConsummer.setWaitForOauth(true)
                 loginwith42(tmpCode)
             }
