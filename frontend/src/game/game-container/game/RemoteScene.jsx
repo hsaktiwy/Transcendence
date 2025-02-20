@@ -60,14 +60,44 @@ const RemoteGame = () => {
                 console.log("location.state.p2_id     :", location.state.p2_id)
                 console.log("location.state.opponent  :", location.state.opponent)
                 if (location.state.room_name && location.state.my_user){
-                    setReomteGameData({room_name:location.state.room_name, my_user:location.state.my_user, p1_id:location.state.p1_id, p2_id: location.state.p2_id, opponent: location.state.opponent}) //p2_id:location.state.my_user
+                    ReomteGameData.room_name = location.state.room_name
+                    ReomteGameData.my_user  = location.state.my_user
+                    ReomteGameData.p1_id  = location.state.p1_id
+                    ReomteGameData.p2_id = location.state.p2_id
+                    ReomteGameData.opponent = location.state.opponent
+                    setReomteGameData(ReomteGameData)
                 }
+                setDataReady(true);
+            }
+            if (ReomteGameData && ReomteGameData.room_name && ReomteGameData.my_user && ReomteGameData.opponent){
+                setDataReady(true);
+            }
+        }
+        if (location.state && !ReomteGameData.room_name && !ReomteGameData.my_user && !ReomteGameData.opponent){
+            if (location.state.room_name && location.state.my_user){
+                ReomteGameData.room_name = location.state.room_name
+                ReomteGameData.my_user = location.state.my_user
+                ReomteGameData.p1_id = location.state.p1_id
+                ReomteGameData.p2_id = location.state.p2_id
+                ReomteGameData.opponent = location.state.opponent
+                setReomteGameData(ReomteGameData)
             }
             setDataReady(true);
         }
-        if (!ReomteGameData.my_user && !ReomteGameData.opponent){
+        if (ReomteGameData && !ReomteGameData.room_name && !ReomteGameData.my_user && !ReomteGameData.opponent){
+            console.log("=>> C protections !!!")
             navigate('/game/PreRemote');
         }
+        else if (ReomteGameData && ReomteGameData.inviting && ReomteGameData.gameSocket){
+            setDataReady(true);
+            // console.log("=>> C protections !!!")
+            // navigate('/game/PreRemote');
+        }
+        // else{
+        //     console.log("=>> C protections V2 !!!")
+        //     console.log("=>> state : ", location.state, ", ReomteGameData.my_user : ", ReomteGameData.my_user)
+        //     navigate('/game/PreRemote');
+        // }
     },[])
     
     // Remote LOgic
@@ -131,13 +161,15 @@ const RemoteGame = () => {
         const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
 //
         gameSocket.onerror = (error) => {
-            console.error("WebSocket Error:", error);
+            // console.error("WebSocket Error:", error);
             navigate('/game/PreRemote');
         };
         
-        gameSocket.onclose = () => {
-            console.log("Matchmaking WebSocket Closed");
-            // navigate('/game/PreRemote');
+        gameSocket.onclose = (event) => {
+            console.log("Matchmaking WebSocket Closed", event);
+            if (!event.wasClean){
+                navigate('/game/PreRemote');
+            }
         };
         
         gameSocket.onmessage = (event) => {
