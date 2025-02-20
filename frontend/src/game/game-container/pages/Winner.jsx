@@ -22,7 +22,7 @@ import { useLocalGamesContext } from '../game/MatchContext';
 const Winner = () => {
 
   const navigate = useNavigate();
-  let winner = '';
+  let winner = 'Yeah Buddy 🗽!';
   
   // Remote LOgic
   const { ReomteGameData } = useRemoteGameContext();
@@ -42,19 +42,16 @@ const Winner = () => {
   console.log("===> Remote winner : ", ReomteGameData.winner);
   console.log("===> Local  winner : ", LocalGamesData.winner);
 
-  if ((ReomteGameData !== null && ReomteGameData !== undefined) && (ReomteGameData.winner !== null && ReomteGameData.winner !== undefined)){
-    winner = ReomteGameData.winner;
-  }
-  else if ((LocalGamesData !== null && LocalGamesData !== undefined) && (LocalGamesData.winner !== null && LocalGamesData.winner !== undefined)){
+  if (LocalGamesData && (LocalGamesData.gametype === 'Multiplayer' || LocalGamesData.gametype === 'Local' || LocalGamesData.gametype === 'Tournament')){
     winner = LocalGamesData.winner;
   }
-
-
+  else if (ReomteGameData && (ReomteGameData.winner)){
+    winner = ReomteGameData.winner;
+  }
 
   return (
     <>
-
-  <div className="main-game-page-container">
+      <div className="main-game-page-container">
         <div className="game-options-container-w">
           <div className="game-options-header-w Text-wt">
             <h1>winner</h1>
