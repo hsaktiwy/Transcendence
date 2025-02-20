@@ -89,7 +89,7 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
     {
         try{
             const req = {
-                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.unique_id,
+                url:'friendship/is/BLOCKED/'+ chatContext.active?.user2.unique_id+'/',
                 method: 'GET',
                 withCredentials:true,
             }

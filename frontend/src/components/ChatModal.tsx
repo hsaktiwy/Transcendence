@@ -19,7 +19,7 @@ function ChatModal(){
             {
                 const action:string = userContext?.action?.type == ActionType.BLOCK ? "block" : (userContext?.action?.type == ActionType.UNBLOCK ? "unblock": (userContext?.action?.type == ActionType.UNFRIEND ? "unfriend" :'none'))
                 const req = {
-                    url: "friendship/"+action+"/"+userContext?.action?.Target_User_UniqueId,
+                    url: "friendship/"+action+"/"+userContext?.action?.Target_User_UniqueId+"/",
                     method: "POST",
                     withCredentials: true,
                 }
