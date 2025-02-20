@@ -66,7 +66,7 @@ def get_or_create_room(user, consumer, Rooms):
     # cleaner(PPong_Rooms)
     user = sync__get_user(user.unique_id)
 
-    if (user.state != MyUser.ONLINE and (find_room_name(user, Rooms))):
+    if (user.state == MyUser.IN_GAME or find_room_name(user, Rooms)):
         # print(f"=> user {user.login} already in room !")
         return
     #find_room
@@ -102,7 +102,8 @@ class ApiConsumer(WebsocketConsumer):
         # if (user.state == MyUser.IN_GAME or user.state == MyUser.IN_SEARCH):
         # print('===> WTF R U DOING HERE !', user.state, find_room_name(user, PPong_Rooms))
         room = find_room_name(user, PPong_Rooms)
-        if (user.state != MyUser.ONLINE or (room and not (len(room) == 4 and room[3] == 'Invited' and room[2][0].unique_id == user.unique_id and room[2][1] == 'TBR'))):
+        # if (user.state == MyUser.IN_GAME or (room and not (len(room) == 4 and room[3] == 'Invited' and room[2][0].unique_id == user.unique_id and room[2][1] == 'TBR'))):
+        if (user.state == MyUser.IN_GAME or (room)):
             self.close()
             return
 
@@ -306,8 +307,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         # On disconnect, remove from the group
         #######################################
 
-        # print("===> goup close code :", close_code)
         if close_code == 1006: #connection rejected, the session already opened
+            print("===> goup close code :", close_code)
             return
 
         user = await async_get_user(self.scope['user'].unique_id)
@@ -355,7 +356,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                                 if len(room) == 3 or (len(room) == 4  and room[3] != 'Ended' and room[3] != 'Forfait'):
                                     roomk = find_room_name(user, PPong_Rooms)
                                     if roomk and roomk[0] == room[0]:
-                                        # print(f"=> room seted", room[0], 'Forfait, Deleted !')
+                                        print(f"=> room seted", room[0], 'Forfait, Deleted !')
                                         remove_room(room[0], PPong_Rooms)
                                         await create_game(
                                             type='PONG',
