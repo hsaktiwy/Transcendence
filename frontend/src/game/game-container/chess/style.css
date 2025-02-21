@@ -205,3 +205,18 @@ body
     position: absolute;
     bottom: 0;
   }
+
+  /* @media (max-width:680px)
+  {
+    .lktaba3 {
+      display: none;
+    }
+
+    .lktaba2 {
+      display: none;
+    }
+
+    .lktaba1 {
+      display: none;
+    }
+  } */
