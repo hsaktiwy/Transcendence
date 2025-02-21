@@ -74,20 +74,20 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
-    "https://10.13.1.16:4444",
-    "https://10.13.1.16",
+    "https://localhost:4444",
+    "https://localhost",
 )
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://10.13.1.16:4444",
-    "https://10.13.1.16",
+    "https://localhost:4444",
+    "https://localhost",
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://10.13.1.16:4444",
-    "https://10.13.1.16",
+    "https://localhost:4444",
+    "https://localhost",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

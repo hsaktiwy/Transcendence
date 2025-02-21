@@ -4,7 +4,7 @@ import { UserContext } from "./UserContext";
 import { formatDate2 } from "@/utils/textFromatting";
 import EmptyConversationList from "./EmptyConversationList";
 import { TbFaceIdError } from "react-icons/tb";
-
+import { customSubString } from "@/utils/textFromatting";
 
 function Conversations(){
     const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
@@ -25,13 +25,7 @@ function Conversations(){
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
         setSearchTerm(e.target.value)
     }
-    // const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>)=>{
-    //     setSearchTerm('')
-    // }
-    // useEffect(()=>{
-    //     if (chatContext.active && searchTerm.length>0)
-    //         setSearchTerm('')
-    // },[chatContext?.active])
+
 return(
 <div className={`    border-r-white/20 border-0 lg:border-r   absolute ${chatContext.activeSectionOnSm === 'conversations' ? 'w-[100%]' : 'w-0'} lg:w-[30%] xl:w-[22%] h-full   font-poppins flex flex-col gap-6 overflow-auto duration-800  transition-all rounded-l-3xl rounded-r-xl lg:rounded-r-none `}>
             <div className="messages-header-container   font-semibold  text-white flex flex-col   gap-4 py-4">
@@ -43,9 +37,6 @@ return(
                         <div className="absolute  mt-5 left-[50%] -translate-x-[50%] w-[100%] h-[800px]   flex flex-col gap-2">
                             {
                                 chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm.toLocaleLowerCase())).map((item, index)=>{
-                                    function customSubString(arg0: string) {
-                                        throw new Error("Function not implemented.");
-                                    }
 
                                     return(
                                         <div key={index} className={`h-[100px] relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{

@@ -114,6 +114,7 @@ const Login = () => {
                     else{
 
                         window.history.replaceState({}, document.title, window.location.pathname);
+                        location.reload()
 
                     }
                 }
