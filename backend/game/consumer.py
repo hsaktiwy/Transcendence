@@ -406,7 +406,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 self.channel_name
             )
-        except (e):  # Use correct exception
+        except Exception as e:  # Use correct exception
             pass 
 
         cleaner(PPong_Rooms)

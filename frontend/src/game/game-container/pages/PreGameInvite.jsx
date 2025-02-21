@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import "./PreRemote.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useRemoteGameContext } from '../game/MatchContext';
 
@@ -14,7 +14,7 @@ const PreInvite = () => {
 
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
-  
+  const location = useLocation()
   const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
 
   let INVITE_TEXT = '';
@@ -26,6 +26,7 @@ const PreInvite = () => {
   useEffect(()=>{
       console.log("==>> Reneredddd ! ", ReomteGameData.form_game_invite);
         let tmpsocket = null
+        let tgameSocket = null
         if (ReomteGameData.form_game_invite === true){
             INVITE_TEXT = ReomteGameData.inviter_login + ' VS ' + ReomteGameData.invited_login
             show = true
@@ -37,12 +38,12 @@ const PreInvite = () => {
                 // setDocket(tmpsocket)
             };
             tmpsocket.onclose = (err) => {
-                console.log("==> Inviting Socket Disconnected !", err);
-                if (err.code === 3011){
-                    if (docket){
-                        docket.close()
-                    }
-                }
+                console.log("==> Inviting Socket Disconnected !: inviting :",ReomteGameData.inviting = true,  err);
+                // if (err.code === 3011){
+                //     if (docket){
+                //         docket.close()
+                //     }
+                // }
                 if (err.code !== 1000){
                     navigate('/game/PreRemote');
                 }
@@ -98,11 +99,11 @@ const PreInvite = () => {
                 
                 console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
-                const tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
+                tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
                 tgameSocket.onopen = () => {
                     console.log("Connected to the game room:", data['room_name']);
-                    setDocket(tgameSocket)
+                    // setDocket(tgameSocket)
                     
                 };
                 tgameSocket.onclose = () => {
@@ -146,10 +147,23 @@ const PreInvite = () => {
                 tmpsocket.close()
                 // ReomteGameData.form_game_invite = false
             }
+            // if (location.pathname !== "/game/RemoteGame" && location.pathname !== "/game/RemoteGame/"){
+            //     console.log('PPPP LOCATIOP :', location.pathname)
+            //     if (tgameSocket && tgameSocket.readyState === WebSocket.OPEN){
+            //         tgameSocket.close()
+            //     }
+            // }
+
         })
 
-    }, [ReomteGameData.form_game_invite])
+    }, [ReomteGameData.form_game_invite/*, location*/])
 
+
+// useEffect(() => {
+// //  return(() => {
+//     // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", location.pathname)
+// //  }) 
+// },[location])
 
   return (
     <>
