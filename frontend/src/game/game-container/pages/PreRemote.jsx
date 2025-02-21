@@ -20,23 +20,23 @@ const PreRemote = () => {
     // Create WebSocket connection
   try {
     const socket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
-    console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
+    // console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
-      console.log("Matchmaking WebSocket Connected");
+      // console.log("Matchmaking WebSocket Connected");
     };
     
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       
       if (data['type'] === 'match_found') {
-        console.log("=> Match Found:");
-        console.log("   => room_name     :", data['room_name']);
-        console.log("   => my_role       :", data['role']);
-        console.log("   => user_name     :", data['user_name']);
-        console.log("   => opponent_name :", data['opponent_name']);
-        console.log("   => my_id         :", data['my_id']);
-        console.log("   => opponent_id   :", data['opponent_id']);
+        // console.log("=> Match Found:");
+        // console.log("   => room_name     :", data['room_name']);
+        // console.log("   => my_role       :", data['role']);
+        // console.log("   => user_name     :", data['user_name']);
+        // console.log("   => opponent_name :", data['opponent_name']);
+        // console.log("   => my_id         :", data['my_id']);
+        // console.log("   => opponent_id   :", data['opponent_id']);
         
         
         // Update Reomte context
@@ -63,7 +63,7 @@ const PreRemote = () => {
     };
     
     socket.onclose = () => {
-      console.log("Matchmaking WebSocket Closed");
+      // console.log("Matchmaking WebSocket Closed");
       setIsSearching(false);
     };
     

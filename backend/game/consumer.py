@@ -194,7 +194,7 @@ class ApiConsumer(WebsocketConsumer):
         #ser 3a t9awed, matsiftlich
 
     def disconnect(self, close_code):
-        print('EROOORRRR CODEE :', close_code)
+        # print('EROOORRRR CODEE :', close_code)
         if close_code == 1000: #connection rejected, the session already opened
             # self.accept()
             # self.close()
@@ -226,7 +226,8 @@ class ApiConsumer(WebsocketConsumer):
             # print('=> user ', user.login, ', quitting matchmaking!')
                 return
         elif (user.game_state == MyUser.IN_GAME and room):
-            print('=====> Fuck My Life !!!!!!!!!!')
+            pass
+            # print('=====> Fuck My Life !!!!!!!!!!')
 
         # Show_Rooms(PPong_Rooms)
         #idik fzeb
@@ -241,7 +242,7 @@ connections_count = {}
 class GameRoomConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
-        Show_Rooms(PPong_Rooms)
+        # Show_Rooms(PPong_Rooms)
 
         user = await async_get_user(self.scope['user'].unique_id)
         if not user:
@@ -539,7 +540,8 @@ def create_game(type, user1, user2, winner, loser, score_p1, score_p2):
             w.save()
             l.save()
         except Exception as e :
-            print(e)
+            pass
+            # print(e)
     return Game.objects.create(
         type=type,
         user_p1=user1,

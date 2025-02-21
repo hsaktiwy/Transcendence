@@ -49,18 +49,18 @@ const RemoteGame = () => {
 
     useEffect(()=>{
         if (!ReomteGameData && !location.state){
-            console.log("=>> C protections !!!")
+            // console.log("=>> C protections !!!")
             navigate('/game/PreRemote');
         }
         else{
-            console.log("ReomteGameData           :",ReomteGameData)
+            // console.log("ReomteGameData           :",ReomteGameData)
             if (location.state){
-                console.log("location.state           :",location.state)
-                console.log("location.state.room_name :", location.state.room_name)
-                console.log("location.state.my_user   :", location.state.my_user)
-                console.log("location.state.p1_id     :", location.state.p1_id)
-                console.log("location.state.p2_id     :", location.state.p2_id)
-                console.log("location.state.opponent  :", location.state.opponent)
+                // console.log("location.state           :",location.state)
+                // console.log("location.state.room_name :", location.state.room_name)
+                // console.log("location.state.my_user   :", location.state.my_user)
+                // console.log("location.state.p1_id     :", location.state.p1_id)
+                // console.log("location.state.p2_id     :", location.state.p2_id)
+                // console.log("location.state.opponent  :", location.state.opponent)
                 if (location.state.room_name && location.state.my_user){
                     ReomteGameData.room_name = location.state.room_name
                     ReomteGameData.my_user  = location.state.my_user
@@ -87,7 +87,7 @@ const RemoteGame = () => {
             setDataReady(true);
         }
         if (ReomteGameData && !ReomteGameData.room_name && !ReomteGameData.my_user && !ReomteGameData.opponent){
-            console.log("=>> C protections !!!")
+            // console.log("=>> C protections !!!")
             navigate('/game/PreRemote');
         }
         else if (ReomteGameData && ReomteGameData.inviting && ReomteGameData.gameSocket){
@@ -148,7 +148,7 @@ const RemoteGame = () => {
             // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
             
             gameSocket.onopen = () => {
-                console.log("Connected to the game room:", ReomteGameData.room_name);
+                // console.log("Connected to the game room:", ReomteGameData.room_name);
                 setdocket(gameSocket);
             };
             // gameSocket.onclose 
@@ -176,7 +176,7 @@ const RemoteGame = () => {
         };
         
         gameSocket.onclose = (event) => {
-            console.log("Matchmaking WebSocket Closed", event);
+            // console.log("Matchmaking WebSocket Closed", event);
             if (!event.wasClean || event.code === 4001){
                 navigate('/game/PreRemote');
             }
@@ -242,7 +242,7 @@ const RemoteGame = () => {
                 }
                 setAiScore(0);
                 setPlayerScore(0);
-                console.log(ReomteGameData.my_user, ' Im quitting !')
+                // console.log(ReomteGameData.my_user, ' Im quitting !')
                 setLocalGamesData({})
                 navigate('/game/Winner');
             }
@@ -261,15 +261,15 @@ const RemoteGame = () => {
                 opp_score         = data['score']['p1']
     
                 if (aiScore != opp_score){
-                    console.log(aiScore, opp_score);
+                    // console.log(aiScore, opp_score);
                     setAiScore(opp_score)
                 }
                 if (playerScore != my_score){
-                    console.log(playerScore, my_score);
+                    // console.log(playerScore, my_score);
                     setAiScore(my_score)
                 }
                 if(ball_count > Objects.length){
-                    console.log('ball should be created here !')
+                    // console.log('ball should be created here !')
                     createSphere(new THREE.Vector3(ball_x, ball_y, ball_y), false);
                 }
                 if(Objects.length && Objects[Objects.length - 1].created_by_me === false){

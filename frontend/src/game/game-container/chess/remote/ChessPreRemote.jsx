@@ -22,18 +22,18 @@ const ChessPreRemote = () => {
     // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
-      console.log("Matchmaking WebSocket Connected");
+      // console.log("Matchmaking WebSocket Connected");
     };
     
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       
       if (data['type'] === 'match_found') {
-        console.log("=> Match Found:");
-        console.log("   => room_name   :", data['room_name']);
-        console.log("   => my_id       :", data['my_id']);
-        console.log("   => opponent_id :", data['opponent_id']);
-        console.log("   => color       :", data['color']);
+        // console.log("=> Match Found:");
+        // console.log("   => room_name   :", data['room_name']);
+        // console.log("   => my_id       :", data['my_id']);
+        // console.log("   => opponent_id :", data['opponent_id']);
+        // console.log("   => color       :", data['color']);
         
         // Update match context
 
@@ -62,7 +62,7 @@ const ChessPreRemote = () => {
     
     socket.onclose = () => {
       setIsSearching(false);
-      console.log("Matchmaking WebSocket Closed");
+      // console.log("Matchmaking WebSocket Closed");
     };
     
     setMatchSocket(socket);

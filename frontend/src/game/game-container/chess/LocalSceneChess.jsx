@@ -209,14 +209,12 @@ const LocalChessGame = () => {
             
         // add event listener to highlight dragged objects
         
-        const MAX_HEIGHT = 1.03; // Set your desired maximum height
+        const MAX_HEIGHT = 1.03; 
         let init_pos_x, init_pos_y;
         
         controls2.addEventListener('drag', handleDrag);
 
         function handleDrag(event) {
-            // console.log( event.object.name , ' : hello, I\'m being draged !');
-            // Clamp the y position to not exceed MAX_HEIGHT
             if (event.object.position.y > MAX_HEIGHT) {
                 event.object.position.y = MAX_HEIGHT;
             }
@@ -283,7 +281,7 @@ const LocalChessGame = () => {
             for (const piece of objects) {
                 const [x, y] = WorldToMatrix(piece.position.x, piece.position.z);
                 if (convertCoordinatesToNotation(x, y) === squareNotation && name !== piece.name){
-                    console.log(piece.name, " being Captured !");
+                    // console.log(piece.name, " being Captured !");
                     return piece;
                 }
             }
@@ -300,11 +298,11 @@ const LocalChessGame = () => {
             const fromNotation = convertCoordinatesToNotation(words[0], words[1]);
             const toNotation   = convertCoordinatesToNotation(cords[0], cords[1]);
         
-            console.log('before cordinnates : ', words[0], words[1]);
-            console.log('from : ', fromNotation);
-            console.log('after  cordinnates : ', cords[0], cords[1]);
-            console.log('to   : ', toNotation);
-            console.log('\n\n');
+            // console.log('before cordinnates : ', words[0], words[1]);
+            // console.log('from : ', fromNotation);
+            // console.log('after  cordinnates : ', cords[0], cords[1]);
+            // console.log('to   : ', toNotation);
+            // console.log('\n\n');
         
             if ((cords[0] > 4 || cords[0] < -4) || (cords[1] > 4 || cords[1] < -4) || !fromNotation || !toNotation){
                 // illegal_sound.play();
@@ -315,17 +313,17 @@ const LocalChessGame = () => {
         
             try {
                 let result = engine_validator.move({from : fromNotation, to: toNotation}); //Try catch (yes it throws!)
-                console.log('==> Game judgemet : ', result);
-                console.log(engine_validator.ascii(),"\n\n");
+                // console.log('==> Game judgemet : ', result);
+                // console.log(engine_validator.ascii(),"\n\n");
                 if (result){
-                    console.log('Valid Move !')
+                    // console.log('Valid Move !')
         
 
 
                     if (engine_validator.isGameOver()) {
                         if (engine_validator.isCheckmate()) {
                             let winning_color = engine_validator.turn() === 'w' ? 'black' : 'white';
-                            console.log("Checkmate! Winning side:", winning_color);
+                            // console.log("Checkmate! Winning side:", winning_color);
                             setLocalGamesData({
                                 gametype: 'chess',
                                 winner  : winning_color + ' WON !'
@@ -350,7 +348,7 @@ const LocalChessGame = () => {
                     if (result.captured){
                         const capturedPiece = findCapturedPiece(name, toNotation);
                         if (capturedPiece) {
-                            console.log("Cptured Piece Found : ", capturedPiece.name);
+                            // console.log("Cptured Piece Found : ", capturedPiece.name);
                             scene.remove(capturedPiece);
                             objects = objects.filter(obj => obj !== capturedPiece); // tbu
                             // capture_sound.play(); // Sound for capture
@@ -366,14 +364,14 @@ const LocalChessGame = () => {
                     });
                 }
                 else {
-                    console.log('InValid Move !')
+                    // console.log('InValid Move !')
                     // illegal_sound.play();
                     pos.x = init_pos_x;
                     pos.z = init_pos_y;
                     return ;
                 }   
             } catch (error) {
-                console.log('InValid Move !')
+                // console.log('InValid Move !')
                 // illegal_sound.play();
                 pos.x = init_pos_x;
                 pos.z = init_pos_y;
