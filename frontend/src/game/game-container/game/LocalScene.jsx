@@ -830,9 +830,9 @@ const LocalGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
-            console.log('====> Getted Info : ', LocalGamesData);
+            // console.log('====> Getted Info : ', LocalGamesData);
             if (LocalGamesData.gametype == 'Tournament'){
-                console.log('====> ON tournamentooooooo');
+                // console.log('====> ON tournamentooooooo');
                 if (playerScore === 7){
                     if (LocalGamesData.FF_done){
                         LocalGamesData.winner = LocalGamesData.TBD1;
@@ -873,7 +873,7 @@ const LocalGame = () => {
 
         }
         else if (playerScore <= 7 && aiScore <= 7){
-            console.log('====> Getted Info : ', LocalGamesData);
+            // console.log('====> Getted Info : ', LocalGamesData);
             if (LocalGamesData.gametype == 'Tournament'){
                 if (playerScore >= aiScore){
                     if (LocalGamesData.FF_done){

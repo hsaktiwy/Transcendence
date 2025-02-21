@@ -61,11 +61,11 @@ const ChessRemoteGame = () => {
         // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.my_user}`);
         
         gameSocket.onopen = () => {
-            console.log("Connected to the game room:", ReomteGameData.room_name);
+            // console.log("Connected to the game room:", ReomteGameData.room_name);
             setPlayerPov();
         };
         gameSocket.onerror = (error) => {
-            console.error("WebSocket Error:", error);
+            // console.error("WebSocket Error:", error);
             navigate('/game/ChessPreRemote');
         };
 
@@ -74,10 +74,10 @@ const ChessRemoteGame = () => {
             
             // console.log("=> Type received :", data['type']);
             
-            if (data['type'] === 'Game_State'){
-                console.log("=> The brodcaster :", data['my_id']);
-                console.log("   => Says        :", data['message'], '\n');
-            }
+            // if (data['type'] === 'Game_State'){
+            //     // console.log("=> The brodcaster :", data['my_id']);
+            //     // console.log("   => Says        :", data['message'], '\n');
+            // }
             let winnner = ''
              if (data['type'] === 'Game_end'){
                 // ReomteGameData.winner = 'YOU WON Forfait'
@@ -112,10 +112,10 @@ const ChessRemoteGame = () => {
             }
             
             if (data['type'] === 'game_update'){
-                console.log("Recived => ");
-                console.log("          : ", data['name']);
-                console.log("          : ", data['from']);
-                console.log("          : ", data['to']);
+                // console.log("Recived => ");
+                // console.log("          : ", data['name']);
+                // console.log("          : ", data['from']);
+                // console.log("          : ", data['to']);
                 Executor(data['name'], data['from'], data['to']);
                 
                 
@@ -399,7 +399,7 @@ const ChessRemoteGame = () => {
             for (const piece of objects) {
                 const [x, y] = WorldToMatrix(piece.position.x, piece.position.z);
                 if (convertCoordinatesToNotation(x, y) === squareNotation && name !== piece.name){
-                    console.log(piece.name, " being Captured !");
+                    // console.log(piece.name, " being Captured !");
                     return piece;
                 }
             }
@@ -438,11 +438,11 @@ const ChessRemoteGame = () => {
             let fromNotation = convertCoordinatesToNotation(words[0], words[1]);
             let toNotation   = convertCoordinatesToNotation(cords[0], cords[1]);
         
-            console.log('before cordinnates : ', words[0], words[1]);
-            console.log('from : ', fromNotation);
-            console.log('after  cordinnates : ', cords[0], cords[1]);
-            console.log('to   : ', toNotation);
-            console.log('\n\n');
+            // console.log('before cordinnates : ', words[0], words[1]);
+            // console.log('from : ', fromNotation);
+            // console.log('after  cordinnates : ', cords[0], cords[1]);
+            // console.log('to   : ', toNotation);
+            // console.log('\n\n');
         
             if ((cords[0] > 4 || cords[0] < -4) || (cords[1] > 4 || cords[1] < -4) || !fromNotation || !toNotation){
                 // illegal_sound.play();
@@ -453,12 +453,12 @@ const ChessRemoteGame = () => {
         
             try {
                 let result = engine_validator.move({from : fromNotation, to: toNotation});
-                console.log('==> Game judgemet : ', result);
-                console.log(engine_validator.ascii(),"\n\n");
+                // console.log('==> Game judgemet : ', result);
+                // console.log(engine_validator.ascii(),"\n\n");
                 if (result){
                     //Sending Packing
                     
-                    console.log('Valid Move !')
+                    // console.log('Valid Move !')
 
                     
                     if (engine_validator.isGameOver()) {
@@ -476,7 +476,7 @@ const ChessRemoteGame = () => {
                         let winning_color = ''
                         if (engine_validator.isCheckmate()) {
                             winning_color = engine_validator.turn() === 'w' ? 'black' : 'white';
-                            console.log("Checkmate! Winning side:", winning_color);
+                            // console.log("Checkmate! Winning side:", winning_color);
                             setReomteGameData({
                                 winner  : winning_color + ' WON !'
                             });  
@@ -493,7 +493,7 @@ const ChessRemoteGame = () => {
                             });                             
                             
                         } else if (engine_validator.isDraw()) {
-                            console.log("It's a draw!");
+                            // console.log("It's a draw!");
                             // message.name = -1;
                             message.winner = 'Draw'
                             // ReomteGameData.winner = 'Draw'
@@ -504,7 +504,7 @@ const ChessRemoteGame = () => {
                         }
                         if (gameSocket.readyState === 1)
                             gameSocket.send(JSON.stringify(message));
-                        console.log("==> Game officially done! the winner is ", winning_color);
+                        // console.log("==> Game officially done! the winner is ", winning_color);
                         navigate('/game/ChessWinner')
                     }
                     
@@ -514,7 +514,7 @@ const ChessRemoteGame = () => {
                     if (result.captured){
                         const capturedPiece = findCapturedPiece(name, toNotation);
                         if (capturedPiece) {
-                            console.log("Cptured Piece Found : ", capturedPiece.name);
+                            // console.log("Cptured Piece Found : ", capturedPiece.name);
                             scene.remove(capturedPiece);
                             objects = objects.filter(obj => obj !== capturedPiece); // tbu
                             // capture_sound.play(); // Sound for capture
@@ -525,14 +525,14 @@ const ChessRemoteGame = () => {
                     pos.z =   ((cords[1] > 0 ? cords[1] - 1: cords[1]) * SQUARE_DIAMETER) + SQUARE_RADIUS;
                 }
                 else {
-                    console.log('InValid Move !')
+                    // console.log('InValid Move !')
                     // illegal_sound.play();
                     pos.x = init_pos_x;
                     pos.z = init_pos_y;
                     return ;
                 }   
             } catch (error) {
-                console.log('InValid Move !')
+                // console.log('InValid Move !')
                 // illegal_sound.play();
                 pos.x = init_pos_x;
                 pos.z = init_pos_y;
@@ -546,7 +546,7 @@ const ChessRemoteGame = () => {
         function findaffectedPiece(name) {
             for (const piece of objects) {
                 if (name === piece.name){
-                    console.log(piece.name, " Affected FOund !");
+                    // console.log(piece.name, " Affected FOund !");
                     return piece;
                 }
             }
@@ -558,7 +558,7 @@ const ChessRemoteGame = () => {
             if (result.captured){
                 const capturedPiece = findCapturedPiece(name, to);
                 if (capturedPiece) {
-                    console.log("Cptured Piece Found : ", capturedPiece.name);
+                    // console.log("Cptured Piece Found : ", capturedPiece.name);
                     scene.remove(capturedPiece);
                     objects = objects.filter(obj => obj !== capturedPiece); // tbu
                     // capture_sound.play(); // Sound for capture
@@ -566,11 +566,11 @@ const ChessRemoteGame = () => {
             }
             const affectedPiece = findaffectedPiece(name)
             let cords = convertNotationToCoordinates(to)
-            console.log("=> THE EXECUTOR CORDS; x: ", cords[0], ", y : ", cords[1]);
+            // console.log("=> THE EXECUTOR CORDS; x: ", cords[0], ", y : ", cords[1]);
             // move_sound.play();
             affectedPiece.position.x =  -((cords[0] > 0 ? cords[0] - 1: cords[0]) * SQUARE_DIAMETER) - SQUARE_RADIUS;
             affectedPiece.position.z =   ((cords[1] > 0 ? cords[1] - 1: cords[1]) * SQUARE_DIAMETER) + SQUARE_RADIUS;
-            console.log("=> move executed remotely!!!");
+            // console.log("=> move executed remotely!!!");
         }
         ///
         

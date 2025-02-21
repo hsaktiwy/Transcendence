@@ -39,8 +39,8 @@ const Winner = () => {
     }
   )
   
-  console.log("===> Remote winner : ", ReomteGameData.winner);
-  console.log("===> Local  winner : ", LocalGamesData.winner);
+  // console.log("===> Remote winner : ", ReomteGameData.winner);
+  // console.log("===> Local  winner : ", LocalGamesData.winner);
 
   if (LocalGamesData && (LocalGamesData.gametype === 'Multiplayer' || LocalGamesData.gametype === 'Local' || LocalGamesData.gametype === 'Tournament')){
     winner = LocalGamesData.winner;

@@ -88,7 +88,7 @@ function Tournament() {
   };
 
   const handleStartMatch = (matchId) => {
-    console.log(`Starting match: ${matchId}`);
+    // console.log(`Starting match: ${matchId}`);
     if (matchId === 'Semi_Final_1'){
       LocalGamesData.player1 = LocalGamesData.playerx1;
       LocalGamesData.player2 = LocalGamesData.playerx2;
@@ -122,8 +122,8 @@ function Tournament() {
     }
     
 
-    console.log("===> Local Data : ", LocalGamesData);
-    console.log("===> Local Data : ", Matches);
+    // console.log("===> Local Data : ", LocalGamesData);
+    // console.log("===> Local Data : ", Matches);
 
     navigate('/game/LocalGame');
   };

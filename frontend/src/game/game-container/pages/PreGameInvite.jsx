@@ -20,11 +20,11 @@ const PreInvite = () => {
   let INVITE_TEXT = '';
   let show = false;
 
-  console.log('===> is from game invite : ', ReomteGameData.form_game_invite);
+//   console.log('===> is from game invite : ', ReomteGameData.form_game_invite);
   
   
   useEffect(()=>{
-      console.log("==>> Reneredddd ! ", ReomteGameData.form_game_invite);
+    //   console.log("==>> Reneredddd ! ", ReomteGameData.form_game_invite);
         let ready = false
         let tmpsocket = null
         let tgameSocket = null
@@ -33,14 +33,14 @@ const PreInvite = () => {
             show = true
         try{    
             tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
-            console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+            // console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
             
             tmpsocket.onopen = () => {
-                console.log("Inviting WebSocket Connected");
+                // console.log("Inviting WebSocket Connected");
                 // setDocket(tmpsocket)
             };
             tmpsocket.onclose = (err) => {
-                console.log("==> Inviting Socket Disconnected !: inviting :",ReomteGameData.inviting = true,  err);
+                // console.log("==> Inviting Socket Disconnected !: inviting :",ReomteGameData.inviting = true,  err);
                 // if (err.code === 3011){
                 //     if (docket){
                 //         docket.close()
@@ -56,17 +56,17 @@ const PreInvite = () => {
             };
             tmpsocket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log("==> message received from the backend !", data);
+                // console.log("==> message received from the backend !", data);
                 
                 if (data['type'] === 'room_created') {
                 // tmpsocket.close()
-                console.log("=> room_created:");
-                console.log("   => room_name     :", data['room_name']);
-                console.log("   => my_role       :", data['role']);
-                console.log("   => user_name     :", data['user_name']);
-                console.log("   => opponent_name :", data['opponent_name']);
-                console.log("   => my_id         :", data['my_id']);
-                console.log("   => opponent_id   :", data['opponent_id']);
+                // console.log("=> room_created:");
+                // console.log("   => room_name     :", data['room_name']);
+                // console.log("   => my_role       :", data['role']);
+                // console.log("   => user_name     :", data['user_name']);
+                // console.log("   => opponent_name :", data['opponent_name']);
+                // console.log("   => my_id         :", data['my_id']);
+                // console.log("   => opponent_id   :", data['opponent_id']);
 
                 ReomteGameData.room_name = data['room_name'];
                 ReomteGameData.role      = data['role'];
@@ -91,25 +91,25 @@ const PreInvite = () => {
                     // my_user  : data['opponent_name'],
                     // opponent : data['user_name'],
                 }
-                console.log(JSON.stringify(req))
-                if (webSContext && webSContext.socket /*&& webSContext.readyState === WebSocket.OPEN*/)
+                // console.log(JSON.stringify(req))
+                if (webSContext && webSContext.socket && webSContext.socket.current && webSContext.socket.current.readyState === WebSocket.OPEN)
                 {
                     webSContext.socket.current.send(JSON.stringify(req))
                 }
                 
                 
                 
-                console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
+                // console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
                 tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
                 tgameSocket.onopen = () => {
-                    console.log("Connected to the game room:", data['room_name']);
+                    // console.log("Connected to the game room:", data['room_name']);
                     // setDocket(tgameSocket)
                     
                 };
                 tgameSocket.onclose = () => {
-                    console.log("==> ", data['room_name'], " room Socket Disconnected !");
+                    // console.log("==> ", data['room_name'], " room Socket Disconnected !");
                 };
                 tgameSocket.onerror = (error) => {
                     if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
@@ -121,7 +121,7 @@ const PreInvite = () => {
                 tgameSocket.onmessage = (event) => {
                     const data = JSON.parse(event.data);
                     if (data['type'] === 'match_found') {
-                        console.log('====> match begin ...');
+                        // console.log('====> match begin ...');
                         ready = true
                         
                         ReomteGameData.inviting = true
