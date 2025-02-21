@@ -19,6 +19,15 @@ def find_room_name(user, Rooms):
             return room
     return None
 
+def eliminate_dups(room_name, Rooms):
+    count = 0
+    for room in Rooms:
+        if (len(room) >= 1 and room[0] == room_name):
+            count += 1
+    if count == 2:
+        remove_room(room_name, Rooms)
+    return Rooms[room_name]
+
 PPong_Rooms = []
 
 def matcha(room):
@@ -103,6 +112,7 @@ class ApiConsumer(WebsocketConsumer):
         # print('===> WTF R U DOING HERE !', user.game_state, find_room_name(user, PPong_Rooms))
         room = find_room_name(user, PPong_Rooms)
         if (user.game_state != MyUser.ONLINE or (room and not (len(room) == 4 and room[3] == 'Invited' and room[2][0].unique_id == user.unique_id and room[2][1] == 'TBR'))):
+            self.accept()
             self.close()
             return
 
@@ -121,8 +131,10 @@ class ApiConsumer(WebsocketConsumer):
             # opponent.game_state = MyUser.INVITED #see if that would protect from potential problem 
             # opponent.save()
 
-            if not opponent:
-                self.close() #different room names
+            if not opponent or (opponent and (opponent.game_state != MyUser.ONLINE or find_room_name(user, PPong_Rooms) or find_room_name(opponent, PPong_Rooms))):
+                self.accept()
+                # self.close() #different room names
+                self.close(code=3011)
                 return
             
             self.accept()
@@ -182,7 +194,10 @@ class ApiConsumer(WebsocketConsumer):
         #ser 3a t9awed, matsiftlich
 
     def disconnect(self, close_code):
-        if close_code == 1006: #connection rejected, the session already opened
+        print('EROOORRRR CODEE :', close_code)
+        if close_code == 1000: #connection rejected, the session already opened
+            # self.accept()
+            # self.close()
             return
 
         user = self.scope['user']
@@ -226,7 +241,7 @@ connections_count = {}
 class GameRoomConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
-        # Show_Rooms(PPong_Rooms)
+        Show_Rooms(PPong_Rooms)
 
         user = await async_get_user(self.scope['user'].unique_id)
         if not user:
@@ -247,6 +262,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     # print('==>', i, part)
                 if len(parts) == 4 and parts[3] != room[0]:
                     # print('==> Diffrent Room names !')
+                    await self.accept() #different room names
                     await self.close() #different room names
                     return
                 # print('=====> To The Invitaion Room, Condition met !')
@@ -282,6 +298,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     # print(f"======> from group channels user ", user.login, "joind the group ! VISIT COUNT :", connections_count[self.room_group_name])
                     # Accept the WebSocket connection #check this above
                 else:
+                    await self.accept()
                     await self.close()
 
 
@@ -306,8 +323,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         # On disconnect, remove from the group
         #######################################
 
-        # print("===> goup close code :", close_code)
-        if close_code == 1006: #connection rejected, the session already opened
+        print("===> ROOOOM CLOSEEEE CODE :", close_code)
+        if close_code == 1000: #connection rejected, the session already opened
             return
 
         user = await async_get_user(self.scope['user'].unique_id)
@@ -316,6 +333,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
         # print(f'===> Player {user.login} quitting !')
         room = find_room_name(user, PPong_Rooms)
+        # room = eliminate_dups(PPong_Rooms)
+        # if (len(room) >= 4 and room[3] == 'Invited'):
         if room:
             # print(f'===> Player {user.login} quitting {room[0]} !')
             if (user.game_state == MyUser.IN_SEARCH):
@@ -382,10 +401,13 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     # print("===> AN ERROR Ocuured :", user.login, " didn't save in db ", room[0])
 
         ######################################
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
+        try:
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name
+            )
+        except (e):  # Use correct exception
+            pass 
 
         cleaner(PPong_Rooms)
         user = await async_get_user(user.unique_id)
