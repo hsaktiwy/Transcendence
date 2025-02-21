@@ -36,11 +36,19 @@ const PreInvite = () => {
                 console.log("Inviting WebSocket Connected");
                 // setDocket(tmpsocket)
             };
-            tmpsocket.onclose = () => {
-                console.log("==> Inviting Socket Disconnected !");
+            tmpsocket.onclose = (err) => {
+                console.log("==> Inviting Socket Disconnected !", err);
+                if (err.code === 3011){
+                    if (docket){
+                        docket.close()
+                    }
+                }
+                if (err.code !== 1000){
+                    navigate('/game/PreRemote');
+                }
             };
             tmpsocket.onerror = (error) => {
-                console.error("WebSocket Error:", error);
+                // console.error("WebSocket Error:", error);
                 navigate('/game/PreRemote');
             };
             tmpsocket.onmessage = (event) => {
@@ -81,7 +89,7 @@ const PreInvite = () => {
                     // opponent : data['user_name'],
                 }
                 console.log(JSON.stringify(req))
-                if (webSContext && webSContext.socket)
+                if (webSContext && webSContext.socket /*&& webSContext.readyState === WebSocket.OPEN*/)
                 {
                     webSContext.socket.current.send(JSON.stringify(req))
                 }
@@ -94,6 +102,7 @@ const PreInvite = () => {
                 
                 tgameSocket.onopen = () => {
                     console.log("Connected to the game room:", data['room_name']);
+                    setDocket(tgameSocket)
                     
                 };
                 tgameSocket.onclose = () => {
@@ -103,7 +112,7 @@ const PreInvite = () => {
                     if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){
                         tmpsocket.close()
                     }
-                    console.error("WebSocket Error:", error);
+                    // console.error("WebSocket Error:", error);
                     navigate('/game/PreRemote');
                 };
                 tgameSocket.onmessage = (event) => {
@@ -113,7 +122,7 @@ const PreInvite = () => {
                         
                         ReomteGameData.inviting = true
                         ReomteGameData.gameSocket = tgameSocket
-                        // ReomteGameData.form_game_invite = false
+                        ReomteGameData.form_game_invite = false
                         
                         // Update Reomte context
                         
