@@ -43,6 +43,10 @@ return(
                         <div className="absolute  mt-5 left-[50%] -translate-x-[50%] w-[100%] h-[800px]   flex flex-col gap-2">
                             {
                                 chatContext.convs.filter(conv=>conv.user2.login.includes(searchTerm.toLocaleLowerCase())).map((item, index)=>{
+                                    function customSubString(arg0: string) {
+                                        throw new Error("Function not implemented.");
+                                    }
+
                                     return(
                                         <div key={index} className={`h-[100px] relative mb-4 flex justify-start gap-6 cursor-pointer hover:bg-black/25 duration-150 rounded p-4 `} onClick={() =>{
                                             setSearchTerm('')
@@ -54,7 +58,7 @@ return(
                                             <img src={backendPath + item.user2.profile_pic} alt="friend-pic" className={`aspect-square rounded-full object-cover w-[50px] h-[50px] 2xl:w-[60px] 2xl:h-[60px]   `} />
                                         </div>
                                         <div className=" flex flex-col gap-3">
-                                            <h1 className="text-sm xxl:text-lg font-semibold">{`${item.user2.firstName} ${item.user2.lastName}`}</h1>
+                                            <h1 className="text-sm xxl:text-lg font-semibold">{`${customSubString(item.user2.firstName + ' ' +item.user2.lastName)}`}</h1>
                                             <p className="tex-sm text-white/75">{`@${item.user2.login}`}</p>
                                         </div>
                                     </div>  

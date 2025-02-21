@@ -130,7 +130,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
                     withCredentials: true,
                 }
                 const resp = await mailman(req)
-                console.log(location,resp, waitForOauth)
                 if(resp.data['message'] && resp.data['message'] === 'user already logged in' && loggedIn === undefined)
                     setLoggedIn(true)
                 else if (resp.data['message'] && resp.data['message'] === 'User logged in successfuly' && loggedIn === undefined)
@@ -151,7 +150,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode}> = ({children}) =>{
   
     }
     useEffect(()=>{
-        console.log(waitForOauth)
         if (!waitForOauth){
             if (loggedIn === false)
                 logout()

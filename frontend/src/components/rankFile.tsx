@@ -5,6 +5,7 @@ import mailman from "@/utils/AxiosFetcher";
 import { rankInterface } from "@/utils/interfaces";
 import { Link } from "react-router-dom";
 import { ProfileDataInterface } from "@/utils/UserDataInterface";
+import { customSubString } from "@/utils/textFromatting";
 // import { Separator } from "@/components/ui/separator"
 // const tags = Array.from({ length: 50 }).map(
 //   (_, i, a) => `v1.2.0-beta.${a.length - i}`
@@ -89,7 +90,7 @@ function RankFile(prop: rankInterrface) {
                                                 <div className="min-w-32 w-[100%] h-full flex items-center">
                                                 <img className={`w-11 aspect-square rounded-full object-cover ${index === 0 ?'border-[3px] border-yellow-500' : index === 1 ? 'border-[3px] border-gray-500' : index === 2 && 'border-[3px] border-orange-800'}`} src={`${import.meta.env.VITE_axiosPath}${user.user.profile_pic}`} alt={user.user.login} />
                                                 <div className="mx-3">
-                                                    <h1 className="font-medium text-xs">{user.user.firstName} {user.user.lastName}</h1>
+                                                    <h1 className="font-medium text-xs">{customSubString(user.user.firstName+" "+user.user.lastName)}</h1>
                                                     <h1 className="font-normal opacity-80 text-xs text-left">@{user.user.login}</h1>
                                                 </div>
                                                 </div>
@@ -105,7 +106,7 @@ function RankFile(prop: rankInterrface) {
                                                 <div className="min-w-32 w-[100%] h-full flex items-center">
                                                 <img className="w-11 ml-3 aspect-square rounded-full object-cover " src={`${import.meta.env.VITE_axiosPath}${currentUser?.user.profile_pic}`} alt={currentUser?.user.login} />
                                                 <div className="mx-3">
-                                                    <h1 className="font-medium text-xs">{currentUser?.user.firstName} {currentUser?.user.lastName}</h1>
+                                                    <h1 className="font-medium text-xs">{currentUser && customSubString(currentUser?.user.firstName+" "+currentUser?.user.lastName)}</h1>
                                                     <h1 className="font-normal opacity-80 text-xs text-left">@{currentUser?.user.login}</h1>
                                                 </div>
                                                 </div>

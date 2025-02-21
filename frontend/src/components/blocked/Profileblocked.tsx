@@ -10,6 +10,7 @@ import mailman from "../../utils/AxiosFetcher";
 import { WebSocketContext } from "../../utils/WSContext";
 import ConnectButton from "../connectButton.tsx";
 import { Link } from "react-router-dom"
+import { customSubString } from "@/utils/textFromatting.ts";
 
 
 
@@ -82,7 +83,7 @@ useEffect(() => {
                                         <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${import.meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                                 
                                                 <div className=" flex  mt-5 flex-col justify-center ">
-                                                    <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
+                                                    <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{customSubString(profileData?.firstName+" "+profileData?.lastName)} </h1>
                                                     <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
                                                 </div>
                                                 {userContextConsumer?.userData?.login === uuid ? (

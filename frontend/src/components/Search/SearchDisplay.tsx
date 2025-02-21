@@ -1,5 +1,6 @@
 
 // import { axiosPath } from "@/utils/Constants"
+import { customSubString } from '@/utils/textFromatting';
 import { Link } from 'react-router-dom'
 interface props
 {
@@ -22,7 +23,7 @@ function SearchDisplay({unique_id,login, firstName, lastName, profile_pic, lastE
                             <img src={`${import.meta.env.VITE_axiosPath}${profile_pic}`} alt="test" className=" rounded-full border-[1px] border-white/25 h-full w-full object-cover"/>
                         </div>
                         <div className="flex flex-col gap-3 items-center sm:items-start overflow-visible">
-                            <p>{`${firstName} ${lastName}`}</p>
+                            <p>{customSubString(firstName+" "+lastName)}</p>
                             <h1 className="text-sm sm:text-base font-medium text-center sm:text-start w-[250px] sm:w-[300px] text-white tracking-wide">
                                 {`@${login}`}
                             </h1>

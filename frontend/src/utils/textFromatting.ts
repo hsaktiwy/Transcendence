@@ -48,3 +48,6 @@ export function formatDate(date: Date | string): string {
         return inputDate.toLocaleDateString(undefined, options);
     }
 }
+export const customSubString = (str: string) =>{
+    return str.length > 20 ? str.substring(0,20) + '...' : str
+}

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import { ProfileDataInterface } from "@/utils/UserDataInterface"
+import { customSubString } from "@/utils/textFromatting"
 
 function OnlineFriends() {
     const userContext = useContext(UserContext)
@@ -65,12 +66,12 @@ function OnlineFriends() {
                                 >
                                     <img
                                         src={`${import.meta.env.VITE_axiosPath}${friend.profile_pic}`}
-                                        alt={`${friend.firstName} ${friend.lastName}`}
+                                        alt={`${friend.firstName } ${friend.lastName}`}
                                         className="w-10 h-10 aspect-square rounded-full object-cover"
                                     />
                                     <div>
                                         <p className="text-sm font-medium">
-                                            {friend.firstName} {friend.lastName}
+                                            {customSubString(friend.firstName+" "+friend.lastName)}
                                         </p>
                                         <p className="text-xs text-gray-500">@{friend.login}</p>
                                     </div>
@@ -102,7 +103,7 @@ function OnlineFriends() {
                                     src={`${import.meta.env.VITE_axiosPath}${friend.profile_pic}`}
                                 />
                                 <div className="mx-3 z-10 flex flex-col items-start justify-center w-72">
-                                    <h1 className="font-medium z-10 text-base">{`${friend.firstName} ${friend.lastName}`}</h1>
+                                    <h1 className="font-medium z-10 text-base">{customSubString(friend.firstName + " "+friend.lastName)}</h1>
                                     <h1 className="font-normal z-10 opacity-80 text-xs text-left">{`@${friend.login}`}</h1>
                                 </div>
                                 <div className='is-online z-10'>

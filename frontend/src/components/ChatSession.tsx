@@ -15,7 +15,7 @@ import { WebSocketContext } from "../utils/WSContext";
 import { Action, ActionType} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
-import { formatDate2 } from "@/utils/textFromatting";
+import { customSubString, formatDate2 } from "@/utils/textFromatting";
 import { toast } from "react-toastify";
 import ChatSessionBlocked from "./chatSessionBlocked";
 
@@ -241,7 +241,7 @@ function ChatSession(){
         }
         catch(error)
         {
-            console.log(error)
+            console.error(error)
         }
     }
 
@@ -294,7 +294,7 @@ function ChatSession(){
                                     if (!isBlocked())
                                         chatContext.setShowProfile(true)
                                 }}>
-                                    <p className=" text-[14px] font-semibold">{chatContext.active &&  chatContext.active.user2.firstName + " " + chatContext.active.user2.lastName}</p>
+                                    <p className=" text-[14px] font-semibold">{chatContext.active &&  `${customSubString(chatContext.active.user2.firstName + ' ' +chatContext.active.user2.lastName)}`}</p>
                                     <div className=" flex gap-3 items-center">
                                         <p className=" text-[12px] text-gray-400">{`@${chatContext.active &&  chatContext.active.user2.login}`} </p>
                                     </div>

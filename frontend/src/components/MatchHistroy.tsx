@@ -2,6 +2,7 @@
 import React, {useState} from "react";
 import { twoGames } from "@/utils/interfaces";
 import { Link } from "react-router-dom";
+import { customSubString } from "@/utils/textFromatting";
 
 interface MatchHistoryProps {
   data: twoGames | undefined;
@@ -80,7 +81,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                     alt="user-image"
                                   />
                                   <div className="text-base font-medium xxl:text-base">
-                                    {data.Pong[0].user_p1.firstName}
+                                    {customSubString(data.Pong[0].user_p1.firstName)}
                                   </div>
                                 </Link>
                                 <div>
@@ -95,7 +96,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                     alt="user-image"
                                   />
                                   <div className="text-base font-medium xxl:text-base">
-                                    {data.Pong[0].user_p2.firstName}
+                                    {customSubString(data.Pong[0].user_p2.firstName)}
                                   </div>
                                 </Link>
                               </div>
@@ -125,7 +126,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                           />
                                           <div className="mx-3">
                                             <h1 className="font-medium text-xs">
-                                              {game.user_p1.firstName} {game.user_p1.lastName}
+                                              {customSubString(game.user_p1.firstName + " " +game.user_p1.lastName)}
                                             </h1>
                                             <h1 className="font-normal opacity-80 text-xs text-left">
                                               {game.user_p1.login || 'N/A'}
@@ -153,7 +154,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                           />
                                           <div className="mx-3">
                                             <h1 className="font-medium text-xs">
-                                              {game.user_p2.firstName} {game.user_p2.lastName}
+                                              {customSubString(game.user_p2.firstName+" "+game.user_p2.lastName)}
                                             </h1>
                                             <h1 className="font-normal opacity-80 text-xs text-left">
                                               {game.user_p2.login || 'N/A'}
@@ -207,7 +208,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                             alt="user-image"
                           />
                           <div className="text-base font-medium xxl:text-base">
-                            {data.Chess[0].user_p1.firstName}
+                            {customSubString(data.Chess[0].user_p1.firstName)}
                           </div>
                         </div>
                         <div>
@@ -222,7 +223,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                             alt="user-image"
                           />
                           <div className="text-base font-medium xxl:text-base">
-                            {data.Chess[0].user_p2.firstName}
+                            {customSubString(data.Chess[0].user_p2.firstName)}
                           </div>
                         </div>
                       </div>
@@ -255,7 +256,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                   />
                                   <div className="mx-3">
                                     <h1 className="font-medium text-xs">
-                                      {game.user_p1.firstName} {game.user_p1.lastName}
+                                      {customSubString(game.user_p1.firstName+" "+game.user_p1.lastName)}
                                     </h1>
                                     <h1 className="font-normal opacity-80 text-xs text-left">
                                       {game.user_p1.login || 'N/A'}
@@ -285,7 +286,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                   />
                                   <div className="mx-3">
                                     <h1 className="font-medium text-xs">
-                                      {game.user_p2.firstName} {game.user_p2.lastName}
+                                      {customSubString(game.user_p2.firstName+" "+game.user_p2.lastName)}
                                     </h1>
                                     <h1 className="font-normal opacity-80 text-xs text-left">
                                       {game.user_p2.login || 'N/A'}

@@ -10,5 +10,5 @@ from datetime import timedelta
 def CreateProfileStatus(sender, instance, created, **kwargs):
     if created:
         ProfileStatus.objects.create(id_user_fk=instance, total_games=0, wins=0, lose=0, _wins=0,_lose=0, rank=0)
-        Notification.objects.create(id_user_fk=instance, content="Welcome to KingPong", type="system")
+        Notification.objects.create(id_user_fk=instance, content="Welcome to Pong Hub", type="system")
         BlockList.objects.create(user=instance)

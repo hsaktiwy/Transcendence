@@ -166,7 +166,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
         catch (error)
         {
-            console.log(error)
+            console.error(error)
         }
     }
     const fetchUserData = async () =>{

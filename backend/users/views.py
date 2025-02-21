@@ -21,85 +21,88 @@ import requests
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def LoginWithOAuth42(request):
-    uuid = request.data.get('uuid')
-    if uuid:
-        try:
-            user = MyUser.objects.get(unique_id=uuid)
-            return generate_tokens_response(user, request)
-        except MyUser.DoesNotExist:
-            return Response({"error": "user not found"} , status=404)
-    else:
-        code = request.data.get('code')
-        client_id = settings.OAUTH_CLIENT
-        client_secret = settings.OAUTH_API_KEY
-        redirect_uri = settings.OAUTH_REDIRECT_URI
-
-        token_url = 'https://api.intra.42.fr/oauth/token'
-        user_info_url = 'https://api.intra.42.fr/v2/me'
-
-        payload = {
-            'grant_type': 'authorization_code',
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'code': code,
-            'redirect_uri': redirect_uri,
-        }
-
-        response = requests.post(token_url, data=payload)
-        if response.status_code != 200:
-            return Response({'error': 'Failed to retrieve access token'}, status=400)
-        access_token = response.json().get('access_token')
-        headers = {
-            'Authorization': f'Bearer {access_token}',
-        }
-        user_info_response = requests.get(user_info_url, headers=headers)
-        if user_info_response.status_code != 200:
-            return Response({'error': 'Failed to retrieve user info'}, status=400)
-
-        user_info = user_info_response.json()
-    
-        login_42 = user_info.get('login')
-        email = user_info.get('email')
-        first_name = user_info.get('first_name')
-        last_name = user_info.get('last_name')
-        responseImage = requests.get(user_info["image"]["versions"]["medium"])
-        if responseImage.status_code == 200:
-            profile_pic = File(BytesIO(responseImage.content), name=f"{login_42}_profile_pic.jpg")
+    try:
+        uuid = request.data.get('uuid')
+        if uuid:
+            try:
+                user = MyUser.objects.get(unique_id=uuid)
+                return generate_tokens_response(user, request)
+            except MyUser.DoesNotExist:
+                return Response({"error": "user not found"} , status=404)
         else:
-            profile_pic = None
-        try:
-            user = MyUser.objects.get(email=email)
-            resp = ''
-            if user.login is None or user.login == "":
-                resp = generate_set_username_response(user, True)
-            elif user.two_factor_auth:
-                resp = generate_TFA_verification_response(user)
-            else:
-                user.state = 'online'
-                user.save()
-                resp = generate_tokens_response(user, request)
-            return resp
-        except MyUser.DoesNotExist:
-            user_data = {
-                'email': email,
-                'firstName': first_name,
-                'lastName': last_name,
-                'oauth': True
+            code = request.data.get('code')
+            client_id = settings.OAUTH_CLIENT
+            client_secret = settings.OAUTH_API_KEY
+            redirect_uri = settings.OAUTH_REDIRECT_URI
+
+            token_url = 'https://api.intra.42.fr/oauth/token'
+            user_info_url = 'https://api.intra.42.fr/v2/me'
+
+            payload = {
+                'grant_type': 'authorization_code',
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'code': code,
+                'redirect_uri': redirect_uri,
             }
-            loginUsed = isLoginAlreadyUSed(login_42)
-            if loginUsed == False:
-                user_data['login'] = login_42
-            user = MyUser.objects.create_user(**user_data)
-            if profile_pic:
-                user.profile_pic.save(f"{login_42}_profile_pic.jpg",profile_pic)
-            resp = ''
-            if loginUsed:
-                resp = generate_set_username_response(user, True)
+
+            response = requests.post(token_url, data=payload)
+            if response.status_code != 200:
+                return Response({'error': 'Failed to retrieve access token'}, status=400)
+            access_token = response.json().get('access_token')
+            headers = {
+                'Authorization': f'Bearer {access_token}',
+            }
+            user_info_response = requests.get(user_info_url, headers=headers)
+            if user_info_response.status_code != 200:
+                return Response({'error': 'Failed to retrieve user info'}, status=400)
+
+            user_info = user_info_response.json()
+        
+            login_42 = user_info.get('login')
+            email = user_info.get('email')
+            first_name = user_info.get('first_name')
+            last_name = user_info.get('last_name')
+            responseImage = requests.get(user_info["image"]["versions"]["medium"])
+            if responseImage.status_code == 200:
+                profile_pic = File(BytesIO(responseImage.content), name=f"{login_42}_profile_pic.jpg")
             else:
-                user.state = 'online'
-                user.save()
-                resp = generate_tokens_response(user, request)
-            return resp
+                profile_pic = None
+            try:
+                user = MyUser.objects.get(email=email)
+                resp = ''
+                if user.login is None or user.login == "":
+                    resp = generate_set_username_response(user, True)
+                elif user.two_factor_auth:
+                    resp = generate_TFA_verification_response(user)
+                else:
+                    user.state = 'online'
+                    user.save()
+                    resp = generate_tokens_response(user, request)
+                return resp
+            except MyUser.DoesNotExist:
+                user_data = {
+                    'email': email,
+                    'firstName': first_name,
+                    'lastName': last_name,
+                    'oauth': True
+                }
+                loginUsed = isLoginAlreadyUSed(login_42)
+                if loginUsed == False:
+                    user_data['login'] = login_42
+                user = MyUser.objects.create_user(**user_data)
+                if profile_pic:
+                    user.profile_pic.save(f"{login_42}_profile_pic.jpg",profile_pic)
+                resp = ''
+                if loginUsed:
+                    resp = generate_set_username_response(user, True)
+                else:
+                    user.state = 'online'
+                    user.save()
+                    resp = generate_tokens_response(user, request)
+                return resp
+    except Exception as e:
+        return Response({'error': str(e)})
 
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
@@ -131,18 +134,24 @@ class getPublicUser(APIView):
 
 class getAuthenticatedUser(APIView):
     def get(self, request):
-        user = request.user
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            user = request.user
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
     def patch(self, request):
-        user = request.user
-        serializer = UserSerializer(instance=user, data=request.data)
-        if serializer.is_valid():
-            if 'email' in serializer.validated_data and serializer.validated_data['email'] != user.email and user.oauth == True:
-                return Response({'email' : 'Email update is not allowed for accounts linked to a third-party provider.'}, status=401)
-            user = serializer.update(instance=user, validated_data=serializer.validated_data)
-            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            user = request.user
+            serializer = UserSerializer(instance=user, data=request.data)
+            if serializer.is_valid():
+                if 'email' in serializer.validated_data and serializer.validated_data['email'] != user.email and user.oauth == True:
+                    return Response({'email' : 'Email update is not allowed for accounts linked to a third-party provider.'}, status=401)
+                user = serializer.update(instance=user, validated_data=serializer.validated_data)
+                return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
         
 
 class RegisterView(APIView):
@@ -272,16 +281,22 @@ def UploadCoverProfile(request):
 class UserNotification(generics.ListAPIView):
     serializer_class = NotificationSerializer
     def get_queryset(self):
-        user=self.request.user
-        Notification.clean_up_notifications(user)
-        return Notification.objects.filter(id_user_fk=user).order_by('created')
+        try:
+            user=self.request.user
+            Notification.clean_up_notifications(user)
+            return Notification.objects.filter(id_user_fk=user).order_by('created')
+        except Exception as e:
+            return Response({'error': str(e)})
 
 
 class GenerateQRCodeView(APIView):
     def get(self, request):
-        user = request.user
-        resp = generat_qr_code(user)
-        return resp
+        try:
+            user = request.user
+            resp = generat_qr_code(user)
+            return resp
+        except Exception as e:
+            return Response({'error': str(e)},status=400)
 
 class Enable2faView(APIView):
     def post(self, request):
@@ -331,7 +346,6 @@ def Search(request):
         identifier = request.GET.get('search')
         Users = MyUser.objects.filter(login__icontains=identifier)[:10]
         SerializedUsers = SearchUserSerializer(Users, many=True)
-
         return Response({'data' : SerializedUsers.data}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)},status=400)
