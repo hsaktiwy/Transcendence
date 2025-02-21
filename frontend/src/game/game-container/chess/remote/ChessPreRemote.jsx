@@ -61,6 +61,7 @@ const ChessPreRemote = () => {
     };
     
     socket.onclose = () => {
+      setIsSearching(false);
       console.log("Matchmaking WebSocket Closed");
     };
     
