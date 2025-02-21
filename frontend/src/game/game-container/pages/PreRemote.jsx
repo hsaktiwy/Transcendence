@@ -1,31 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
 import "./PreRemote.css";
-import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
 // import { useMatchContext } from '../game/MatchContext';
 
 import { useRemoteGameContext } from '../game/MatchContext';
 
-import { UserContext } from '../../../components/UserContext'
-import { WebSocketContext } from '../../../utils/WSContext';
 
 
 const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
-  const webSContext = useContext(WebSocketContext);
   const { setReomteGameData } = useRemoteGameContext();
-  const { ReomteGameData } = useRemoteGameContext();
-  
-  const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
-  const user = useContext(UserContext)
 
   const startMatchmaking = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
+  try {
     const socket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
     console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
     
@@ -75,10 +68,15 @@ const PreRemote = () => {
     };
     
     setMatchSocket(socket);
+
+  }catch(error){
+      navigate('/game/PingPong_Lobby');
+  }
+
   };
 
   const cancelMatchmaking = () => {
-    if (matchSocket) {
+    if (matchSocket && matchSocket.readyState === 1) {
       matchSocket.close();
       setIsSearching(false);
     }

@@ -8,7 +8,7 @@ import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 import gsap from 'gsap'; 
 import LoadingScreen from '../components/LoadingScreen';
 
-import Hud from '../components/Hud'
+// import Hud from '../components/Hud'
 
 import './RemoteScene.css'
 
@@ -133,6 +133,14 @@ const RemoteGame = () => {
     if (dataReady == true)
     {
         let gameSocket = null
+        const scene = new THREE.Scene();
+
+//
+        const kgeometry = new THREE.SphereGeometry( 0.10, 32, 16 ); 
+        const kmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); 
+        const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
+
+    try{
         if (!ReomteGameData.inviting && !ReomteGameData.gameSocket){
             // Connect to the game server using those values
             // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
@@ -155,12 +163,12 @@ const RemoteGame = () => {
         //     console.log('==> NOT CONNECTED !');
         //     navigate('/game/PreRemote')
         // }
-        const scene = new THREE.Scene();
+//         const scene = new THREE.Scene();
 
-//
-        const kgeometry = new THREE.SphereGeometry( 0.10, 32, 16 ); 
-        const kmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); 
-        const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
+// //
+//         const kgeometry = new THREE.SphereGeometry( 0.10, 32, 16 ); 
+//         const kmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); 
+//         const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
 //
         gameSocket.onerror = (error) => {
             // console.error("WebSocket Error:", error);
@@ -275,7 +283,10 @@ const RemoteGame = () => {
         };
     
     
-        };        
+        };
+    }catch(error){
+        navigate('/game/PingPong_Lobby');
+    }    
      
         ////=>////
 
@@ -1095,11 +1106,11 @@ const RemoteGame = () => {
                 left: 0,
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
-            <Hud/>
+            {/* <Hud/> */}
             <div className='downleft'>
                 <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (Up, Right, Left, Down) or your Mouse to move, aim, and interact with the game.'}/>
             </div>
-            <Scoreboard player1={ReomteGameData.my_user} player2={ReomteGameData.opponent} playerScore={playerScore} aiScore={aiScore}/>
+            {/* <Scoreboard player1={ReomteGameData.my_user} player2={ReomteGameData.opponent} playerScore={playerScore} aiScore={aiScore}/> */}
         </>
     )
 };
