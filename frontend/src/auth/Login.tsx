@@ -112,14 +112,9 @@ const Login = () => {
                     else if (resp.data.user)
                         setTfaUser(resp.data.user)
                     else{
-                        // console.log(window.location.pathname)
+
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        location.reload()
-                        // AuthContextConsummer.setWaitForOauth(false)
-                        // AuthContextConsummer.setLoggedIn(true)
-                        // _setCode(null)
-                        // location.reload();
-                        // AuthContextConsummer.setLoggedIn(true)
+
                     }
                 }
 

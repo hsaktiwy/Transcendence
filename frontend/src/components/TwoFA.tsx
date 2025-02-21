@@ -26,10 +26,11 @@ function TwoFA(){
             }
             const resp = await mailman(req)
             const qrUrl = URL.createObjectURL(resp.data);
+            console.error(resp.data)
             setQRCode(qrUrl)
         }
         catch(err){
-            console.log(err)
+            console.error(err)
         }
 
     }

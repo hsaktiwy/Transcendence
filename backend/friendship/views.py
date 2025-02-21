@@ -242,7 +242,6 @@ def GetBlockList(request):
 	except BlockList.DoesNotExist:
 		return Response({'Error':'user does not exist'}, status=404)
 	except Exception as e:
-		print(e)
 		return Response({'Error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
 		
 		

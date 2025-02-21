@@ -17,6 +17,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonProfile from "./Skeletons/SkeletonProfile.tsx";
 import ProfileLocked from "./blocked/Profileblocked.tsx";
 import { LoseWins, LinechartData, RadarChartInterFace, UserRankResponse,twoGames } from "@/utils/interfaces.ts";
+import { customSubString } from "@/utils/textFromatting.ts";
 
 const ProfileTest  = () =>{
     const SocketContext = useContext(WebSocketContext)
@@ -133,7 +134,7 @@ const ProfileTest  = () =>{
         }
         catch(err)
         {
-            console.log(err)
+            console.error(err)
         }
     }
     const waitData=  async() =>
@@ -177,7 +178,7 @@ const ProfileTest  = () =>{
                                         <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${import.meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
                                                 
                                                 <div className=" flex  mt-5 flex-col justify-center ">
-                                                    <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{`${profileData?.firstName} ${profileData?.lastName}`} </h1>
+                                                    <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{customSubString(profileData?.firstName+ " " +profileData?.lastName)} </h1>
                                                     <h1 className="sm:text-[80%] text-center font-normal text-gray-300">@{profileData?.login}</h1>
                                                 </div>
                                                 {userContextConsumer?.userData?.unique_id === uuid ? (

@@ -31,10 +31,8 @@ class JWTAuthMiddleware(BaseMiddleware):
             payload = jwt.decode(access_token, settings.JWT_SECRET_KEY, algorithms=['HS256'])
             scope['user'] = await database_sync_to_async(User.objects.get)(id=payload['user_id'])
         except jwt.ExpiredSignatureError:
-            print("Access token has expired.")
             return await self.close_connection(send)
         except jwt.InvalidTokenError:
-            print(f'Invlaid Token ${access_token}')
             return await self.close_connection(send)
 
         return await super().__call__(scope, receive, send)
@@ -42,7 +40,7 @@ class JWTAuthMiddleware(BaseMiddleware):
     async def close_connection(self, send):
         await send({
             'type': 'websocket.close',
-            'code': 4000,  # Custom code indicating authentication failure
+            'code': 4000, 
         })
 
 class JWTAuthHTTPMiddlware:

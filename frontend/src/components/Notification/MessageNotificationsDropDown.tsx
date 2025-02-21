@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
-import { RiNotification2Line } from "react-icons/ri";
+import { RiNotification2Line, RiTimeFill } from "react-icons/ri";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { RiGamepadLine } from "react-icons/ri";
 import { BiMessageSquareDetail } from "react-icons/bi";
@@ -90,7 +90,7 @@ const MessageNotificationsDropDown = (info: prop) =>{
                             
                          
                                 <Link to={`${linkToChat}` } state={{channel_id : item.channel_id}} 
-                                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#333b3f] break-words"
+                                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-[#595b5d] break-words"
                                 key={index + 1} onClick={() =>{
                                     removeNotification(item)
                                 }}
@@ -105,11 +105,8 @@ const MessageNotificationsDropDown = (info: prop) =>{
                                     <p className="text-slate-100 font-medium break-words">
                                         {item.content.length > 20 ? `${item.content.substring(0,20)}...` : item.content}
                                     </p>
-                                    <p className="text-slate-500 text-sm flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1 text-slate-400">
-                                        <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clipRule="evenodd" />
-                                        </svg>
-
+                                    <p className="text-slate-400 text-sm flex items-center">
+                                        <RiTimeFill/>
                                         {formatDate(item.created)}
                                     </p>
                                     </div>
@@ -124,7 +121,7 @@ const MessageNotificationsDropDown = (info: prop) =>{
                 <span className="text-4xl">
                     <RiInbox2Line/>
                 </span>
-                <h1 className=" text-slate-100/80 font-semibold text-lg">No Notifications yet !</h1>
+                <h1 className=" text-slate-100/80 font-semibold text-lg">No Messages yet !</h1>
              </ul>
             }
         </ul>

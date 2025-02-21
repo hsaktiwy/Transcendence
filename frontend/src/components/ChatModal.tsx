@@ -77,14 +77,14 @@ function ChatModal(){
                         })
                     }
                     catch(e){
-                        console.log(e)
+                        console.error(e)
                     }
                 }
             }
         }
         catch(err)
         {
-            console.log(err)
+            console.error(err)
         }
     }
     return(

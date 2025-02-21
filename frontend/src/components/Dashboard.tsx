@@ -16,6 +16,7 @@ import mailman from "@/utils/AxiosFetcher.ts";
 import { LinechartData, LoseWins, RadarChartInterFace, twoGames, UserRankResponse,  } from "@/utils/interfaces.ts";
 import "../index.css"
 import { ProfileDataInterface } from "@/utils/UserDataInterface.ts";
+import { customSubString } from "@/utils/textFromatting.ts";
 
 Chart.register(CategoryScale);
 
@@ -133,7 +134,7 @@ function Dashboard(){
                                       <div className=" h-20  flex items-center 2xl:items-end z-10">
                                               <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">
                                                   <div className="relative text-lg text-white font-medium">
-                                                    {`Hello ${userContextConsumer.userData?.firstName}`} 
+                                                    {`Hello ${userContextConsumer.userData && customSubString(userContextConsumer.userData?.firstName)}`} 
                                                   </div>
                                                 </div>
 

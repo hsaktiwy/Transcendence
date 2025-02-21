@@ -90,7 +90,7 @@ function ConnectButton(prop: buttonInterface) {
       }
       catch(err)
       {
-          console.log(err)
+          console.error(err)
       }
     }
   }
@@ -116,7 +116,7 @@ function ConnectButton(prop: buttonInterface) {
       }
       catch(err)
       {
-          console.log(err)
+          console.error(err)
       }
   }
 
@@ -150,7 +150,7 @@ function ConnectButton(prop: buttonInterface) {
     }
     catch(err)
     {
-        console.log(err)
+        console.error(err)
     }
   }
 
@@ -252,7 +252,7 @@ function ConnectButton(prop: buttonInterface) {
       }
     }
     catch(e){
-      console.log(e)
+      console.error(e)
     }
   }
 
@@ -279,7 +279,7 @@ function ConnectButton(prop: buttonInterface) {
       }
     }
     catch(e){
-      console.log(e)
+      console.error(e)
     }
   }
 
@@ -307,7 +307,7 @@ function ConnectButton(prop: buttonInterface) {
       }
     }
     catch(e){
-        console.log(e)
+        console.error(e)
     }
   }
 

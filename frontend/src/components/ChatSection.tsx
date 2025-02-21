@@ -135,7 +135,7 @@ function ChatSection(){
             
         }
         catch(e){
-            console.log(e)
+            console.error(e)
         }
     }
 

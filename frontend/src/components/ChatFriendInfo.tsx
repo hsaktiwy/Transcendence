@@ -18,6 +18,7 @@ import ChatInfoBlocked  from "./blocked/ChatInfoBlocked"
 
 //@ts-ignore
 import { useRemoteGameContext } from '../game/game-container/game/MatchContext.jsx';
+import { customSubString } from "@/utils/textFromatting.ts";
 
     ////---------------------------
     function ChatFriendInfo(){
@@ -100,7 +101,7 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
         }
         catch(err)
         {
-            // console.log("Block status ", err)
+            console.error("Block status ", err)
         }
     }
         
@@ -145,7 +146,7 @@ import { useRemoteGameContext } from '../game/game-container/game/MatchContext.j
                                 className="aspect-square rounded-full object-cover w-28 h-28" />
 
                             <h1 className="mt-4 font-semibold text-xl">
-                                {chatContext.active ? `${chatContext.active.user2.firstName} ${chatContext.active.user2.lastName}` : ''}
+                                {chatContext.active ? `${customSubString(chatContext.active.user2.firstName + ' ' +chatContext.active.user2.lastName)}` : ''}
                             </h1>
 
                             <div className="w-full p-3 my-2 flex flex-col rounded-xl py-2 bg-black/30 shadow-ms justify-center items-center">
