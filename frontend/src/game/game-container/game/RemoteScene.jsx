@@ -169,7 +169,7 @@ const RemoteGame = () => {
         
         gameSocket.onclose = (event) => {
             console.log("Matchmaking WebSocket Closed", event);
-            if (!event.wasClean){
+            if (!event.wasClean || event.code === 4001){
                 navigate('/game/PreRemote');
             }
         };

@@ -263,7 +263,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                 if len(parts) == 4 and parts[3] != room[0]:
                     # print('==> Diffrent Room names !')
                     await self.accept() #different room names
-                    await self.close() #different room names
+                    await self.close(code=4001)
+
                     return
                 # print('=====> To The Invitaion Room, Condition met !')
                 
@@ -299,7 +300,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     # Accept the WebSocket connection #check this above
                 else:
                     await self.accept()
-                    await self.close()
+                    await self.close(code=4001)
+
 
 
 
@@ -317,7 +319,15 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                     # print(f"======> from group channels user ", user.login, "joind the group ! visit count :", connections_count[self.room_group_name])
                     # Accept the WebSocket connection #check this above
                 else:
-                    await self.close()
+                    await self.accept()
+                    await self.close(code=4001)
+            else:
+                await self.accept()
+                await self.close(code=4001)
+        else:
+            await self.accept()
+            await self.close(code=4001)        
+
 
     async def disconnect(self, close_code):
         # On disconnect, remove from the group
