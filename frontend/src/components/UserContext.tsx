@@ -344,7 +344,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
                     method: 'DELETE',
                     withCredentials: true,
                 }
-                const resp=await mailman(req)
+                await mailman(req)
             }
         }
         catch(err){
