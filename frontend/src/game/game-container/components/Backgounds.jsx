@@ -34,37 +34,29 @@ function Backgrounds() {
 
   const show = (location.pathname ===  '/game') || (location.pathname ===  '/game/');
   
-  // console.log(location.pathname, ", OnPongRoute : ", OnPongRoute, ", OnChessRoute : ", OnChessRoute, ", show : ", show);
-
   return (
     <>
+      <div className={OnChessRoute ? "" : "hidden-v"}>
+        <ChessGameBack />
+      </div>
+      <div className={OnPongRoute ? "" : "hidden-v"}>
+        <PingPongBack />
+      </div> 
 
-        {/* <div className={OnChessRoute ? "" : "hidden-v"}> */}
-          {/* {(OnChessRoute && <ChessGameBack />)} */}
-          {/* <ChessGameBack /> */}
-        {/* </div> */}
-        {/* <div className={OnPongRoute ? "" : "hidden-v"}> */}
-        {/* {(OnPongRoute && <PingPongBack />)} */}
-          {/* <PingPongBack /> */}
-        {/* </div>  */}
-
-
-        {/* <div className="main-game-page-container"> */}
-          <div className={show ? "teams-container" : "hidden-v"} >
-            <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
-              <center>
-                <h1>Chess Game</h1>
-              </center>
-              <ChessPreview />
-            </div>
-            <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
-              <center>
-                <h1>Ping Pong</h1>
-              </center>
-              <PingPongPreview />
-            </div>
-          </div>
-        {/* </div> */}
+      <div className={show ? "teams-container" : "hidden-v"} >
+        <div className="team" onClick={() => {navigate('/game/Chess_Lobby')}}>
+          <center>
+            <h1>Chess Game</h1>
+          </center>
+          <ChessPreview />
+        </div>
+        <div className="team" onClick={() => {navigate('/game/PingPong_Lobby')}}>
+          <center>
+            <h1>Ping Pong</h1>
+          </center>
+          <PingPongPreview />
+        </div>
+      </div>
     </>
   );
 }

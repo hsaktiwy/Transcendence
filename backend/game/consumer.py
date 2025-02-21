@@ -334,7 +334,7 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
         # On disconnect, remove from the group
         #######################################
 
-        print("===> ROOOOM CLOSEEEE CODE :", close_code)
+        # print("===> ROOOOM CLOSEEEE CODE :", close_code)
         if close_code == 1000: #connection rejected, the session already opened
             return
 

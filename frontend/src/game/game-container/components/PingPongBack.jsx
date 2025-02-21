@@ -73,7 +73,7 @@ const PingPongBack = () => {
             canvas: canvas
         })
         renderer.setSize(sizes.width, sizes.height)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.5))
         
         const GLTFLoaderr = new GLTFLoader(loadingManager); 
         GLTFLoaderr.load('/GamePub/models/chinese_tea_table_4k.gltf/tabla_v2.gltf', function (gltf){
