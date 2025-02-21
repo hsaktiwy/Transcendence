@@ -335,19 +335,38 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         }
             
     }
+    const removeGameInvite = async (notifs: NotificationPropreties[]) =>{
+        try{
+            for (let i = 0; i < notifs.length;i++){
+
+                const req = {
+                    url: `/profile/notification/${notifs[i].id}/`,
+                    method: 'DELETE',
+                    withCredentials: true,
+                }
+                const resp=await mailman(req)
+            }
+        }
+        catch(err){
+            console.error(err)
+        }
+    }
     const gameInviteHandler = (data: NotificationPropreties) => {
-        // data.content = `${data.sender.login} invites you to play a pong game`
-        // let newArrNotif = notifications.filter(notif => notif.type !== 'gameInvitation' && notif.sender.unique_id !== data.sender.unique_id)
-        // newArrNotif.push(data)
-        // newArrNotif = newArrNotif.sort((a,b)=> b.id - a.id)
-        // let newArrNotifToast = newNotification.filter(notif => notif.type !== 'gameInvitation' && notif.sender.unique_id !== data.sender.unique_id)
-        // newArrNotifToast.push(data)
-        // newArrNotifToast = newArrNotifToast.sort((a,b)=> b.id - a.id)
-        // setnotifications(newArrNotif)
-        // setNewNotification(prev => [...prev, data])
         data.content = `${data.sender.login} invites you to play a pong game`
-        setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
-        setNewNotification(prev => [...prev, data])
+        const notifToRemove = notifications.filter(notif=>notif.type === 'gameInvitation' && notif.sender.unique_id === data.sender.unique_id)
+        if (notifToRemove.length>0)
+            removeGameInvite(notifToRemove)
+        let newArrNotif = notifications.filter(notif => notif.type !== 'gameInvitation' || notif.sender.unique_id !== data.sender.unique_id)
+        newArrNotif.push(data)
+        newArrNotif = newArrNotif.sort((a,b)=> b.id - a.id)
+        let newArrNotifToast = newNotification.filter(notif => notif.type !== 'gameInvitation' || notif.sender.unique_id !== data.sender.unique_id)
+        newArrNotifToast.push(data)
+        newArrNotifToast = newArrNotifToast.sort((a,b)=> b.id - a.id)
+        setnotifications(newArrNotif)
+        setNewNotification(newArrNotifToast)
+        // data.content = `${data.sender.login} invites you to play a pong game`
+        // setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
+        // setNewNotification(prev => [...prev, data])
     }
     const updateFriendList = (user: ProfileDataInterface) =>{
         setFriends(prev => prev.filter(friend=> friend.unique_id !== user.unique_id))
@@ -380,6 +399,10 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
         setnotifications(prev => prev.filter(notif=> notif.id !== id))
         setNewNotification(prev => prev.filter(notif=> notif.id !== id))
     }
+
+    useEffect(()=>{
+        SocketContext.AddChannel('NOTIFICATION_GAME_INVITE', gameInviteHandler)
+    },[notifications,newNotification])
     useEffect(() =>{
         if (ready)
         {
