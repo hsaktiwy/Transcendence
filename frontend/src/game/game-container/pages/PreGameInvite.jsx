@@ -25,6 +25,7 @@ const PreInvite = () => {
   
   useEffect(()=>{
       console.log("==>> Reneredddd ! ", ReomteGameData.form_game_invite);
+        let ready = false
         let tmpsocket = null
         let tgameSocket = null
         if (ReomteGameData.form_game_invite === true){
@@ -120,6 +121,7 @@ const PreInvite = () => {
                     const data = JSON.parse(event.data);
                     if (data['type'] === 'match_found') {
                         console.log('====> match begin ...');
+                        ready = true
                         
                         ReomteGameData.inviting = true
                         ReomteGameData.gameSocket = tgameSocket
@@ -147,12 +149,12 @@ const PreInvite = () => {
                 tmpsocket.close()
                 // ReomteGameData.form_game_invite = false
             }
-            // if (location.pathname !== "/game/RemoteGame" && location.pathname !== "/game/RemoteGame/"){
-            //     console.log('PPPP LOCATIOP :', location.pathname)
-            //     if (tgameSocket && tgameSocket.readyState === WebSocket.OPEN){
-            //         tgameSocket.close()
-            //     }
-            // }
+            if (!ready){
+                // console.log('PPPP LOCATIOP :', location.pathname)
+                if (tgameSocket && tgameSocket.readyState === WebSocket.OPEN){
+                    tgameSocket.close()
+                }
+            }
 
         })
 
