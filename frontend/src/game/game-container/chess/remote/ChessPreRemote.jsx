@@ -56,7 +56,7 @@ const ChessPreRemote = () => {
     };
     
     socket.onerror = (error) => {
-      console.error("WebSocket Error:", error);
+      // console.error("WebSocket Error:", error);
       setIsSearching(false);
     };
     

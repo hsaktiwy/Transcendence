@@ -337,7 +337,15 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>{
             
     }
     const gameInviteHandler = (data: NotificationPropreties) => {
-
+        // data.content = `${data.sender.login} invites you to play a pong game`
+        // let newArrNotif = notifications.filter(notif => notif.type !== 'gameInvitation' && notif.sender.unique_id !== data.sender.unique_id)
+        // newArrNotif.push(data)
+        // newArrNotif = newArrNotif.sort((a,b)=> b.id - a.id)
+        // let newArrNotifToast = newNotification.filter(notif => notif.type !== 'gameInvitation' && notif.sender.unique_id !== data.sender.unique_id)
+        // newArrNotifToast.push(data)
+        // newArrNotifToast = newArrNotifToast.sort((a,b)=> b.id - a.id)
+        // setnotifications(newArrNotif)
+        // setNewNotification(prev => [...prev, data])
         data.content = `${data.sender.login} invites you to play a pong game`
         setnotifications(prev => [...prev, data].sort((a,b)=> b.id - a.id))
         setNewNotification(prev => [...prev, data])
