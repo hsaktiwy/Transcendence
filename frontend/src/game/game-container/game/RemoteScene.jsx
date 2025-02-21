@@ -239,7 +239,7 @@ const RemoteGame = () => {
                 navigate('/game/Winner');
             }
             
-            if (data){
+            else if (data){
                 Aix               = data['paddle']['x'];
                 Aiy               = data['paddle']['y'];
     
