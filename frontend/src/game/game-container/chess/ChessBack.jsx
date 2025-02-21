@@ -68,7 +68,7 @@ const ChessGameBack = () => {
         
             // Update renderer
             renderer.setSize(sizes.width, sizes.height)
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.5))     
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))     
         }
         
         // Base camera
@@ -82,7 +82,7 @@ const ChessGameBack = () => {
             canvas: canvas
         })
         renderer.setSize(sizes.width, sizes.height)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))
         
         //
         

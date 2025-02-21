@@ -27,7 +27,7 @@ function PingPongPreview() {
     // Renderer
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.7));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55));
 
 
     // Light

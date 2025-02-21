@@ -639,14 +639,14 @@ const RemoteGame = () => {
         
         // enviroment map
         const rgbeLoader = new RGBELoader(loadingManager);
-        rgbeLoader.load('/GamePub/models/neon_photostudio_2k.hdr', (enviroment_map) => {
+        rgbeLoader.load('/GamePub/models/metro_noord_1k.hdr', (enviroment_map) => {
             enviroment_map.mapping = THREE.EquirectangularReflectionMapping
             scene.background  = enviroment_map;
             scene.environment = enviroment_map;
             
             scene.backgroundBlurriness = 0.5; 
-            scene.environmentIntensity = 0.01; 
-            scene.backgroundIntensity  = 0.007;
+            scene.environmentIntensity = 0.02; 
+            scene.backgroundIntensity  = 0.008;
         })
         
         const BallBoundingBox     = new THREE.Box3();
