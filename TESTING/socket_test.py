@@ -27,7 +27,7 @@
 #         return False
 
 # async def connect_websocket(token: str):
-#     ws_url = "wss://10.13.1.16:4444/api/ws/chat/"
+#     ws_url = "wss://localhost:4444/api/ws/chat/"
 #     headers = [("Authorization", f"Bearer {token}")]
 
 #     try:
@@ -44,7 +44,7 @@
 #     # password = "Hamza@123"
 #     print("Starting operation...")
 #     session = requests.Session()
-#     host = "https://10.13.1.16:4444"
+#     host = "https://localhost:4444"
 #     login_url = host + "/api/api/user/login/"  # Replace with your login URL
 #     credentials = {
 #         "email": "Baki@gmail.com",
@@ -98,7 +98,7 @@ def authenticate(username: str, password: str):
 
     # Step 1: GET a page to retrieve the CSRF token in the cookies.
     # Adjust the URL to one that sets the CSRF token.
-    # csrf_url = "https://10.13.1.16:4444/api/cookie"
+    # csrf_url = "https://localhost:4444/api/cookie"
     # session.get(csrf_url)
 
     # Retrieve the CSRF token from the cookies; it's typically named "csrftoken".
@@ -107,7 +107,7 @@ def authenticate(username: str, password: str):
     #     raise RuntimeError("CSRF token was not retrieved from the initial request.")
 
     # Step 2: Authenticate using JWT by sending credentials.
-    auth_url = "https://10.13.1.16:4444/api/api/user/login/"
+    auth_url = "https://localhost:4444/api/api/user/login/"
     payload = {"email": username, "password": password}
 
     # Include the CSRF token in the headers
@@ -145,7 +145,7 @@ async def connect_websocket(csrf_token: str, access_token: str):
     The tokens are passed in the header accordingly.
     """
     # Replace with your actual WebSocket URL.
-    ws_url = "wss://10.13.1.16:4444/api/ws/ping-pong/room"
+    ws_url = "wss://localhost:4444/api/ws/ping-pong/room"
 
     # Construct the Cookie header value.
     cookie_value = f"csrftoken={csrf_token}; access_token={access_token}"
