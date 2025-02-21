@@ -81,6 +81,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     CoverProfile = models.ImageField(upload_to=user_pic_location, blank=True, default='default.jpeg')
     created_at = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=OFFLINE)
+    game_state = models.CharField(max_length=20, choices=STATE_CHOICES, default=ONLINE)
     last_visit = models.DateTimeField(null=True, blank=True)
     oauth = models.BooleanField(default=False)
 
