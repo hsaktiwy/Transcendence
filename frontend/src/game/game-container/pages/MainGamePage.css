@@ -1,34 +1,49 @@
 .teams-container {
-    position: absolute;
-    top: 50%;
-    left: 50%; /* Add this */
-    transform: translate(-50%, -50%); /* Add this */
-    display: flex;
-    justify-content: space-between;
-    /* gap: 200px;
-     */
-     gap: 20vw;
-     align-items: center;
-     z-index: 50;
-    }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-between;
+  gap: 20vw;
+  align-items: center;
+  z-index: 50;
+}
     
-  .team {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.164);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(12px);
-      border-radius: 12px;
-      width : 350px;
-      height: 350px;
-      cursor: pointer;
-      z-index: 1;
-    }
+.team {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.164);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  width : 350px;
+  height: 350px;
+  cursor: pointer;
+  z-index: 1;
+}
     
 .hidden-v{
       /* display: none; */
       position: absolute;
       opacity: 0;
       z-index: 0;
-
 }
 
+@media (max-width: 640px) {
+  .teams-container {
+    flex-direction: column;
+    top: 45%;
+  }
+}
+
+@media (max-width: 1050px) {
+  .teams-container {
+    gap: 7vw;
+  }
+}
+
+@media (max-width: 1000px) {
+  .teams-container {
+    gap: 2vw;
+  }
+}
