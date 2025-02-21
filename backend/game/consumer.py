@@ -937,7 +937,8 @@ class ApiChessConsumer(WebsocketConsumer):
         # return
         if (user.game_state != MyUser.ONLINE):     #tbc
             # print("=>", f"User {user.login} already Playing or Looking for li 7wih!")
-            self.close()
+            self.accept()
+            self.close(code=3019)
             return
 
         # # clean the PPong_Rooms, ...
@@ -964,7 +965,7 @@ class ApiChessConsumer(WebsocketConsumer):
         #ser 3a t9awed, matsiftlich
 
     def disconnect(self, close_code):
-        if close_code == 1006: #connection rejected, the session already opened
+        if close_code == 1006 or close_code == 3019: #connection rejected, the session already opened
             return
 
 
@@ -1035,15 +1036,19 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                     # Accept the WebSocket connection #check this above
                     await self.accept()
                 else:
-                    await self.close()
+                    await self.accept()
+                    await self.close(code=4320)
                     # chess_connections_count[self.room_group_name] += 1
+        else:
+            await self.accept()
+            await self.close(code=4320)
 
     async def disconnect(self, close_code):
         # On disconnect, remove from the group
         #######################################
 
         # print("===> goup close code :", close_code)
-        if close_code == 1006: #connection rejected, the session already opened
+        if close_code == 1006 or close_code == 4320: #connection rejected, the session already opened
             return
 
         user = self.scope['user']
