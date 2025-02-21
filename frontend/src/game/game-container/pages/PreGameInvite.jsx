@@ -31,6 +31,7 @@ const PreInvite = () => {
         if (ReomteGameData.form_game_invite === true){
             INVITE_TEXT = ReomteGameData.inviter_login + ' VS ' + ReomteGameData.invited_login
             show = true
+        try{    
             tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
             console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
             
@@ -136,13 +137,17 @@ const PreInvite = () => {
                         navigate('/game/RemoteGame');
                     }
                 }
-                };
-            }
+            };
         }
-        else{
-            show = false
-            navigate('/game/PingPong_Lobby')
+        
+        }catch(error){
+            navigate('/game/PingPong_Lobby');
         }
+    }
+    else{
+        show = false
+        navigate('/game/PingPong_Lobby')
+    }
 
         return(() => {
             if (tmpsocket && tmpsocket.readyState === WebSocket.OPEN){

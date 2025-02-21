@@ -14,16 +14,11 @@ function Tournament() {
   const { LocalGamesData }    = useLocalGamesContext();
   const { setLocalGamesData } = useLocalGamesContext();
   
-  // useEffect( () => {
-  //     if ( LocalGamesData.gametype !== 'Tournament'
-  //       || LocalGamesData.player1 === null ||  LocalGamesData.player1 === undefined 
-  //       || LocalGamesData.player2 === null ||  LocalGamesData.player2 === undefined  
-  //       || LocalGamesData.player3 === null ||  LocalGamesData.player3 === undefined
-  //       || LocalGamesData.player4 === null ||  LocalGamesData.player4 === undefined
-  //     ){
-  //       navigate('/game/PingPong_Lobby');
-  //     };
-  // })
+  useEffect( () => {
+      if (!LocalGamesData || (LocalGamesData && LocalGamesData.gametype !== 'Tournament')){
+        navigate('/game/PingPong_Lobby');
+      };
+  })
   // console.log('====> Getted Info : ', LocalGamesData);
 
   const [Matches, setMatches] = useState({
