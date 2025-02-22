@@ -119,7 +119,8 @@ class ApiConsumer(WebsocketConsumer):
             invited_id = parts[-1]
             opponent =  sync__get_user(invited_id)
 
-            if not opponent or (opponent and (opponent.game_state != MyUser.ONLINE and (find_room_name(user, PPong_Rooms) != find_room_name(opponent, PPong_Rooms)))):
+            # if not opponent or (opponent and (opponent.game_state != MyUser.ONLINE and (find_room_name(user, PPong_Rooms) != find_room_name(opponent, PPong_Rooms)))):
+            if not opponent or (opponent and (opponent.game_state != MyUser.ONLINE or find_room_name(opponent, PPong_Rooms) or find_room_name(user, PPong_Rooms))):        
                 self.accept()
                 self.close(code=3011)
                 return
@@ -166,7 +167,8 @@ class ApiConsumer(WebsocketConsumer):
 
         get_or_create_room(user, self, PPong_Rooms)
 
-    def receive(self):
+    def receive(self, text_data):
+        data = json.loads(text_data)
         pass
 
     def disconnect(self, close_code):
@@ -505,7 +507,8 @@ class ApiChessConsumer(WebsocketConsumer):
         get_or_create_room(user, self, Chess_Rooms)
 
 
-    def receive(self):
+    def receive(self, text_data):
+        data = json.loads(text_data)
         pass
 
     def disconnect(self, close_code):
