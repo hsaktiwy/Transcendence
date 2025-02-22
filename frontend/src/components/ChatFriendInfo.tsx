@@ -66,7 +66,7 @@ import { customSubString } from "@/utils/textFromatting.ts";
                     setLevel(resp.data);
             }
             catch (err){
-                console.error("dddddd======????",err)
+                console.error(err)
             }
         }
         
@@ -83,7 +83,7 @@ import { customSubString } from "@/utils/textFromatting.ts";
                 setRadarChartData(resp.data);
             }
             catch (err){
-                console.error("dddddd======????",err)
+                console.error(err)
             }
         }
     const BlockStatusCheck = async ()=>
@@ -101,7 +101,7 @@ import { customSubString } from "@/utils/textFromatting.ts";
         }
         catch(err)
         {
-            console.error("Block status ", err)
+            console.error(err)
         }
     }
         
