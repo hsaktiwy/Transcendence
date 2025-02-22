@@ -666,6 +666,7 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
                     user  = await async_get_user(user_id1)
                     user2 = await async_get_user(user_id2)
+                    t_winner, t_loser = None, None
 
                     if user and user2:
                         if score_1 == score_2:
@@ -694,28 +695,29 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                         elif score_1 < score_2:
                             t_winner, t_loser = user2, user
 
-                        winner_profile = await get_profile(t_winner)
-                        loser_profile  = await get_profile(t_loser)
+                        if (t_winner and t_loser):
+                            winner_profile = await get_profile(t_winner)
+                            loser_profile  = await get_profile(t_loser)
 
-                        if (winner_profile and loser_profile):
-                            winner_profile._wins += 1
-                            winner_profile.total_games += 1                  
-                            
-                            loser_profile._lose += 1
-                            loser_profile.total_games += 1
-                            
-                            await sync_to_async(winner_profile.save)()
-                            await sync_to_async(loser_profile.save)()
+                            if (winner_profile and loser_profile):
+                                winner_profile._wins += 1
+                                winner_profile.total_games += 1                  
+                                
+                                loser_profile._lose += 1
+                                loser_profile.total_games += 1
+                                
+                                await sync_to_async(winner_profile.save)()
+                                await sync_to_async(loser_profile.save)()
 
-                            await create_game(
-                                type='CHESS',
-                                user1=t_winner,
-                                user2=t_loser,
-                                winner=t_winner,
-                                loser=t_loser,
-                                score_p1=score_1,
-                                score_p2=score_2
-                            )
+                                await create_game(
+                                    type='CHESS',
+                                    user1=t_winner,
+                                    user2=t_loser,
+                                    winner=t_winner,
+                                    loser=t_loser,
+                                    score_p1=score_1,
+                                    score_p2=score_2
+                                )
 
         
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):
