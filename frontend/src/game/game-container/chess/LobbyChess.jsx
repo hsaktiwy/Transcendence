@@ -1,10 +1,8 @@
 import { Frame } from '../components/Frame';
 import InfoLink from '../components/InfoLink';
-import LocalChessGame from './LocalSceneChess';
 import { useNavigate } from "react-router-dom";
 import './style.css'
 import '../game/RemoteScene.css'
-import { SlLock } from "react-icons/sl";
 
 
 function ChessLobby(){

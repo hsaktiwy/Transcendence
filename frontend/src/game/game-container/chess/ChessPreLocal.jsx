@@ -1,4 +1,4 @@
-import "../pages/GameOptions.css"; // any extra styling
+import "../pages/GameOptions.css"; 
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
 
