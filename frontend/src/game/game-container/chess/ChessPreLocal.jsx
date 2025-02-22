@@ -12,7 +12,6 @@ const ChessPreLocal = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // CLEAR LOCAL SRORAGE
     localStorage.removeItem('Matches_data');
     localStorage.removeItem("matchId")
   }, []);
@@ -20,7 +19,6 @@ const ChessPreLocal = () => {
   return (
     <>
 
-      {/* <ChessGameBack /> */}
       <div className="main-game-page-container">
 
       <div className="game-options-container">

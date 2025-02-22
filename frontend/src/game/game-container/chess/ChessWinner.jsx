@@ -1,6 +1,4 @@
 
-// export default Winner;
-
 import React, { useEffect } from "react";
 import "./ChessWinner.css";
 
