@@ -166,7 +166,8 @@ class ApiConsumer(WebsocketConsumer):
 
         get_or_create_room(user, self, PPong_Rooms)
 
-    def receive(self):
+    def receive(self, text_data):
+        data = json.loads(text_data)
         pass
 
     def disconnect(self, close_code):
@@ -505,7 +506,8 @@ class ApiChessConsumer(WebsocketConsumer):
         get_or_create_room(user, self, Chess_Rooms)
 
 
-    def receive(self):
+    def receive(self, text_data):
+        data = json.loads(text_data)
         pass
 
     def disconnect(self, close_code):
