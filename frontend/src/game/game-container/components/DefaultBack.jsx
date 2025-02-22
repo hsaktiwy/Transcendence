@@ -175,7 +175,9 @@ const DefaultBack = () => {
             renderer.setSize(window.innerWidth, window.innerHeight);
         
             renderer.render(scene, camera);
-            requestAnimationFrame(Animate)
+            // requestAnimationFrame(Animate)
+            renderer.setAnimationLoop(tick);
+
         }
         
         Animate();
