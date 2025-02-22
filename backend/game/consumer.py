@@ -72,13 +72,10 @@ def matcha(room):
 
 
 def get_or_create_room(user, consumer, Rooms):
-    # cleaner(PPong_Rooms)
     user = sync__get_user(user.unique_id)
 
     if (user.game_state != MyUser.ONLINE and (find_room_name(user, Rooms))):
-        # print(f"=> user {user.login} already in room !")
         return
-    #find_room
     for room in Rooms:
         if len(room) == 2:
             mdar = sync__get_user(room[1][0].unique_id)
@@ -87,17 +84,14 @@ def get_or_create_room(user, consumer, Rooms):
                 matcha(room) 
                 return
 
-    #new_room
-    new_room_name = str(random_room_name())  # create a short random room name
+    new_room_name = str(random_room_name())
     new_room = [new_room_name, [user, consumer]]
     Rooms.append(new_room)
 
 
 def cleaner(Rooms):
-    #delete Hanging rooms
     for i, room in enumerate(Rooms):
         if (len(room) >= 4 and (room[3] == 'Forfait' or room[3] == 'Ended')):
-            # print('==> deleting hanging room :', room[0], "it's game_state :", room[3])
             Rooms.pop(i)
 
 class ApiConsumer(WebsocketConsumer):
@@ -108,8 +102,6 @@ class ApiConsumer(WebsocketConsumer):
         if not user:
             return
 
-        # if (user.game_state == MyUser.IN_GAME or user.game_state == MyUser.IN_SEARCH):
-        # print('===> WTF R U DOING HERE !', user.game_state, find_room_name(user, PPong_Rooms))
         room = find_room_name(user, PPong_Rooms)
         if (user.game_state != MyUser.ONLINE or (room and not (len(room) == 4 and room[3] == 'Invited' and room[2][0].unique_id == user.unique_id and room[2][1] == 'TBR'))):
             self.accept()
@@ -117,7 +109,7 @@ class ApiConsumer(WebsocketConsumer):
             return
 
         #INVITE_PROCESS
-        path = self.scope['path']  # e.g. '/api/server-endpoint-socket/invite/XYZ-123'
+        path = self.scope['path']
         if path.endswith('/'):
             path = path[:-1]
         parts = path.split('/')
@@ -125,31 +117,24 @@ class ApiConsumer(WebsocketConsumer):
 
         if len(parts) == 5 and parts[-2] == 'invite':
             invited_id = parts[-1]
-            # print("Invite mode. Unique ID:", invited_id)
-
             opponent =  sync__get_user(invited_id)
-            # opponent.game_state = MyUser.INVITED #see if that would protect from potential problem 
-            # opponent.save()
 
-            if not opponent or (opponent and (opponent.game_state != MyUser.ONLINE or find_room_name(user, PPong_Rooms) or find_room_name(opponent, PPong_Rooms))):
+            if not opponent or (opponent and (opponent.game_state != MyUser.ONLINE and (find_room_name(user, PPong_Rooms) != find_room_name(opponent, PPong_Rooms)))):
                 self.accept()
-                # self.close() #different room names
                 self.close(code=3011)
                 return
             
             self.accept()
 
             user = sync__get_user(user.unique_id)
-            user.game_state = MyUser.IN_SEARCH #debbug
+            user.game_state = MyUser.IN_SEARCH
             user.save()
 
-            cleaner(PPong_Rooms) #tbd
-            new_room_name = str(random_room_name())  # create a short random room name
+            cleaner(PPong_Rooms) 
+            new_room_name = str(random_room_name()) 
             new_room = [new_room_name, [user, self], [opponent, 'TBR'], 'Invited']
             PPong_Rooms.append(new_room)
-            # Show_Rooms(PPong_Rooms)
             
-            # send the room_created to the inviter
             self.send(json.dumps({
                 'type': 'room_created',
                 'role': 'p1',
@@ -166,13 +151,8 @@ class ApiConsumer(WebsocketConsumer):
             return
         
         else:
-            # print("No invite segment in the path.")
             pass 
 
-        #INVITE_PROCESS
-
-        # # clean the PPong_Rooms, ...
-        # cleaner(PPong_Rooms)
         self.accept()
         user = sync__get_user(user.unique_id)
         user.game_state = MyUser.IN_SEARCH
@@ -186,18 +166,11 @@ class ApiConsumer(WebsocketConsumer):
 
         get_or_create_room(user, self, PPong_Rooms)
 
-        # Show_Rooms(PPong_Rooms)
-
-
-    def receive(self, text_data):
-        data = json.loads(text_data)
-        #ser 3a t9awed, matsiftlich
+    def receive(self):
+        pass
 
     def disconnect(self, close_code):
-        # print('EROOORRRR CODEE :', close_code)
-        if close_code == 1000: #connection rejected, the session already opened
-            # self.accept()
-            # self.close()
+        if close_code == 1000:
             return
 
         user = self.scope['user']
@@ -205,69 +178,47 @@ class ApiConsumer(WebsocketConsumer):
         if not user:
             return
 
-        # print('=> user ', user.login, ', disconnected ! close_code:', close_code)
         room = find_room_name(user, PPong_Rooms)
         if (user.game_state == MyUser.IN_SEARCH):
             if room :
-                remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
-                # print('=> user ', user.login, ', removed with it\'s room ', room[0], '!')
+                remove_room(room[0], PPong_Rooms)
             user = sync__get_user(user.unique_id)
-            user.game_state = MyUser.ONLINE #baghi 3a y3ich
+            user.game_state = MyUser.ONLINE
             user.save()
         elif (user.game_state == MyUser.IN_GAME and room and len(room) >= 4 and room[3] == 'Invited'):
 
             second_user = sync__get_user(room[2][0].unique_id)
             if second_user and second_user.game_state == MyUser.ONLINE:
-                remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
+                remove_room(room[0], PPong_Rooms)
                 user = sync__get_user(user.unique_id)
-                user.game_state = MyUser.ONLINE #baghi 3a y3ich
+                user.game_state = MyUser.ONLINE
                 user.save()
             else:
-            # print('=> user ', user.login, ', quitting matchmaking!')
                 return
         elif (user.game_state == MyUser.IN_GAME and room):
             pass
-            # print('=====> Fuck My Life !!!!!!!!!!')
-
-        # Show_Rooms(PPong_Rooms)
-        #idik fzeb
-        #other player win forfait if the game still in play
-
 
 connections_count = {}
-#{"room_name":count, "room_name2":count2, ...}
-
-# with transaction.atomic():
-# connections_count_lock = asyncio.Lock()
 class GameRoomConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
-        # Show_Rooms(PPong_Rooms)
 
         user = await async_get_user(self.scope['user'].unique_id)
         if not user:
             return
         room = find_room_name(user, PPong_Rooms)
 
-
-
         if room:
-            if (len(room) == 4 and room[3] == 'Invited'): #game_invite_case
-                # print('=====> To The Invitaion Room !',user.login, room[0])
-                #protection diff room names
+            if (len(room) == 4 and room[3] == 'Invited'):
                 path = self.scope['path'] 
                 if path.endswith('/'):
                     path = path[:-1]
                 parts = path.split('/')
-                # for i, part in enumerate(parts):
-                    # print('==>', i, part)
-                if len(parts) == 4 and parts[3] != room[0]:
-                    # print('==> Diffrent Room names !')
-                    await self.accept() #different room names
-                    await self.close(code=4001)
 
+                if len(parts) == 4 and parts[3] != room[0]:
+                    await self.accept()
+                    await self.close(code=4001)
                     return
-                # print('=====> To The Invitaion Room, Condition met !')
                 
                 self.room_name = room[0]
                 self.room_group_name = f"game_room_{self.room_name}"
@@ -285,8 +236,8 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                         self.channel_name
                     )
 
-                    if user.unique_id == room[2][0].unique_id: #send to the inviter that the game begins
-                        data = {"type" : "match_found", "room_name" : room[0], "user_name" : user.login} #send match_found to both of them aka (could help syncing remote game)
+                    if user.unique_id == room[2][0].unique_id:
+                        data = {"type" : "match_found", "room_name" : room[0], "user_name" : user.login}
                         
                         await self.channel_layer.group_send(
                             self.room_group_name,
@@ -296,15 +247,9 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                             }
                         )
                         
-                    ####
-                    # print(f"======> from group channels user ", user.login, "joind the group ! VISIT COUNT :", connections_count[self.room_group_name])
-                    # Accept the WebSocket connection #check this above
                 else:
                     await self.accept()
                     await self.close(code=4001)
-
-
-
 
             elif (len(room) >= 1): 
                 self.room_name = room[0]
@@ -317,8 +262,6 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                         self.room_group_name,
                         self.channel_name
                     )
-                    # print(f"======> from group channels user ", user.login, "joind the group ! visit count :", connections_count[self.room_group_name])
-                    # Accept the WebSocket connection #check this above
                 else:
                     await self.accept()
                     await self.close(code=4001)
@@ -331,48 +274,35 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
 
 
     async def disconnect(self, close_code):
-        # On disconnect, remove from the group
-        #######################################
 
-        # print("===> ROOOOM CLOSEEEE CODE :", close_code)
-        if close_code == 1000: #connection rejected, the session already opened
+        if close_code == 1000:
             return
 
         user = await async_get_user(self.scope['user'].unique_id)
         if not user:
             return
 
-        # print(f'===> Player {user.login} quitting !')
         room = find_room_name(user, PPong_Rooms)
-        # room = eliminate_dups(PPong_Rooms)
-        # if (len(room) >= 4 and room[3] == 'Invited'):
         if room:
-            # print(f'===> Player {user.login} quitting {room[0]} !')
             if (user.game_state == MyUser.IN_SEARCH):
                 room = find_room_name(user, PPong_Rooms)
                 if room :
-                    remove_room(room[0], PPong_Rooms) #only me in room no need for it anymore
-                    # print('==> delete hanging room :', room[0], ", player disconnected (maybe in invite context) !")
+                    remove_room(room[0], PPong_Rooms)
 
             elif (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
                 loser, winner = None, None
                 if user.unique_id == room[1][0].unique_id:
-                    loser =  await async_get_user(room[1][0].unique_id)#MyUser.objects.filter(unique_id=room[1][0].unique_id).first()
-                    winner = await async_get_user(room[2][0].unique_id)#MyUser.objects.filter(unique_id=room[2][0].unique_id).first()
+                    loser =  await async_get_user(room[1][0].unique_id)
+                    winner = await async_get_user(room[2][0].unique_id)
 
                 elif user.unique_id == room[2][0].unique_id:
-                    loser =  await async_get_user(room[2][0].unique_id)#MyUser.objects.filter(unique_id=room[2][0].unique_id).first()
-                    winner = await async_get_user(room[1][0].unique_id)#MyUser.objects.filter(unique_id=room[1][0].unique_id).first()
+                    loser =  await async_get_user(room[2][0].unique_id)
+                    winner = await async_get_user(room[1][0].unique_id)
                 
                 if (len(room) == 3 and loser and winner and (loser.game_state == MyUser.IN_GAME and winner.game_state == MyUser.IN_GAME) ) or (len(room) == 4 and room[3] == 'Invited'):
-                    # if (len(room) == 4 and room[3] == 'Invited'): #or tar9i3a
-                    #     room[3] = 'Forfait'
-                    # else:
-                    #     room.append('Forfait')
-
                     try:
-                        loser_profile   = await get_profile(loser)#ProfileStatus.objects.get(id_user_fk=loser)
-                        winner_profile  = await get_profile(winner)#ProfileStatus.objects.get(id_user_fk=winner)
+                        loser_profile   = await get_profile(loser)
+                        winner_profile  = await get_profile(winner)
                         if loser and winner:
                             if (loser_profile and winner_profile):
                                 loser_profile.lose += 1
@@ -385,7 +315,6 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                                 if len(room) == 3 or (len(room) == 4  and room[3] != 'Ended' and room[3] != 'Forfait'):
                                     roomk = find_room_name(user, PPong_Rooms)
                                     if roomk and roomk[0] == room[0]:
-                                        # print(f"=> room seted", room[0], 'Forfait, Deleted !')
                                         remove_room(room[0], PPong_Rooms)
                                         await create_game(
                                             type='PONG',
@@ -396,87 +325,63 @@ class GameRoomConsumer(AsyncWebsocketConsumer):
                                             score_p1=7,
                                             score_p2=0
                                         )
-                                        data = {"type" : "Forfait"}  #Forfait
+                                        data = {"type" : "Forfait"}
                                         await self.channel_layer.group_send(
                                             self.room_group_name,
                                             {
-                                                # This is the method name that will be called (like a "handler")
                                                 'type': 'broadcast_event',
                                                 'payload': data
                                             }
                                         )
                     except Exception as e:
-                        # print("===> AN ERROR Ocuured exeption:", e)
                         pass
-                # else:
-                    # print("===> AN ERROR Ocuured :", user.login, " didn't save in db ", room[0])
 
-        ######################################
         try:
             await self.channel_layer.group_discard(
                 self.room_group_name,
                 self.channel_name
             )
-        except Exception as e:  # Use correct exception
+        except Exception as e:
             pass 
 
         cleaner(PPong_Rooms)
         user = await async_get_user(user.unique_id)
-        user.game_state = MyUser.ONLINE #baghi 3a y3ich
+        user.game_state = MyUser.ONLINE 
         await sync_to_async(user.save)()
-        # # clean the PPong_Rooms, ...
-        # remove_room()
-        # if connections_count.get(self.room_group_name):
-        #     connections_count.pop(self.room_group_name)
-        # print(connections_count) #to check the invite users
-        # Show_Rooms(PPong_Rooms)
 
     async def receive(self, text_data):
-        # Receive a message from the client
         data = json.loads(text_data)
 
-        # Broadcast it to everyone else in the same group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                # This is the method name that will be called (like a "handler")
                 'type': 'broadcast_event',
                 'payload': data
             }
         )
 
     async def broadcast_event(self, event):
-        if event['payload'].get('type') == 'Game_end': #check that shit
+        if event['payload'].get('type') == 'Game_end':
             user = self.scope['user']
-            # if not user:
-            #     return
             room = find_room_name(user, PPong_Rooms)
-            # print('==> is the room ??', room)
             if room:
                 if (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
-                    # print('+===> Match going to end here and the room would be setted to Ended', room[0])
                     if (len(room) == 3) or (len(room) == 4 and room[3] == 'Invited'):
-                        # room.append('Ended')
                         remove_room(room[0], PPong_Rooms)
                     elif (len(room) == 4 and room[3] == 'Invited'):
-                        # room[3] = 'Ended'
                         remove_room(room[0], PPong_Rooms)
                     user_id1 = event['payload']['paddle']['x']
                     user_id2 = event['payload']['paddle']['y']
 
                     user  = await async_get_user(user_id1)
-                    # print('==>', user.login)
                     user2 = await async_get_user(user_id2)
                     profile1 = await get_profile(user)
                     profile2 = await get_profile(user2)
-
-                    # print('==>', user2.login)
 
                     score_1 = int(event['payload']['ball']['x'])
                     score_2 = int(event['payload']['ball']['y'])
 
                     if user and user2:
-                        # Decide winner vs loser
                         if score_1 > score_2:
                             t_winner, t_loser = user, user2
                             if (profile1 and profile2):
@@ -517,7 +422,6 @@ def get_profile(user):
         profile  = ProfileStatus.objects.get(id_user_fk=user)
         return profile
     except Exception as e:
-        # print("Game get_profile function error :", e)
         return None
     
 @sync_to_async
@@ -541,7 +445,6 @@ def create_game(type, user1, user2, winner, loser, score_p1, score_p2):
             l.save()
         except Exception as e :
             pass
-            # print(e)
     return Game.objects.create(
         type=type,
         user_p1=user1,
@@ -573,354 +476,7 @@ def remove_room(room_name, Rooms):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#FOR CHESS
 Chess_Rooms = []
-# Rooms.append(["Room_name", [user1, consumer],[user2, consumer])
-
 
 class ApiChessConsumer(WebsocketConsumer):
     def connect(self):
@@ -930,27 +486,16 @@ class ApiChessConsumer(WebsocketConsumer):
         if not user:
             return
         
-        # Show_Rooms(Chess_Rooms)
-
-        # print("=> user connected to official route :", user.login)
-        # print("=>", f"Client {user.unique_id}, {user.login} Connected !, game_state :", user.game_state)
-        # user.game_state = MyUser.ONLINE #TBM
-        # user.save()
-        # return
-        if (user.game_state != MyUser.ONLINE):     #tbc
-            # print("=>", f"User {user.login} already Playing or Looking for li 7wih!")
+        if (user.game_state != MyUser.ONLINE):
             self.accept()
             self.close(code=3019)
             return
 
-        # # clean the PPong_Rooms, ...
         cleaner(Chess_Rooms)
         self.accept()
-        # user = sync__get_user(self.scope['user'].unique_id)
-        user.game_state = MyUser.IN_SEARCH #TBM
+        user.game_state = MyUser.IN_SEARCH
         user.save()
 
-        
         self.send(json.dumps({
             'type': 'connection_established',
             'my_id': str(user.unique_id),
@@ -959,50 +504,32 @@ class ApiChessConsumer(WebsocketConsumer):
 
         get_or_create_room(user, self, Chess_Rooms)
 
-        # Show_Rooms(Chess_Rooms)
 
-
-    def receive(self, text_data):
-        data = json.loads(text_data)
-        #ser 3a t9awed, matsiftlich
+    def receive(self):
+        pass
 
     def disconnect(self, close_code):
-        if close_code == 1006 or close_code == 3019: #connection rejected, the session already opened
+        if close_code == 1006 or close_code == 3019:
             return
-
 
         user = self.scope['user']
         user = sync__get_user(user.unique_id)
         if not user:
             return
 
-        
-        # print('=> user ', user.login, ', disconnected ! close_code:', close_code)
         if (user.game_state == MyUser.IN_SEARCH):
             room = find_room_name(user, Chess_Rooms)
             if room :
-                remove_room(room[0], Chess_Rooms) #only me in room no need for it anymore
-                # print('=> user ', user.login, ', removed with it\'s room ', room[0], '!')
-            user.game_state = MyUser.ONLINE #baghi 3a y3ich
+                remove_room(room[0], Chess_Rooms) 
+            user.game_state = MyUser.ONLINE 
             user.save()
         elif (user.game_state == MyUser.IN_GAME):
-            # print('=> user ', user.login, ', quitting matchmaking!')
             pass
-
-        # Show_Rooms(Chess_Rooms)
-        #idik fzeb
-        #other player win forfait if the game still in play
-
-
-
 
 
 
 
 chess_connections_count = {}
-#{"room_name":count, "room_name2":count2, ...}
-
-
 
 class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
@@ -1016,17 +543,10 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
         room = find_room_name(user, Chess_Rooms)
 
-        # user
-        # if room:
-        #     print('====>', user.login, "Entered the room", room[0])
-        # else:
-        #     print('====>', user.login, "Entered the room", None)
-
         if room:
             if (len(room) >= 1): 
                 self.room_name = room[0]
                 self.room_group_name = f"game_room_{self.room_name}"
-                # async with connections_count_lock:
                 chess_connections_count[self.room_group_name] = chess_connections_count.get(self.room_group_name, 0) + 1
 
                 if chess_connections_count[self.room_group_name] <= 2:
@@ -1034,23 +554,17 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                         self.room_group_name,
                         self.channel_name
                     )
-                    # print(f"======> from group channels user ", user.login, "joind the group ! visit count :", chess_connections_count[self.room_group_name])
-                    # Accept the WebSocket connection #check this above
                     await self.accept()
                 else:
                     await self.accept()
                     await self.close(code=4320)
-                    # chess_connections_count[self.room_group_name] += 1
         else:
             await self.accept()
             await self.close(code=4320)
 
     async def disconnect(self, close_code):
-        # On disconnect, remove from the group
-        #######################################
 
-        # print("===> goup close code :", close_code)
-        if close_code == 1006 or close_code == 4320: #connection rejected, the session already opened
+        if close_code == 1006 or close_code == 4320:
             return
 
         user = self.scope['user']
@@ -1059,7 +573,6 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
         if not user:
             return
 
-        # print(f'===> Player {user.login} quitting !')
         room = find_room_name(user, Chess_Rooms)
         if room:
             if (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
@@ -1068,20 +581,19 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
 
                 if (user1.game_state == MyUser.IN_GAME and user2.game_state == MyUser.IN_GAME):
                     if user.unique_id == user1.unique_id:
-                        loser  = user1 #await async_get_user(room[1][0].unique_id)#MyUser.objects.filter(unique_id=room[1][0].unique_id).first()
-                        winner = user2 #await async_get_user(room[2][0].unique_id)#MyUser.objects.filter(unique_id=room[2][0].unique_id).first()
+                        loser  = user1
+                        winner = user2 
 
                     elif user.unique_id == user2.unique_id:
-                        loser  = user2 #await async_get_user(room[2][0].unique_id)#MyUser.objects.filter(unique_id=room[2][0].unique_id).first()
-                        winner = user1 #await async_get_user(room[1][0].unique_id)#MyUser.objects.filter(unique_id=room[1][0].unique_id).first()
+                        loser  = user2 
+                        winner = user1
 
                 if len(room) == 3:
                     room.append('Forfait')
-                    # print("=> room seted", room[0] ,"Forfait.")
 
                     try:
-                        winner_profile   =  await get_profile(loser)#ProfileStatus.objects.get(id_user_fk=loser) //SWITCH TEMPORALRLY
-                        loser_profile    =  await get_profile(winner)#ProfileStatus.objects.get(id_user_fk=winner)
+                        winner_profile   =  await get_profile(loser)
+                        loser_profile    =  await get_profile(winner)
                         if loser and winner:
                             if (loser_profile and winner_profile):
                                 winner_profile._wins += 1
@@ -1106,61 +618,46 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                             await self.channel_layer.group_send(
                                 self.room_group_name,
                                 {
-                                    # This is the method name that will be called (like a "handler")
                                     'type': 'broadcast_event_chess',
                                     'payload': data
                                 }
                             )
                     except Exception as e:
-                        # print("Game get_profile function error :", e)
                         pass
-        ######################################
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
-        # if not user:
-            # return
         user = await async_get_user(user.unique_id)
-        user.game_state = MyUser.ONLINE #baghi 3a y3ich
+        user.game_state = MyUser.ONLINE
         await sync_to_async(user.save)()
-        # # clean the Chess_Rooms, ...
-        # cleaner(Chess_Rooms)
-        # remove_room()
         if chess_connections_count.get(self.room_group_name):
             chess_connections_count.pop(self.room_group_name)
-        # Show_Rooms(Chess_Rooms)
 
     async def receive(self, text_data):
-        # Receive a message from the client
         data = json.loads(text_data)
 
-        # Broadcast it to everyone else in the same group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                # This is the method name that will be called (like a "handler")
                 'type': 'broadcast_event_chess',
                 'payload': data
             }
         )
 
     async def broadcast_event_chess(self, event):
-        if event['payload'].get('type') == 'Game_end': #check that shit
+        if event['payload'].get('type') == 'Game_end':
             user = self.scope['user']
-            # user = await async_get_user(user.unique_id)
-            # if not user:
-            #     return
+
             room = find_room_name(user, Chess_Rooms)
-            # print('==> is the room ??', room)
             if room:
                 if (len(room) == 3 or (len(room) == 4 and room[3] != 'Ended' and room[3] != 'Forfait')):
                     if (len(room) == 3):
                         room.append('Ended')
                     elif len(room) == 4 and room[3] != 'Invited':
                         room[3] = 'Ended'
-                        # print("=> room seted", room[0] ,"Ended.")
 
                     user_id1 = event['payload']['p1_id']
                     user_id2 = event['payload']['p2_id']
@@ -1170,18 +667,12 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                     user  = await async_get_user(user_id1)
                     user2 = await async_get_user(user_id2)
 
-
-
                     if user and user2:
-                        # Decide winner vs loser
-                        if score_1 == score_2: #draw
+                        if score_1 == score_2:
                             winner_profile = await get_profile(user)
                             loser_profile  = await get_profile(user2)
 
                             if (winner_profile and loser_profile):
-                                # winner_profile.wins += 1
-                                # loser_profile.lose += 1
-                                # loser_profile.draw = True
                                 winner_profile.total_games += 1                  
                                 loser_profile.total_games += 1
                                 
@@ -1197,35 +688,34 @@ class GameChessRoomConsumer(AsyncWebsocketConsumer):
                                     score_p1=0,
                                     score_p2=0
                                 )
-                            # print('game setted to draw')
 
                         elif score_1 > score_2:
                             t_winner, t_loser = user, user2
                         elif score_1 < score_2:
                             t_winner, t_loser = user2, user
 
-                            winner_profile = await get_profile(t_winner)
-                            loser_profile  = await get_profile(t_loser)
+                        winner_profile = await get_profile(t_winner)
+                        loser_profile  = await get_profile(t_loser)
 
-                            if (winner_profile and loser_profile):
-                                winner_profile._wins += 1
-                                winner_profile.total_games += 1                  
-                                
-                                loser_profile._lose += 1
-                                loser_profile.total_games += 1
-                                
-                                await sync_to_async(winner_profile.save)()
-                                await sync_to_async(loser_profile.save)()
+                        if (winner_profile and loser_profile):
+                            winner_profile._wins += 1
+                            winner_profile.total_games += 1                  
+                            
+                            loser_profile._lose += 1
+                            loser_profile.total_games += 1
+                            
+                            await sync_to_async(winner_profile.save)()
+                            await sync_to_async(loser_profile.save)()
 
-                                await create_game(
-                                    type='CHESS',
-                                    user1=t_winner,
-                                    user2=t_loser,
-                                    winner=t_winner,
-                                    loser=t_loser,
-                                    score_p1=score_1, #SWITCH TEMPORALRLY
-                                    score_p2=score_2
-                                )
+                            await create_game(
+                                type='CHESS',
+                                user1=t_winner,
+                                user2=t_loser,
+                                winner=t_winner,
+                                loser=t_loser,
+                                score_p1=score_1,
+                                score_p2=score_2
+                            )
 
         
         if (str(event['payload'].get('my_id')) == str(self.scope['user'].unique_id)):

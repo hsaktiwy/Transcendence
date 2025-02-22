@@ -41,7 +41,6 @@ class MyUserManager(BaseUserManager):
 
         return self.create_user(email, firstName, lastName, password, **extra_fields)
 
-# Create your models here.
 class MyUser(AbstractBaseUser, PermissionsMixin):
     name_validator = RegexValidator(
         regex=r"^(?=.{3,50}$)[A-Za-z]+([ '-][A-Za-z]+)*$",
