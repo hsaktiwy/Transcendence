@@ -9,6 +9,7 @@ services:
       - transendence
     volumes:
       - psql:/var/lib/postgresql/data
+  
   gunicorn_django:
     build:
       context: ./backend
@@ -27,6 +28,8 @@ services:
       - transendence
     depends_on:
       - redis
+      - postgres-db
+
   daphne_django:
     build:
       context: ./backend
@@ -42,6 +45,7 @@ services:
       - transendence
     depends_on:
       - redis
+  
   frontend:
     build:
       context: ./frontend
@@ -60,6 +64,7 @@ services:
       - "4444:443"
     networks:
       - transendence
+  
   redis:
     image: redis:latest
     container_name: redis
