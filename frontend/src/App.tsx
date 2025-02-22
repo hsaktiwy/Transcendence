@@ -63,13 +63,13 @@ const App = () =>
   
   <SkeletonTheme baseColor="#242b2f" highlightColor="#444">
     <BrowserRouter>
-      <Backgrounds/>
-        <AuthProvider>
-          <Auth>
-            <WebSocketProvider>
-              <UserProvider>
-                <RemoteGameProvider >
-                  <LocalGamesProvider>
+      <AuthProvider>
+        <Auth>
+          <WebSocketProvider>
+            <UserProvider>
+              <RemoteGameProvider >
+                <LocalGamesProvider>
+                  <Backgrounds/>
                     <Routes>
                       <Route path='/'  element={ <Layout/>}>
                       <Route path='/profile/:uuid' element={ <ProfileTest/>}/>
