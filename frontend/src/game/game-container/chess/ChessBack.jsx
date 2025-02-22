@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import LoadingScreen from '../components/LoadingScreen';
 import gsap from 'gsap'; 
 import '../game/RemoteScene.css'
 
