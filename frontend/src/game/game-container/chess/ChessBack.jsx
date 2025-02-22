@@ -34,7 +34,6 @@ const ChessGameBack = () => {
         
         const scene = new THREE.Scene()
        
-        // Lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 2.4)
         scene.add(ambientLight)
         
@@ -49,7 +48,6 @@ const ChessGameBack = () => {
         directionalLight.position.set(5, 5, 5)
         scene.add(directionalLight)
         
-        //  Sizes
         const sizes = {
             width: window.innerWidth,
             height: window.innerHeight
@@ -58,35 +56,27 @@ const ChessGameBack = () => {
         window.addEventListener('resize', handleResize)
 
         function handleResize(event) {
-            // Update sizes
             sizes.width = window.innerWidth
             sizes.height = window.innerHeight
         
-            // Update camera
             camera.aspect = sizes.width / sizes.height
             camera.updateProjectionMatrix()
         
-            // Update renderer
             renderer.setSize(sizes.width, sizes.height)
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))     
         }
         
-        // Base camera
         const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
         camera.position.set(-0.71, 1.41, 0.78)
         scene.add(camera)
         
         
-        //  Renderer
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas
         })
         renderer.setSize(sizes.width, sizes.height)
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))
         
-        //
-        
-        //GLTF Loading
         const GLTFLoaderr = new GLTFLoader(loadingManager);
         
         GLTFLoaderr.load(
@@ -117,11 +107,9 @@ const ChessGameBack = () => {
         );
         
         
-        //  Animate
         let cameraAngle  = 0;
         let cameraHeight = 0.7;
-        let cameraRadius = 1.8; // Adjust based on your scene scale
-        //
+        let cameraRadius = 1.8; 
         
     
         const clock = new THREE.Clock()
@@ -144,16 +132,13 @@ const ChessGameBack = () => {
     
             camera.lookAt(0, 0, 0);
         
-            // Render
             renderer.render(scene, camera)
         
-            // Call tick again on the next frame
             renderer.setAnimationLoop(tick);
         }
         
         tick()
         
-////=>////
 
         return() => {
 

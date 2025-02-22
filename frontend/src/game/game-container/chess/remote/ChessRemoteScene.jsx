@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js'
-import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 import gsap from 'gsap'; 
@@ -12,18 +11,6 @@ import '../../game/RemoteScene.css'
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js'
 import { useRemoteGameContext } from '../../game/MatchContext';
-
-
-
-
-// room_name: data['room_name'],
-// role     : data['role'],
-// my_user  : data['user_name'],
-// opponent : data['opponent_name'],
-// p1_id    : data['my_id'],
-// p2_id    : data['opponent_id'],
-// color    : data['color'],
-// winner   : null
 
 
 const ChessRemoteGame = () => {
@@ -126,26 +113,20 @@ const ChessRemoteGame = () => {
 
 ////=>////
         const loadingManager = new THREE.LoadingManager();
-
-        loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                // Hide the screen entirely
-                setLoading(false);
-              }
-            });
-          };
-
-
-
-        let canvas = null;
-        if (canvasRef.current != null)
-            canvas = canvasRef.current
         
-        const gui = new GUI()
+        let canvas = null;
+        if (canvasRef.current != null){
+            canvas = canvasRef.current
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
         
         const scene = new THREE.Scene()
        
@@ -632,7 +613,6 @@ const ChessRemoteGame = () => {
         return() => {
 
             window.removeEventListener('resize', handleResize)
-            // document.removeEventListener("keydown", handleKeyDown)
             controls.dispose();
             if (controls2){
                 controls2.removeEventListener('drag', handleDrag);
@@ -643,8 +623,6 @@ const ChessRemoteGame = () => {
 
             renderer.dispose();
 
-            gui.destroy();
-            
             while (scene.children.length > 0) {
                 const child = scene.children[0];
                 scene.remove(child);

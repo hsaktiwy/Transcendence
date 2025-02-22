@@ -16,23 +16,22 @@ const DefaultBack = () => {
 ////=>////
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                // Hide the screen entirely
-                setLoading(false);
-              }
-            });
-          };
+        let canvas = null;
+        if (canvasRef.current != null){
+            canvas = canvasRef.current
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
 
         const scene = new THREE.Scene();
 
-        let canvas = null;
-        if (canvasRef.current != null)
-            canvas = canvasRef.current
         
 
         const TextureLoader = new THREE.TextureLoader(loadingManager);

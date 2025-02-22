@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js'
-import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 import gsap from 'gsap'; 
@@ -11,7 +10,6 @@ import './style.css'
 import '../game/RemoteScene.css'
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js'
-// import { Frame } from '../components/Frame';
 import { useLocalGamesContext } from '../game/MatchContext';
 
 
@@ -19,36 +17,30 @@ import { useLocalGamesContext } from '../game/MatchContext';
 const LocalChessGame = () => {
     const navigate = useNavigate();
     const canvasRef = useRef(null);
-    // const buttonRef = useRef(null);
 
     const [loading, setLoading] = useState(true);
     const { setLocalGamesData } = useLocalGamesContext();
-    const { LocalGamesData } = useLocalGamesContext();
 
     useEffect(() => {
 
-////=>////
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                // Hide the screen entirely
-                setLoading(false);
-              }
-            });
-          };
-
-
-
-        let canvas = null;
-        if (canvasRef.current != null)
-            canvas = canvasRef.current
         
-        const gui = new GUI()
+        
+        
+        let canvas = null;
+        if (canvasRef.current != null){
+            canvas = canvasRef.current
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
         
         const scene = new THREE.Scene()
        
@@ -68,9 +60,7 @@ const LocalChessGame = () => {
         floor.receiveShadow = true
         floor.rotation.x = - Math.PI * 0.5
         floor.material.side = THREE.DoubleSide;
-        // scene.add(floor)
         
-        // Lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 2.4)
         scene.add(ambientLight)
         
@@ -85,7 +75,6 @@ const LocalChessGame = () => {
         directionalLight.position.set(5, 5, 5)
         scene.add(directionalLight)
         
-        //  Sizes
         const sizes = {
             width: window.innerWidth,
             height: window.innerHeight
@@ -94,32 +83,26 @@ const LocalChessGame = () => {
         window.addEventListener('resize', handleResize)
 
         function handleResize(event) {
-            // Update sizes
             sizes.width = window.innerWidth
             sizes.height = window.innerHeight
         
-            // Update camera
             camera.aspect = sizes.width / sizes.height
             camera.updateProjectionMatrix()
         
-            // Update renderer
             renderer.setSize(sizes.width, sizes.height)
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))     
         }
         
-        // Base camera
         const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
         camera.position.set(-0.71, 1.41, 0.78)
         scene.add(camera)
         
-        // Controls
         const controls = new OrbitControls(camera, canvas)
         controls.target.set(0, 0.75, 0)
         controls.enableDamping = true
         
         let objects = []
         
-        //  Renderer
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas
         })
@@ -128,21 +111,7 @@ const LocalChessGame = () => {
         renderer.setSize(sizes.width, sizes.height)
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         
-        //
-        
-        //GLTF Loading
         const GLTFLoaderr = new GLTFLoader(loadingManager);
-        
-        // GLTFLoaderr.load(
-        //     '/GamePub/chess-assets/models/round_wooden_table_01_4k.gltf/round_wooden_table_01_4k.gltf',
-        //     function ( gltf ) {
-        //         gltf.scene.children[0].position.y = 0;
-        //         // gui.add(gltf.scene.children[0].position, 'y', -50, 1).step(1);
-        //         scene.add( gltf.scene.children[0] ); //Jilali Table
-        //     }
-        // );
-        
-        
         
         GLTFLoaderr.load(
             '/GamePub/chess-assets/models/chess_set_2k.gltf/chess_set.gltf',
@@ -164,19 +133,8 @@ const LocalChessGame = () => {
         );
         
         let controls2; 
-        
-        
-        
-        //
-        // //Enviroment Map
-        // const rgbeLoader = new RGBELoader();
-        // rgbeLoader.load('/GamePub/chess-assets/models/envmap/photo_studio_loft_hall_8k.pic', (enviroment_map) => {
-        //     enviroment_map.mapping = THREE.EquirectangularReflectionMapping
-        //     scene.background  = enviroment_map;
-        //     scene.environment = enviroment_map;
-        // })
-        
-        // enviroment map
+    
+
         const rgbeLoader = new RGBELoader(loadingManager);
         rgbeLoader.load('/GamePub/chess-assets/models/neon_photostudio_2k.hdr', (enviroment_map) => {
             enviroment_map.mapping = THREE.EquirectangularReflectionMapping
@@ -191,7 +149,6 @@ const LocalChessGame = () => {
         let cinm = true;
         
         function setPlayerPov(){
-            // camera.position.set(0.011, 1.3785, camera.position.z > 0 ? -0.4220:0.4220)
             camera.position.set(0.011, 1.3785, -0.4220)
             controls.enabled = false
             cinm = false;
@@ -207,8 +164,6 @@ const LocalChessGame = () => {
         document.addEventListener("keydown", handleKeyDown)
         controls2 = new DragControls( objects, camera, canvas );
             
-        // add event listener to highlight dragged objects
-        
         const MAX_HEIGHT = 1.03; 
         let init_pos_x, init_pos_y;
         
@@ -227,17 +182,14 @@ const LocalChessGame = () => {
         controls2.addEventListener( 'dragstart', handleDragStart);
 
         function handleDragStart(event) {
-            // controls.enabled = false
             event.object.material.emissive.set( 0xaaaaaa );
             init_pos_x = event.object.position.x;
             init_pos_y = event.object.position.z;
         }
         
-        ///Edge Case
         function isNegativeZero(value) {
             return value === 0 && (1 / value) === -Infinity;
         }
-        ///
         
         controls2.addEventListener( 'dragend', handleDragEnd);
 
@@ -250,7 +202,6 @@ const LocalChessGame = () => {
         }
         //
 
-        ///Get The position World to matrix
         const RATIO_FACTOR    = 19.74;
         const SQUARE_DIAMETER = 0.058;
         const SQUARE_RADIUS   = 0.029;
@@ -258,11 +209,9 @@ const LocalChessGame = () => {
         
         
         
-        ///Using lib
         const engine_validator = new Chess();
         ///
         
-        ///cordinnatesToNotation
         function convertCoordinatesToNotation(x, y) {
             const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
             const columnIndex = x < 0 ? x + 4 : x > 0 ? x + 3 : null;
@@ -276,12 +225,10 @@ const LocalChessGame = () => {
         }
         ///
         
-        ///Capturing
         function findCapturedPiece(name, squareNotation) {
             for (const piece of objects) {
                 const [x, y] = WorldToMatrix(piece.position.x, piece.position.z);
                 if (convertCoordinatesToNotation(x, y) === squareNotation && name !== piece.name){
-                    // console.log(piece.name, " being Captured !");
                     return piece;
                 }
             }
@@ -289,7 +236,6 @@ const LocalChessGame = () => {
         }
         ///
         
-        ///Validator
         function Validator(name, pos) {
             let words = WorldToMatrix(init_pos_x, init_pos_y);
             let cords = WorldToMatrix(pos.x, pos.z);
@@ -298,14 +244,7 @@ const LocalChessGame = () => {
             const fromNotation = convertCoordinatesToNotation(words[0], words[1]);
             const toNotation   = convertCoordinatesToNotation(cords[0], cords[1]);
         
-            // console.log('before cordinnates : ', words[0], words[1]);
-            // console.log('from : ', fromNotation);
-            // console.log('after  cordinnates : ', cords[0], cords[1]);
-            // console.log('to   : ', toNotation);
-            // console.log('\n\n');
-        
             if ((cords[0] > 4 || cords[0] < -4) || (cords[1] > 4 || cords[1] < -4) || !fromNotation || !toNotation){
-                // illegal_sound.play();
                 pos.x = init_pos_x;
                 pos.z = init_pos_y;
                 return ;
@@ -313,17 +252,11 @@ const LocalChessGame = () => {
         
             try {
                 let result = engine_validator.move({from : fromNotation, to: toNotation}); //Try catch (yes it throws!)
-                // console.log('==> Game judgemet : ', result);
-                // console.log(engine_validator.ascii(),"\n\n");
                 if (result){
-                    // console.log('Valid Move !')
-        
-
 
                     if (engine_validator.isGameOver()) {
                         if (engine_validator.isCheckmate()) {
                             let winning_color = engine_validator.turn() === 'w' ? 'black' : 'white';
-                            // console.log("Checkmate! Winning side:", winning_color);
                             setLocalGamesData({
                                 gametype: 'chess',
                                 winner  : winning_color + ' WON !'
@@ -344,17 +277,13 @@ const LocalChessGame = () => {
 
 
 
-                    ///Capturing
                     if (result.captured){
                         const capturedPiece = findCapturedPiece(name, toNotation);
                         if (capturedPiece) {
-                            // console.log("Cptured Piece Found : ", capturedPiece.name);
                             scene.remove(capturedPiece);
                             objects = objects.filter(obj => obj !== capturedPiece); // tbu
-                            // capture_sound.play(); // Sound for capture
                         }
                     }
-                    // move_sound.play();
                     pos.x =  -((cords[0] > 0 ? cords[0] - 1: cords[0]) * SQUARE_DIAMETER) - SQUARE_RADIUS;
                     pos.z =   ((cords[1] > 0 ? cords[1] - 1: cords[1]) * SQUARE_DIAMETER) + SQUARE_RADIUS;
                     gsap.to(camera.position, {
@@ -364,15 +293,11 @@ const LocalChessGame = () => {
                     });
                 }
                 else {
-                    // console.log('InValid Move !')
-                    // illegal_sound.play();
                     pos.x = init_pos_x;
                     pos.z = init_pos_y;
                     return ;
                 }   
             } catch (error) {
-                // console.log('InValid Move !')
-                // illegal_sound.play();
                 pos.x = init_pos_x;
                 pos.z = init_pos_y;
                 return ;
@@ -397,24 +322,15 @@ const LocalChessGame = () => {
             else if (y === 0){
                 y = 1
             }
-            // console.log("x : ",  x,", y : ", y);
             return [x, y];
         }
         ///
         
         
-        ////BUttona
-        // let button = null;
-        // if (buttonRef.current != null){
-        //     button = buttonRef.current
-        //     button.addEventListener('click', setPlayerPov);
-        // }
-        ///
-        
-        //  Animate
+      
         let cameraAngle  = 0;
         let cameraHeight = 0.9;
-        let cameraRadius = 2; // Adjust based on your scene scale
+        let cameraRadius = 2; 
         //
         
         let ah = new THREE.AxesHelper(15);
@@ -440,12 +356,9 @@ const LocalChessGame = () => {
                 camera.lookAt(0, 0, 0);
             }
         
-            // Update controls
             controls.update()
         
-            // console.log(camera.position);
         
-            // Render
             renderer.render(scene, camera)
         
             renderer.setAnimationLoop(tick);
@@ -454,8 +367,6 @@ const LocalChessGame = () => {
         
         tick()
         
-////=>////
-
         return() => {
 
             window.removeEventListener('resize', handleResize)
@@ -470,15 +381,12 @@ const LocalChessGame = () => {
 
             renderer.dispose();
 
-            gui.destroy();
             
             while (scene.children.length > 0) {
                 const child = scene.children[0];
                 scene.remove(child);
             }
 
-            // hit_sound.pause();
-            // hit_sound.src = "";
         };
 
     }, []);
@@ -490,7 +398,6 @@ const LocalChessGame = () => {
                 left: 0,
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
-            {/* <button className="button" ref={buttonRef}>Press Start To Start</button> */}
         </>
     )
 };

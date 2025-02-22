@@ -21,6 +21,7 @@ const PingPongBack = () => {
         
         let canvas = null;
         if (canvasRef.current != null){
+          canvas = canvasRef.current
           loadingManager.onLoad = () => {
               gsap.to('#loading-screen', {
                 opacity: 0,
@@ -30,7 +31,6 @@ const PingPongBack = () => {
                 }
               });
             };
-            canvas = canvasRef.current
         }
 
         const scene = new THREE.Scene()

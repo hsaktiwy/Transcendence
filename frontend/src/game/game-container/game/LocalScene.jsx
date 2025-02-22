@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -110,24 +109,20 @@ const LocalGame = () => {
 
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
-            // setLoading(false);
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                // Hide the screen entirely
-                setLoading(false);
-              }
-            });
-          };
-
-        // const gui = new GUI()
 
         let canvas = null;
-        if (canvasRef.current != null)
+        if (canvasRef.current != null){
             canvas = canvasRef.current
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
 
         
         const scene = new THREE.Scene()
@@ -333,8 +328,6 @@ const LocalGame = () => {
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
         }
         
-        // gui.add(BallCreator, 'createBall')
-        // gui.add(BallCreator, 'reset')
         
         //Table 
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
@@ -811,7 +804,6 @@ const LocalGame = () => {
             document.removeEventListener('keyup', handleKeyUp);
             renderer.dispose();
 
-            // gui.destroy();
             
             while (scene.children.length > 0) {
                 const child = scene.children[0];

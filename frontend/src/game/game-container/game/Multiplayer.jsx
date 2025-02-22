@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -51,24 +50,19 @@ const MultiplayerGame = () => {
 
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                // Hide the screen entirely
-                setLoading(false);
-              }
-            });
-          };
-
-        // const gui = new GUI()
-
         let canvas = null;
-        if (canvasRef.current != null)
+        if (canvasRef.current != null){
             canvas = canvasRef.current
-
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
         
         const scene = new THREE.Scene()
         
@@ -317,8 +311,6 @@ const MultiplayerGame = () => {
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
         }
         
-        // gui.add(BallCreator, 'createBall')
-        // gui.add(BallCreator, 'reset')
         
         //Table 
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
@@ -681,24 +673,6 @@ const MultiplayerGame = () => {
             
 
             else if (NetBoundingBox.intersectsBox(BallBoundingBox)) {
-                // console.log('ball collided with the Net!');
-                // Objects[Objects.length - 1].sphereBody.velocity.z = -(Objects[Objects.length - 1].sphereBody.velocity.z) * 0.5; //Good !
-                // Good just need to get the best velocity values
-
-                // const normalVelocity = Objects[Objects.length - 1].velocity.dot(new THREE.Vector3(0, 0, 1)); // Extract velocity along the normal
-                // Objects[Objects.length - 1].velocity.z = ((Objects[Objects.length - 1].velocity.y) > 0 ? 1 : -1 ) * restitution;
-
-                // // Apply friction to X and Y velocity components
-                // Objects[Objects.length - 1].velocity.x *= friction;
-                // Objects[Objects.length - 1].velocity.y *= friction;
-
-                // // Prevent sinking into the net by repositioning the ball
-                // const ballDepth = BallBoundingBox.max.z - BallBoundingBox.min.z;
-                // if (Objects[Objects.length - 1].sphere.position.z > NetBoundingBox.max.z) {
-                //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.max.z + ballDepth / 2; // Ball is on one side of the net
-                // } else {
-                //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.min.z - ballDepth / 2; // Ball is on the other side of the net
-                // }
             }
             else if (TableBoundingBox.intersectsBox(BallBoundingBox)) {
                 // console.log('ball collided with the Table!');
@@ -720,12 +694,7 @@ const MultiplayerGame = () => {
     }
 //
         
-        // scene.add(new THREE.GridHelper( 50, 50 ))
-        // scene.add(new THREE.AxesHelper(15))
-
         
-        // gui.add(BallCreator, 'cameraFixed');
-        // gui.add(BallCreator, 'PADDLE_SPEED', 0.01 , 0.2).step(0.01)
         
         //  Animate
         const clock = new THREE.Clock()
@@ -925,7 +894,6 @@ const MultiplayerGame = () => {
                     paddle.position.x = -(5.5 * BLUE_P2.x);
                     paddle.position.y = 5.03 + (2 * BLUE_P2.y);
 
-                //BOTTOM PART
                     ///RIGHT BLUE P1                
                     cameras[3].position.x = 0;
                     cameras[3].position.y = 7.8;
@@ -1088,8 +1056,6 @@ const MultiplayerGame = () => {
             document.removeEventListener('keyup', handleKeyUp);
             renderer.dispose();
 
-            // gui.destroy();
-            
             while (scene.children.length > 0) {
                 const child = scene.children[0];
                 scene.remove(child);

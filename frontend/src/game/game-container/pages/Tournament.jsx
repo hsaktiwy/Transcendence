@@ -19,7 +19,6 @@ function Tournament() {
         navigate('/game/PingPong_Lobby');
       };
   })
-  // console.log('====> Getted Info : ', LocalGamesData);
 
   const [Matches, setMatches] = useState({
     Semi_Final_1: {
@@ -63,10 +62,6 @@ function Tournament() {
 
   }, [LocalGamesData.F1_turn, LocalGamesData.F2_turn, LocalGamesData.FF_turn])
 
-  // if (Matches.Final.Done === true){
-  //   // navigate('/game/')
-  //   navigate("/game/Winner")
-  // }
 
   const handleReady = (matchId, whichPlayer) => {
     setMatches((prev) => {
