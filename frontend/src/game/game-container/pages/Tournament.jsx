@@ -188,10 +188,10 @@ function Tournament() {
       <div className="tournament-page">
         <div className="tournament-layout">
           <div className=" bg-white/5 backdrop-filter backdrop-blur-md border  border-white/20 w-full h-full rounded-3xl ">
-            <div className="flex h-96 p-6 justify-center items-center ">
+            <div className="flex h-96 p-6 justify-center items-center  ">
                     <Bracket
                     rounds={rounds}
-                    className="text-white bg-gray-900 border border-gray-700"
+                    className="text-white bg-slate-950 border border-gray-700 "
                   />
 
             </div>

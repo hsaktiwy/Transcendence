@@ -3,8 +3,7 @@ from channels.middleware import BaseMiddleware
 from channels.db import database_sync_to_async
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.response import Response
+
 User = get_user_model()
 
 def get_cookies(scope):
@@ -15,7 +14,6 @@ def get_cookies(scope):
     )
     cookies = {}
     if cookies_header:
-        # Split the cookie string by semicolons
         cookie_string = cookies_header.get('cookie')
         if cookie_string:
             for cookie in cookie_string.split(';'):
@@ -26,7 +24,6 @@ class JWTAuthMiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
         cookies = get_cookies(scope)
         access_token = cookies.get('access_token') 
-        
         try:
             payload = jwt.decode(access_token, settings.JWT_SECRET_KEY, algorithms=['HS256'])
             scope['user'] = await database_sync_to_async(User.objects.get)(id=payload['user_id'])
@@ -42,45 +39,3 @@ class JWTAuthMiddleware(BaseMiddleware):
             'type': 'websocket.close',
             'code': 4000, 
         })
-
-class JWTAuthHTTPMiddlware:
-    def __init__(self, get_response):
-        self.get_reponse = get_response
-
-    def __call__(self, request):
-        try:
-            resp = self.get_reponse(request)
-        except AuthenticationFailed as e:
-            resp = self.handle_authentication_failed(e)
-        return resp
-
-    def handle_authentication_failed(self, exception):
-            resp_status = 401
-            error_message = str(exception)
-            if error_message == 'User not found':
-                resp_status = 404
-            resp = Response({
-                'message': error_message
-            }, status=resp_status)
-            resp.set_cookie(
-                key='access_token',
-                value='',
-                httponly=True,
-                samesite='Lax',
-                expires=0
-            )
-            resp.set_cookie(
-                key='refresh_token',
-                value='',
-                httponly=True,
-                samesite='Lax',
-                expires=0
-            )
-            resp.set_cookie(
-                key='csrftoken',
-                value='',
-                httponly=False,
-                samesite='Lax',
-                expires=0
-            )
-            return resp

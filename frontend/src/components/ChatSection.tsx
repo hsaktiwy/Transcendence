@@ -116,7 +116,7 @@ function ChatSection(){
         try{
 
             const req = {
-                url: 'chat/conversation/'+channel_id+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/',
+                url: 'chat/conversation/'+channel_id+'/20/',
                 method: "GET",
                 withCredentials: true,
             }

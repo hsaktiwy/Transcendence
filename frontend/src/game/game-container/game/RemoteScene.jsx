@@ -18,6 +18,7 @@ import { useLocation, useNavigate} from 'react-router-dom';
 import { useRemoteGameContext } from '../game/MatchContext';
 import { useLocalGamesContext } from '../game/MatchContext';
 import Tooltip from '../components/Tooltip';
+import { VITE_ws_url } from '../../../utils/interfaces';
 
 
 
@@ -135,8 +136,7 @@ const RemoteGame = () => {
         let gameSocket = null
         if (!ReomteGameData.inviting && !ReomteGameData.gameSocket){
             // Connect to the game server using those values
-            // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
-            gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ws/ping-pong/room/${ReomteGameData.room_name}`);
+            gameSocket = new WebSocket(VITE_ws_url + `/ws/ping-pong/room/${ReomteGameData.room_name}`);
             // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
             
             gameSocket.onopen = () => {

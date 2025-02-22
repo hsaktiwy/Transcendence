@@ -5,9 +5,10 @@ import { formatDate2 } from "@/utils/textFromatting";
 import EmptyConversationList from "./EmptyConversationList";
 import { TbFaceIdError } from "react-icons/tb";
 import { customSubString } from "@/utils/textFromatting";
+import { VITE_BACKEND } from "@/utils/interfaces";
 
 function Conversations(){
-    const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
+    const backendPath:string = VITE_BACKEND
     const chatContext =useContext(ChatSectionContext)
     if (!chatContext)
         throw new Error('error')

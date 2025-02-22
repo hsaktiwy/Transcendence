@@ -8,6 +8,7 @@ import Search from "./Search/Search.tsx";
 import NotificationDropDown from "./Notification/NotificationDropDown.tsx";
 import MessageNotificationsDropDown from "./Notification/MessageNotificationsDropDown.tsx";
 import { useLocation } from "react-router-dom";
+import { VITE_BACKEND } from "@/utils/interfaces.ts";
  
 
 
@@ -131,7 +132,7 @@ function NavBarV2(){
                                 <MessageNotificationsDropDown display={messagesDrop}/>
                             </div>
                             <div ref={dropContainerRef} className="w-[30px] h-[30px] cursor-pointer relative " onClick={()=> setDrop(!drop)} >
-                                <img src={`${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full aspect-square rounded-full object-cover " />
+                                <img src={`${VITE_BACKEND}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="w-full h-full aspect-square rounded-full object-cover " />
                                 <NavBarDrop display={drop}/>
                             </div>
                     

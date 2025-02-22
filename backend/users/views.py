@@ -18,6 +18,7 @@ from django.core.files import File
 from django.http import Http404
 from rest_framework.decorators import api_view, permission_classes
 import requests
+import urllib.parse
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def LoginWithOAuth42(request):
@@ -35,8 +36,8 @@ def LoginWithOAuth42(request):
             client_secret = settings.OAUTH_API_KEY
             redirect_uri = settings.OAUTH_REDIRECT_URI
 
-            token_url = 'https://api.intra.42.fr/oauth/token'
-            user_info_url = 'https://api.intra.42.fr/v2/me'
+            token_url = settings.TOKEN_URL
+            user_info_url = settings.API_URL
 
             payload = {
                 'grant_type': 'authorization_code',
@@ -380,4 +381,14 @@ def SetUsername(request):
             return Response({"error": "user not found"} , status=404)
         except Exception as e:
             return Response({"error": str(e)} , status=400)
-            
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getOauthRedirectURI(request):
+    try:
+        redirect_uri = settings.OAUTH_REDIRECT_URI
+        client_id = settings.OAUTH_CLIENT
+        base_url = settings.AUTHORIZATION_BASE_URL
+        auth_url  = f'{base_url}?client_id={client_id}&redirect_uri={urllib.parse.quote(redirect_uri, safe="")}&response_type=code'
+        return Response({'uri': auth_url})
+    except Exception as e:
+        return Response({'error':str(e)})

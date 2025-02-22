@@ -9,6 +9,7 @@ import { useRemoteGameContext } from '../game/MatchContext';
 
 import { UserContext } from '../../../components/UserContext'
 import { WebSocketContext } from '../../../utils/WSContext';
+import { VITE_BACKEND, VITE_ws_url } from '../../../utils/interfaces';
 
 
 const PreRemote = () => {
@@ -19,15 +20,15 @@ const PreRemote = () => {
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
   
-  const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
+  const backendPath = VITE_BACKEND
   const user = useContext(UserContext)
 
   const startMatchmaking = () => {
     setIsSearching(true);
     
     // Create WebSocket connection
-    const socket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
-    console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/');
+    const socket = new WebSocket(VITE_ws_url + '/ws/server-endpoint-socket/');
+    console.log("==>", VITE_ws_url + '/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
       console.log("Matchmaking WebSocket Connected");

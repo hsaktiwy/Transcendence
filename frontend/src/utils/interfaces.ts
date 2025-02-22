@@ -106,3 +106,6 @@ export interface manage_button{
   action: string,
   status: string
 }
+export const VITE_BACKEND = `${window.location.origin}/api`;
+// export const VITE_axiosPath = `${window.location.origin}/api`;
+export const VITE_ws_url = `wss://${window.location.hostname}:4444/api`;

@@ -12,7 +12,7 @@ import { RadarChartFile } from "./RadarChartFile";
 import { FiUser } from "react-icons/fi";
 import { Link } from 'react-router-dom'
 import Achievements from "./Achievements";
-
+import { VITE_BACKEND } from "@/utils/interfaces";
 
 import ChatInfoBlocked  from "./blocked/ChatInfoBlocked"
 
@@ -37,7 +37,7 @@ import { customSubString } from "@/utils/textFromatting.ts";
         };
     ////---------------------------
 
-    const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
+    const backendPath:string = VITE_BACKEND
     const chatContext = useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
 

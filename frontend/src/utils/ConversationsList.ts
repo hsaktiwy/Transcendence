@@ -4,7 +4,7 @@ import mailman from "./AxiosFetcher";
 export const init_conv = async (setLoading:React.Dispatch<React.SetStateAction<boolean>>,setActive:React.Dispatch<React.SetStateAction<Conversation | undefined>>, setConv:React.Dispatch<React.SetStateAction<Conversation[] | undefined>> , channel_id : number | undefined) =>
 {
     try {
-      const url:string = import.meta.env.VITE_CONVERSATION + import.meta.env.VITE_MESSAGES_PACKET_SIZE + '/'
+      const url:string = '/chat/conversations/20/'
       const request = {
         url: url,
         method: 'GET',

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMatchContext } from './MatchContext';
 import { useNavigate } from 'react-router-dom';
+import { VITE_ws_url } from '../../../utils/interfaces';
 
 const WebSocketComponent = () => {
 const [connectionStatus, setConnectionStatus] = useState("Disconnected");
@@ -17,7 +18,7 @@ const navigate = useNavigate();
 
 useEffect(() => {
 
-  const socket = new WebSocket(import.meta.env.VITE_ws_url +'/ws/server-endpoint-socket/');
+  const socket = new WebSocket(VITE_ws_url +'/ws/server-endpoint-socket/');
   // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
   
   socket.onopen = () => {

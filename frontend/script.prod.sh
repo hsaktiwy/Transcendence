@@ -1,7 +1,7 @@
 #!/bin/sh
-npm install --legacy-peer-deps
+# npm install --legacy-peer-deps
 
-npm run build
+# npm run build
 
 # setuping nginx
 mkdir -p "${ssl_path}"

@@ -14,6 +14,7 @@ class JWTAuthentication(BaseAuthentication):
         "/api/user/logout/",
         "/api/user/check/",
         "/api/user/verify2fa/",
+        "/api/get_auth_uri/"
     }
 
     def authenticate(self, request):

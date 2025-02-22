@@ -14,7 +14,7 @@ class Command(BaseCommand):
         password = "Hamza@123"
         for username in username_list:
             try:
-                user = MyUser.objects.create_user(login=username, firstName=username, lastName=username, password=password,email=username+"@gmail.com")
+                user = MyUser.objects.create(login=username, firstName=username, lastName=username, password=password,email=username+"@gmail.com")
                 print(f"{user.id}, {user.login}, {user.email}")
             except Exception as e:
                 print(e, file=sys.stderr)

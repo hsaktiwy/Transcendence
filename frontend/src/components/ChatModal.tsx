@@ -64,7 +64,7 @@ function ChatModal(){
                 {
                     try{
                         const req = {
-                            url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/'+import.meta.env.VITE_MESSAGES_PACKET_SIZE+'/',
+                            url: 'chat/conversation/'+userContext?.action?.ConversationChannel+'/20/',
                             method: "GET",
                             withCredentials: true,
                         }

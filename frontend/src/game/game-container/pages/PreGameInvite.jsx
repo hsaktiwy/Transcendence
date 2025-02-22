@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRemoteGameContext } from '../game/MatchContext';
 
 import { WebSocketContext } from '../../../utils/WSContext';
+import { VITE_BACKEND, VITE_ws_url } from '../../../utils/interfaces';
 
 
 const PreInvite = () => {
@@ -15,7 +16,7 @@ const PreInvite = () => {
   const { setReomteGameData } = useRemoteGameContext();
   const { ReomteGameData } = useRemoteGameContext();
   const location = useLocation()
-  const backendPath = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
+  const backendPath = VITE_BACKEND
 
   let INVITE_TEXT = '';
   let show = false;
@@ -31,8 +32,8 @@ const PreInvite = () => {
         if (ReomteGameData.form_game_invite === true){
             INVITE_TEXT = ReomteGameData.inviter_login + ' VS ' + ReomteGameData.invited_login
             show = true
-            tmpsocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
-            console.log("==>", import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+            tmpsocket = new WebSocket(VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
+            console.log("==>", VITE_ws_url + '/ws/server-endpoint-socket/' + 'invite/' + ReomteGameData.invited_id);
             
             tmpsocket.onopen = () => {
                 console.log("Inviting WebSocket Connected");
@@ -98,9 +99,9 @@ const PreInvite = () => {
                 
                 
                 
-                console.log("===> trying to connect to : ", import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
+                console.log("===> trying to connect to : ", VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
-                tgameSocket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
+                tgameSocket = new WebSocket(VITE_ws_url + '/ws/ping-pong/room/' + data['room_name']);
                 
                 tgameSocket.onopen = () => {
                     console.log("Connected to the game room:", data['room_name']);

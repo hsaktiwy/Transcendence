@@ -7,6 +7,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 import { UserDataInterface } from "../utils/UserDataInterface";
+import { VITE_BACKEND } from "@/utils/interfaces";
 function Settings() {
     const userContextConsumer = useContext(UserContext)
     const [activeSettingSection , setActiveSettingsSection] = useState<string>('general')
@@ -62,7 +63,7 @@ function Settings() {
                         <div className="absolute text-xl right-[3%] top-[10%]  z-40 hidden group-hover:block">
                             <FiEdit2/>
                         </div>
-                        <img src={`${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile}`} alt="user-pic" className="rounded-xl object-cover h-full w-full"/>
+                        <img src={`${VITE_BACKEND}${userContextConsumer.userData?.CoverProfile}`} alt="user-pic" className="rounded-xl object-cover h-full w-full"/>
                         <input id='CoverProfile' type="file" accept='image/*' onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50  border-black w-full h-full rounded-xl" />
                     </div>
                 <div className="relative h-[300px] bg-black/25 rounded-xl left-0 top-0 bg-"></div>
@@ -70,7 +71,7 @@ function Settings() {
                         <div className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-40 hidden group-hover:block">
                             <FiEdit2/>
                         </div>
-                        <img src={`${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
+                        <img src={`${VITE_BACKEND}${userContextConsumer.userData?.profile_pic}`} alt="user-pic" className="rounded-full object-cover h-full w-full"/>
                         <input id='profile_pic' type="file" accept='image/*' onChange={handleProfilChanged} className="border bg-white absolute top-[50%] -translate-y-[50%] opacity-0 cursor-pointer z-50  border-black w-[160px] h-[160px] rounded-full" />
                     </div>
                 </div>

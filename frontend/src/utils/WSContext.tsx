@@ -1,5 +1,5 @@
 import {useEffect, createContext, useRef, useContext} from 'react'
-import {channelType, WebSocketContextType, childrenInterface, friendship, manage_button} from './interfaces'
+import {channelType, WebSocketContextType, childrenInterface, friendship, manage_button, VITE_ws_url} from './interfaces'
 import {CallbackType} from './types'
 import {Message } from './ChatContext'
 import { AuthContext } from '@/components/AuhtenticationContext'
@@ -25,7 +25,7 @@ export const WebSocketProvider = ({ children }:childrenInterface) => {
 
     const ConnectSocket = ()=>
     {
-      const url:string = import.meta.env.VITE_ws_url + '/ws/chat/'
+      const url:string = VITE_ws_url + '/ws/chat/'
       if (!connected.current)
         socket.current = new WebSocket(url)
   
