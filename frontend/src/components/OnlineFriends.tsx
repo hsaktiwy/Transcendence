@@ -107,9 +107,7 @@ function OnlineFriends() {
                                     <h1 className="font-medium z-10 text-base">{customSubString(friend.firstName + " "+friend.lastName)}</h1>
                                     <h1 className="font-normal z-10 opacity-80 text-xs text-left">{`@${friend.login}`}</h1>
                                 </div>
-                                <div className='is-online z-10'>
-                                    <div className='green-dot'></div>
-                                </div>
+
                             </Link>
                         );
                     }

@@ -1,14 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./PreRemote.css";
-import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
-// import { useMatchContext } from '../game/MatchContext';
 
 import { useRemoteGameContext } from '../game/MatchContext';
-
-import { UserContext } from '../../../components/UserContext'
-import { WebSocketContext } from '../../../utils/WSContext';
 import { VITE_BACKEND, VITE_ws_url } from '../../../utils/interfaces';
 
 
@@ -16,40 +11,22 @@ const PreRemote = () => {
   const navigate = useNavigate();
   const [isSearching, setIsSearching] = useState(false);
   const [matchSocket, setMatchSocket] = useState(null);
-  const webSContext = useContext(WebSocketContext);
   const { setReomteGameData } = useRemoteGameContext();
-  const { ReomteGameData } = useRemoteGameContext();
-  
-  const backendPath = VITE_BACKEND
-  const user = useContext(UserContext)
 
   const startMatchmaking = () => {
     setIsSearching(true);
     
-    // Create WebSocket connection
+  try {
     const socket = new WebSocket(VITE_ws_url + '/ws/server-endpoint-socket/');
-    console.log("==>", VITE_ws_url + '/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
-      console.log("Matchmaking WebSocket Connected");
     };
     
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       
       if (data['type'] === 'match_found') {
-        console.log("=> Match Found:");
-        console.log("   => room_name     :", data['room_name']);
-        console.log("   => my_role       :", data['role']);
-        console.log("   => user_name     :", data['user_name']);
-        console.log("   => opponent_name :", data['opponent_name']);
-        console.log("   => my_id         :", data['my_id']);
-        console.log("   => opponent_id   :", data['opponent_id']);
-        
-        
-        // Update Reomte context
         setReomteGameData({
-          // room_name: 'Bit_n3as',
           room_name: data['room_name'],
           role     : data['role'],
           my_user  : data['user_name'],
@@ -58,7 +35,6 @@ const PreRemote = () => {
           p2_id    : data['opponent_id'],
           winner   : null
         });
-        // Close the socket and navigate to RemoteGame
         socket.close();
         setIsSearching(false);
         navigate('/game/RemoteGame');
@@ -66,31 +42,30 @@ const PreRemote = () => {
     };
     
     socket.onerror = (error) => {
-      // console.error("WebSocket Error:", error);
       setIsSearching(false);
     };
     
     socket.onclose = () => {
-      console.log("Matchmaking WebSocket Closed");
       setIsSearching(false);
     };
     
     setMatchSocket(socket);
+
+  }catch(error){
+      navigate('/game/PingPong_Lobby');
+  }
+
   };
 
   const cancelMatchmaking = () => {
-    if (matchSocket) {
+    if (matchSocket && matchSocket.readyState === 1) {
       matchSocket.close();
       setIsSearching(false);
     }
   };
 
-
-  // #tbe
   useEffect(() => {
-    // Cleanup socket on component unmount
     return () => {
-      // setReomteGameData({hello:'hello'})
       if (matchSocket) {
         matchSocket.close();
       }
@@ -99,10 +74,7 @@ const PreRemote = () => {
 
   return (
     <>
-
-      {/* <PingPongBack /> */}
       <div className="main-game-page-container">
-
 
       <div className="game-options-container-r">
         <div className="game-options-header-r">

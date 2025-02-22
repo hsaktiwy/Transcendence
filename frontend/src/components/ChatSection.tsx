@@ -42,9 +42,9 @@ function ChatSection(){
                 let currentConv = convs[i]
                 const elm = currentConv.user2 as ProfileDataInterface
                 let friendInList:ProfileDataInterface | undefined = undefined
-                if (friends.length)
+                if (friends.length > 0)
                      friendInList = friends.find(friend => friend.unique_id === elm.unique_id)
-                if (friendInList != undefined)
+                if (friends.length > 0 && friendInList != undefined)
                 {
                     const newFriendState: User = {...friendInList, id: currentConv.user2.id} 
                     currentConv = {...currentConv, user2: newFriendState}
@@ -63,6 +63,7 @@ function ChatSection(){
     useEffect(()=>{
         updateConvsState()
     }, [userContextConsumer.friends])
+
     useEffect(()=>{
         if (convs && blockList.length >0){
             let updateActive : Conversation | undefined = undefined

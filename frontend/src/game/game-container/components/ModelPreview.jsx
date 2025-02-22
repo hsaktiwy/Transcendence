@@ -80,7 +80,9 @@ function ModelPreview({ modelPath, Scale }) {
 
       controls.update();
       renderer.render(scene, camera);
-      requestAnimationFrame(tick);
+      // requestAnimationFrame(tick);
+      renderer.setAnimationLoop(tick);
+
     }
     tick();
 
@@ -93,7 +95,6 @@ function ModelPreview({ modelPath, Scale }) {
     };
   }, [modelPath]);
 
-  // Style: give the canvas a fixed size or let CSS handle it
   return (
     <div style={{ width: '350px', height: '350px', position: 'relative' }}>
       <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />

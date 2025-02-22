@@ -49,6 +49,7 @@ function Settings() {
                 }
             }
             catch (err){
+                console.log(err)
                 toast.error('Error occurred ! Try again')
             }
         }

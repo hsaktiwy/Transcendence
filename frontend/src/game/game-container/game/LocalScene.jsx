@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -22,7 +21,7 @@ const LocalGame = () => {
     
     const navigate     = useNavigate();
     const canvasRef    = useRef(null);
-    // const countdownRef = useRef(null);
+    
 
     const { LocalGamesData }    = useLocalGamesContext();
     const { setLocalGamesData } = useLocalGamesContext();
@@ -38,19 +37,19 @@ const LocalGame = () => {
         }
       )
 
-    // const { LocalGamesData }    = useLocalGamesContext();
-    // const { setLocalGamesData } = useLocalGamesContext();
+    
+    
 
 
-    //   useEffect( () => {
-    //       if ( LocalGamesData.player1 === null
-    //         || LocalGamesData.player2 === null  || LocalGamesData.gametype === null
-    //       ){
-    //         navigate('/game/PingPong_Lobby');
-    //       };
+    
+    
+    
+    
+    
+    
           
-    //     }
-    //   )
+    
+    
 
   
     const [playerScore, setPlayerScore] = useState(0);
@@ -60,74 +59,70 @@ const LocalGame = () => {
 
 
 
-////
-    // const [isCountdownComplete, setIsCountdownComplete] = useState(false);
 
-
-    // useEffect(() => {
-    //     // if (isCountdownComplete === true) return;
-    //     if (!isCountdownComplete && !loading){
-    //         let count = 3;
-    //         if (countdownRef.current) {
-    //             countdownRef.current.style.display = 'block';
-    //             countdownRef.current.textContent = count;
-    //         }
     
-    //         const countdownInterval = setInterval(() => {
-    //             count--;
-    //             if (countdownRef.current) {
-    //             if (count > 0) {
-    //                 // Add puffer animation class
-    //                 countdownRef.current.classList.add('puffer');
-    //                 // Update the count
-    //                 setTimeout(() => {
-    //                 countdownRef.current.textContent = count;
-    //                 countdownRef.current.classList.remove('puffer');
-    //                 }, 400);
-    //             } else {
-    //                 clearInterval(countdownInterval);
-    //                 countdownRef.current.style.display = 'none';
-    //                 // BallCreator.cameraFixed = true;
-    //                 setIsCountdownComplete(true);
-    //             }
-    //             }
-    //         }, 1000);
 
-    //         return () => {
-    //             clearInterval(countdownInterval);
-    //         };
-    //     }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
         
 
-    // }, [isCountdownComplete, loading]); 
+    
     
     useEffect(() => {
 
-////=>////
+
         const gravity     = -9.8;
         const friction    = 0.25;
         const restitution = 0.89;
 
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
-            // setLoading(false);
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                // Hide the screen entirely
-                setLoading(false);
-              }
-            });
-          };
-
-        // const gui = new GUI()
 
         let canvas = null;
-        if (canvasRef.current != null)
+        if (canvasRef.current != null){
             canvas = canvasRef.current
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
 
         
         const scene = new THREE.Scene()
@@ -230,13 +225,13 @@ const LocalGame = () => {
             paddle = model;
             model.scale.set(2.1, 2.1, 2.1)
             model.position.y = 4.0387;
-            model.position.z = 10; //-8
+            model.position.z = 10; 
             
             model.traverse(function (node) {          
                 if (node.isMesh) {
                     node.castShadow = true;
                     node.receiveShadow = true;
-                    // node.material.wireframe = true;
+                    
                 }
             })
         
@@ -251,9 +246,9 @@ const LocalGame = () => {
         const hit_sound = new Audio("/GamePub/sounds/ping_pong.mp3");
         
         const Pong_Ball_colide = (impact) => {
-            // hit_sound.volume = Math.min(impact, 1);
-            // hit_sound.currentTime = 0;
-            // hit_sound.play();
+            
+            
+            
         }
         
         const TextureLoader = new THREE.TextureLoader(loadingManager);
@@ -281,14 +276,14 @@ const LocalGame = () => {
                 
                 scene.add(sphere)
                 
-                // BallCreator.reset()
+                
                 Objects.push({
                     sphere: sphere,
-                    velocity: new THREE.Vector3(1, 1, 1), // Initial velocity
+                    velocity: new THREE.Vector3(1, 1, 1), 
                     mass: 1,
                 });
         
-                // serve 
+                
                 Objects[Objects.length - 1].velocity.set(BallCreator.serve_x, BallCreator.serve_y, BallCreator.serve_z); 
         
             New_ball_launched = true;
@@ -333,10 +328,8 @@ const LocalGame = () => {
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
         }
         
-        // gui.add(BallCreator, 'createBall')
-        // gui.add(BallCreator, 'reset')
         
-        //Table 
+        
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
         const material       = new THREE.MeshBasicMaterial( {color: 0xffffff} );
         material.transparent = true; 
@@ -348,7 +341,7 @@ const LocalGame = () => {
         
         Table.scale.set(8.28, 0.3, 18.51)
         
-        //Net
+        
         const Net = new THREE.Mesh( geometry, material ); 
         Net.position.x = 0;
         Net.position.y = 4.66;
@@ -367,12 +360,12 @@ const LocalGame = () => {
             prevMouseX = mouse.x;
         };
 
-        // mouse event listener
+        
         const mouse = new THREE.Vector2();
             window.addEventListener('mousemove', handleMouseMove
         )
         
-        // keyboard event listener
+        
         const keyboard = new THREE.Vector2();
         let Chained_Keys = [
             {w:0},
@@ -454,15 +447,15 @@ const LocalGame = () => {
         };
           
 
-        // document.addEventListener(
-        //     "keyup",
-        //     handleKeyUp
-        // )
+        
+        
+        
+        
         
         
         document.addEventListener("keydown", handleKeyDown)
         document.addEventListener("keyup", handleKeyUp)
-        // enviroment map
+        
         const rgbeLoader = new RGBELoader(loadingManager);
         rgbeLoader.load('/GamePub/models/neon_photostudio_2k.hdr', (enviroment_map) => {
             enviroment_map.mapping = THREE.EquirectangularReflectionMapping
@@ -486,15 +479,15 @@ const LocalGame = () => {
         const TableBoxHelper    = new THREE.Box3Helper(TableBoundingBox, 0xff0000);
         const NetHelper         = new THREE.Box3Helper(NetBoundingBox, 0xff0000);
         
-        // scene.add(paddleBoxHelper1);
-        // scene.add(paddleBoxHelper2);
-        // scene.add(paddleBoxHelper3);
-        // scene.add(NetHelper3);
         
-//
+        
+        
+        
+        
+
     function checkCollision() {
         if (Objects.length && Cameras.length === 2 && paddle && paddleAi){
-            // Update bounding boxes with the current positions of the models
+            
             PaddleBoundingBox.setFromObject(paddle);
             PaddleBoundingAiBox.setFromObject(paddleAi);
             BallBoundingBox.setFromObject(Objects[Objects.length - 1].sphere);
@@ -504,7 +497,7 @@ const LocalGame = () => {
             if (PaddleBoundingBox.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z > 0) {
                 
 
-                // console.log('paddle and ball!');
+                
                 let intensity = Math.max((3 - (Math.abs(paddle.position.x))), 0);
                 if ((paddle.position.x > 2) && (mouseDirection < 0)){
                     intensity = (Math.abs(paddle.position.x) * 0.5) ;
@@ -514,9 +507,9 @@ const LocalGame = () => {
                 }    
                 let forceX = (intensity * mouseDirection)
 
-                // console.log(forceX > 0 ? "right" : "left");
+                
 
-                //for push Sumilation
+                
                 gsap.to(paddle.rotation, {
                     x: paddle.rotation.x - 0.5,
                     duration: 0.1,
@@ -524,15 +517,15 @@ const LocalGame = () => {
                 })
                 Pong_Ball_colide(0.54);
                 
-                Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                Objects[Objects.length - 1].velocity.set( forceX,
                                                         BallCreator.hit_y,        
                                                         -BallCreator.hit_z
                 )
             }
             else if (PaddleBoundingAiBox.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z < 0){
                 
-                // console.log('paddleAi and ball!');
-                // let Aidecision = (Math.random() - 0.5) > 0 ? 1:-1;                   
+                
+                
                 let intensity = Math.max((3 - (Math.abs(paddleAi.position.x))), 0);
                 if ((paddleAi.position.x > 2) && (mouseDirection > 0)){
                     intensity = (Math.abs(paddleAi.position.x) * 0.5) ;
@@ -542,7 +535,7 @@ const LocalGame = () => {
                 }    
                 let forceX = -(intensity * mouseDirection)
 
-                //for push Sumilation
+                
                 gsap.to(paddleAi.rotation, {
                     x: paddleAi.rotation.x + 0.5,
                     duration: 0.1,
@@ -550,69 +543,69 @@ const LocalGame = () => {
                 })
                 Pong_Ball_colide(0.54);
                 
-                Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                Objects[Objects.length - 1].velocity.set( forceX,
                                                         BallCreator.hit_y,        
                                                         BallCreator.hit_z
                 )
             }
             
             else if (NetBoundingBox.intersectsBox(BallBoundingBox)) {
-                // console.log('ball collided with the Net!');
-                // Objects[Objects.length - 1].sphereBody.velocity.z = -(Objects[Objects.length - 1].sphereBody.velocity.z) * 0.5; //Good !
-                // Good just need to get the best velocity values
+                
+                
+                
 
-                // const normalVelocity = Objects[Objects.length - 1].velocity.dot(new THREE.Vector3(0, 0, 1)); // Extract velocity along the normal
-                // Objects[Objects.length - 1].velocity.z = ((Objects[Objects.length - 1].velocity.y) > 0 ? 1 : -1 ) * restitution;
+                
+                
 
-                // // Apply friction to X and Y velocity components
-                // Objects[Objects.length - 1].velocity.x *= friction;
-                // Objects[Objects.length - 1].velocity.y *= friction;
+                
+                
+                
 
-                // // Prevent sinking into the net by repositioning the ball
-                // const ballDepth = BallBoundingBox.max.z - BallBoundingBox.min.z;
-                // if (Objects[Objects.length - 1].sphere.position.z > NetBoundingBox.max.z) {
-                //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.max.z + ballDepth / 2; // Ball is on one side of the net
-                // } else {
-                //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.min.z - ballDepth / 2; // Ball is on the other side of the net
-                // }
+                
+                
+                
+                
+                
+                
+                
             }
             else if (TableBoundingBox.intersectsBox(BallBoundingBox)) {
-                // console.log('ball collided with the Table!');
-                // Collision with the table (restitution + friction) tobeadded
+                
+                
                 Pong_Ball_colide(0.85);
                 
-                // Apply friction to X and Z velocity components
+                
                 Objects[Objects.length - 1].velocity.x *= friction;
                 Objects[Objects.length - 1].velocity.z *= friction;
 
-                // Reverse the Y velocity for bounce and apply restitution
+                
                 Objects[Objects.length - 1].velocity.y *= -restitution;
 
-                // Prevent sinking into the table by repositioning the ball
+                
                 const ballHeight = BallBoundingBox.max.y - BallBoundingBox.min.y;
-                Objects[Objects.length - 1].sphere.position.y = TableBoundingBox.max.y + ballHeight / 2; // Place the ball on the table
+                Objects[Objects.length - 1].sphere.position.y = TableBoundingBox.max.y + ballHeight / 2; 
             }
         }
     }
-//
-        
-        // scene.add(new THREE.GridHelper( 50, 50 ))
-        // scene.add(new THREE.AxesHelper(15))
 
         
-        // gui.add(BallCreator, 'cameraFixed');
-        // gui.add(BallCreator, 'PADDLE_SPEED', 0.01 , 0.2).step(0.01)
         
-        //  Animate
+        
+
+        
+        
+        
+        
+        
         const clock = new THREE.Clock()
         let previousTime = 0
         let p = true;
         
         const tick = () =>
         {
-            // isCountdownComplete :  true
-            // console.log("=> isCountdownComplete : ", isCountdownComplete);
-            //tbr
+            
+            
+            
             if (p && paddleAi && paddle){
                 p = false
                 setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
@@ -622,8 +615,8 @@ const LocalGame = () => {
             previousTime = elapsedTime
             
             
-            // floor.position.copy(planeBody.position);
-            // floor.quaternion.copy(planeBody.quaternion);
+            
+            
         
             Cameras[0].position.y += 0.02;
             Cameras[0].position.z -= 0.02;
@@ -637,32 +630,32 @@ const LocalGame = () => {
             for (const object of Objects){
                 object.velocity.y += gravity * deltaTime;
                 
-                // Update position
+                
                 object.sphere.position.x += object.velocity.x * deltaTime;
                 object.sphere.position.y += object.velocity.y * deltaTime;
                 object.sphere.position.z += object.velocity.z * deltaTime;       
 
-                //Scoring System
+                
                 if (New_ball_launched){
                     if (Objects[Objects.length - 1].sphere.position.z > (paddle.position.z + 1)) {
-                        // aiScore += 1;
+                        
                         New_ball_launched = false;
                         setAiScore((aiScore) => aiScore + 1)
-                        // BallCreator.createBall();
+                        
 
                     } else if (Objects[Objects.length - 1].sphere.position.z < (paddleAi.position.z - 1)) {
-                        // playerScore += 1;
+                        
                         New_ball_launched = false;
                         setPlayerScore((playerScore) => playerScore + 1)
-                        // BallCreator.createBall();
+                        
                     }
                 }
             }
         if (BallCreator.cameraFixed){
             if (/*isCountdownComplete === true && */Cameras.length === 2 && paddle && paddleAi){
-                // if (playerScore === 0 && aiScore === 0 && !New_ball_launched){
-                //     BallCreator.createBall();
-                // }
+                
+                
+                
                 checkCollision();
                 
                 if ( Chained_Keys.w === 1) {
@@ -781,28 +774,28 @@ const LocalGame = () => {
             topControls.update()
             bottomControls.update()
         
-            //renderer
+            
             renderer.setScissorTest(true);
         
-            // Top half
+            
             renderer.setViewport(0, sizes.height / 2, sizes.width, sizes.height / 2);
             renderer.setScissor(0, sizes.height / 2, sizes.width, sizes.height / 2);
             renderer.render(scene, topCamera);
             
-            // Bottom half
+            
             renderer.setViewport(0, 0, sizes.width, sizes.height / 2);
             renderer.setScissor(0, 0, sizes.width, sizes.height / 2);
             renderer.render(scene, bottomCamera);
             
             renderer.setScissorTest(false);
             
-            // stat.update()
-            // window.requestAnimationFrame(tick)
+            
+            
             renderer.setAnimationLoop(tick);
         }
         
         tick()
-////=>////
+
 
         return() => {
             window.removeEventListener('resize', handleResize);
@@ -811,7 +804,6 @@ const LocalGame = () => {
             document.removeEventListener('keyup', handleKeyUp);
             renderer.dispose();
 
-            // gui.destroy();
             
             while (scene.children.length > 0) {
                 const child = scene.children[0];
@@ -830,9 +822,9 @@ const LocalGame = () => {
   
     useEffect(() => {
         if (playerScore === 7 || aiScore === 7) {
-            console.log('====> Getted Info : ', LocalGamesData);
+            
             if (LocalGamesData.gametype == 'Tournament'){
-                console.log('====> ON tournamentooooooo');
+                
                 if (playerScore === 7){
                     if (LocalGamesData.FF_done){
                         LocalGamesData.winner = LocalGamesData.TBD1;
@@ -873,7 +865,7 @@ const LocalGame = () => {
 
         }
         else if (playerScore <= 7 && aiScore <= 7){
-            console.log('====> Getted Info : ', LocalGamesData);
+            
             if (LocalGamesData.gametype == 'Tournament'){
                 if (playerScore >= aiScore){
                     if (LocalGamesData.FF_done){

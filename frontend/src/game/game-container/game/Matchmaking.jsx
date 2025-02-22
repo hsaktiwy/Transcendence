@@ -22,7 +22,7 @@ useEffect(() => {
   // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
   
   socket.onopen = () => {
-    console.log("=> WebSocket Connected", socket);
+    // console.log("=> WebSocket Connected", socket);
     setConnectionStatus("Connected");
     setSocket(socket);
   };
@@ -31,19 +31,19 @@ useEffect(() => {
     const data = JSON.parse(event.data);
     
     if (data['type'] === 'connection_established'){
-      console.log((data['message']));
+      // console.log((data['message']));
       setId(data['my_id']);
-      console.log(data['my_id']);
+      // console.log(data['my_id']);
     }
 
     if (data['type'] === 'server_response')
-      console.log("=> Message received:", data['message']);
+      // console.log("=> Message received:", data['message']);
     
     if (data['type'] === 'match_found'){
-      console.log("=> Match Infos:");
-      console.log("   => room_name   :", data['room_name']);
-      console.log("   => my_id       :", data['my_id']);
-      console.log("   => opponent_id :", data['opponent_id'],'\n');
+      // console.log("=> Match Infos:");
+      // console.log("   => room_name   :", data['room_name']);
+      // console.log("   => my_id       :", data['my_id']);
+      // console.log("   => opponent_id :", data['opponent_id'],'\n');
       
       setMatchData({
         roomName: data['room_name'],
@@ -57,7 +57,7 @@ useEffect(() => {
   };
 
   return () => {
-    console.log("=> Closing WebSocket On useEffect return !");
+    // console.log("=> Closing WebSocket On useEffect return !");
     socket.close();
   };
 }, []);

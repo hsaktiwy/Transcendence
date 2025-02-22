@@ -1,5 +1,4 @@
-// import React from "react";
-import "./PreRemote"; // any extra styling
+import "./PreRemote";
 import PingPongBack from "../components/PingPongBack";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +21,6 @@ const PreTournament = () => {
   const [player4Name, setPlayer4Name] = useState('');
 
   const { setLocalGamesData } = useLocalGamesContext();
-  const { LocalGamesData } = useLocalGamesContext();
 
   const handleLaunch = () => {   
     
@@ -31,7 +29,7 @@ const PreTournament = () => {
     
     if (areNamesValid) {
       setLocalGamesData({
-        gametype: 'Tournament', // Local, Multiplayer, Tournament 
+        gametype: 'Tournament',
         player1: player1Name,
         player2: player2Name,
         playerx1: player1Name,

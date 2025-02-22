@@ -14,17 +14,11 @@ function Tournament() {
   const { LocalGamesData }    = useLocalGamesContext();
   const { setLocalGamesData } = useLocalGamesContext();
   
-  // useEffect( () => {
-  //     if ( LocalGamesData.gametype !== 'Tournament'
-  //       || LocalGamesData.player1 === null ||  LocalGamesData.player1 === undefined 
-  //       || LocalGamesData.player2 === null ||  LocalGamesData.player2 === undefined  
-  //       || LocalGamesData.player3 === null ||  LocalGamesData.player3 === undefined
-  //       || LocalGamesData.player4 === null ||  LocalGamesData.player4 === undefined
-  //     ){
-  //       navigate('/game/PingPong_Lobby');
-  //     };
-  // })
-  // console.log('====> Getted Info : ', LocalGamesData);
+  useEffect( () => {
+      if (!LocalGamesData || (LocalGamesData && LocalGamesData.gametype !== 'Tournament')){
+        navigate('/game/PingPong_Lobby');
+      };
+  })
 
   const [Matches, setMatches] = useState({
     Semi_Final_1: {
@@ -68,10 +62,6 @@ function Tournament() {
 
   }, [LocalGamesData.F1_turn, LocalGamesData.F2_turn, LocalGamesData.FF_turn])
 
-  // if (Matches.Final.Done === true){
-  //   // navigate('/game/')
-  //   navigate("/game/Winner")
-  // }
 
   const handleReady = (matchId, whichPlayer) => {
     setMatches((prev) => {
@@ -93,7 +83,7 @@ function Tournament() {
   };
 
   const handleStartMatch = (matchId) => {
-    console.log(`Starting match: ${matchId}`);
+    // console.log(`Starting match: ${matchId}`);
     if (matchId === 'Semi_Final_1'){
       LocalGamesData.player1 = LocalGamesData.playerx1;
       LocalGamesData.player2 = LocalGamesData.playerx2;
@@ -127,8 +117,8 @@ function Tournament() {
     }
     
 
-    console.log("===> Local Data : ", LocalGamesData);
-    console.log("===> Local Data : ", Matches);
+    // console.log("===> Local Data : ", LocalGamesData);
+    // console.log("===> Local Data : ", Matches);
 
     navigate('/game/LocalGame');
   };
