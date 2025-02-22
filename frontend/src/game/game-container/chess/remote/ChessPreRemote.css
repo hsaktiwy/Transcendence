@@ -30,9 +30,7 @@
 }
 
 .players-container-r {
-  /* top: 900px; */
   display: flex;
-  /* filter: blur(6px); */
   backdrop-filter: blur(12px);
 
 
@@ -46,7 +44,6 @@
 .buttona-r {
   display: flex;
   align-items: center;
-  /* padding: auto auto; */
   margin: auto auto;
 }
 

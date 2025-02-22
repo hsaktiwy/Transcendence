@@ -90,7 +90,7 @@ const PreMultiplayerGame = () => {
               
               if (areNamesValid) {
                 setLocalGamesData({
-                  gametype: 'Multiplayer', // Local, Multiplayer, Tournament 
+                  gametype: 'Multiplayer', 
                   player1:  "BLUE",
                   player2:  "RED",
                   player3: null,

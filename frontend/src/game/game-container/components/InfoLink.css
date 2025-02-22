@@ -43,14 +43,14 @@
   font-size: 14px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.3);
   white-space: nowrap;
-  opacity: 0.8; /*0.7*/
+  opacity: 0.8; 
   transition: opacity 0.2s ease;
 }
 
 
 .lktabaa {
-  width: 400px;       /* desired width */
-  height: 200px;      /* desired height */
+  width: 400px;       
+  height: 200px;   
 
-  overflow: auto;            /* enable scrolling if content exceeds box */
+  overflow: auto;           
 }

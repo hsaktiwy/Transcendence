@@ -16,26 +16,15 @@ const ChessPreRemote = () => {
   const startMatchmaking = () => {
     setIsSearching(true);
     
-    // Create WebSocket connection
-    // const socket = new WebSocket('ws://localhost:8000/ws/server-endpoint-socket-chess/');
     const socket = new WebSocket(import.meta.env.VITE_ws_url + '/ws/server-endpoint-socket-chess/');
-    // const socket = new WebSocket('ws://10.11.5.2:8000/ws/server-endpoint-socket/');
     
     socket.onopen = () => {
-      // console.log("Matchmaking WebSocket Connected");
     };
     
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       
       if (data['type'] === 'match_found') {
-        // console.log("=> Match Found:");
-        // console.log("   => room_name   :", data['room_name']);
-        // console.log("   => my_id       :", data['my_id']);
-        // console.log("   => opponent_id :", data['opponent_id']);
-        // console.log("   => color       :", data['color']);
-        
-        // Update match context
 
         setReomteGameData({
           room_name: data['room_name'],
@@ -48,7 +37,6 @@ const ChessPreRemote = () => {
           winner   : null
         });
         
-        // Close the socket and navigate to RemoteGame
         socket.close();
         setIsSearching(false);
         navigate('/game/ChessRemoteGame');
@@ -56,13 +44,11 @@ const ChessPreRemote = () => {
     };
     
     socket.onerror = (error) => {
-      // console.error("WebSocket Error:", error);
       setIsSearching(false);
     };
     
     socket.onclose = () => {
       setIsSearching(false);
-      // console.log("Matchmaking WebSocket Closed");
     };
     
     setMatchSocket(socket);
@@ -76,7 +62,6 @@ const ChessPreRemote = () => {
   };
 
   useEffect(() => {
-    // Cleanup socket on component unmount
     return () => {
       if (matchSocket) {
         matchSocket.close();
@@ -86,10 +71,7 @@ const ChessPreRemote = () => {
 
   return (
     <>
-
-      {/* <ChessGameBack/> */}
       <div className="main-game-page-container">
-
 
       <div className="game-options-container-r">
         <div className="game-options-header-r">
@@ -117,7 +99,6 @@ const ChessPreRemote = () => {
             </div>
           </div>
         </center>
-        
       </div>
       </div>
     </>

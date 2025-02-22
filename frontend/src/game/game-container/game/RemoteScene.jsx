@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
 import gsap from 'gsap'; 
 import LoadingScreen from '../components/LoadingScreen';
-
-// import Hud from '../components/Hud'
 
 import './RemoteScene.css'
 
@@ -27,40 +24,18 @@ const RemoteGame = () => {
     const navigate = useNavigate();
     const canvasRef = useRef(null);
     
-    // Remote LOgic
     const { setReomteGameData } = useRemoteGameContext();
     const { ReomteGameData } = useRemoteGameContext();
     const { setLocalGamesData } = useLocalGamesContext();
     const location = useLocation()
     const [dataReady, setDataReady] = useState(false)
 
-    // useEffect( () => {
-    //     console.log(ReomteGameData.room_name, ReomteGameData.my_user);
-
-    //         if (!ReomteGameData.room_name || !ReomteGameData.my_user){
-    //             navigate('/game/PreRemote');
-    //         }
-    //         else{
-    //             setDataReady(true);
-    //         }
-    //     }, []
-    // )
-
-
     useEffect(()=>{
         if (!ReomteGameData && !location.state){
-            // console.log("=>> C protections !!!")
             navigate('/game/PreRemote');
         }
         else{
-            // console.log("ReomteGameData           :",ReomteGameData)
             if (location.state){
-                // console.log("location.state           :",location.state)
-                // console.log("location.state.room_name :", location.state.room_name)
-                // console.log("location.state.my_user   :", location.state.my_user)
-                // console.log("location.state.p1_id     :", location.state.p1_id)
-                // console.log("location.state.p2_id     :", location.state.p2_id)
-                // console.log("location.state.opponent  :", location.state.opponent)
                 if (location.state.room_name && location.state.my_user){
                     ReomteGameData.room_name = location.state.room_name
                     ReomteGameData.my_user  = location.state.my_user
@@ -87,22 +62,12 @@ const RemoteGame = () => {
             setDataReady(true);
         }
         if (ReomteGameData && !ReomteGameData.room_name && !ReomteGameData.my_user && !ReomteGameData.opponent){
-            // console.log("=>> C protections !!!")
             navigate('/game/PreRemote');
         }
         else if (ReomteGameData && ReomteGameData.inviting && ReomteGameData.gameSocket){
             setDataReady(true);
-            // console.log("=>> C protections !!!")
-            // navigate('/game/PreRemote');
         }
-        // else{
-        //     console.log("=>> C protections V2 !!!")
-        //     console.log("=>> state : ", location.state, ", ReomteGameData.my_user : ", ReomteGameData.my_user)
-        //     navigate('/game/PreRemote');
-        // }
     },[])
-    
-    // Remote LOgic
     
     const [playerScore, setPlayerScore] = useState(0);
     const [aiScore, setAiScore] = useState(0);
@@ -110,8 +75,6 @@ const RemoteGame = () => {
     const [loading, setLoading] = useState(true);
     const [The_end, setThe_end] = useState(false);
     const [docket, setdocket] = useState(null);
-    
-
 
     let Aix        = 0;
     let Aiy        = 0;
@@ -126,7 +89,6 @@ const RemoteGame = () => {
     let OppmouseDirection;
 
     let state = false;
-    // useEffect()
     
     useEffect(() => {
 
@@ -135,23 +97,17 @@ const RemoteGame = () => {
         let gameSocket = null
         const scene = new THREE.Scene();
 
-//
         const kgeometry = new THREE.SphereGeometry( 0.10, 32, 16 ); 
         const kmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); 
         const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
 
     try{
         if (!ReomteGameData.inviting && !ReomteGameData.gameSocket){
-            // Connect to the game server using those values
-            // const gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ping-pong/room/Bit_n3as`);
             gameSocket = new WebSocket(import.meta.env.VITE_ws_url + `/ws/ping-pong/room/${ReomteGameData.room_name}`);
-            // const gameSocket = new WebSocket(`ws://10.11.5.2:8000/ws/ping-pong/room/${ReomteGameData.room_name}/?user_id=${ReomteGameData.p1_id}`);
             
             gameSocket.onopen = () => {
-                // console.log("Connected to the game room:", ReomteGameData.room_name);
                 setdocket(gameSocket);
             };
-            // gameSocket.onclose 
             
         }
         else if (ReomteGameData.inviting && ReomteGameData.room_name){
@@ -159,24 +115,11 @@ const RemoteGame = () => {
             setdocket(gameSocket);
         }
   
-        // if (!gameSocket || gameSocket.readyState === WebSocket.CLOSED){
-        //     console.log('==> NOT CONNECTED !');
-        //     navigate('/game/PreRemote')
-        // }
-//         const scene = new THREE.Scene();
-
-// //
-//         const kgeometry = new THREE.SphereGeometry( 0.10, 32, 16 ); 
-//         const kmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); 
-//         const sphere = new THREE.Mesh( kgeometry, kmaterial ); scene.add( sphere );
-//
         gameSocket.onerror = (error) => {
-            // console.error("WebSocket Error:", error);
             navigate('/game/PreRemote');
         };
         
         gameSocket.onclose = (event) => {
-            // console.log("Matchmaking WebSocket Closed", event);
             if (!event.wasClean || event.code === 4001){
                 navigate('/game/PreRemote');
             }
@@ -185,23 +128,10 @@ const RemoteGame = () => {
         gameSocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         
-        // console.log("=> Type received :", data['type']);
-        
-        // if (data['type'] == 'Game_State'){
-        //     console.log("=> The brodcaster :", data['my_id']);
-        //     console.log("   => Says        :", data['message'], '\n');
-        // }
         if (data['type'] == 'paddle_update' || data['type'] == 'Game_end'|| data['type'] == 'Forfait'){
-            // console.log('========> wa ladaafaafafjkjerkjkjrkjr', data);
             if(data['type'] == 'Forfait'){
                 
                 setReomteGameData({
-                    // room_name: null,
-                    // role     : null,
-                    // my_user  : null,
-                    // opponent : null,
-                    // p1_id    : null,
-                    // p2_id    : null,
                     winner  : ReomteGameData.my_user + ' FORFAIT'
                 }); 
                 setAiScore(0);
@@ -218,31 +148,16 @@ const RemoteGame = () => {
             if (state === true){
                 if (OppmouseDirection === 1){
                     setReomteGameData({
-                        // room_name: null,
-                        // role     : null,
-                        // my_user  : null,
-                        // opponent : null,
-                        // p1_id    : null,
-                        // p2_id    : null,
-
                         winner  : ReomteGameData.opponent
                     });
                 }
                 else {
                     setReomteGameData({
-                        // room_name: null,
-                        // role     : null,
-                        // my_user  : null,
-                        // opponent : null,
-                        // p1_id    : null,
-                        // p2_id    : null,
-        
                         winner  : ReomteGameData.my_user
                     });        
                 }
                 setAiScore(0);
                 setPlayerScore(0);
-                // console.log(ReomteGameData.my_user, ' Im quitting !')
                 setLocalGamesData({})
                 navigate('/game/Winner');
             }
@@ -261,15 +176,12 @@ const RemoteGame = () => {
                 opp_score         = data['score']['p1']
     
                 if (aiScore != opp_score){
-                    // console.log(aiScore, opp_score);
                     setAiScore(opp_score)
                 }
                 if (playerScore != my_score){
-                    // console.log(playerScore, my_score);
                     setAiScore(my_score)
                 }
                 if(ball_count > Objects.length){
-                    // console.log('ball should be created here !')
                     createSphere(new THREE.Vector3(ball_x, ball_y, ball_y), false);
                 }
                 if(Objects.length && Objects[Objects.length - 1].created_by_me === false){
@@ -288,9 +200,6 @@ const RemoteGame = () => {
         navigate('/game/PingPong_Lobby');
     }    
      
-        ////=>////
-
-        // Physics properties (perfect values)
         const gravity     = -9.8;
         const friction    = 0.25;
         const restitution = 0.89;
@@ -298,25 +207,18 @@ const RemoteGame = () => {
         const loadingManager = new THREE.LoadingManager();
 
         loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
             gsap.to('#loading-screen', {
               opacity: 0,
               duration: 1,
               onComplete: () => {
-                // Hide the screen entirely
                 setLoading(false);
               }
             });
           };
 
-        // const gui = new GUI()
-
         let canvas = null;
         if (canvasRef.current != null)
             canvas = canvasRef.current
-        
-        
-        // const scene = new THREE.Scene()
         
         const floor = new THREE.Mesh(
             new THREE.PlaneGeometry(30, 30),
@@ -349,7 +251,6 @@ const RemoteGame = () => {
             height: window.innerHeight
         }
         
-        //event listeners
         const handleResize = () => {
             sizes.width = window.innerWidth
             sizes.height = window.innerHeight
@@ -401,13 +302,12 @@ const RemoteGame = () => {
             paddle = model;
             model.scale.set(2.1, 2.1, 2.1)
             model.position.y = 4.0387;
-            model.position.z = 10; //-8
+            model.position.z = 10; 
             
             model.traverse(function (node) {          
                 if (node.isMesh) {
                     node.castShadow = true;
                     node.receiveShadow = true;
-                    // node.material.wireframe = true;
                 }
             })
         
@@ -438,10 +338,6 @@ const RemoteGame = () => {
         STDMaterial.map       = Texture;
         
         
-        function applyForce(obj, Velocity){
-            obj.velocity.copy(Velocity)
-        }
-        
         const createSphere = (position, status) => {
             const sphere = new THREE.Mesh(
                 STDGeometry,
@@ -453,15 +349,13 @@ const RemoteGame = () => {
                 
                 scene.add(sphere)
                 
-                // BallCreator.reset()
                 Objects.push({
                     sphere: sphere,
-                    velocity: new THREE.Vector3(1, 1, 1), // Initial velocity
+                    velocity: new THREE.Vector3(1, 1, 1), 
                     mass: 1,
                     created_by_me: status
                 });
         
-                // serve 
                 Objects[Objects.length - 1].velocity.set(BallCreator.serve_x, BallCreator.serve_y, BallCreator.serve_z); 
         
             New_ball_launched = true;
@@ -500,24 +394,10 @@ const RemoteGame = () => {
             let y = 4.92;
             let z = -10.1;
             
-            // console.log("==>  paddle.position.z : ", paddle.position.z);
-            // console.log("==> -paddle.position.z : ", -paddle.position.z);
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
             
         }
         
-        // gui.add(BallCreator, 'createBall')
-        // gui.add(BallCreator, 'reset')
-        
-        // gui.add(BallCreator, 'serve_x',  -20,  70).step(0.05)
-        // gui.add(BallCreator, 'serve_y',  -20,  70).step(0.05)
-        // gui.add(BallCreator, 'serve_z',  -20,  70).step(0.05)
-        
-        // gui.add(BallCreator, 'hit_x', -20,  70).step(0.05)
-        // gui.add(BallCreator, 'hit_y', -20,  70).step(0.05)
-        // gui.add(BallCreator, 'hit_z', -20,  70).step(0.05)
-        
-        //Table 
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
         const material       = new THREE.MeshBasicMaterial( {color: 0xffffff} );
         material.transparent = true; 
@@ -529,20 +409,14 @@ const RemoteGame = () => {
         
         Table.scale.set(8.28, 0.3, 18.51)
         
-        //Net
         const Net = new THREE.Mesh( geometry, material ); 
         Net.position.x = 0;
         Net.position.y = 4.66;
         Net.position.z = -0.02;
         Net.scale.set(10.29, 1, 0.05)
         
-        // mouse event listener
-        
         let mouseDirection = 0;
         let prevMouseX = 0;
-        
-        
-        //event listeners
         
         const handleMouseMove = (info) => {
             mouse.x = (info.clientX/window.innerWidth)*2-1;
@@ -552,38 +426,10 @@ const RemoteGame = () => {
             prevMouseX = mouse.x;
         };
         
-        // const handleKeyDown = (event) => {
-        //     const keyName = event.key;
-          
-        //     //   if (keyName === " "  ){
-        //       if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
-        //           BallCreator.createBall()
-        //       }
-        //     //   if (keyName === "t"){
-        //     //       BallCreator.reset()
-        //     //   }
-        //     //   if (keyName === "v"){
-        //     //       BallCreator.cameraFixed = true;
-        //     //   }
-        //     //   if (keyName === "b"){
-        //     //       BallCreator.cameraFixed = false;
-        //     //   }
-        // };
-        // document.addEventListener("keydown", handleKeyDown)
-        //
-        
-        
         const mouse = new THREE.Vector2();
         window.addEventListener('mousemove', handleMouseMove)
 
-
-        // const keyboard = new THREE.Vector2();
         let Chained_Keys = [
-            // {w:0},
-            // {d:0},
-            // {s:0},
-            // {a:0},
-
             {ArrowUp   :0},
             {ArrowRight:0},
             {ArrowDown :0},
@@ -594,11 +440,9 @@ const RemoteGame = () => {
         const handleKeyDown = (event) => {
             const keyName = event.key;
           
-              if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
-                  BallCreator.createBall()
-              }
-
-
+            if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
+                BallCreator.createBall()
+            }
             if ( keyName === "ArrowUp") {
                 Chained_Keys.ArrowUp = 1;
             }
@@ -634,10 +478,7 @@ const RemoteGame = () => {
         
         document.addEventListener("keydown", handleKeyDown)
         document.addEventListener("keyup", handleKeyUp)
-
         
-        
-        // enviroment map
         const rgbeLoader = new RGBELoader(loadingManager);
         rgbeLoader.load('/GamePub/models/metro_noord_1k.hdr', (enviroment_map) => {
             enviroment_map.mapping = THREE.EquirectangularReflectionMapping
@@ -654,22 +495,9 @@ const RemoteGame = () => {
         const PaddleBoundingAiBox = new THREE.Box3();
         const TableBoundingBox    = new THREE.Box3();
         const NetBoundingBox      = new THREE.Box3();
-        
-        const PaddleBoxHelper   = new THREE.Box3Helper(PaddleBoundingBox, 0xff0000);
-        const PaddleAiBoxHelper = new THREE.Box3Helper(PaddleBoundingAiBox, 0xff0000);
-        const BallBoxHelper     = new THREE.Box3Helper(BallBoundingBox, 0xff0000);
-        const TableBoxHelper    = new THREE.Box3Helper(TableBoundingBox, 0xff0000);
-        const NetHelper         = new THREE.Box3Helper(NetBoundingBox, 0xff0000);
-        
-        // scene.add(PaddleBoxHelper);
-        // scene.add(PaddleAiBoxHelper);
-        // scene.add(BallBoxHelper);
-        // scene.add(TableBoxHelper);
-        // scene.add(NetHelper);
-        
+                
         function checkCollision() {
             if (Objects.length){
-                // Update bounding boxes with the current positions of the models
                 PaddleBoundingBox.setFromObject(paddle);
                 PaddleBoundingAiBox.setFromObject(paddleAi);
                 BallBoundingBox.setFromObject(Objects[Objects.length - 1].sphere);
@@ -678,8 +506,6 @@ const RemoteGame = () => {
                 
                 if (PaddleBoundingBox.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z > 0) {
                     
-        
-                    // console.log('paddle and ball!');
                     let intensity = Math.max((3 - (Math.abs(paddle.position.x))), 0);
                     if ((paddle.position.x > 2) && (mouseDirection < 0)){
                         intensity = (Math.abs(paddle.position.x) * 0.5) ;
@@ -689,9 +515,6 @@ const RemoteGame = () => {
                     }    
                     let forceX = (intensity * mouseDirection)
         
-                    // console.log(forceX > 0 ? "right" : "left");
-        
-                    //for push Sumilation
                     gsap.to(paddle.rotation, {
                         x: paddle.rotation.x - 0.5,
                         duration: 0.1,
@@ -699,25 +522,13 @@ const RemoteGame = () => {
                     })
                     Pong_Ball_colide(0.54);
                     
-                    Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                    Objects[Objects.length - 1].velocity.set( forceX,       
                                                               BallCreator.hit_y,        
                                                               -BallCreator.hit_z
                     )
                 }
                 else if (PaddleBoundingAiBox.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z < 0){
                     
-                    // console.log('paddleAi and ball!');
-                    // let Aidecision = (Math.random() - 0.5) > 0 ? 1:-1;                   
-                    // let intensity = Math.max((3 - (Math.abs(paddleAi.position.x))), 0);
-                    // if ((paddleAi.position.x > 2) && (OppmouseDirection < 0)){
-                    //     intensity = (Math.abs(paddleAi.position.x) * 0.5) ;
-                    // }
-                    // if ((paddleAi.position.x < -2) && (OppmouseDirection > 0)){
-                    //     intensity = (Math.abs(paddleAi.position.x) * 0.5);
-                    // }    
-                    // let forceX = (intensity * OppmouseDirection)
-                    // console.log(forceX > 0 ? "right" : "left");
-
                     let intensity = Math.max((3 - (Math.abs(paddleAi.position.x))), 0);
                     if ((paddleAi.position.x > 2) && (OppmouseDirection > 0)){
                         intensity = (Math.abs(paddleAi.position.x) * 0.5) ;
@@ -727,7 +538,6 @@ const RemoteGame = () => {
                     }    
                     let forceX = -(intensity * OppmouseDirection)
                     
-                    //for push Sumilation
                     gsap.to(paddleAi.rotation, {
                         x: paddleAi.rotation.x + 0.5,
                         duration: 0.1,
@@ -735,73 +545,41 @@ const RemoteGame = () => {
                     })
                     Pong_Ball_colide(0.54);
                     
-                    Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                    Objects[Objects.length - 1].velocity.set( forceX,       
                                                               BallCreator.hit_y,        
                                                               BallCreator.hit_z
                     )
                 }
                 
-                else if (NetBoundingBox.intersectsBox(BallBoundingBox)) {
-                    // console.log('ball collided with the Net!');
-                    // Objects[Objects.length - 1].sphereBody.velocity.z = -(Objects[Objects.length - 1].sphereBody.velocity.z) * 0.5; //Good !
-                    // Good just need to get the best velocity values
-        
-                    // const normalVelocity = Objects[Objects.length - 1].velocity.dot(new THREE.Vector3(0, 0, 1)); // Extract velocity along the normal
-                    // Objects[Objects.length - 1].velocity.z = ((Objects[Objects.length - 1].velocity.y) > 0 ? 1 : -1 ) * restitution;
-        
-                    // // Apply friction to X and Y velocity components
-                    // Objects[Objects.length - 1].velocity.x *= friction;
-                    // Objects[Objects.length - 1].velocity.y *= friction;
-        
-                    // // Prevent sinking into the net by repositioning the ball
-                    // const ballDepth = BallBoundingBox.max.z - BallBoundingBox.min.z;
-                    // if (Objects[Objects.length - 1].sphere.position.z > NetBoundingBox.max.z) {
-                    //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.max.z + ballDepth / 2; // Ball is on one side of the net
-                    // } else {
-                    //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.min.z - ballDepth / 2; // Ball is on the other side of the net
-                    // }
-                }
+                // else if (NetBoundingBox.intersectsBox(BallBoundingBox)) {
+                // }
                 else if (TableBoundingBox.intersectsBox(BallBoundingBox)) {
-                    // console.log('ball collided with the Table!');
-                    // Collision with the table (restitution + friction) tobeadded
                     Pong_Ball_colide(0.85);
                     
-                    // Apply friction to X and Z velocity components
                     Objects[Objects.length - 1].velocity.x *= friction;
                     Objects[Objects.length - 1].velocity.z *= friction;
         
-                    // Reverse the Y velocity for bounce and apply restitution
                     Objects[Objects.length - 1].velocity.y *= -restitution;
         
-                    // Prevent sinking into the table by repositioning the ball
                     const ballHeight = BallBoundingBox.max.y - BallBoundingBox.min.y;
-                    Objects[Objects.length - 1].sphere.position.y = TableBoundingBox.max.y + ballHeight / 2; // Place the ball on the table
+                    Objects[Objects.length - 1].sphere.position.y = TableBoundingBox.max.y + ballHeight / 2;
                 }
             }
         }
         
-        // scene.add(new THREE.GridHelper( 50, 50 ))
-        // scene.add(new THREE.AxesHelper( 50 ))
-        
-        // gui.add(BallCreator, 'cameraFixed');
-        
-        //Scoring System
         let New_ball_launched = false;
         
-        //  Animate
         const clock = new THREE.Clock()
         let   deltaTime    = 0;
         
-        let   angle = 0; // Start angle for rotation
-        const radius = 20; // Distance from the center of the object
+        let   angle = 0;
+        const radius = 20;
         const target = new THREE.Vector3(0, 0, 0);
 
-////==>////
         const sendPaddleUpdate = (end_state) => {
             const message = {
                 type: 'paddle_update',
                 my_id: ReomteGameData.p1_id,
-                // role:  ReomteGameData.role,
                 paddle: {
                     x: mouse.x,
                     y: mouse.y,      
@@ -828,28 +606,12 @@ const RemoteGame = () => {
         };
 
         let   accumulator = 0;
-        const targetInterval = 1/60; // ~0.0333 seconds = 33ms
-        ////==>////
+        const targetInterval = 1/60;
         
-////Ball Thrower
-        const Ball_Thrower = (New_ball_launched) => {
-            if (New_ball_launched === false){
-                // BallCreator.createBall ();
-                // New_ball_launched = true;
-                // setTimeout(() => {
-                //     BallCreator.createBall()
-                // }, 2800);
-                // createSphere()
-                
-            }
-        };
-/////====///////
-
         let p =false;
 
         const tick = () =>
         {
-            //tbr
             if (p === false && paddleAi && paddle){
                 setTimeout(() => {BallCreator.cameraFixed = true} , 3800)
                 p = true;
@@ -868,58 +630,29 @@ const RemoteGame = () => {
             
         if (BallCreator.cameraFixed){
             if (accumulator >= targetInterval) {
-                // console.log('Updater triggered !');
-                // if (O)
-                sendPaddleUpdate(false);  // your function that does socket.send(...)
+                sendPaddleUpdate(false);
                 accumulator -= targetInterval;
             }
             for (const obj of Objects) {
-                // Apply Gravity
-                // if (obj.created_by_me === true){
                     obj.velocity.y += gravity * deltaTime;
                     
-                    // Update position
                     obj.sphere.position.x += obj.velocity.x * deltaTime;
                     obj.sphere.position.y += obj.velocity.y * deltaTime;
                     obj.sphere.position.z += obj.velocity.z * deltaTime;       
-                // }
             }
             
             if (Objects.length && paddleAi){
-                // Ball_Thrower(New_ball_launched)
-                // paddleAi.position.x = Objects[Objects.length - 1].sphere.position.x; 
-                // paddleAi.position.y = Objects[Objects.length - 1].sphere.position.y - 0.4;
                 
-                //Scoring System
                 if (New_ball_launched){
                     if (Objects[Objects.length - 1].sphere.position.z > (paddle.position.z + 1)) {
-                        // aiScore += 1;
                         New_ball_launched = false;
-                        // if (aiScore === 7){
-                        //     // sendPaddleUpdate(true);
-                        //     setThe_end(true);
-                        // }
                         setAiScore((aiScore) => aiScore + 1)
-                        // sendPaddleUpdate(true);
                     } else if (Objects[Objects.length - 1].sphere.position.z < (paddleAi.position.z - 1)) {
-                        // playerScore += 1;
                         New_ball_launched = false;
-                        // if (playerScore === 7){
-                        //     // sendPaddleUpdate(true);
-                        //     setThe_end(true);
-                        // }
                         setPlayerScore((playerScore) => playerScore + 1)
-                        // sendPaddleUpdate(true);
                     }
                 }
                 
-                // if (PlayerScore === 7 || AiScore === 7) {
-                    //     updateScoreboard()
-                    //     alert(`${PlayerScore === 7 ? 'Player' : 'Ai'} Wins!`);
-                    //     PlayerScore = 0;
-                    //     AiScore = 0;
-                    //     updateScoreboard()
-                    // }
                 }
                 
                 if ( Chained_Keys.ArrowUp === 1) {
@@ -956,11 +689,9 @@ const RemoteGame = () => {
                 camera.position.y = (6.8 + ( 1 * mouse.y));
                 
                 paddle.position.x = (5.5 * mouse.x);
-                // paddle.position.z = (11 - Math.abs((2 * mouse.x))); // edge effect
                 paddle.position.y = (5.03 + (2 * mouse.y));
 
                 paddleAi.position.x = (5.5 * (-Aix));
-                // paddleAi.position.z = (11 - Math.abs((2 * mouse.x))); // edge effect
                 paddleAi.position.y = (5.03 + (2 * Aiy));
                 
                 if (paddle.position.x >0){
@@ -1005,7 +736,6 @@ const RemoteGame = () => {
             checkCollision();
         
             topControls.update()
-            // stat.update()
             
             renderer.render(scene, camera)
         
@@ -1013,7 +743,6 @@ const RemoteGame = () => {
         }
         
         tick()
-////=>////
 
         return() => {
             window.removeEventListener('resize', handleResize);
@@ -1026,12 +755,13 @@ const RemoteGame = () => {
             }
 
             renderer.dispose();
-
             topControls.dispose();
 
             hit_sound.pause();
             hit_sound.src = "";
-            gameSocket.close();
+            if (gameSocket && gameSocket.readyState === 1){
+                gameSocket.close();
+            }
         };
 
     }
@@ -1064,24 +794,12 @@ const RemoteGame = () => {
         };
         if (playerScore === 7){
             setReomteGameData({
-                // room_name: null,
-                // role     : null,
-                // my_user  : null,
-                // opponent : null,
-                // p1_id    : null,
-                // p2_id    : null,
                 winner  : ReomteGameData.my_user
             });    
             message.ball.mousedirection = 1;
         }
         else {
             setReomteGameData({
-                // room_name: null,
-                // role     : null,
-                // my_user  : null,
-                // opponent : null,
-                // p1_id    : null,
-                // p2_id    : null,
                 winner  : ReomteGameData.opponent
             });     
             message.ball.mousedirection = 2;
@@ -1091,7 +809,6 @@ const RemoteGame = () => {
         
         setPlayerScore(0);
         setAiScore(0);
-        //sleep a bit to send updates before disconnecting and forfait the game
         setLocalGamesData({})
         navigate('/game/Winner');
 
@@ -1106,7 +823,6 @@ const RemoteGame = () => {
                 left: 0,
                 width: '100%',
                 height: '100%'}} ref={canvasRef}></canvas>
-            {/* <Hud/> */}
             <div className='downleft'>
                 <Tooltip Tip={'Hint'} Paragraph={'Use the Arrow keys on your Keyboard (Up, Right, Left, Down) or your Mouse to move, aim, and interact with the game.'}/>
             </div>

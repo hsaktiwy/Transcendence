@@ -8,11 +8,6 @@ import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
 
 
-// import { useMatchContext } from './MatchContext';
-// import { useRemoteGameContext } from '../game/MatchContext';
-
-// import { useMatchContext } from '../game/MatchContext';
-
 import { useRemoteGameContext } from '../game/MatchContext';
 import { useLocalGamesContext } from '../game/MatchContext';
 
@@ -22,7 +17,6 @@ const ChessWinner = () => {
     const navigate = useNavigate();
     let winner = '';
     
-    // Remote LOgic
     const { ReomteGameData } = useRemoteGameContext();
     const { LocalGamesData } = useLocalGamesContext();
     
@@ -57,7 +51,6 @@ const ChessWinner = () => {
             </div>
             
             <div className="players-container-w Text-tt">
-              {/* Add your game content here */}
               <h1 >{winner}</h1>
             </div>
             <div className="button-container-w">
@@ -69,15 +62,6 @@ const ChessWinner = () => {
                   navigate('/game/Chess_Lobby')
                 }}
               />
-              {/* <Frame
-                text="Re-Match"
-                default_icon='/GamePub/bottouns/default_offline.svg'
-                hovered_icon='/GamePub/bottouns/hovered_offline.svg'
-                onClick={ () => {
-                  navigate('/game/LocalGame')
-                }
-                }
-              /> */}
             </div>
           </div>
         </div>
