@@ -1,6 +1,4 @@
-/* LoadingScreen.css */
 
-/* Container styles */
 #loading-screen {
     position: fixed;
     top: 0;
@@ -14,7 +12,6 @@
     z-index: 9999;
   }
   
-  /* Spinner styles */
   #loading-spinner {
     transform: rotateZ(45deg);
     perspective: 1000px;
@@ -22,7 +19,7 @@
     width: 48px;
     height: 48px;
     color: #fff;
-    position: relative; /* position relative so :before and :after can be absolute */
+    position: relative; 
   }
   
   #loading-spinner:before,

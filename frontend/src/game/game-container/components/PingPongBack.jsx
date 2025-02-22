@@ -17,20 +17,21 @@ const PingPongBack = () => {
 
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                setLoading(false);
-              }
-            });
-          };
-
-
+        
+        
         let canvas = null;
-        if (canvasRef.current != null)
-            canvas = canvasRef.current
+        if (canvasRef.current != null){
+          canvas = canvasRef.current
+          loadingManager.onLoad = () => {
+              gsap.to('#loading-screen', {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                  setLoading(false);
+                }
+              });
+            };
+        }
 
         const scene = new THREE.Scene()
    
@@ -59,7 +60,7 @@ const PingPongBack = () => {
             camera.aspect = sizes.width / sizes.height
             camera.updateProjectionMatrix()
             renderer.setSize(sizes.width, sizes.height)
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.5))
 
         };
         
@@ -74,7 +75,7 @@ const PingPongBack = () => {
             canvas: canvas
         })
         renderer.setSize(sizes.width, sizes.height)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.5))
         
         const GLTFLoaderr = new GLTFLoader(loadingManager); 
         GLTFLoaderr.load('/GamePub/models/chinese_tea_table_4k.gltf/tabla_v2.gltf', function (gltf){
@@ -158,7 +159,7 @@ const PingPongBack = () => {
 
     return (
         <>
-            {/* <LoadingScreen show={loading} /> */}
+            <LoadingScreen show={loading} />
             <div className="blur-wrapper">
                 <canvas ref={canvasRef}></canvas>
             </div>
