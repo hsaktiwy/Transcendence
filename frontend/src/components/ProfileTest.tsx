@@ -84,7 +84,7 @@ const ProfileTest  = () =>{
             setRadarChartData(resp.data);
         }
         catch (err){
-            console.error("dddddd======????",err)
+            console.error("error",err)
         }
     }
     const [userMatchHistory, setUserMatchHistory] = useState<twoGames | undefined>();
@@ -146,7 +146,9 @@ const ProfileTest  = () =>{
             setIsLoading(false)
         } 
 
-
+        useEffect(()=>{
+            BlockStatusCheck();
+        },[userContextConsumer.blockList]) 
    useEffect(() =>{
     if (userContextConsumer?.userData?.unique_id !== uuid){
         fetchUserData().finally(() => {
@@ -164,7 +166,7 @@ const ProfileTest  = () =>{
         setProfileData(userContextConsumer?.userData)
         waitData()
     }
-   },[uuid, userContextConsumer.blockList])
+   },[uuid])
 
     return(
         <>

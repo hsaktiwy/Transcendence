@@ -78,12 +78,13 @@ function ConnectButton(prop: buttonInterface) {
             )
           })
         }
+        // isblock refer to the old status not the new own (i need to stop distroying my brain with this weird states hahahah)
         setBtn_block(isblock ? 'Block' : 'Unblock');
         setIsbLock(!isblock)
         const notification = {
           type: 'NotifBlock',
           to : uuid,
-          status: isblock
+          status: !isblock
         }
         const message = JSON.stringify(notification)
         SocketContext?.socket?.current?.send(message)
@@ -187,10 +188,20 @@ function ConnectButton(prop: buttonInterface) {
       }
     }
     const blocknotify = (data:friendship)=>{
-      if(data){
-        setBloker(false);
-        setIsbLock(true);
-        userContextConsumer?.setBlockList(prev=>[...prev])
+      if(data.sender.unique_id == uuid){
+        console.log(data)
+        if(data.status && isblock == false)
+        {
+          setBloker(false);
+          setIsbLock(true);
+          userContextConsumer?.setBlockList(prev=>[...prev])
+        }
+        if (!data.status && isblock == true)
+        {
+          setBloker(false);
+          setIsbLock(false);
+          userContextConsumer?.setBlockList(prev=>[...prev])
+        }
       }
     }
     const MANAGE_BUTTONS = (data:manage_button)=>
