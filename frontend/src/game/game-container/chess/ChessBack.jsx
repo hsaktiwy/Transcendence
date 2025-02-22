@@ -14,21 +14,22 @@ const ChessGameBack = () => {
 
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                setLoading(false);
-              }
-            });
-          };
-
-
-
+        
+        
+        
         let canvas = null;
-        if (canvasRef.current != null)
+        if (canvasRef.current != null){
             canvas = canvasRef.current
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
         
         
         const scene = new THREE.Scene()
@@ -147,7 +148,7 @@ const ChessGameBack = () => {
             renderer.render(scene, camera)
         
             // Call tick again on the next frame
-            window.requestAnimationFrame(tick)
+            renderer.setAnimationLoop(tick);
         }
         
         tick()
@@ -178,7 +179,7 @@ const ChessGameBack = () => {
   
     return (
         <>
-            {/* <LoadingScreen show={loading} /> */}
+            <LoadingScreen show={loading} />
             <div className="blur-wrapper">
                 <canvas ref={canvasRef}></canvas>
             </div>

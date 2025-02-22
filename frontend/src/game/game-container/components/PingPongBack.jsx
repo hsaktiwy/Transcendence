@@ -17,20 +17,21 @@ const PingPongBack = () => {
 
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                setLoading(false);
-              }
-            });
-          };
-
-
+        
+        
         let canvas = null;
-        if (canvasRef.current != null)
+        if (canvasRef.current != null){
+          loadingManager.onLoad = () => {
+              gsap.to('#loading-screen', {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                  setLoading(false);
+                }
+              });
+            };
             canvas = canvasRef.current
+        }
 
         const scene = new THREE.Scene()
    
@@ -158,7 +159,7 @@ const PingPongBack = () => {
 
     return (
         <>
-            {/* <LoadingScreen show={loading} /> */}
+            <LoadingScreen show={loading} />
             <div className="blur-wrapper">
                 <canvas ref={canvasRef}></canvas>
             </div>
