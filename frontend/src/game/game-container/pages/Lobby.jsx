@@ -1,7 +1,5 @@
 import { Frame } from '../components/Frame';
 import InfoLink from '../components/InfoLink';
-import PingPongBack from '../components/PingPongBack';
-// import RemoteGame from '../game/RemoteScene';
 import './style.css'
 import { useNavigate } from "react-router-dom";
 
@@ -64,12 +62,6 @@ function Lobby(){
                     hovered_icon='/GamePub/bottouns/hovered_tournament.svg'
                     onClick={() => {navigate('/game/PreTournament')}}
                     />
-                    {/* <Frame
-                        text="Chess Game Test"
-                        default_icon='/GamePub/bottouns/default_online.svg'
-                        hovered_icon='/GamePub/bottouns/hovered_online.svg'
-                        onClick={() => {navigate('/game/Chess_Lobby')}}
-                    /> */}
             </div>
 
                 <InfoLink />

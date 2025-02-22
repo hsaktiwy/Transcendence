@@ -1,10 +1,10 @@
 .match-card {
-  background: rgba(255, 255, 255, 0.1); /* slightly transparent white */
-  backdrop-filter: blur(8px);           /* the blur effect */
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(8px);          
   border-radius: 8px;
   padding: 16px;
   margin: 16px;
-  color: #fff;                          /* text color on dark background */
+  color: #fff;                          
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,7 +38,7 @@
 }
 
 .join-button {
-  background: #4caf50;    /* green */
+  background: #4caf50;   
   border: none;
   color: #fff;
   cursor: pointer;
@@ -50,7 +50,7 @@
 }
 
 .ready-button {
-  background: #1f2fa8;     /* a blue color */
+  background: #1f2fa8;    
   border: none;
   color: #fff;
   cursor: pointer;
@@ -60,13 +60,11 @@
 }
 
 .start-match-button {
-  background: #fdd835;     /* a golden color */
+  background: #fdd835;     
   border: none;
   color: #000;
-  /* padding: 8px 16px; */
   cursor: pointer;
   border-radius: 4px;
-  /* margin-top: 12px; */
   padding: 4px 8px;
   font-size: 15px;
 }
