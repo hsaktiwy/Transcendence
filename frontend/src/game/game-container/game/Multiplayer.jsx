@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
-// import GUI from 'lil-gui'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 
@@ -44,31 +43,26 @@ const MultiplayerGame = () => {
 
     useEffect(() => {
 
-////=>////
+
         const gravity     = -9.8;
         const friction    = 0.25;
         const restitution = 0.89;
 
         const loadingManager = new THREE.LoadingManager();
 
-        loadingManager.onLoad = () => {
-            // If you want a fade-out effect with GSAP:
-            gsap.to('#loading-screen', {
-              opacity: 0,
-              duration: 1,
-              onComplete: () => {
-                // Hide the screen entirely
-                setLoading(false);
-              }
-            });
-          };
-
-        // const gui = new GUI()
-
         let canvas = null;
-        if (canvasRef.current != null)
+        if (canvasRef.current != null){
             canvas = canvasRef.current
-
+            loadingManager.onLoad = () => {
+                gsap.to('#loading-screen', {
+                  opacity: 0,
+                  duration: 1,
+                  onComplete: () => {
+                    setLoading(false);
+                  }
+                });
+              };
+        }
         
         const scene = new THREE.Scene()
         
@@ -107,14 +101,14 @@ const MultiplayerGame = () => {
         let New_ball_launched = false;
 
         const handleResize = () =>  {
-            // sizes.width = window.innerWidth
-            // sizes.height = window.innerHeight
-            // topCamera.aspect = sizes.width / (sizes.height / 2)
-            // bottomCamera.aspect = sizes.width / (sizes.height / 2)
-            // topCamera.updateProjectionMatrix()
-            // bottomCamera.updateProjectionMatrix()
-            // renderer.setSize(sizes.width, sizes.height)
-            // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+            
+            
+            
+            
+            
+            
+            
+            
 
             renderer.setSize(window.innerWidth, window.innerHeight);
             cameras.forEach(camera => {
@@ -135,31 +129,31 @@ const MultiplayerGame = () => {
         ];
 
         
-        //BLUE TEAM FR
+        
         cameras[1].position.set(-5, 8, -12);
         cameras[0].position.set(5, 8, -12);
         
-        //BLUE RED FR
+        
         cameras[3].position.set(5,  8, 12);
         cameras[2].position.set(-5, 8, 12);
 
-        // const topCamera = new THREE.PerspectiveCamera(75, sizes.width / (sizes.height / 2), 0.1, 100)
-        // topCamera.position.set(-15, 4, 0)
-        // scene.add(topCamera)
         
-        // Cameras.push(topCamera)
         
-        // const bottomCamera = new THREE.PerspectiveCamera(75, sizes.width / (sizes.height / 2), 0.1, 100)
-        // bottomCamera.position.set(15, 4, 0)
-        // scene.add(bottomCamera)
         
-        // Cameras.push(bottomCamera)
         
-        // const topControls = new OrbitControls(topCamera, canvas)
-        // topControls.enableDamping = true
         
-        // const bottomControls = new OrbitControls(bottomCamera, canvas)
-        // bottomControls.enableDamping = true
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas
@@ -188,11 +182,11 @@ const MultiplayerGame = () => {
             scene.add(model);
         })
         
-        //Blue Team
+        
         let paddle = null;
         let paddleAi = null;
         
-        //Red Team
+        
         let paddle2 = null;
         let paddleAi2 = null;
         
@@ -201,13 +195,13 @@ const MultiplayerGame = () => {
             paddle = model;
             model.scale.set(2.1, 2.1, 2.1)
             model.position.y = 4.0387;
-            model.position.z = 10; //-8
+            model.position.z = 10; 
             
             model.traverse(function (node) {          
                 if (node.isMesh) {
                     node.castShadow = true;
                     node.receiveShadow = true;
-                    // node.material.wireframe = true;
+                    
                 }
             })
         
@@ -265,14 +259,14 @@ const MultiplayerGame = () => {
                 
                 scene.add(sphere)
                 
-                // BallCreator.reset()
+                
                 Objects.push({
                     sphere: sphere,
-                    velocity: new THREE.Vector3(1, 1, 1), // Initial velocity
+                    velocity: new THREE.Vector3(1, 1, 1), 
                     mass: 1,
                 });
         
-                // serve 
+                
                 Objects[Objects.length - 1].velocity.set(BallCreator.serve_x, BallCreator.serve_y, BallCreator.serve_z); 
         
             New_ball_launched = true;
@@ -317,10 +311,8 @@ const MultiplayerGame = () => {
             createSphere(new THREE.Vector3(paddle.position.x, y, -paddle.position.z), true)
         }
         
-        // gui.add(BallCreator, 'createBall')
-        // gui.add(BallCreator, 'reset')
         
-        //Table 
+        
         const geometry       = new THREE.BoxGeometry( 1, 1, 1 ); 
         const material       = new THREE.MeshBasicMaterial( {color: 0xffffff} );
         material.transparent = true; 
@@ -332,7 +324,7 @@ const MultiplayerGame = () => {
         
         Table.scale.set(8.28, 0.3, 18.51)
         
-        //Net
+        
         const Net = new THREE.Mesh( geometry, material ); 
         Net.position.x = 0;
         Net.position.y = 4.66;
@@ -351,14 +343,14 @@ const MultiplayerGame = () => {
             prevMouseX = mouse.x;
         };
 
-        // mouse event listener
+        
         const mouse = new THREE.Vector2();
             window.addEventListener('mousemove', handleMouseMove
         )
         
         
-        ///KEYS
-        // keyboard event listener
+        
+        
         const RED_P1 = new THREE.Vector2();
         const RED_P2 = new THREE.Vector2();
         
@@ -394,9 +386,9 @@ const MultiplayerGame = () => {
             if (keyName === " " && !New_ball_launched && BallCreator.cameraFixed){
                 BallCreator.createBall()
             }
-            // if (keyName === " "){
-            //     BallCreator.cameraFixed = true;
-            // }
+            
+            
+            
 
             if ( keyName === "w") {
                 Chained_Keys.w = 1;
@@ -515,7 +507,7 @@ const MultiplayerGame = () => {
             }
         }
 
-///
+
           
 
         document.addEventListener(
@@ -526,7 +518,7 @@ const MultiplayerGame = () => {
         
         document.addEventListener("keydown", handleKeyDown)
         document.addEventListener("keyup", handleKeyUp)
-        // enviroment map
+        
         const rgbeLoader = new RGBELoader(loadingManager);
         rgbeLoader.load('/GamePub/models/neon_photostudio_2k.hdr', (enviroment_map) => {
             enviroment_map.mapping = THREE.EquirectangularReflectionMapping
@@ -552,15 +544,15 @@ const MultiplayerGame = () => {
         const TableBoxHelper    = new THREE.Box3Helper(TableBoundingBox, 0xff0000);
         const NetHelper         = new THREE.Box3Helper(NetBoundingBox, 0xff0000);
         
-        // scene.add(paddleBoxHelper1);
-        // scene.add(paddleBoxHelper2);
-        // scene.add(paddleBoxHelper3);
-        // scene.add(NetHelper3);
         
-//
+        
+        
+        
+        
+
     function checkCollision() {
         if (Objects.length){
-            // Update bounding boxes with the current positions of the models
+            
             PaddleBoundingBox.setFromObject(paddle);
             Paddle2BoundingBox.setFromObject(paddle2);
             PaddleBoundingAiBox.setFromObject(paddleAi);
@@ -572,7 +564,7 @@ const MultiplayerGame = () => {
             if (PaddleBoundingBox.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z > 0) {
                 
 
-                // console.log('paddle and ball!');
+                
                 let intensity = Math.max((3 - (Math.abs(paddle.position.x))), 0);
                 if ((paddle.position.x > 2) && (mouseDirection < 0)){
                     intensity = (Math.abs(paddle.position.x) * 0.5) ;
@@ -582,9 +574,9 @@ const MultiplayerGame = () => {
                 }    
                 let forceX = (intensity * mouseDirection)
 
-                // console.log(forceX > 0 ? "right" : "left");
+                
 
-                //for push Sumilation
+                
                 gsap.to(paddle.rotation, {
                     x: paddle.rotation.x - 0.5,
                     duration: 0.1,
@@ -592,7 +584,7 @@ const MultiplayerGame = () => {
                 })
                 Pong_Ball_colide(0.54);
                 
-                Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                Objects[Objects.length - 1].velocity.set( forceX,
                                                         BallCreator.hit_y,        
                                                         -BallCreator.hit_z
                 )
@@ -600,7 +592,7 @@ const MultiplayerGame = () => {
             if (Paddle2BoundingBox.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z > 0) {
                 
 
-                // console.log('paddle and ball!');
+                
                 let intensity = Math.max((3 - (Math.abs(paddle2.position.x))), 0);
                 if ((paddle2.position.x > 2) && (mouseDirection < 0)){
                     intensity = (Math.abs(paddle2.position.x) * 0.5) ;
@@ -610,9 +602,9 @@ const MultiplayerGame = () => {
                 }    
                 let forceX = (intensity * mouseDirection)
 
-                // console.log(forceX > 0 ? "right" : "left");
+                
 
-                //for push Sumilation
+                
                 gsap.to(paddle2.rotation, {
                     x: paddle2.rotation.x - 0.5,
                     duration: 0.1,
@@ -620,7 +612,7 @@ const MultiplayerGame = () => {
                 })
                 Pong_Ball_colide(0.54);
                 
-                Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                Objects[Objects.length - 1].velocity.set( forceX,
                                                         BallCreator.hit_y,        
                                                         -BallCreator.hit_z
                 )
@@ -628,8 +620,8 @@ const MultiplayerGame = () => {
 
             else if (PaddleBoundingAiBox.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z < 0){
                 
-                // console.log('paddleAi and ball!');
-                // let Aidecision = (Math.random() - 0.5) > 0 ? 1:-1;                   
+                
+                
                 let intensity = Math.max((3 - (Math.abs(paddleAi.position.x))), 0);
                 if ((paddleAi.position.x > 2) && (mouseDirection > 0)){
                     intensity = (Math.abs(paddleAi.position.x) * 0.5) ;
@@ -639,7 +631,7 @@ const MultiplayerGame = () => {
                 }    
                 let forceX = -(intensity * mouseDirection)
 
-                //for push Sumilation
+                
                 gsap.to(paddleAi.rotation, {
                     x: paddleAi.rotation.x + 0.5,
                     duration: 0.1,
@@ -647,15 +639,15 @@ const MultiplayerGame = () => {
                 })
                 Pong_Ball_colide(0.54);
                 
-                Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                Objects[Objects.length - 1].velocity.set( forceX,
                                                         BallCreator.hit_y,        
                                                         BallCreator.hit_z
                 )
             }
             else if (PaddleBoundingAi2Box.intersectsBox(BallBoundingBox) && Objects[Objects.length - 1].velocity.z < 0){
                 
-                // console.log('paddleAi and ball!');
-                // let Aidecision = (Math.random() - 0.5) > 0 ? 1:-1;                   
+                
+                
                 let intensity = Math.max((3 - (Math.abs(paddleAi.position.x))), 0);
                 if ((paddleAi2.position.x > 2) && (mouseDirection > 0)){
                     intensity = (Math.abs(paddleAi2.position.x) * 0.5) ;
@@ -665,7 +657,7 @@ const MultiplayerGame = () => {
                 }    
                 let forceX = -(intensity * mouseDirection)
 
-                //for push Sumilation
+                
                 gsap.to(paddleAi2.rotation, {
                     x: paddleAi2.rotation.x + 0.5,
                     duration: 0.1,
@@ -673,7 +665,7 @@ const MultiplayerGame = () => {
                 })
                 Pong_Ball_colide(0.54);
                 
-                Objects[Objects.length - 1].velocity.set( forceX,//BallCreator.hit_x,        
+                Objects[Objects.length - 1].velocity.set( forceX,
                                                         BallCreator.hit_y,        
                                                         BallCreator.hit_z
                 )
@@ -681,59 +673,36 @@ const MultiplayerGame = () => {
             
 
             else if (NetBoundingBox.intersectsBox(BallBoundingBox)) {
-                // console.log('ball collided with the Net!');
-                // Objects[Objects.length - 1].sphereBody.velocity.z = -(Objects[Objects.length - 1].sphereBody.velocity.z) * 0.5; //Good !
-                // Good just need to get the best velocity values
-
-                // const normalVelocity = Objects[Objects.length - 1].velocity.dot(new THREE.Vector3(0, 0, 1)); // Extract velocity along the normal
-                // Objects[Objects.length - 1].velocity.z = ((Objects[Objects.length - 1].velocity.y) > 0 ? 1 : -1 ) * restitution;
-
-                // // Apply friction to X and Y velocity components
-                // Objects[Objects.length - 1].velocity.x *= friction;
-                // Objects[Objects.length - 1].velocity.y *= friction;
-
-                // // Prevent sinking into the net by repositioning the ball
-                // const ballDepth = BallBoundingBox.max.z - BallBoundingBox.min.z;
-                // if (Objects[Objects.length - 1].sphere.position.z > NetBoundingBox.max.z) {
-                //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.max.z + ballDepth / 2; // Ball is on one side of the net
-                // } else {
-                //     Objects[Objects.length - 1].sphere.position.z = NetBoundingBox.min.z - ballDepth / 2; // Ball is on the other side of the net
-                // }
             }
             else if (TableBoundingBox.intersectsBox(BallBoundingBox)) {
-                // console.log('ball collided with the Table!');
-                // Collision with the table (restitution + friction) tobeadded
+                
+                
                 Pong_Ball_colide(0.85);
                 
-                // Apply friction to X and Z velocity components
+                
                 Objects[Objects.length - 1].velocity.x *= friction;
                 Objects[Objects.length - 1].velocity.z *= friction;
 
-                // Reverse the Y velocity for bounce and apply restitution
+                
                 Objects[Objects.length - 1].velocity.y *= -restitution;
 
-                // Prevent sinking into the table by repositioning the ball
+                
                 const ballHeight = BallBoundingBox.max.y - BallBoundingBox.min.y;
-                Objects[Objects.length - 1].sphere.position.y = TableBoundingBox.max.y + ballHeight / 2; // Place the ball on the table
+                Objects[Objects.length - 1].sphere.position.y = TableBoundingBox.max.y + ballHeight / 2; 
             }
         }
     }
-//
-        
-        // scene.add(new THREE.GridHelper( 50, 50 ))
-        // scene.add(new THREE.AxesHelper(15))
 
         
-        // gui.add(BallCreator, 'cameraFixed');
-        // gui.add(BallCreator, 'PADDLE_SPEED', 0.01 , 0.2).step(0.01)
         
-        //  Animate
+        
+        
         const clock = new THREE.Clock()
         let previousTime = 0
         let p = true 
         const tick = () =>
         {
-//tbr
+
             if (p && paddleAi && paddle){
                 p = false
                 setTimeout(()=> {BallCreator.cameraFixed = true} , 3800)
@@ -763,19 +732,19 @@ const MultiplayerGame = () => {
             for (const object of Objects){
                 object.velocity.y += gravity * deltaTime;
                 
-                // Update position
+                
                 object.sphere.position.x += object.velocity.x * deltaTime;
                 object.sphere.position.y += object.velocity.y * deltaTime;
                 object.sphere.position.z += object.velocity.z * deltaTime;       
 
-                //Scoring System
+                
                 if (New_ball_launched){
                     if (Objects[Objects.length - 1].sphere.position.z > (paddle.position.z + 1)) {
-                        // aiScore += 1;
+                        
                         New_ball_launched = false;
                         setAiScore((aiScore) => aiScore + 1)
                     } else if (Objects[Objects.length - 1].sphere.position.z < (paddleAi.position.z - 1)) {
-                        // playerScore += 1;
+                        
                         New_ball_launched = false;
                         setPlayerScore((playerScore) => playerScore + 1)
                     }
@@ -898,12 +867,12 @@ const MultiplayerGame = () => {
                     BLUE_P1.y = Math.max(BLUE_P1.y, -1);
                 }
 
-                // cameras[0].updateProjectionMatrix();
-                // cameras[1].updateProjectionMatrix();
-                // cameras[2].updateProjectionMatrix();
-                // cameras[3].updateProjectionMatrix();
-                //UPPER PART
-                    ///RIGHT RED P1
+                
+                
+                
+                
+                
+                    
              
                     cameras[1].position.x = 0;
                     cameras[1].position.y = 7.8;
@@ -915,7 +884,7 @@ const MultiplayerGame = () => {
                     paddle2.position.y = 5.03 + (2 * BLUE_P1.y);
                     
                     
-                    ///LEFT RED P2
+                    
                     cameras[0].position.x = 0;
                     cameras[0].position.y = 7.8;
                     cameras[0].position.z = 12.8;
@@ -925,8 +894,7 @@ const MultiplayerGame = () => {
                     paddle.position.x = -(5.5 * BLUE_P2.x);
                     paddle.position.y = 5.03 + (2 * BLUE_P2.y);
 
-                //BOTTOM PART
-                    ///RIGHT BLUE P1                
+                    
                     cameras[3].position.x = 0;
                     cameras[3].position.y = 7.8;
                     cameras[3].position.z = -12.9;
@@ -937,7 +905,7 @@ const MultiplayerGame = () => {
                     paddleAi.position.y = 5.03 + (2 * RED_P1.y);
                     
                     
-                    ///RIGHT BLUE P2                
+                    
                     cameras[2].position.x = 0;
                     cameras[2].position.y = 7.8;
                     cameras[2].position.z = -12.8;
@@ -1029,57 +997,57 @@ const MultiplayerGame = () => {
 
             }
             
-            // controls.update();
+            
 
-            // topControls.update()
-            // bottomControls.update()
+            
+            
 
             controls[0].update();
             controls[1].update();
             controls[2].update();
             controls[3].update();
         
-            //renderer
+            
             renderer.setScissorTest(true);
 
-            // Define viewports and render each camera to its respective viewport
+            
             const width = window.innerWidth / 2;
             const height = window.innerHeight / 2;
         
-            // Top-left viewport
+            
             renderer.setViewport(0, height, width, height);
             renderer.setScissor(0, height, width, height);
             renderer.setScissorTest(true);
             renderer.render(scene, cameras[0]);
         
-            // Top-right viewport
+            
             renderer.setViewport(width, height, width, height);
             renderer.setScissor(width, height, width, height);
             renderer.setScissorTest(true);
             renderer.render(scene, cameras[1]);
         
-            // Bottom-left viewport
+            
             renderer.setViewport(0, 0, width, height);
             renderer.setScissor(0, 0, width, height);
             renderer.setScissorTest(true);
             renderer.render(scene, cameras[2]);
         
-            // Bottom-right viewport
+            
             renderer.setViewport(width, 0, width, height);
             renderer.setScissor(width, 0, width, height);
             renderer.setScissorTest(true);
             renderer.render(scene, cameras[3]);
-            // renderer.render(scene, bottomCamera);
+            
             
             renderer.setScissorTest(false);
             
-            // stat.update()
-            // window.requestAnimationFrame(tick)
+            
+            
             renderer.setAnimationLoop(tick);
         }
         
         tick()
-////=>////
+
 
         return() => {
             window.removeEventListener('resize', handleResize);
@@ -1088,8 +1056,6 @@ const MultiplayerGame = () => {
             document.removeEventListener('keyup', handleKeyUp);
             renderer.dispose();
 
-            // gui.destroy();
-            
             while (scene.children.length > 0) {
                 const child = scene.children[0];
                 scene.remove(child);
@@ -1117,8 +1083,8 @@ const MultiplayerGame = () => {
             }
             
             setLocalGamesData(LocalGamesData);     
-            // setPlayerScore(0);
-            // setAiScore(0);
+            
+            
 
             navigate("/game/Winner")
         }

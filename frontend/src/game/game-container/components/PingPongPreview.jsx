@@ -27,7 +27,7 @@ function PingPongPreview() {
     // Renderer
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.5));
 
 
     // Light
@@ -111,7 +111,6 @@ function PingPongPreview() {
     };
   }, []);
 
-  // Style: give the canvas a fixed size or let CSS handle it
   return (
     <div style={{ width: '350px', height: '350px', position: 'relative' }}>
       <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />

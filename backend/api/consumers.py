@@ -37,9 +37,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     def create_add_friend_notification(self, _receiver, _sender):
         try:
+            
             not_content = f'{_sender.unique_id} sends you a friend request'
             receiver = MyUser.objects.filter(unique_id=_receiver).first()
             sender_instance = MyUser.objects.get(id=_sender.id)
+            blocked = BlockList.objects.get(user=receiver.id).block_users.filter(id=sender_instance.id).exists()
+            blocker = BlockList.objects.get(user=sender_instance.id).block_users.filter(id=receiver.id).exists()
+            if blocked or blocker:
+                return 0, None, None, None
             existing_rev_request = FriendRequest.objects.filter(sender=receiver, receiver=sender_instance).first()
             if existing_rev_request:
                 return 0, None, None, None
@@ -53,6 +58,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             not_content = f'{_sender.unique_id} accepted your friend request'
             receiver = MyUser.objects.filter(unique_id=_receiver).first()
             sender_instance = MyUser.objects.get(id=_sender.id)
+            blocked = BlockList.objects.get(user=receiver.id).block_users.filter(id=sender_instance.id).exists()
+            blocker = BlockList.objects.get(user=sender_instance.id).block_users.filter(id=receiver.id).exists()
+            if blocked or blocker:
+                return 0, None, None, None
             acceptedFriendReq = FriendRequest.objects.filter(sender=receiver, receiver=sender_instance, status="accepted").first()
             notification = Notification.objects.create(id_user_fk=receiver, content=not_content , type='friendship', friend_request_id=acceptedFriendReq.id)
             rev_notif = Notification.objects.filter(id_user_fk=sender_instance, friend_request_id=acceptedFriendReq.id).first()

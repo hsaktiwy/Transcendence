@@ -1,26 +1,10 @@
-/* .game-options-container {
-    color: #fff; 
-    text-align: center;
-    padding: 40px;
-    background, etc. as you wish
-  }
-  
-  .cards-row {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 40px;
-  }
-   */
-
-/* pages/GameOptions.css */
 .game-options-container {
   min-height: 100vh;
-  /* background: #1a1a1a; */
   padding: 40px;
   color: white;
 
-  position: relative;  /* Add this */
-  z-index: 2;         /* Add this */
+  position: relative;  
+  z-index: 2;         
 
 }
 
@@ -41,20 +25,14 @@
 
 .players-container {
   display: flex;
-  /*zabba*/
-  /* filter: blur(6px); */
   backdrop-filter: blur(12px);
 
-  /* position: relative; */
   justify-content: space-between;
   align-items: center;
   max-width: 1700px;
-  /* max-height: 200px; */
-  /* height: 260px; */
   margin: 0 auto;
   padding: 20px;
   background: rgba(255, 255, 255, 0.164);
-  /* opacity: 0.1; */
   border-radius: 12px;
 }
 

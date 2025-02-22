@@ -167,34 +167,25 @@ class RegisterView(APIView):
 class LoginView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
-        if not isinstance(request.user, AnonymousUser):
-            return Response({
-                'message': 'user already logged in'
-            }, status=status.HTTP_200_OK)
-        serializer = UserLoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
-            resp = ''
-            if user.login is None or user.login == "":
-                resp = generate_set_username_response(user, False)
-            elif user.two_factor_auth:
-                resp = generate_TFA_verification_response(user)
-            else:
-                resp = generate_tokens_response(user, request)
-            return resp
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-
-class UpdateUserData(APIView):
-    def patch(self, request):
-        user = request.user
- 
-        serializer = UserSerializer(instance=user, data=request.data)
-        if serializer.is_valid():
-            if 'email' in serializer.validated_data and user.oauth == True:
-                return Response({'message' : 'Email update is not allowed for accounts linked to a third-party provider.'}, status=401)
-            user = serializer.update(instance=user, validated_data=serializer.validated_data)
-            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=400)
+        try:  
+            if not isinstance(request.user, AnonymousUser):
+                return Response({
+                    'message': 'user already logged in'
+                }, status=status.HTTP_200_OK)
+            serializer = UserLoginSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.validated_data['user']
+                resp = ''
+                if user.login is None or user.login == "":
+                    resp = generate_set_username_response(user, False)
+                elif user.two_factor_auth:
+                    resp = generate_TFA_verification_response(user)
+                else:
+                    resp = generate_tokens_response(user, request)
+                return resp
+            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
     
 class RefreshToken(APIView):
     permission_classes = [AllowAny]

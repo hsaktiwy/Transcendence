@@ -123,10 +123,8 @@ const Login = () => {
                     else if (resp.data.user)
                         setTfaUser(resp.data.user)
                     else{
-
                         window.history.replaceState({}, document.title, window.location.pathname);
                         location.reload()
-
                     }
                 }
 
@@ -143,10 +141,7 @@ const Login = () => {
             else
                 tryToLogin()
     }, [needLogin])
-    // useEffect(()=>{
-    //     if (code === null)
-    //         location.reload()
-    // },[code])
+
     useEffect(() => {
       
             const searchParams = new URLSearchParams(window.location.search);
@@ -246,7 +241,6 @@ const Login = () => {
                                     </button>
                                     <div className='h-[80px] flex flex-col gap-4 justify-center items-center text-white'>
                                         <p>Don't have an account ? <Link to='/signup' className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Sign up</Link></p>
-                                        <p>Forget Password ? <span className='text-slate-200 inline-block ml-2  hover:text-[#5E97A9] duration-100 cursor-pointer'>Click here</span></p>
                                     </div>
                                 </div>
                             </motion.form> : needLogin === true  || needLogin === false ? <Username email={email} setNeedLogin={setNeedLogin} /> : <TfaVerification user={tfaUser}/>}
