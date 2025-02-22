@@ -1,8 +1,7 @@
 import React from 'react';
-import './LoadingScreen.css'; // Where you placed your spinner CSS
+import './LoadingScreen.css';
 
 const LoadingScreen = ({ show }) => {
-  // Conditionally render the loading screen based on `show`
   if (!show) return null;
 
   return (

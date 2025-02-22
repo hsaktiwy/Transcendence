@@ -1,15 +1,12 @@
-// import React from "react";
-import "./GameOptions.css"; // any extra styling
-import PingPongBack from "../components/PingPongBack";
+import "./GameOptions.css";
 import { Frame } from "../components/Frame";
 import { useNavigate } from "react-router-dom";
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import PlayerInput from '../components/PlayerInput';
 
 import { useLocalGamesContext } from '../game/MatchContext';
 import { toast } from 'react-toastify';
-
 
 
 const PlayLocally_1v1 = () => {
@@ -25,10 +22,7 @@ const PlayLocally_1v1 = () => {
 
   return (
     <>
-
-      {/* <PingPongBack /> */}
       <div className="main-game-page-container">
-
 
       <div className="game-options-container">
         <div className="game-options-header">
@@ -66,7 +60,7 @@ const PlayLocally_1v1 = () => {
                   
                   if (areNamesValid) {
                     setLocalGamesData({
-                      gametype: 'Local', // Local, Multiplayer, Tournament 
+                      gametype: 'Local',
                       player1: player1Name,
                       player2: player2Name,
                       player3: null,
