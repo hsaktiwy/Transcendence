@@ -13,7 +13,7 @@ import { MatchHistory } from "./MatchHistroy.tsx";
 import SkeletonDashboard from "./Skeletons/SkeletoneDashboard.tsx";
 import { WebSocketContext } from "@/utils/WSContext.tsx";
 import mailman from "@/utils/AxiosFetcher.ts";
-import { LinechartData, LoseWins, RadarChartInterFace, twoGames, UserRankResponse,  } from "@/utils/interfaces.ts";
+import { LinechartData, LoseWins, RadarChartInterFace, twoGames, UserRankResponse, VITE_BACKEND } from "@/utils/interfaces.ts";
 import "../index.css"
 import { ProfileDataInterface } from "@/utils/UserDataInterface.ts";
 import { customSubString } from "@/utils/textFromatting.ts";
@@ -129,7 +129,7 @@ function Dashboard(){
                           <div className="flex items-center  justify-center w-full p-4 h-full  2xl:p-10 bg-gradient-to-br from-[#283137] to-[#242729]   shadow-3xl shadow-[#22333869] sh rounded-2xl  ">
                               <div className="w-full h-full  grid grid-rows-2 ">
                               <div className="relative bg-cover bg-center px-5 lg:px-10 rounded-3xl grid grid-rows-2"
-                                  style={{ backgroundImage: `url(${import.meta.env.VITE_axiosPath}${userContextConsumer.userData?.CoverProfile})`,}}>
+                                  style={{ backgroundImage: `url(${VITE_BACKEND}${userContextConsumer.userData?.CoverProfile})`,}}>
                               <div className="absolute inset-0 bg-black/60 rounded-3xl"></div>
                                       <div className=" h-20  flex items-center 2xl:items-end z-10">
                                               <div className="relative px-4 h-8 min-w-36 xxl:h-10 xxl:min-w-36 border border-white/30  rounded-xl flex justify-center items-center">

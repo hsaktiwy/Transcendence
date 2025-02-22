@@ -1,6 +1,6 @@
 
 import React, {useState} from "react";
-import { twoGames } from "@/utils/interfaces";
+import { twoGames, VITE_BACKEND } from "@/utils/interfaces";
 import { Link } from "react-router-dom";
 import { customSubString } from "@/utils/textFromatting";
 
@@ -77,7 +77,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                 <Link to={`/profile/${data.Pong[0].user_p1.unique_id}`} className="flex  items-center justify-center flex-col gap-3">
                                   <img
                                     className="size-14 lg:size-18 xxl:size-24 rounded-full aspect-square object-cover"
-                                    src={`${import.meta.env.VITE_axiosPath}${data.Pong[0].user_p1.profile_pic}` || ""}
+                                    src={`${VITE_BACKEND}${data.Pong[0].user_p1.profile_pic}` || ""}
                                     alt="user-image"
                                   />
                                   <div className="text-base font-medium xxl:text-base">
@@ -92,7 +92,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                 <Link to={`/profile/${data.Pong[0].user_p2.unique_id}`} className="flex items-center justify-center flex-col gap-3">
                                   <img
                                     className="size-14 lg:size-18 xxl:size-24 rounded-full aspect-square object-cover"
-                                    src={`${import.meta.env.VITE_axiosPath}${data.Pong[0].user_p2.profile_pic}`}
+                                    src={`${VITE_BACKEND}${data.Pong[0].user_p2.profile_pic}`}
                                     alt="user-image"
                                   />
                                   <div className="text-base font-medium xxl:text-base">
@@ -121,7 +121,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                         <div className="min-w-32 w-[100%] h-full  flex items-center">
                                           <img
                                             className="w-11 aspect-square rounded-full object-cover"
-                                            src={`${import.meta.env.VITE_axiosPath}${game.user_p1.profile_pic}`}
+                                            src={`${VITE_BACKEND}${game.user_p1.profile_pic}`}
                                             alt="user-image"
                                           />
                                           <div className="mx-3">
@@ -149,7 +149,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                         <div className="min-w-32 w-[100%] h-full flex items-center">
                                           <img
                                             className="w-11 aspect-square rounded-full object-cover"
-                                            src={`${import.meta.env.VITE_axiosPath}${game.user_p2.profile_pic}`}
+                                            src={`${VITE_BACKEND}${game.user_p2.profile_pic}`}
                                             alt="user-image"
                                           />
                                           <div className="mx-3">
@@ -204,7 +204,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                         <div className="flex items-center justify-center flex-col gap-3">
                           <img
                             className="size-14 lg:size-18 xxl:size-24 rounded-full aspect-square object-cover"
-                            src={`${import.meta.env.VITE_axiosPath}${data.Chess[0].user_p1.profile_pic}` || ""}
+                            src={`${VITE_BACKEND}${data.Chess[0].user_p1.profile_pic}` || ""}
                             alt="user-image"
                           />
                           <div className="text-base font-medium xxl:text-base">
@@ -219,7 +219,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                         <div className="flex items-center justify-center flex-col gap-3">
                           <img
                             className="size-14 lg:size-18 xxl:size-24 rounded-full aspect-square object-cover"
-                            src={`${import.meta.env.VITE_axiosPath}${data.Chess[0].user_p2.profile_pic}`}
+                            src={`${VITE_BACKEND}${data.Chess[0].user_p2.profile_pic}`}
                             alt="user-image"
                           />
                           <div className="text-base font-medium xxl:text-base">
@@ -251,7 +251,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                 <div className="min-w-32 w-[100%] h-full  flex items-center">
                                   <img
                                     className="w-11 aspect-square rounded-full object-cover"
-                                    src={`${import.meta.env.VITE_axiosPath}${game.user_p1.profile_pic}`}
+                                    src={`${VITE_BACKEND}${game.user_p1.profile_pic}`}
                                     alt="user-image"
                                   />
                                   <div className="mx-3">
@@ -281,7 +281,7 @@ export function MatchHistory({ data, username }: MatchHistoryProps) {
                                 <div className="min-w-32 w-[100%] h-full flex items-center">
                                   <img
                                     className="w-11 aspect-square rounded-full object-cover"
-                                    src={`${import.meta.env.VITE_axiosPath}${game.user_p2.profile_pic}`}
+                                    src={`${VITE_BACKEND}${game.user_p2.profile_pic}`}
                                     alt="user-image"
                                   />
                                   <div className="mx-3">

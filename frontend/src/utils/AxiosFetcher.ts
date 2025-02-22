@@ -1,9 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { VITE_BACKEND } from './interfaces';
 
 const mailman = axios.create(
     {
-        baseURL: import.meta.env.VITE_axiosPath,
+        baseURL: VITE_BACKEND,
         withCredentials: true
     }
 );
@@ -34,7 +35,7 @@ mailman.interceptors.response.use(
             originalRequest._retry = true
                 
             try{
-                const req:string = import.meta.env.VITE_axiosPath+"/api/user/refresh_token/"
+                const req:string = VITE_BACKEND+"/api/user/refresh_token/"
                 await axios.get(req, {
                     withCredentials: true,
                 })

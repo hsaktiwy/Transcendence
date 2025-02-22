@@ -12,7 +12,7 @@ import { MdOutlineBlock } from "react-icons/md";
 
 
 import { WebSocketContext } from "../utils/WSContext";
-import { Action, ActionType} from "@/utils/interfaces";
+import { Action, ActionType, VITE_BACKEND} from "@/utils/interfaces";
 import mailman from "../utils/AxiosFetcher";
 import { UserContext } from "./UserContext";
 import { customSubString, formatDate2 } from "@/utils/textFromatting";
@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import ChatSessionBlocked from "./chatSessionBlocked";
 
 
-export const backendPath:string = import.meta.env.VITE_BACKEND.substring(0, import.meta.env.VITE_BACKEND.length - 1)
+export const backendPath:string = VITE_BACKEND
 function ChatSession(){
     const chatContext =useContext(ChatSectionContext)
     const userContext = useContext(UserContext)
@@ -201,8 +201,8 @@ function ChatSession(){
     {
         try
         {
-            const extracting = 'update/' + chatContext.active?.channelId + '/' + import.meta.env.VITE_MESSAGES_PACKET_SIZE + '/' + chatContext.active?.next_packet_number + '/'
-            const url = import.meta.env.VITE_CONVERSATION + extracting
+            const extracting = 'update/' + chatContext.active?.channelId + '/20/' + chatContext.active?.next_packet_number + '/'
+            const url = '/chat/conversations/' + extracting
             const request = {
                 url: url,
                 method: 'GET',

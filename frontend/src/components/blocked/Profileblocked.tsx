@@ -11,6 +11,7 @@ import { WebSocketContext } from "../../utils/WSContext";
 import ConnectButton from "../connectButton.tsx";
 import { Link } from "react-router-dom"
 import { customSubString } from "@/utils/textFromatting.ts";
+import { VITE_BACKEND } from "@/utils/interfaces.ts";
 
 
 
@@ -80,7 +81,7 @@ useEffect(() => {
         <div className="rounded-2xl row-span-1 justify-center items-center md:col-span-12 md:row-span-3 xl:row-span-5 2xl:col-span-12 xxl:row-span-6 xxl:col-span-9 grid grid-cols-12">
           <div className="h-full col-span-12 sm:col-span-3 bg-gradient-to-br from-[#2f3a41] to-[#2B2F32] shadow-3xl shadow-[#22333869] rounded-xl 2xl:col-span-2 flex flex-col justify-center items-center">
           <div className=" pt-4 h-full  col-span-2  flex  flex-col  justify-center items-center rounded-2xl  ">           
-                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${import.meta.env.VITE_axiosPath}${profileData?.profile_pic}`} alt="user-image" />
+                                        <img className="size-24   md:size-28 xl:size-38 aspect-square rounded-full object-cover  xxl:size-42 " src={`${VITE_BACKEND}${profileData?.profile_pic}`} alt="user-image" />
                                                 
                                                 <div className=" flex  mt-5 flex-col justify-center ">
                                                     <h1 className=" sm:text-[80%] text-center font-bold  xxl:text-[120%]">{customSubString(profileData?.firstName+" "+profileData?.lastName)} </h1>

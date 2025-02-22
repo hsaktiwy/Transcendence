@@ -15,6 +15,7 @@ import { RiInbox2Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { formatDate } from "@/utils/textFromatting";
 import { WebSocketContext } from "@/utils/WSContext";
+import { VITE_BACKEND } from "@/utils/interfaces";
 
 interface prop {
     display: boolean
@@ -98,7 +99,7 @@ const MessageNotificationsDropDown = (info: prop) =>{
                                     
                                     <img
                                     alt="notif-sender-pic"
-                                    src={item.type==='message' ? import.meta.env.VITE_axiosPath + item.sender.profile_pic : LOGO}
+                                    src={item.type==='message' ? VITE_BACKEND + item.sender.profile_pic : LOGO}
                                     className="relative inline-block h-10 w-10 rounded-full object-cover object-center"
                                     />
                                     <div className="flex flex-col gap-1 ml-4">

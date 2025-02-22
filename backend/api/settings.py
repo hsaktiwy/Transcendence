@@ -22,8 +22,12 @@ OAUTH_API_KEY = os.getenv('DJANGO_API_KEY')
 OAUTH_REDIRECT_URI = os.getenv('DJANGO_REDIRECT_URI')
 OAUTH_CLIENT = os.getenv('DJANGO_CLIENT')
 JWT_SECRET_KEY = os.getenv('DJANGO_JWT_SECRET_KEY')
+TOKEN_URL = os.getenv('DJANGO_TOKEN_URL')
+API_URL = os.getenv('DJANGO_API_URL')
+AUTHORIZATION_BASE_URL=os.getenv('DJANGO_AUTHORIZATION_BASE_URL')
 ACCESS_TOKEN_LIFETIME = int(os.getenv('DJANGO_ACCESS_TOKEN_LIFETIME'))
 REFRESH_TOKEN_LIFETIME = int(os.getenv('DJANGO_REFRESH_TOKEN_LIFETIME'))
+
 
 DEBUG = False
 ALLOWED_HOSTS = ['*']
@@ -74,20 +78,20 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = (
-    "https://localhost:4444",
-    "https://localhost",
+    "https://10.11.5.10:4444",
+    "https://10.11.5.10",
 )
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost:4444",
-    "https://localhost",
+    "https://10.11.5.10:4444",
+    "https://10.11.5.10",
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://localhost:4444",
-    "https://localhost",
+    "https://10.11.5.10:4444",
+    "https://10.11.5.10",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

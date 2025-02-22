@@ -33,7 +33,18 @@ const Login = () => {
     const [needLogin, setNeedLogin] = useState<boolean |  undefined>(undefined)
     const handleSubmitWith42 = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        window.location.href = import.meta.env.VITE_REDIRECT
+        try{
+            const req = {
+                url: '/api/get_auth_uri/',
+                method: 'GET'
+            }
+            const resp = await mailman(req)
+            console.log(resp)
+            window.location.href = resp.data['uri']
+        }
+        catch (err){
+            toast.error('error occured')
+        }
     };
     const tryToLogin = async () =>{
         const data: LoginDataInterface = {
