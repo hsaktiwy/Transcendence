@@ -63,7 +63,7 @@ const ChessGameBack = () => {
             camera.updateProjectionMatrix()
         
             renderer.setSize(sizes.width, sizes.height)
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))     
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.5))     
         }
         
         const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
@@ -75,7 +75,7 @@ const ChessGameBack = () => {
             canvas: canvas
         })
         renderer.setSize(sizes.width, sizes.height)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.55))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 0.5))
         
         const GLTFLoaderr = new GLTFLoader(loadingManager);
         
