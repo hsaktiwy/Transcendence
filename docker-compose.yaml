@@ -12,7 +12,7 @@ services:
   gunicorn_django:
     build:
       context: ./backend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: gunicorn_django
     command: > 
       sh -c "/bin/bash -c /wait_data_base.sh && /bin/bash -c /setup_backend.sh && gunicorn api.wsgi:application --bind 0.0.0.0:8000"
@@ -29,7 +29,7 @@ services:
   daphne_django:
     build:
       context: ./backend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: daphne_django
     command: sh -c " /bin/bash -c /wait_data_base.sh && daphne -b 0.0.0.0 -p 8001 api.asgi:application"
     restart: always 
@@ -44,7 +44,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: frontend
     restart : always
     volumes:

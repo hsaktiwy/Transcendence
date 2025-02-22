@@ -6,7 +6,7 @@ RUN apt-get update \
        netcat-openbsd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-ENV DJANGO_LOG_LEVEL=INFO
+
 COPY requirements.txt .
 COPY ./utils/setup_backend.sh .
 COPY ./utils/wait_data_base.sh .
@@ -14,3 +14,4 @@ COPY ./utils/wait_data_base.sh .
 RUN chmod +x setup_backend.sh wait_data_base.sh
 RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app
+COPY . .

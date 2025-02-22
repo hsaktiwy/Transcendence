@@ -1,16 +1,13 @@
 # Created At: 2020-09-06 11:00:00
 CMD = docker-compose
 
-all :
-	@echo "Try to run  : make [prod] [dev] [restart] [clean] [fclean] [re] [reboot]"
+all : run
 
-prod:
-	$(CMD) -f docker-compose.prod.yaml up --build
-dev:
-	$(CMD) -f docker-compose.dev.yaml up --build
+run:
+	$(CMD) -f docker-compose.yaml up --build
+
 clean:
-	$(CMD) -f docker-compose.dev.yaml down
-	$(CMD) -f docker-compose.prod.yaml down
+	$(CMD) -f docker-compose.yaml down
 
 restart:
 	docker restart daphne_django gunicorn_django frontend

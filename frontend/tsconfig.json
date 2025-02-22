@@ -13,14 +13,11 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "jsx": "react-jsx",  // For React 17+
+    "jsx": "react-jsx",
     "moduleResolution": "node",
     "allowJs": true,  
     "checkJs": false,  
     "resolveJsonModule": true  
   },
 
-  
-  // "allowJs": true,
-  // "checkJs": false
 }

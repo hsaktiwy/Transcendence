@@ -112,8 +112,3 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-
-
-    #delete setMatchData
-
-    #modify all setReomteGameData
