@@ -47,7 +47,7 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 				MessagesSerialized = MessageSerializer(packet, many=True) if conversation_status == 0 else None
 				users = channel.users.all()
 				if len(users) < 2:
-					return  Response({'Wala' : 'the users on this channel are less then 2 (probably one is deleted)'}, status=status.HTTP_400_BAD_REQUEST)
+					return  Response({'error' : 'the users on this channel are less then 2 (probably one is deleted)'}, status=status.HTTP_400_BAD_REQUEST)
 				UserSerialized = UserSerializer(users, many=True)
 				if UserSerialized.data[0]['id'] == user.id:
 					user1 = UserSerialized.data[0]
@@ -74,7 +74,7 @@ class ConversationAPIVIEW(generics.RetrieveAPIView):
 
 			return Response({'conversations' : consversations}, status=status.HTTP_200_OK)
 		except Exception as e:
-			return  Response({'Wala' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+			return  Response({'error' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class ConversationUpdateAPIVIEW(generics.RetrieveAPIView):
 	serializer_class = ChannelSerializer
@@ -97,7 +97,7 @@ class ConversationUpdateAPIVIEW(generics.RetrieveAPIView):
 				'is_next_packet': True if paginator.num_pages - packetToAdd > 0 else False
 				}, status=status.HTTP_200_OK)
 		except Exception as e:
-			return  Response({'Wala' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+			return  Response({'error' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def get_conversation(request, channelId, packetSize):
@@ -139,7 +139,7 @@ def get_conversation(request, channelId, packetSize):
 			MessagesSerialized = MessageSerializer(packet, many=True) if conversation_status == 0 else None
 			users = channel.users.all()
 			if len(users) < 2:
-				return  Response({'Wala' : 'the users on this channel are less then 2 (probably one is deleted)'}, status=status.HTTP_400_BAD_REQUEST)
+				return  Response({'error' : 'the users on this channel are less then 2 (probably one is deleted)'}, status=status.HTTP_400_BAD_REQUEST)
 			UserSerialized = UserSerializer(users, many=True)
 			if UserSerialized.data[0]['id'] == user.id:
 				user1 = UserSerialized.data[0]

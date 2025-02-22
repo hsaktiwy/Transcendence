@@ -28,7 +28,7 @@ function ChatModal(){
                 chatContext.setOpenModal(false)
                 if (action == 'block' || action == 'unfriend')
                 {
-                    if( chatContext.active){
+                    if(chatContext.active){
                         const notification = {
                             type: action == 'unfriend' ? 'NOTIFICATION_UNCONNECT' :'NotifBlock',
                             to : chatContext.active.user2.unique_id,

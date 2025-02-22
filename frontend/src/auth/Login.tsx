@@ -112,10 +112,8 @@ const Login = () => {
                     else if (resp.data.user)
                         setTfaUser(resp.data.user)
                     else{
-
                         window.history.replaceState({}, document.title, window.location.pathname);
                         location.reload()
-
                     }
                 }
 
@@ -132,10 +130,7 @@ const Login = () => {
             else
                 tryToLogin()
     }, [needLogin])
-    // useEffect(()=>{
-    //     if (code === null)
-    //         location.reload()
-    // },[code])
+
     useEffect(() => {
       
             const searchParams = new URLSearchParams(window.location.search);
