@@ -2,7 +2,7 @@
 CMD = docker-compose
 
 all :
-	@echo "Try to run  : make [prod] [dev] [restart] [clean] [fclean] [re]"
+	@echo "Try to run  : make [prod] [dev] [restart] [clean] [fclean] [re] [reboot]"
 
 prod:
 	$(CMD) -f docker-compose.prod.yaml up --build
@@ -21,4 +21,18 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: re fclean all clean_dev clean_prod restart
+rm_i:
+	@docker rmi -f ${shell docker image ls -aq} || echo "Nothing_to_delete"
+
+rm_c:
+	@docker rm -f ${shell docker container ls -aq} || echo "Nothing_to_delete"
+
+rm_v:
+	@docker volume rm -f ${shell docker volume ls -q} || echo "Nothing_to_delete"
+
+reboot: rm_c rm_i rm_v
+	docker system prune -af
+	docker volume prune -f
+	@clear && echo "====Clean===="
+
+.PHONY: re fclean all clean_dev clean_prod restart rm_i rm_c rm_v reboot
